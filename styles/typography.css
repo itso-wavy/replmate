@@ -1,0 +1,162 @@
+/* Typography Utilities - Figma Design System */
+
+/* Display */
+@utility typo-display-48 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -1px;
+}
+
+@utility typo-display-40 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -1px;
+}
+
+@utility typo-display-36 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -1px;
+}
+
+@utility typo-display-32 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: -1px;
+}
+
+/* Heading */
+@utility typo-heading-28 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+}
+
+@utility typo-heading-24 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+}
+
+@utility typo-heading-20 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+}
+
+@utility typo-heading-16 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+}
+
+/* Body */
+@utility typo-body-18 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-body-16 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-body-14 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+/* Link */
+@utility typo-link-16 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-link-14 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-link-12 {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+/* Button */
+@utility typo-button-16 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-button-14 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-button-12 {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+/* Eyebrow */
+@utility typo-eyebrow-16 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-eyebrow-14 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-eyebrow-12 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+/* Caption */
+@utility typo-caption-14 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
+
+@utility typo-caption-12 {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4em;
+  letter-spacing: 0px;
+}
