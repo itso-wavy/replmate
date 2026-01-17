@@ -3,28 +3,28 @@
 /* Display */
 @utility typo-display-48 {
   font-size: 48px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2em;
   letter-spacing: -1px;
 }
 
 @utility typo-display-40 {
   font-size: 36px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2em;
   letter-spacing: -1px;
 }
 
 @utility typo-display-36 {
   font-size: 36px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2em;
   letter-spacing: -1px;
 }
 
 @utility typo-display-32 {
   font-size: 36px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2em;
   letter-spacing: -1px;
 }
