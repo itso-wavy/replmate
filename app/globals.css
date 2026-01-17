@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@import '../styles/layout.css';
 @import '../styles/typography.css';
 
 @custom-variant dark (&:is(.dark *));
@@ -137,4 +138,8 @@
 
 body {
   font-family: var(--font-pretendard);
+}
+
+.container-wrapper {
+
 }
