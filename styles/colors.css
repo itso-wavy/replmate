@@ -22,6 +22,9 @@
 }
 
 @theme inline {
+  --color-kakao-theme: #FEE500;
+  --color-naver-theme: #03A94D;
+
   --color-brand-0: #005CF2;
   --color-brand-1: #629eff;
   --color-brand-2: #A5C1EE;
