@@ -40,7 +40,6 @@ export interface AuthState extends AuthTokens {
     user: User;
   }) => void;
   clearAuth: () => void;
-  refreshAccessToken: () => Promise<boolean>;
 }
 
 // ============================================================================
