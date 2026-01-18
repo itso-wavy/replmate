@@ -165,7 +165,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
                   key={menu.label}
                   href={menu.href}
                   className={cn(
-                    'text-foreground typo-button-16 block w-fit rounded-full bg-[#edede8] px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:bg-[#edede8]/85 hover:font-medium',
+                    'text-foreground typo-button-16 bg-brand-10 hover:bg-brand-10/85 block w-fit rounded-full px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:font-medium',
                     openSideNav
                       ? 'translate-y-0 opacity-100'
                       : 'translate-y-[-20px] opacity-0'

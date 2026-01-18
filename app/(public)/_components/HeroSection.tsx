@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { openReplmateSupportEmail } from '@/lib/utils';
 
 const MOCK_REPLY_TEXT =
@@ -151,7 +151,7 @@ const HeroSection = ({ id }: { id: string }) => {
           <div className='bg-brand-9/10 absolute top-1/2 left-1/2 -z-10 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]'></div>
           <div className='animate-float-slow'>
             <Card className='border-0 bg-white/80 shadow-2xl backdrop-blur-xl'>
-              <div className='flex flex-col gap-6'>
+              <CardContent className='flex flex-col gap-6'>
                 {/* Mock Chat UI */}
                 <div className='animate-scale-in flex items-start gap-4 opacity-0 delay-75'>
                   <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100'>
@@ -199,7 +199,7 @@ const HeroSection = ({ id }: { id: string }) => {
                     </Button>
                   </div>
                 </div>
-              </div>
+              </CardContent>
             </Card>
           </div>
         </div>
