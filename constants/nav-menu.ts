@@ -1,4 +1,5 @@
 export const SECTION_ID = {
+  HERO: 'hero',
   FEATURES: 'features',
   PRICE: 'price',
   SUPPORT: 'support',

@@ -34,8 +34,12 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
   });
 
   return (
-    <header className='border-border fixed top-0 right-0 left-0 z-50 h-[64px] w-full border-b bg-white/30 backdrop-blur-[8px] backdrop-saturate-180'>
-      <div className='container-wrapper flex h-full items-center justify-between'>
+    <header
+      className={
+        'border-border fixed top-0 right-0 left-0 z-50 h-[64px] w-full border-b bg-white/30 backdrop-blur-[8px] backdrop-saturate-180'
+      }
+    >
+      <div className='wrapper flex h-full items-center justify-between'>
         <Logo />
 
         {/* Navigation */}
@@ -45,7 +49,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
               key={menu.label}
               href={menu.href}
               className={cn(
-                'typo-button-14 text-foreground/80 hover:bg-accent hover:text-foreground rounded-[8px] px-3 py-2 transition-all duration-200 hover:font-medium',
+                'typo-button-14 text-foreground/80 hover:bg-accent hover:text-foreground rounded-[8px] px-3 py-2 font-normal transition-all duration-200 hover:font-medium',
                 menu.href === `/#${activeId}` &&
                   'bg-accent text-foreground font-medium'
               )}
@@ -54,7 +58,6 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
             </Link>
           ))}
         </nav>
-
         {/* Login Button Group with Arrow */}
         <svg className='absolute inset-0 h-0 w-0'>
           <defs>
@@ -110,7 +113,6 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
             </filter>
           </defs>
         </svg>
-
         <div
           id='gooey-btn'
           className='group relative flex items-center'
@@ -138,7 +140,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
           <Button
             size='default'
             onClick={toLogin}
-            className='bg-brand-lightblue hover:bg-brand-lightblue/90 md:bg-foreground md:text-background md:hover:bg-foreground/90 z-10 h-9 cursor-pointer rounded-full px-4 text-center transition-all duration-300 md:h-8 md:px-3 md:pl-4 md:text-xs'
+            className='z-10 h-9 cursor-pointer rounded-full px-4 text-center transition-all duration-300 md:h-8 md:px-3 md:pl-4 md:text-xs'
           >
             로그인
           </Button>
@@ -146,8 +148,9 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
           <div className='relative'>
             <Button
               size='icon'
+              variant='outline'
               onClick={() => setOpenSideNav((prev) => !prev)}
-              className='bg-foreground text-background hover:bg-foreground/90 ml-2 md:hidden'
+              className='bg-accent text-foreground hover:bg-accent/85 ml-2 border-2 md:hidden'
             >
               <ListIcon />
             </Button>
@@ -162,7 +165,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
                   key={menu.label}
                   href={menu.href}
                   className={cn(
-                    'bg-foreground text-background hover:bg-foreground/90 typo-button-16 block w-fit rounded-full px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:font-medium',
+                    'text-foreground typo-button-16 block w-fit rounded-full bg-[#edede8] px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:bg-[#edede8]/85 hover:font-medium',
                     openSideNav
                       ? 'translate-y-0 opacity-100'
                       : 'translate-y-[-20px] opacity-0'
