@@ -97,14 +97,14 @@ const PriceCard = ({ plan }: any) => {
   return (
     <Card
       className={cn(
-        'bg-accent/20 relative flex h-full flex-col overflow-visible transition-all',
+        'bg-accent/20 relative flex h-full flex-col overflow-visible transition-all lg:py-8',
         plan.popular
           ? 'border-brand-12 shadow-primary/10 ring-brand-12 z-10 bg-white shadow-xl ring-2 md:scale-105'
           : 'hover:border-brand-7 border border-transparent'
       )}
     >
       {plan.popular && (
-        <div className='typo-caption-12 bg-brand-12 text-primary-foreground absolute top-0 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-full px-3 py-1.5 shadow-lg'>
+        <div className='typo-caption-12 bg-brand-12 text-primary-foreground absolute top-0 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-full px-3 py-1.5 whitespace-nowrap shadow-lg'>
           <SparkleIcon size={10} className='mr-1' />
           MOST POPULAR
         </div>
