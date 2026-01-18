@@ -4,3 +4,7 @@
   margin-inline: auto;
   position: relative;
 }
+
+@theme inline {
+  --header-height: 64px;
+}

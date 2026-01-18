@@ -124,7 +124,7 @@ const HeroSection = ({ id }: { id: string }) => {
           <Button
             size='lg'
             onClick={() => router.push('/login')}
-            className='group from-brand-0 to-brand-2 relative bg-gradient-to-r hover:bg-transparent md:h-14'
+            className='group from-brand-0 to-brand-2 relative bg-gradient-to-r hover:bg-transparent'
           >
             <div
               aria-hidden='true'
@@ -139,7 +139,6 @@ const HeroSection = ({ id }: { id: string }) => {
             size='lg'
             variant='outline'
             onClick={openReplmateSupportEmail}
-            className='h-12 md:h-14'
           >
             도입 문의하기
           </Button>
