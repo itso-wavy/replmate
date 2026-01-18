@@ -5,6 +5,7 @@
 @import '../styles/layout.css';
 @import '../styles/colors.css';
 @import '../styles/typography.css';
+@import '../styles/animation.css';
 
 @custom-variant dark (&:is(.dark *));
 

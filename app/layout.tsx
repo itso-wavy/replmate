@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang='ko' className='scroll-smooth'>
       <body
-        className={`${pretendard.variable} selection:bg-primary/50 antialiased select-none`}
+        className={`${pretendard.variable} selection:bg-primary/40 selection:text-foreground antialiased select-none`}
       >
         {children}
 

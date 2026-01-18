@@ -7,7 +7,8 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
     <div className='relative flex min-h-svh flex-col overflow-hidden scroll-smooth'>
       <PublicHeader navMenu={GNB_MENU} />
 
-      <main className='flex flex-1 flex-col before:block before:h-[64px]'>
+      <main className='flex flex-1 flex-col'>
+        {/* before:block before:h-[64px] */}
         {children}
       </main>
 
