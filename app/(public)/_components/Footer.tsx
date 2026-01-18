@@ -31,12 +31,11 @@ const Footer = () => {
         </div>
 
         <div className='typo-caption-14 mb-6 border-t border-gray-100 md:border-t-0 md:*:ml-auto'>
-          <div className='hover:text-brand-main/90 group mt-6 flex w-fit cursor-pointer items-center transition-colors md:mt-0'>
+          <div className='hover:text-secondary/90 group mt-6 flex w-fit cursor-pointer items-center transition-colors md:mt-0'>
             <EnvelopeSimpleIcon
               size={16}
               className='mr-2 group-hover:text-gray-400/90'
             />
-            {/* <Mail size={16} className='mr-2 group-hover:text-gray-400/90' /> */}
             <p onClick={openReplmateSupportEmail} className='flex items-start'>
               이메일 문의: support@replmate.com
             </p>
@@ -45,12 +44,12 @@ const Footer = () => {
           <div className='typo-caption-12 mt-2 w-fit space-x-4 md:text-end'>
             <TermDialog
               id='terms'
-              trigger={<div className='hover:text-brand-main/90'>이용약관</div>}
+              trigger={<div className='hover:text-secondary/90'>이용약관</div>}
             />
             <TermDialog
               id='privacy'
               trigger={
-                <div className='hover:text-brand-main/90'>개인정보처리방침</div>
+                <div className='hover:text-secondary/90'>개인정보처리방침</div>
               }
             />
           </div>
