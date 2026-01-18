@@ -51,8 +51,15 @@
   letter-spacing: -0.5px;
 }
 
+@utility typo-heading-18 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+}
+
 @utility typo-heading-16 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.2em;
   letter-spacing: -0.5px;

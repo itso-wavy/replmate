@@ -121,7 +121,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
           <Button
             size='sm'
             onClick={toLogin}
-            className='bg-foreground text-background hover:bg-foreground/90 absolute right-0 hidden -translate-x-13 cursor-pointer rounded-full transition-all duration-300 group-hover:-translate-x-15 md:block'
+            className='bg-foreground text-primary-foreground hover:bg-foreground/90 absolute right-0 hidden -translate-x-13 cursor-pointer rounded-full transition-all duration-300 group-hover:-translate-x-15 md:block'
           >
             <svg
               className='h-3 w-3'

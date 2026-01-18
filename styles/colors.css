@@ -43,7 +43,7 @@
   /* Foundation */
   --background: #ffffff;
   --foreground: #1c1917;
-  --color-foreground-secondary: #677583;
+  --foreground-description: #585856;
   --border: #e4e5e7;
 
   /* Container */
@@ -68,7 +68,8 @@
 
   /* Supporting */
   --muted: #f5f5f6;
-  --muted-foreground: #71717a;
+  /* --muted-foreground: #71717a; */
+  --muted-foreground: var(--foreground-description);
 
   /* Sidebar */
   --sidebar: #fafafb;

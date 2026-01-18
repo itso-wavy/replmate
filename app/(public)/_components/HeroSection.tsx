@@ -108,7 +108,7 @@ const HeroSection = ({ id }: { id: string }) => {
           </span>
           에게 맡기세요
         </h1>
-        <div className='typo-body-16 md:typo-body-18 text-foreground-secondary mb-10 max-w-2xl text-balance'>
+        <div className='typo-body-16 md:typo-body-18 text-muted-foreground mb-10 max-w-2xl text-balance'>
           <p>매일 쌓이는 리뷰, 언제까지 직접 쓰실 건가요?</p>
           <p>CS 담당자의 업무 시간을 80% 이상 단축시키세요.</p>
         </div>
@@ -162,7 +162,7 @@ const HeroSection = ({ id }: { id: string }) => {
                       <span className='typo-button-14'>구매자</span>
                       <div className='text-brand-9'>★★★★☆</div>
                     </div>
-                    <p className='text-foreground-secondary'>
+                    <p className='text-muted-foreground'>
                       배송도 빠르고 상품도 마음에 들어요! 다만 포장이 조금 더
                       꼼꼼했으면 좋겠어요.
                     </p>

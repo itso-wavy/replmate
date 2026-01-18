@@ -9,7 +9,7 @@ import { openReplmateSupportEmail } from '@/lib/utils';
 const Footer = () => {
   return (
     <footer className='bg-gray-50 py-8 text-gray-400 md:py-16 md:pt-20'>
-      <div className='container-wrapper flex flex-col justify-between md:flex-row'>
+      <div className='wrapper flex flex-col justify-between md:flex-row'>
         <div className='typo-caption-12 mb-8 flex items-start md:mb-0'>
           <Logo
             showIcon

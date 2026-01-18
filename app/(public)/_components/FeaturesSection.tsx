@@ -20,7 +20,7 @@ const FeaturesSection = ({ id }: { id: string }) => {
         <div className='mb-16 text-center *:text-balance'>
           <p className='typo-eyebrow-14 text-brand-5 mb-2'>서비스 소개</p>
           <h2 className='typo-display-36'>왜 리플메이트인가요?</h2>
-          <p className='text-foreground-secondary typo-body-16 mt-3'>
+          <p className='text-muted-foreground typo-body-16 mt-3'>
             단순 반복 업무는 AI에게 맡기고, 사장님은 매출 상승에만 집중하세요.
           </p>
         </div>
@@ -52,14 +52,14 @@ const FeatureCard: React.FC<{
   title: string;
   description: string;
 }> = ({ icon, title, description }) => (
-  <Card className='hover:border-brand-7 bg-brand-11/10 h-full border border-transparent transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]'>
+  <Card className='hover:border-brand-7 bg-accent/20 h-full border border-transparent transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]'>
     <CardContent>
       <div className='bg-brand-10/20 mb-3 grid size-14 place-content-center rounded-2xl'>
         {icon}
       </div>
     </CardContent>
     <CardHeader>
-      <CardTitle className='typo-heading-16'>{title}</CardTitle>
+      <CardTitle className='typo-heading-20 mb-1'>{title}</CardTitle>
       <CardDescription className='typo-body-14'>{description}</CardDescription>
     </CardHeader>
   </Card>
