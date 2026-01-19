@@ -1,12 +1,18 @@
 'use client';
 
+import { useState } from 'react';
+
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 
 import Logo from '@/components/global/Logo';
-import TermDialog from '@/components/global/TermDialog';
+import TermDialog from '@/components/modal/TermDialog';
 import { openReplmateSupportEmail } from '@/lib/utils';
+import { TermsType } from '@/types';
 
 const Footer = () => {
+  const [showTermOfUseModal, setShowTermOfUseModal] = useState(false);
+  const [showPrivacyTermModal, setShowPrivacyTermModal] = useState(false);
+
   return (
     <footer className='bg-gray-50 py-8 text-gray-400 md:py-16 md:pt-20'>
       <div className='wrapper flex flex-col justify-between md:flex-row'>
@@ -42,19 +48,33 @@ const Footer = () => {
           </div>
 
           <div className='typo-caption-12 mt-2 w-fit space-x-4 md:text-end'>
-            <TermDialog
-              id='terms'
-              trigger={<div className='hover:text-secondary/90'>이용약관</div>}
-            />
-            <TermDialog
-              id='privacy'
-              trigger={
-                <div className='hover:text-secondary/90'>개인정보처리방침</div>
-              }
-            />
+            <button
+              type='button'
+              onClick={() => setShowTermOfUseModal(true)}
+              className='hover:text-secondary/90'
+            >
+              이용약관
+            </button>
+            <button
+              type='button'
+              onClick={() => setShowPrivacyTermModal(true)}
+              className='hover:text-secondary/90'
+            >
+              개인정보처리방침
+            </button>
           </div>
         </div>
       </div>
+      <TermDialog
+        id={TermsType.TERMS}
+        open={showTermOfUseModal}
+        onOpenChange={setShowTermOfUseModal}
+      />
+      <TermDialog
+        id={TermsType.PRIVACY}
+        open={showPrivacyTermModal}
+        onOpenChange={setShowPrivacyTermModal}
+      />
     </footer>
   );
 };

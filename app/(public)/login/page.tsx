@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { useState } from 'react';
+
 import { CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -10,11 +12,11 @@ import { toast } from 'sonner';
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
-import TermDialog from '@/components/global/TermDialog';
+import TermDialog from '@/components/modal/TermDialog';
 import { Button } from '@/components/ui/button';
 import { dummyUser } from '@/dummy/dashboard';
 import { useSetAuth } from '@/store/authStore';
-import { AuthProvider } from '@/types';
+import { AuthProvider, TermsType } from '@/types';
 
 import { PublicHeader } from '../_components';
 
@@ -23,6 +25,8 @@ import { PublicHeader } from '../_components';
 export const LoginPage = () => {
   const router = useRouter();
   const setAuth = useSetAuth();
+  const [showTermOfUseModal, setShowTermOfUseModal] = useState(false);
+  const [showPrivacyTermModal, setShowPrivacyTermModal] = useState(false);
 
   const handleSocialLogin = async (provider: AuthProvider) => {
     try {
@@ -105,27 +109,35 @@ export const LoginPage = () => {
               계속 진행하면 다음 약관에 동의한 것으로 간주합니다.
             </p>
             <div className='typo-caption-12 text-muted-foreground flex justify-center gap-6 text-center font-medium'>
+              <button
+                type='button'
+                onClick={() => setShowTermOfUseModal(true)}
+                className='group flex cursor-pointer items-center gap-1.5 transition-colors'
+              >
+                <CheckIcon size={10} strokeWidth={3} />
+                <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
+                  이용 약관
+                </span>
+              </button>
+              <button
+                type='button'
+                onClick={() => setShowPrivacyTermModal(true)}
+                className='group flex cursor-pointer items-center gap-1.5 transition-colors'
+              >
+                <CheckIcon size={10} strokeWidth={3} />
+                <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
+                  개인정보 처리방침
+                </span>
+              </button>
               <TermDialog
-                id='terms'
-                trigger={
-                  <div className='group flex cursor-pointer items-center gap-1.5 transition-colors'>
-                    <CheckIcon size={10} strokeWidth={3} />
-                    <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
-                      이용 약관
-                    </span>
-                  </div>
-                }
+                id={TermsType.TERMS}
+                open={showTermOfUseModal}
+                onOpenChange={setShowTermOfUseModal}
               />
               <TermDialog
-                id='privacy'
-                trigger={
-                  <div className='group flex cursor-pointer items-center gap-1.5 transition-colors'>
-                    <CheckIcon size={10} strokeWidth={3} />
-                    <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
-                      개인정보 처리방침
-                    </span>
-                  </div>
-                }
+                id={TermsType.PRIVACY}
+                open={showPrivacyTermModal}
+                onOpenChange={setShowPrivacyTermModal}
               />
             </div>
           </div>
