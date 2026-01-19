@@ -11,6 +11,7 @@ interface LogoProps {
   href?: string;
   showIcon?: boolean;
   showText?: boolean;
+  className?: string;
   iconClassName?: string;
   textClassName?: string;
 }
@@ -19,6 +20,7 @@ const Logo = ({
   href = '/',
   showIcon = false,
   showText = true,
+  className,
   iconClassName,
   textClassName,
 }: LogoProps) => {
@@ -30,7 +32,7 @@ const Logo = ({
     <Link
       href={href}
       onClick={handleLogoClick}
-      className='group mr-2 flex shrink-0 items-center pt-2'
+      className={cn('group mr-2 flex shrink-0 items-center pt-2', className)}
     >
       {showIcon && (
         <Image
