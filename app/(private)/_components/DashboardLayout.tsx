@@ -5,7 +5,7 @@ import { Alert } from '@/types';
 
 interface DashboardLayoutProps {
   heading?: string;
-  description?: string;
+  description?: string | React.ReactNode;
   alerts?: Alert[];
 }
 
@@ -20,9 +20,7 @@ const DashboardLayout = ({
       <div className='border-border w-full space-y-2 border-b px-7 py-5'>
         {heading && <h1 className='typo-display-36'>{heading}</h1>}
         {description && (
-          <p className='typo-body-16 text-foreground-secondary'>
-            {description}
-          </p>
+          <p className='typo-body-16 text-warmgray-600'>{description}</p>
         )}
       </div>
 

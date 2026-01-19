@@ -18,10 +18,19 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
+import { UsageQuotaSubscription } from '@/types';
 
-const DashboardPlanCard = ({ isIdentifyed = false, plan }) => {
+interface DashboardCardProps {
+  isIdentifyed?: boolean;
+  subscription: UsageQuotaSubscription;
+}
+
+const DashboardPlanCard = ({
+  isIdentifyed = false,
+  subscription,
+}: DashboardCardProps) => {
   const router = useRouter();
-  const getDday = (updateDateTimestamp: Date): number => {
+  const getDday = (updateDateTimestamp: string): number => {
     const today = new Date();
     const updateDate = new Date(updateDateTimestamp);
     const diff = Math.floor(
@@ -49,7 +58,7 @@ const DashboardPlanCard = ({ isIdentifyed = false, plan }) => {
         <ItemContent>
           <ItemDescription className='mt-6'>
             <span className='text-foreground typo-heading-24 font-medium'>
-              {plan.name}
+              {subscription.planName}
             </span>
             {!isIdentifyed && (
               <span className='typo-caption-14 text-muted-foreground'>
@@ -64,7 +73,7 @@ const DashboardPlanCard = ({ isIdentifyed = false, plan }) => {
               <span>다음 갱신일: </span>
               <span>
                 {isIdentifyed
-                  ? `${plan.updateDate} (D-${getDday(plan.updateDate)})`
+                  ? `${subscription.updatedAt} (D-${getDday(subscription.updatedAt)})`
                   : '-'}
               </span>
             </div>
@@ -79,7 +88,11 @@ const DashboardPlanCard = ({ isIdentifyed = false, plan }) => {
   );
 };
 
-const DashboardTodayCard = ({ todayReplys = 0 }: { todayReplys: number }) => {
+const DashboardTodayCard = ({
+  todayReplyCount,
+}: {
+  todayReplyCount: number;
+}) => {
   const router = useRouter();
 
   return (
@@ -100,13 +113,15 @@ const DashboardTodayCard = ({ todayReplys = 0 }: { todayReplys: number }) => {
 
         <ItemContent>
           <ItemDescription className='text-foreground mt-6'>
-            <span className='typo-heading-24 font-medium'>{todayReplys}</span>
+            <span className='typo-heading-24 font-medium'>
+              {todayReplyCount}
+            </span>
             <span className='typo-caption-14 font-medium'> 건</span>
           </ItemDescription>
 
           <ItemFooter>
             <div className='text-muted-foreground typo-caption-12 mt-2'>
-              {!todayReplys
+              {!todayReplyCount
                 ? '작성된 리플이 없습니다.'
                 : '작성된 리플을 확인해보세요!'}
             </div>
@@ -120,8 +135,10 @@ const DashboardTodayCard = ({ todayReplys = 0 }: { todayReplys: number }) => {
   );
 };
 
-const DashboardReplyCard = ({ replys }) => {
+const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
   const router = useRouter();
+  const { replyQuotaTotal, replyQuotaUsed } = subscription;
+  const replyQuotaRest = replyQuotaTotal - replyQuotaUsed;
 
   return (
     <Item
@@ -142,16 +159,16 @@ const DashboardReplyCard = ({ replys }) => {
         <ItemContent className='w-full'>
           <ItemDescription className='text-foreground mt-6'>
             <span className='typo-heading-24 font-medium'>
-              <span>{replys.rest | 0}</span>
+              <span>{replyQuotaRest | 0}</span>
               <span className='mx-0.5 inline text-[16px]'>/</span>
-              <span>{replys.total | 0}</span>
+              <span>{replyQuotaTotal | 0}</span>
             </span>
             <span className='typo-caption-14 font-medium'> 건</span>
           </ItemDescription>
 
           <ItemFooter>
             <Progress
-              value={(replys.rest / replys.total) * 100}
+              value={(replyQuotaRest / replyQuotaTotal) * 100}
               className='w-full'
               trackClassName='bg-gray-900/5'
               indicatorClassName='bg-brand-10'
@@ -167,7 +184,7 @@ const DashboardReplyCard = ({ replys }) => {
   );
 };
 
-const DashboardStoresCard = ({ stores }) => {
+const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
   const router = useRouter();
 
   return (
@@ -188,7 +205,9 @@ const DashboardStoresCard = ({ stores }) => {
 
         <ItemContent>
           <ItemDescription className='text-foreground mt-6'>
-            <span className='typo-heading-24 font-medium'>{stores}</span>
+            <span className='typo-heading-24 font-medium'>
+              {subscription.storeQuotaUsed}
+            </span>
             <span className='typo-caption-14 font-medium'> 건</span>
           </ItemDescription>
 

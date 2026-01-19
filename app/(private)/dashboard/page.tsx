@@ -4,19 +4,14 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import {
-  dummyAlerts,
-  dummyPlan,
-  dummyReplies,
-  dummyReplys,
-} from '@/dummy/dashboard';
+import { dummyAlerts, dummyReplies } from '@/dummy/dashboard';
+import { dummySubscription } from '@/dummy/subscription';
 import { useUser } from '@/store/authStore';
 import { Alert, AlertType } from '@/types';
 
 import { DashboardLayout } from '../_components';
 import {
   DashboardPlanCard,
-  type DashboardReply,
   DashboardReplyCard,
   DashboardStoresCard,
   DashboardTodayCard,
@@ -55,12 +50,12 @@ const DashboardPage = () => {
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           <DashboardPlanCard
-            isIdentifyed={user?.is_verified}
-            plan={dummyPlan}
+            isIdentifyed={user?.is_verified!}
+            subscription={dummySubscription}
           />
-          <DashboardTodayCard todayReplys={0} />
-          <DashboardReplyCard replys={dummyReplys} />
-          <DashboardStoresCard stores={2} />
+          <DashboardTodayCard todayReplyCount={0} />
+          <DashboardReplyCard subscription={dummySubscription} />
+          <DashboardStoresCard subscription={dummySubscription} />
         </div>
 
         <Card className='block p-4'>

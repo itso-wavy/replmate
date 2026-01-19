@@ -57,16 +57,6 @@ export const dummyUser = {
   },
 };
 
-export const dummyPlan = {
-  name: '무료 플랜',
-  updateDate: '2026.01.25',
-};
-
-export const dummyReplys = {
-  rest: 10,
-  total: 30,
-};
-
 export const dummyReplies: DashboardReply[] = [
   {
     id: 1,

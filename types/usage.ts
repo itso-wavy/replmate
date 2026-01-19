@@ -8,10 +8,15 @@ import { UsageEventType } from './enums';
 // GET /api/v1/usage/quota 이번달 남은 구독 사용량
 export interface UsageQuotaSubscription {
   userId: number;
-  remaining: number;
   updatedAt: string;
-  // replyQuotaUsed: number;
-  // replyQuotaTotal: number;
+  // TODO: 임의로 추가함
+  planName: string;
+  storeQuotaUsed: number;
+  storeQuotaTotal: number;
+  productQuotaUsed: number;
+  productQuotaTotal: number;
+  replyQuotaUsed: number;
+  replyQuotaTotal: number;
 }
 
 //GET /api/v1/usage/free-quota 스토어당 오늘 남은 무료 리플 미리보기 사용량
