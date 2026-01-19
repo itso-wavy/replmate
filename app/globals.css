@@ -154,3 +154,25 @@ body {
 button:not([disabled]) {
   cursor: pointer;
 }
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: var(--color-warmgray-300);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-warmgray-500);
+}
+
+/* #dashboard::-webkit-scrollbar {
+  display: none;
+} */
