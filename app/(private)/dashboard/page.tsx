@@ -4,7 +4,12 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { dummyAlerts, dummyPlan, dummyReplys } from '@/dummy/dashboard';
+import {
+  dummyAlerts,
+  dummyPlan,
+  dummyReplies,
+  dummyReplys,
+} from '@/dummy/dashboard';
 import { useUser } from '@/store/authStore';
 import { Alert, AlertType } from '@/types';
 
@@ -66,7 +71,7 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          {/* <RecentRepliesTable replies={dummyReplies} /> */}
+          <RecentRepliesTable replies={dummyReplies} />
         </Card>
       </>
     </DashboardLayout>

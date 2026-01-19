@@ -3,10 +3,13 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useState } from 'react';
+
 import { LogOut, Settings } from 'lucide-react';
 
 import { ProfileSvg } from '@/assets/svg';
 import Logo from '@/components/global/Logo';
+import LogoutDialog from '@/components/modal/LogoutDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +30,8 @@ interface HeaderProps {
 const PrivateHeader = ({ navMenu }: HeaderProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const handleLogoutModal = () => setShowLogoutModal(true);
 
   return (
     <header className='sticky top-0 right-0 left-0 z-50 h-[64px] bg-white/30 backdrop-blur-[8px] backdrop-saturate-180'>
@@ -49,7 +54,7 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
           ))}
         </nav>
 
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger>
             <div className='text-foreground/80 hover:bg-accent hover:text-foreground rounded-[8px] p-2 transition-all duration-200'>
               <ProfileSvg className='h-[22px] w-[22px]' />
@@ -69,13 +74,19 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
                 <Settings className='text-warmgray-600 size-4' />
                 <span>계정 관리</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/logout')}>
+
+              <DropdownMenuItem onClick={handleLogoutModal}>
                 <LogOut className='text-warmgray-600 size-4' />
                 <span>로그아웃</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <LogoutDialog
+          open={showLogoutModal}
+          onOpenChange={setShowLogoutModal}
+        />
       </div>
     </header>
   );
