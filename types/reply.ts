@@ -46,3 +46,5 @@ export interface ReplyOption {
 }
 
 export type ReplyList = Pagination & { items: Reply[] };
+
+export type SentimentType = 'positive' | 'negative' | 'neutral';

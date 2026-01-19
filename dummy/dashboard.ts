@@ -72,7 +72,8 @@ export const dummyReplies: DashboardReply[] = [
     id: 1,
     productName: '이바나 츄르비츠 가다랑어&참치맛',
     sentiment: { type: 'negative', score: 1 },
-    content: '이바나 츄르비츠 가다랑어&참치역시 맛있어서 ...',
+    content:
+      '이바나 츄르비츠 가다랑어&참치 역시 맛있어서 고양이가 너무너무너무 좋아하구, 팔짝팔짝 뛰어요. 추천합니다.',
     createdAt: '2025.12.02',
   },
   {

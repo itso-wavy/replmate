@@ -1,5 +1,5 @@
 export * from './DashboardCards';
 export {
-  RecentRepliesTable,
+  default as RecentRepliesTable,
   type DashboardReply,
 } from './RecentRepliesTable';
