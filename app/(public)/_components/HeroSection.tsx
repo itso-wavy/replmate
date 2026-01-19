@@ -89,7 +89,7 @@ const HeroSection = ({ id }: { id: string }) => {
   return (
     <section
       id={id}
-      className='from-brand-11 relative bg-gradient-to-b to-white to-50% pt-33 pb-20 md:pt-37 md:pb-32'
+      className='from-warmgray-100 relative bg-gradient-to-b to-white to-50% pt-33 pb-20 md:pt-37 md:pb-32'
     >
       <div className='wrapper relative flex flex-col items-center text-center'>
         <Badge className='text-brand-1 animate-bounce-slow typo-caption-14 border-border mb-4 border bg-white/90 px-3.5 py-3 shadow-xs'>

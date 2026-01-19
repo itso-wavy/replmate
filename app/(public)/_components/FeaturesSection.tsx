@@ -54,7 +54,7 @@ const FeatureCard: React.FC<{
 }> = ({ icon, title, description }) => (
   <Card className='hover:border-brand-7 bg-accent/20 h-full border border-transparent transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]'>
     <CardContent>
-      <div className='bg-brand-10/20 mb-3 grid size-14 place-content-center rounded-2xl'>
+      <div className='bg-warmgray-200/20 mb-3 grid size-14 place-content-center rounded-2xl'>
         {icon}
       </div>
     </CardContent>
