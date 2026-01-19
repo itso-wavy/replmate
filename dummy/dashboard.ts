@@ -1,5 +1,5 @@
 import { DashboardReply } from '@/app/(private)/dashboard/_components';
-import { Alert, AlertType } from '@/types';
+import { Alert, AlertType, AuthProvider } from '@/types';
 
 export const dummyAlerts: Alert[] = [
   {
@@ -38,15 +38,33 @@ export const dummyAlerts: Alert[] = [
 ];
 
 export const dummyUser = {
-  isIdentifyed: true,
-  plan: {
-    name: '무료 플랜',
-    updateDate: '2026.01.25',
+  accessToken: '123',
+  refreshToken: '123',
+  user: {
+    id: 1,
+    email: 'user@replmae.com',
+    name: '김리플',
+    phone_number: '010-1234-5678',
+    auth_provider: AuthProvider.GOOGLE,
+    auth_provider_id: '123',
+    is_verified: false,
+    verified_at: '2026-01-15',
+    created_at: '2026-01-15',
+    updated_at: '2026-01-15',
+    needs_terms_agreement: true,
+    is_del: false,
+    deleted_at: '2026-01-15',
   },
-  replys: {
-    rest: 10,
-    total: 30,
-  },
+};
+
+export const dummyPlan = {
+  name: '무료 플랜',
+  updateDate: '2026.01.25',
+};
+
+export const dummyReplys = {
+  rest: 10,
+  total: 30,
 };
 
 export const dummyReplies: DashboardReply[] = [

@@ -12,6 +12,8 @@ import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
 import TermDialog from '@/components/global/TermDialog';
 import { Button } from '@/components/ui/button';
+import { dummyUser } from '@/dummy/dashboard';
+import { useSetAuth } from '@/store/authStore';
 import { AuthProvider } from '@/types';
 
 import { PublicHeader } from '../_components';
@@ -20,6 +22,7 @@ import { PublicHeader } from '../_components';
 
 export const LoginPage = () => {
   const router = useRouter();
+  const setAuth = useSetAuth();
 
   const handleSocialLogin = async (provider: AuthProvider) => {
     try {
@@ -27,6 +30,9 @@ export const LoginPage = () => {
       //   callbackUrl: '/auth/callback',
       //   redirect: false,
       // });
+
+      setAuth(dummyUser);
+
       router.push('/dashboard');
     } catch (err) {
       toast.error('SNS 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.');
@@ -41,7 +47,7 @@ export const LoginPage = () => {
         <div className='absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:36px_36px]' />
         {/* Rainbow Pattern */}
         <div className='absolute top-[250px] left-1/2 size-[80px] -translate-x-1/2 -translate-y-1/2 scale-x-[1.6] opacity-10'>
-          <div className='absolute -inset-24 bg-[conic-gradient(from_0deg,var(--color-brand-1)_0deg,var(--color-brand-5)_123deg,transparent_200deg,var(--color-brand-2)_270deg,var(--color-brand-9)_300deg,var(--color-brand-1)_340deg)] mix-blend-overlay blur-[50px] saturate-[2]' />
+          <div className='absolute -inset-24 bg-[conic-gradient(from_0deg,var(--color-brand-1)_0deg,var(--color-brand-9)_123deg,transparent_200deg,var(--color-brand-2)_270deg,var(--color-brand-11)_300deg,var(--color-brand-1)_340deg)] mix-blend-overlay blur-[50px] saturate-[2]' />
         </div>
       </div>
 
