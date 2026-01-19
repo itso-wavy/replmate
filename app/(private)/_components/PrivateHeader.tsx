@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { GearIcon, SignOutIcon } from '@phosphor-icons/react/dist/ssr';
+import { LogOut, Settings } from 'lucide-react';
 
 import { ProfileSvg } from '@/assets/svg';
 import Logo from '@/components/global/Logo';
@@ -61,16 +61,16 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
               <DropdownMenuLabel className='text-warmgray-400 pb-1.5 font-medium'>
                 Email
               </DropdownMenuLabel>
-              <div className='typo-caption-14 text-brand-7 px-3 pb-2 wrap-break-word'>
+              <div className='typo-caption-14 text-brand-5 px-3 pb-2 wrap-break-word'>
                 user@replmate.com
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push('/account')}>
-                <GearIcon size={16} />
+                <Settings className='text-warmgray-600 size-4' />
                 <span>계정 관리</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push('/logout')}>
-                <SignOutIcon size={16} />
+                <LogOut className='text-warmgray-600 size-4' />
                 <span>로그아웃</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>

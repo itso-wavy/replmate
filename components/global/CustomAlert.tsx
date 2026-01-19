@@ -2,12 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 
-import { ArrowRightIcon } from '@phosphor-icons/react';
+import {
+  BadgeCheck,
+  CircleX,
+  Info,
+  MoveRight,
+  TriangleAlert,
+} from 'lucide-react';
 
-import BadgeCheck from '@/assets/svg/BadgeCheck';
-import CircleX from '@/assets/svg/CircleX';
-import Info from '@/assets/svg/Info';
-import TriangleAlert from '@/assets/svg/TriangleAlert';
 import { AlertType, AlertVariant } from '@/types';
 
 import { Alert, AlertAction, AlertDescription, AlertTitle } from '../ui/alert';
@@ -55,7 +57,7 @@ const CustomAlert = ({
         <AlertAction>
           <Button size='xs' onClick={action.onClick}>
             {action.label}
-            <ArrowRightIcon />
+            <MoveRight />
           </Button>
         </AlertAction>
       )}
