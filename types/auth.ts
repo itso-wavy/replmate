@@ -27,7 +27,7 @@ export interface User {
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
-  sessionId: string; // 백엔드 Redis 세션 ID
+  // sessionId: string; // 백엔드 Redis 세션 ID
 }
 
 export interface AuthState extends AuthTokens {
@@ -36,7 +36,7 @@ export interface AuthState extends AuthTokens {
   setAuth: (data: {
     accessToken: string;
     refreshToken: string;
-    sessionId: string;
+    // sessionId: string;
     user: User;
   }) => void;
   clearAuth: () => void;
@@ -49,6 +49,6 @@ export interface AuthState extends AuthTokens {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  sessionId: string;
+  // sessionId: string;
   user: User;
 }
