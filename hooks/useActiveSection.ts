@@ -21,7 +21,7 @@ export const useActiveSection = ({
   sectionIds,
   headerHeight = 68,
   debounceMs = 100,
-  syncHash = true,
+  syncHash = false,
 }: UseActiveSectionOptions) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);

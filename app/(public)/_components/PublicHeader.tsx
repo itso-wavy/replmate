@@ -30,7 +30,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
   const activeId = useActiveSection({
     sectionIds,
     headerHeight: 64,
-    syncHash: true,
+    // syncHash: true,
   });
 
   return (
@@ -169,7 +169,7 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
                       key={menu.label}
                       href={menu.href}
                       className={cn(
-                        'text-foreground typo-button-16 bg-brand-10 hover:bg-brand-10/85 block w-fit rounded-full px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:font-medium',
+                        'text-foreground typo-button-16 bg-warmgray-200 hover:bg-warmgray-200/85 block w-fit rounded-full px-4.5 py-3 whitespace-nowrap transition-all duration-300 hover:font-medium',
                         openSideNav
                           ? 'translate-y-0 opacity-100'
                           : 'translate-y-[-20px] opacity-0'
