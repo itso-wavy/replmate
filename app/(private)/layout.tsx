@@ -32,7 +32,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
               className='ring-foreground/15 relative mx-auto flex w-full flex-1 flex-col rounded-2xl bg-white ring-1'
             >
               {/* <div className='bg-background-muted/30 absolute inset-0 rounded-2xl'> */}
-              <div className='absolute inset-0 overflow-y-scroll rounded-2xl bg-white'>
+              <div className='absolute inset-0 overflow-y-auto rounded-2xl bg-white'>
                 {children}
               </div>
             </div>

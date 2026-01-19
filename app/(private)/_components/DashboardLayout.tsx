@@ -15,7 +15,7 @@ const DashboardLayout = ({
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
   return (
-    <div className='text-foreground relative mx-auto min-h-screen py-5'>
+    <div className='text-foreground relative mx-auto py-5'>
       <div className='border-border w-full space-y-2 border-b px-7 py-5'>
         {heading && <h1 className='typo-display-36'>{heading}</h1>}
         {description && (

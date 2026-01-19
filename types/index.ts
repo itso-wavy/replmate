@@ -12,3 +12,4 @@ export * from './reply';
 export * from './usage';
 export * from './plan';
 export * from './term';
+export * from './alert';

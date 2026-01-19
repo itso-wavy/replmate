@@ -19,3 +19,30 @@ export const GNB_MENU = [
     href: '/#support',
   },
 ];
+
+export const DASHBOARD_MENU = [
+  {
+    label: '대시보드',
+    href: '/dashboard',
+  },
+  {
+    label: '쇼핑몰 연동',
+    href: '/stores',
+  },
+  {
+    label: '상품 관리',
+    href: '/products',
+  },
+  {
+    label: '리플 옵션',
+    href: '/options',
+  },
+  {
+    label: '리플 확인',
+    href: '/replys',
+  },
+  {
+    label: '구독 관리',
+    href: '/subscribe',
+  },
+];

@@ -1,0 +1,66 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
+import { ArrowRightIcon } from '@phosphor-icons/react';
+
+import BadgeCheck from '@/assets/svg/BadgeCheck';
+import CircleX from '@/assets/svg/CircleX';
+import Info from '@/assets/svg/Info';
+import TriangleAlert from '@/assets/svg/TriangleAlert';
+import { AlertType, AlertVariant } from '@/types';
+
+import { Alert, AlertAction, AlertDescription, AlertTitle } from '../ui/alert';
+import { Button } from '../ui/button';
+
+export interface CustomAlertProps {
+  id: string;
+  createdAt: Date;
+  variant: AlertVariant;
+  type: AlertType;
+  title: string;
+  description?: string;
+  href?: string;
+  // action?: {
+  //   label: string;
+  //   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  // };
+}
+
+/** variant별 스타일링은 Alert 컴포넌트단에서 확인 */
+const CustomAlert = ({
+  variant,
+  title,
+  description,
+  href,
+  // action,
+  className,
+  ...props
+}: CustomAlertProps & { className?: string }) => {
+  const router = useRouter();
+  const action = href && {
+    label: '이동',
+    onClick: () => router.push(href),
+  };
+
+  return (
+    <Alert variant={variant} className={className} {...props}>
+      {variant === 'success' && <BadgeCheck />}
+      {variant === 'info' && <Info />}
+      {variant === 'warning' && <TriangleAlert />}
+      {variant === 'error' && <CircleX />}
+      <AlertTitle>{title}</AlertTitle>
+      {description && <AlertDescription>{description}</AlertDescription>}
+      {action && (
+        <AlertAction>
+          <Button size='xs' onClick={action.onClick}>
+            {action.label}
+            <ArrowRightIcon />
+          </Button>
+        </AlertAction>
+      )}
+    </Alert>
+  );
+};
+
+export default CustomAlert;
