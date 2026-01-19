@@ -1,11 +1,12 @@
 import { PropsWithChildren } from 'react';
 
-import CustomAlert, { CustomAlertProps } from '@/components/global/CustomAlert';
+import CustomAlert from '@/components/global/CustomAlert';
+import { Alert } from '@/types';
 
 interface DashboardLayoutProps {
   heading?: string;
   description?: string;
-  alerts?: CustomAlertProps[];
+  alerts?: Alert[];
 }
 
 const DashboardLayout = ({
@@ -28,9 +29,11 @@ const DashboardLayout = ({
       <div className='flex flex-col gap-4 px-4 py-4'>
         {alerts && (
           <div className='flex flex-col gap-1'>
-            {alerts.map((alert) => (
-              <CustomAlert key={alert.id} {...alert} />
-            ))}
+            {alerts.map((alert) => {
+              const { createdAt, ...rest } = alert;
+
+              return <CustomAlert key={alert.id} {...rest} />;
+            })}
           </div>
         )}
         {children}

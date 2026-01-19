@@ -17,7 +17,6 @@ import { Button } from '../ui/button';
 
 export interface CustomAlertProps {
   id: string;
-  createdAt: Date;
   variant: AlertVariant;
   type: AlertType;
   title: string;

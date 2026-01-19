@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 
-import { CustomAlertProps } from '@/components/global/CustomAlert';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { dummyAlerts } from '@/dummy/dashboard';
-import { AlertType } from '@/types/enums';
+import { dummyAlerts, dummyPlan, dummyReplys } from '@/dummy/dashboard';
+import { useUser } from '@/store/authStore';
+import { Alert, AlertType } from '@/types';
 
 import { DashboardLayout } from '../_components';
 import {
@@ -20,8 +20,9 @@ import {
 
 const DashboardPage = () => {
   const router = useRouter();
+  const user = useUser();
 
-  const sortDashboardAlerts = (alerts: CustomAlertProps[]) => {
+  const sortDashboardAlerts = (alerts: Alert[]) => {
     const paymentFailureAlerts = [];
     const otherAlerts = [];
     const sortedAlerts = alerts.sort(
@@ -48,13 +49,13 @@ const DashboardPage = () => {
     >
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
-          {/* <DashboardPlanCard
-            isIdentifyed={dummyUser.isIdentifyed}
-            plan={dummyUser.plan}
+          <DashboardPlanCard
+            isIdentifyed={user?.is_verified}
+            plan={dummyPlan}
           />
           <DashboardTodayCard todayReplys={0} />
-          <DashboardReplyCard replys={dummyUser.replys} />
-          <DashboardStoresCard stores={2} /> */}
+          <DashboardReplyCard replys={dummyReplys} />
+          <DashboardStoresCard stores={2} />
         </div>
 
         <Card className='block p-4'>

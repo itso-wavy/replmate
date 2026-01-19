@@ -8,7 +8,7 @@ const initialState = {
   isAuthenticated: false,
   accessToken: '',
   refreshToken: '',
-  sessionId: '',
+  // sessionId: '',
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>()(
         partialize: (state) => ({
           accessToken: state.accessToken,
           refreshToken: state.refreshToken,
-          sessionId: state.sessionId,
+          // sessionId: state.sessionId,
           user: state.user,
         }),
       }
@@ -47,6 +47,6 @@ export const useIsAuthenticated = () =>
 export const useAccessToken = () => useAuthStore((state) => state.accessToken);
 export const useRefreshToken = () =>
   useAuthStore((state) => state.refreshToken);
-export const useSessionId = () => useAuthStore((state) => state.sessionId);
+// export const useSessionId = () => useAuthStore((state) => state.sessionId);
 export const useSetAuth = () => useAuthStore((state) => state.setAuth);
 export const useClearAuth = () => useAuthStore((state) => state.clearAuth);
