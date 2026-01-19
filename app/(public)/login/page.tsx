@@ -4,13 +4,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { CheckIcon } from '@phosphor-icons/react/dist/ssr';
+import { signIn } from 'next-auth/react';
+import { toast } from 'sonner';
 
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
-import Logo from '@/components/global/Logo';
 import TermDialog from '@/components/global/TermDialog';
 import { Button } from '@/components/ui/button';
+import { AuthProvider } from '@/types';
 
 import { PublicHeader } from '../_components';
 
@@ -18,13 +20,18 @@ import { PublicHeader } from '../_components';
 
 export const LoginPage = () => {
   const router = useRouter();
-  const handleSocialLogin = (provider: string) => {
-    // TODO: 인증 처리
-    // const redirectUrl =
-    //   OAUTH_ENDPOINTS[provider.toUpperCase() as keyof typeof OAUTH_ENDPOINTS];
-    // window.location.href = redirectUrl;
 
-    router.push('/dashboard');
+  const handleSocialLogin = async (provider: AuthProvider) => {
+    try {
+      // await signIn(provider, {
+      //   callbackUrl: '/auth/callback',
+      //   redirect: false,
+      // });
+      throw new Error('error');
+      router.push('/dashboard');
+    } catch (err) {
+      toast.error('SNS 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
   };
 
   return (
@@ -52,7 +59,7 @@ export const LoginPage = () => {
           <div className='mt-14 flex w-full flex-col items-center space-y-2'>
             <Button
               className='border-border text-foreground hover:bg-input/30 relative w-full gap-2 bg-white'
-              onClick={() => handleSocialLogin('google')}
+              onClick={() => handleSocialLogin(AuthProvider.GOOGLE)}
             >
               <Image
                 alt='google-logo'
@@ -66,7 +73,7 @@ export const LoginPage = () => {
 
             <Button
               className='bg-kakao-theme relative w-full gap-2 text-[#000000d8] hover:bg-[hsl(57,100%,50%)]'
-              onClick={() => handleSocialLogin('kakao')}
+              onClick={() => handleSocialLogin(AuthProvider.KAKAO)}
             >
               <Image
                 alt='kakao-logo'
@@ -80,7 +87,7 @@ export const LoginPage = () => {
 
             <Button
               className='bg-naver-theme relative w-full gap-2 hover:bg-[hsl(138,80%,42%)]'
-              onClick={() => handleSocialLogin('naver')}
+              onClick={() => handleSocialLogin(AuthProvider.NAVER)}
             >
               <NaverSvg className='absolute left-[20px] text-white' />
               <span>네이버 로그인</span>

@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         {children}
 
-        <Toaster position='bottom-center' expand={false} richColors />
+        <Toaster position='bottom-center' expand={false} closeButton={false} />
       </body>
     </html>
   );
