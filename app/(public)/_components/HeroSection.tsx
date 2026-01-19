@@ -104,7 +104,7 @@ const HeroSection = ({ id }: { id: string }) => {
             <span className='from-primary to-secondary relative z-10 bg-gradient-to-r bg-clip-text text-transparent'>
               리플메이트 AI
             </span>
-            <span className='bg-brand-9/80 animate-highlighter absolute bottom-2 left-0 z-0 h-4 w-0 -rotate-1 rounded-full md:h-5' />
+            <span className='bg-brand-11/80 animate-highlighter absolute bottom-2 left-0 z-0 h-4 w-0 -rotate-1 rounded-full md:h-5' />
           </span>
           에게 맡기세요
         </h1>
@@ -147,7 +147,7 @@ const HeroSection = ({ id }: { id: string }) => {
         {/* Abstract UI Representation */}
         {/* FIXME: 실제 내부 UI와 맞추기 작업 */}
         <div className='relative mx-auto mt-20 w-full max-w-4xl'>
-          <div className='bg-brand-9/10 absolute top-1/2 left-1/2 -z-10 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]'></div>
+          <div className='bg-brand-11/10 absolute top-1/2 left-1/2 -z-10 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]'></div>
           <div className='animate-float-slow'>
             <Card className='border-0 bg-white/80 shadow-2xl backdrop-blur-xl'>
               <CardContent className='flex flex-col gap-6'>
@@ -159,7 +159,7 @@ const HeroSection = ({ id }: { id: string }) => {
                   <div className='w-full rounded-2xl rounded-tl-none bg-gray-50 p-4 text-left'>
                     <div className='mb-1 flex items-center gap-2'>
                       <span className='typo-button-14'>구매자</span>
-                      <div className='text-brand-9'>★★★★☆</div>
+                      <div className='text-brand-11'>★★★★☆</div>
                     </div>
                     <p className='text-muted-foreground'>
                       배송도 빠르고 상품도 마음에 들어요! 다만 포장이 조금 더

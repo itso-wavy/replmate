@@ -100,7 +100,7 @@ const PriceCard = ({ plan }: any) => {
         'bg-accent/20 relative flex h-full flex-col overflow-visible transition-all lg:py-8',
         plan.popular
           ? 'border-brand-12 shadow-primary/10 ring-brand-12 z-10 bg-white shadow-xl ring-2 md:scale-105'
-          : 'hover:border-brand-7 border border-transparent'
+          : 'hover:border-brand-5 border border-transparent'
       )}
     >
       {plan.popular && (
@@ -132,7 +132,7 @@ const PriceCard = ({ plan }: any) => {
           {plan.features.map((feature: string) => (
             <div key={feature} className='flex items-center'>
               <div
-                className={`bg-brand-7/20 mr-3 flex flex-shrink-0 rounded-full p-1`}
+                className={`bg-brand-9/20 mr-3 flex flex-shrink-0 rounded-full p-1`}
               >
                 <CheckIcon size={10} className='text-muted-foreground' />
               </div>

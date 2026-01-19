@@ -61,7 +61,7 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
               <DropdownMenuLabel className='text-warmgray-400 pb-1.5 font-medium'>
                 Email
               </DropdownMenuLabel>
-              <div className='typo-caption-14 text-brand-5 px-3 pb-2 wrap-break-word'>
+              <div className='typo-caption-14 text-brand-1 px-3 pb-2 wrap-break-word'>
                 user@replmate.com
               </div>
               <DropdownMenuSeparator />
