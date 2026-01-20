@@ -31,10 +31,10 @@ export const useAuthStore = create<AuthState & AuthAction>()(
       {
         name: 'auth-store',
         partialize: (state) => ({
+          user: state.user,
           accessToken: state.accessToken,
           refreshToken: state.refreshToken,
           // sessionId: state.sessionId,
-          user: state.user,
         }),
       }
     )
