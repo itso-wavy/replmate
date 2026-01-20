@@ -6,14 +6,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { CheckIcon } from '@phosphor-icons/react/dist/ssr';
-import { Loader } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
-import TermDialog from '@/components/modal/TermDialog';
+import { TermModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { dummyUser } from '@/dummy/dashboard';
@@ -147,12 +146,12 @@ export const LoginPage = () => {
                     개인정보 처리방침
                   </span>
                 </button>
-                <TermDialog
+                <TermModal
                   id={TermsType.TERMS}
                   open={showTermOfUseModal}
                   onOpenChange={setShowTermOfUseModal}
                 />
-                <TermDialog
+                <TermModal
                   id={TermsType.PRIVACY}
                   open={showPrivacyTermModal}
                   onOpenChange={setShowPrivacyTermModal}

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 
 import Logo from '@/components/global/Logo';
-import TermDialog from '@/components/modal/TermDialog';
+import { TermModal } from '@/components/modal';
 import { openReplmateSupportEmail } from '@/lib/utils';
 import { TermsType } from '@/types';
 
@@ -65,12 +65,12 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <TermDialog
+      <TermModal
         id={TermsType.TERMS}
         open={showTermOfUseModal}
         onOpenChange={setShowTermOfUseModal}
       />
-      <TermDialog
+      <TermModal
         id={TermsType.PRIVACY}
         open={showPrivacyTermModal}
         onOpenChange={setShowPrivacyTermModal}

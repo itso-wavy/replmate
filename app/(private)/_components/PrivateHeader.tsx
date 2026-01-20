@@ -9,7 +9,7 @@ import { LogOut, Settings } from 'lucide-react';
 
 import { ProfileSvg } from '@/assets/svg';
 import Logo from '@/components/global/Logo';
-import LogoutDialog from '@/components/modal/LogoutDialog';
+import { LogoutModal } from '@/components/modal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -83,10 +83,7 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <LogoutDialog
-          open={showLogoutModal}
-          onOpenChange={setShowLogoutModal}
-        />
+        <LogoutModal open={showLogoutModal} onOpenChange={setShowLogoutModal} />
       </div>
     </header>
   );
