@@ -14,8 +14,8 @@ const alertVariants = cva(
         // destructive:
         //   'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current',
         success:
-          'bg-green-50 [&>*]:data-[slot=alert-title]:text-green-800 [&>*]:data-[slot=alert-description]:text-green-700 [&_button]:bg-green-200 [&>svg]:text-green-500 [&_button]:text-green-800 [&_button]:hover:bg-green-200/60',
-        info: 'bg-blue-50 [&>*]:data-[slot=alert-title]:text-blue-800 [&>*]:data-[slot=alert-description]:text-blue-700 [&_button]:bg-blue-200 [&>svg]:text-blue-500 [&_button]:text-blue-800 [&_button]:hover:bg-blue-200/60',
+          'bg-teal-50 [&>*]:data-[slot=alert-title]:text-teal-800 [&>*]:data-[slot=alert-description]:text-teal-700 [&_button]:bg-teal-200 [&>svg]:text-teal-500 [&_button]:text-teal-800 [&_button]:hover:bg-teal-200/60',
+        info: 'bg-indigo-50 [&>*]:data-[slot=alert-title]:text-indigo-800 [&>*]:data-[slot=alert-description]:text-indigo-800/80 [&_button]:bg-indigo-200 [&>svg]:text-indigo-500 [&_button]:text-indigo-800 [&_button]:hover:bg-indigo-200/60',
         warning:
           'bg-yellow-50 [&>*]:data-[slot=alert-title]:text-yellow-800 [&>*]:data-[slot=alert-description]:text-yellow-700 [&_button]:bg-yellow-200 [&>svg]:text-yellow-500 [&_button]:text-yellow-800 [&_button]:hover:bg-yellow-200/60',
         error:

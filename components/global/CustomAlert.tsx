@@ -51,7 +51,11 @@ const CustomAlert = ({
       {variant === 'warning' && <TriangleAlert />}
       {variant === 'error' && <CircleX />}
       <AlertTitle>{title}</AlertTitle>
-      {description && <AlertDescription>{description}</AlertDescription>}
+      {description && (
+        <AlertDescription className='whitespace-pre-line'>
+          {description}
+        </AlertDescription>
+      )}
       {action && (
         <AlertAction>
           <Button size='xs' onClick={action.onClick}>
