@@ -1,13 +1,7 @@
-import { UsageQuotaSubscription } from '@/types';
+import { UsageQuotaDto } from '@/types';
 
-export const dummySubscription: UsageQuotaSubscription = {
-  planName: 'Basic',
+export const dummySubscription: UsageQuotaDto = {
   userId: 123,
+  remaining: 50,
   updatedAt: '2025-01-01T00:00:00Z',
-  storeQuotaUsed: 2,
-  storeQuotaTotal: 5,
-  productQuotaUsed: 10,
-  productQuotaTotal: 30,
-  replyQuotaUsed: 50,
-  replyQuotaTotal: 100,
 };

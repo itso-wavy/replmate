@@ -5,19 +5,19 @@ import { TermsType } from './enums';
 // ============================================================================
 
 // GET /api/v1/terms 약관 목록 조회 API
-export interface Term {
+export interface TermsDto {
   id: number;
-  type: TermsType; // TODO: 추가 부분
+  type: TermsType;
   title: string;
   content: string;
-  is_required: boolean;
-  created_at: string;
+  isRequired: boolean;
+  createdAt: string;
 }
 
-// POST /api/v1/users/me/terms-agreements
-// export interface UserTermsAgreement {
-//   id: number;
-//   userId: number;
-//   termsId: number;
-//   agreedAt: string;
-// }
+// POST /api/v1/users/me/terms-agreements 약관 동의 응답
+export interface AgreedTermDto {
+  termsId: number;
+  title: string;
+  isRequired: boolean;
+  agreedAt: string;
+}

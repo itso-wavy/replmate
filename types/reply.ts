@@ -1,50 +1,40 @@
 import type { Pagination } from './common';
-import type { ReplyLength, ReplyTone } from './enums';
-import type { Product } from './product';
+import type { ProductDto } from './product';
 
 // ============================================================================
 // 리플 (Replies)
 // ============================================================================
 
-export interface Review {
+export interface ReviewDto {
   id: number;
   rating: number;
   content: string;
   reviewedAt: string;
 }
 
-export interface Reply {
+// GET /api/v1/replies 리플 목록 조회
+export interface ReplyDto {
   id: number;
-  review: Review;
-  product: Product;
+  review: ReviewDto;
+  product: ProductDto;
   aiText: string;
-  editedText: string;
+  editedText: string | null;
   status: string;
-  tone: ReplyTone;
-  lengthType: ReplyLength;
+  tone: string | null;
+  lengthType: string | null;
   includeEmoji: boolean;
   usageCount: number;
-  exportedAt: string;
+  exportedAt: string | null;
   createdAt: string;
   updatedAt: string;
-  // isDel: boolean;
-  // deletedAt: string | null;
 }
 
-// GET /api/v1/stores/{store_id}/reply-options
-export interface ReplyOption {
-  id?: number;
-  storeId: number;
-  // defaultTone: ReplyTone;
-  // defaultLength: ReplyLength;
-  tone: ReplyTone;
-  lengthType: ReplyLength;
-  includeEmoji: boolean;
-  brandGuideline: string;
-  createdAt?: string;
-  updatedAt?: string;
+// POST /api/v1/replies/test 리플 테스트 응답
+export interface TestReplyDto {
+  aiText: string;
+  usageCount: number;
 }
 
-export type ReplyList = Pagination & { items: Reply[] };
+export type ReplyList = Pagination & { items: ReplyDto[] };
 
 export type SentimentType = 'positive' | 'negative' | 'neutral';

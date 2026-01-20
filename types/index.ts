@@ -13,3 +13,7 @@ export * from './usage';
 export * from './plan';
 export * from './term';
 export * from './alert';
+export * from './user';
+export * from './contact';
+export * from './reminder';
+export * from './job';

@@ -3,38 +3,25 @@ import { PlatformType } from './enums';
 // ============================================================================
 // 스토어 (Stores)
 // ============================================================================
+
 // GET /api/v1/stores/me 연동한 스토어 목록
-// 대시보드, 쇼핑몰 연동에서 사용
-export interface Stores {
+// GET /api/v1/stores/{store_id} 스토어 상세 조회
+export interface StoreDto {
   id: number;
-  // userId: number;
   name: string;
-  // connectionStatus: string;
   url: string;
   platform: PlatformType;
-  is_active: boolean;
-  is_verified: boolean;
-  verified_at: string;
-  last_product_synced_at: string;
-  created_at: string;
-  updated_at: string;
-  deletedAt: string | null;
+  isActive: boolean;
+  isVerified: boolean;
+  verifiedAt: string | null;
+  lastProductSyncedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// GET /api/v1/stores/{store_id}
-// 특정 스토어의 상세 정보를 조회, 스토어 소유자만 조회 가능
-export interface Store {
-  id: number;
-  // userId: number;
-  name: string;
-  // connectionStatus: string;
-  url: string;
-  platform: PlatformType;
-  is_active: boolean;
-  is_verified: boolean;
-  verified_at: string;
-  last_product_synced_at: string;
-  created_at: string;
-  updated_at: string;
-  // deletedAt: string | null;
+// GET /api/v1/stores/{store_id}/reply-options 스토어 리플 옵션 조회
+export interface StoreReplyOptionsDto {
+  tone: string | null;
+  lengthType: string | null;
+  includeEmoji: boolean;
 }

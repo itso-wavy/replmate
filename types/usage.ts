@@ -6,41 +6,31 @@ import { UsageEventType } from './enums';
 // ============================================================================
 
 // GET /api/v1/usage/quota 이번달 남은 구독 사용량
-export interface UsageQuotaSubscription {
+export interface UsageQuotaDto {
   userId: number;
+  remaining: number;
   updatedAt: string;
-  // TODO: 임의로 추가함
-  planName: string;
-  storeQuotaUsed: number;
-  storeQuotaTotal: number;
-  productQuotaUsed: number;
-  productQuotaTotal: number;
-  replyQuotaUsed: number;
-  replyQuotaTotal: number;
 }
 
-//GET /api/v1/usage/free-quota 스토어당 오늘 남은 무료 리플 미리보기 사용량
-export interface UsageQuotaFree {
-  store_id: number;
+// GET /api/v1/usage/test-quota 오늘 남은 리플 테스트 사용량
+export interface TestUsageQuotaDto {
+  userId: number;
   remaining: number;
-  updated_at: string;
-  // replyQuotaUsed: number;
-  // replyQuotaTotal: number;
+  updatedAt: string;
 }
 
 // GET /api/v1/usage/history?page=1&size=20
-export interface UsageHistoryItem {
+export interface UsageLedgerDto {
   id: number;
-  event_type: UsageEventType; // 이벤트 타입
-  delta_quantity: number; // 사용량 증감
-  store_id: number;
-  plan_id: number;
-  occurred_at: string; // 발생 일시
+  eventType: UsageEventType;
+  deltaQuantity: number;
+  storeId: number;
+  planId: number;
+  occurredAt: string;
   meta: {
-    // 메타 정보
-    reply_id: number;
-    review_id: number;
+    replyId?: number;
+    reviewId?: number;
   };
 }
 
-export type UsageHistoryList = Pagination & { items: UsageHistoryItem[] };
+export type UsageHistoryList = Pagination & { items: UsageLedgerDto[] };
