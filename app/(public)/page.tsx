@@ -10,8 +10,6 @@ import {
 } from './_components';
 
 const LandingPage = () => {
-  // TODO: Auth 상태에 따른 CTA 경로 처리 (PUB-LAND-CTA-001)
-
   return (
     <>
       <PublicHeader navMenu={GNB_MENU} />
