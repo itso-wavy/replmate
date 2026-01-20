@@ -101,7 +101,7 @@ const HeroSection = ({ id }: { id: string }) => {
           <br />
           이제{' '}
           <span className='relative mx-1 inline-block'>
-            <span className='from-primary to-secondary relative z-10 bg-gradient-to-r bg-clip-text text-transparent'>
+            <span className='from-primary to-brand-5 relative z-10 bg-gradient-to-r bg-clip-text text-transparent'>
               리플메이트 AI
             </span>
             <span className='bg-brand-11/80 animate-highlighter absolute bottom-2 left-0 z-0 h-4 w-0 -rotate-1 rounded-full md:h-5' />
