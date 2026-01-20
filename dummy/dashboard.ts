@@ -38,8 +38,6 @@ export const dummyAlerts: Alert[] = [
 ];
 
 export const dummyUser = {
-  accessToken: '123',
-  refreshToken: '123',
   user: {
     id: 1,
     email: 'user@replmae.com',
@@ -53,6 +51,8 @@ export const dummyUser = {
     updatedAt: '2026-01-15',
     needsTermsAgreement: true,
   },
+  accessToken: '123',
+  refreshToken: '123',
 };
 
 export const dummyReplies: DashboardReply[] = [

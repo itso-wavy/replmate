@@ -8,36 +8,34 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  phone_number: string | null;
-  auth_provider: AuthProvider;
-  auth_provider_id: string;
-  is_verified: boolean;
-  verified_at: string | null;
-  created_at: string;
-  updated_at: string;
-  needs_terms_agreement: boolean;
-  is_del: boolean;
-  deleted_at: string | null;
+  phoneNumber: string | null;
+  authProvider: AuthProvider;
+  authProviderId: string;
+  isVerified: boolean;
+  verifiedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  needsTermsAgreement: boolean;
 }
 
 // ============================================================================
 // 인증 토큰 (next-auth 통합용)
 // ============================================================================
 
-export interface AuthTokens {
+export interface AuthState {
+  user: User | null;
+  isAuthenticated?: boolean;
   accessToken: string;
   refreshToken: string;
-  // sessionId: string; // 백엔드 Redis 세션 ID
+  // sessionId: string,
 }
 
-export interface AuthState extends AuthTokens {
-  user: User | null;
-  isAuthenticated: boolean;
+export interface AuthAction {
   setAuth: (data: {
+    user: User;
     accessToken: string;
     refreshToken: string;
     // sessionId: string;
-    user: User;
   }) => void;
   clearAuth: () => void;
 }

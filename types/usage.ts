@@ -34,3 +34,18 @@ export interface UsageLedgerDto {
 }
 
 export type UsageHistoryList = Pagination & { items: UsageLedgerDto[] };
+
+
+// ============================================================================
+// 대시보드용 (프론트엔드 전용)
+// ============================================================================
+
+// 대시보드에서 사용하는 구독 정보 (사용자 플랜 + 사용량 통합)
+export interface UsageQuotaSubscription {
+  planName: string;
+  updatedAt: string;
+  replyQuotaTotal: number;
+  replyQuotaUsed: number;
+  storeQuotaTotal: number;
+  storeQuotaUsed: number;
+}

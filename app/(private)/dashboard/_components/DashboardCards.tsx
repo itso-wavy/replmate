@@ -206,7 +206,7 @@ const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
         <ItemContent>
           <ItemDescription className='text-foreground mt-6'>
             <span className='typo-heading-24 font-medium'>
-              {subscription.storeQuotaUsed}
+              {subscription.storeQuotaUsed || 0}
             </span>
             <span className='typo-caption-14 font-medium'> 건</span>
           </ItemDescription>

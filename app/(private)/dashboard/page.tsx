@@ -50,7 +50,7 @@ const DashboardPage = () => {
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           <DashboardPlanCard
-            isIdentifyed={user?.is_verified!}
+            isIdentifyed={user?.isVerified!}
             subscription={dummySubscription}
           />
           <DashboardTodayCard todayReplyCount={0} />

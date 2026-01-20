@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import type { AuthState } from '@/types';
+import type { AuthAction, AuthState } from '@/types';
 
-const initialState = {
+const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   accessToken: '',
@@ -11,7 +11,7 @@ const initialState = {
   // sessionId: '',
 };
 
-export const useAuthStore = create<AuthState>()(
+export const useAuthStore = create<AuthState & AuthAction>()(
   devtools(
     persist(
       (set, _get) => ({
