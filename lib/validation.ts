@@ -36,3 +36,15 @@ export const addNewStoreSchema = z.object({
 });
 
 export type AddNewStoreFormData = z.infer<typeof addNewStoreSchema>;
+
+export const storeLimitedSchema = (maxAllowed: number) =>
+  z.object({
+    storeIds: z
+      .array(z.string())
+      // .min(1, '최소 1개 이상의 쇼핑몰을 선택해 주세요.')
+      .max(maxAllowed, `최대 ${maxAllowed}개까지만 선택 가능합니다.`),
+  });
+
+export type StoreLimitedFormData = z.infer<
+  ReturnType<typeof storeLimitedSchema>
+>;

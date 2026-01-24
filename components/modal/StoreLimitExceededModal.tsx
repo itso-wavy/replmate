@@ -1,45 +1,130 @@
-'use client';
+// 쇼핑몰 수 강제 조정 모달
+import { Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '../ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { StoreLimitedFormData, storeLimitedSchema } from '@/lib/validation';
+import { StoreDto } from '@/types';
+
+import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import { CommonModalProps } from './types';
 
-// 쇼핑몰 수 한도 초과 모달
-const Modal = ({ open, onOpenChange }: CommonModalProps) => {
-  const router = useRouter();
+interface ModalProps extends CommonModalProps {
+  stores: StoreDto[]; // 현재 연동 중인 쇼핑몰 목록
+  maxAllowed: number; // 변경될 플랜의 최대 허용 개수
+}
 
-  const handleAction = () => {
-    router.push('/subscribe');
+const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
+  const form = useForm<StoreLimitedFormData>({
+    resolver: zodResolver(storeLimitedSchema(maxAllowed)),
+    defaultValues: {
+      storeIds: [],
+    },
+  });
+
+  const selectedStoreIds = form.watch('storeIds');
+
+  const handleCheckboxChange = (storeId: string, checked: boolean) => {
+    const currentIds = selectedStoreIds;
+
+    if (checked) {
+      // 체크 시도
+      if (currentIds.length >= maxAllowed) {
+        // 한도 초과 - 토스트 표시 및 체크 차단
+        toast.error(`최대 ${maxAllowed}개까지만 선택 가능합니다.`);
+        return;
+      }
+      form.setValue('storeIds', [...currentIds, storeId]);
+    } else {
+      // 체크 해제
+      form.setValue(
+        'storeIds',
+        currentIds.filter((id) => id !== storeId)
+      );
+    }
+  };
+
+  const handleSaveSelection = (data: StoreLimitedFormData) => {
+    console.log('data: ', data);
+    // TODO: API 호출로 선택된 쇼핑몰만 활성 상태 유지
+    console.log('Selected store IDs:', data.storeIds);
+    toast.success('선택한 쇼핑몰이 유지됩니다.');
+    onOpenChange(false);
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className='sm:max-w-[425px]'>
-        <AlertDialogHeader>
-          <AlertDialogTitle className='typo-heading-16 w-full text-center'>
-            쇼핑몰 등록
-          </AlertDialogTitle>
-          <AlertDialogDescription className='mx-auto text-center'>{`등록 가능한 쇼핑몰 한도를 초과했습니다.\n더 많은 쇼핑몰을 연동하려면 플랜을 업그레이드 해주세요.`}</AlertDialogDescription>
-        </AlertDialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {/* <form onSubmit={form.handleSubmit(handleSaveSelection)}> */}
+      <DialogContent className='p-0'>
+        <form
+          onSubmit={form.handleSubmit(handleSaveSelection)}
+          className='flex flex-col gap-6 p-6'
+        >
+          <DialogHeader>
+            <DialogTitle className='typo-heading-20!'>쇼핑몰 선택</DialogTitle>
+            <DialogDescription className='mx-auto text-center'>{`구독 플랜 변경으로 연동 가능한 쇼핑몰 수를 초과했습니다.\n계속해서 관리할 쇼핑몰을 선택해 주세요.`}</DialogDescription>
+          </DialogHeader>
 
-        <AlertDialogFooter className='*:flex-1'>
-          <AlertDialogCancel>다음에 하기</AlertDialogCancel>
-          <AlertDialogAction onClick={handleAction}>
-            플랜 업그레이드
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          <div className='max-h-[400px] overflow-y-auto'>
+            <FieldGroup data-slot='checkbox-group' className='rounded-xl p-3'>
+              {stores.map((store) => {
+                const storeId = store.id.toString();
+
+                return (
+                  <Field key={storeId} orientation='horizontal'>
+                    <Checkbox
+                      id={'checkbox_' + storeId}
+                      checked={selectedStoreIds.includes(storeId)}
+                      onCheckedChange={(checked) =>
+                        handleCheckboxChange(storeId, checked)
+                      }
+                    />
+
+                    <FieldLabel
+                      htmlFor={'checkbox_' + storeId}
+                      className='ml-1.5'
+                    >
+                      <div className='flex flex-col'>
+                        <span className='typo-body-16 text-warmgray-900 font-medium'>
+                          {store.name}
+                        </span>
+                        <span className='typo-body-14 text-warmgray-600'>
+                          {store.url}
+                        </span>
+                      </div>
+                    </FieldLabel>
+                  </Field>
+                );
+              })}
+            </FieldGroup>
+          </div>
+
+          <DialogFooter>
+            <Button
+              disabled={
+                // selectedStoreIds.length === 0 ||
+                selectedStoreIds.length > maxAllowed
+              }
+              className='w-full'
+            >
+              선택한 쇼핑몰 유지하기
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

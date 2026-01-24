@@ -1,5 +1,10 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 import { compareDesc } from 'date-fns';
 
+import { StoreLimitExceededModal } from '@/components/modal';
 import { dummyStores, storeAlert } from '@/dummy/stores';
 import { dummySubscription } from '@/dummy/subscription';
 
@@ -7,6 +12,14 @@ import { DashboardLayout } from '../_components';
 import { AddNewCard, StoreCard } from './_components';
 
 const StoresPage = () => {
+  const [isPlanLimitModalOpen, setIsPlanLimitModalOpen] = useState(false);
+
+  useEffect(() => {
+    // TODO: 백엔드에서 '조정 필요' 상태 확인
+    const needsAdjustment = true; // 임시
+    if (needsAdjustment) setIsPlanLimitModalOpen(true);
+  }, []);
+
   return (
     <DashboardLayout
       heading='쇼핑몰 연동'
@@ -37,6 +50,15 @@ const StoresPage = () => {
           ))}
         <AddNewCard />
       </div>
+
+      {isPlanLimitModalOpen && (
+        <StoreLimitExceededModal
+          stores={dummyStores}
+          maxAllowed={3} // TODO: 새롭게 변경될 플랜의 맥스 연동 수
+          open={isPlanLimitModalOpen}
+          onOpenChange={setIsPlanLimitModalOpen}
+        />
+      )}
     </DashboardLayout>
   );
 };
