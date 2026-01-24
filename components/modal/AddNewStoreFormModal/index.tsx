@@ -33,14 +33,14 @@ import { useAddNewStoreForm } from './hook';
 
 export const availableStores = [
   {
-    label: '네이버 스마트 스토어',
+    label: '네이버 스마트스토어',
     value: PlatformType.NAVER_SMART_STORE,
     itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
     // 부모 요소의 bg를 바꾸려면???
     triggerStyle: 'bg-smart-store-theme/8',
   },
   {
-    label: '네이버 브랜드 스토어',
+    label: '네이버 브랜드스토어',
     value: PlatformType.NAVER_BRAND_STORE,
     itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',
     triggerStyle: 'bg-brand-store-theme/8',

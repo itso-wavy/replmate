@@ -230,7 +230,6 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       closeModal();
       form.reset(); // 폼 초기화
       setUploadedFiles([]); // 파일 초기화
-      // setUrlCheckMessage('');
     } catch (error: any) {
       // 4. 실패 처리
       console.error('스토어 등록 실패:', error);
