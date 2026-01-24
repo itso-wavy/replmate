@@ -69,9 +69,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            <p className='typo-heading-20 w-full text-center'>쇼핑몰 등록</p>
-          </DialogTitle>
+          <DialogTitle className='typo-heading-20!'>쇼핑몰 등록</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>

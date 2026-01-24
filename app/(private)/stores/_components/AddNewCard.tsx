@@ -6,7 +6,7 @@ import { Plus } from 'lucide-react';
 
 import {
   AddNewStoreFormModal,
-  StoreLimitExceededModal,
+  RecommandPlanUpgradeModal,
   VerificationRequiredModal,
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
@@ -51,7 +51,7 @@ const AddNewCard = () => {
         open={activeModal === 'verification'}
         onOpenChange={(open) => !open && setActiveModal(null)}
       />
-      <StoreLimitExceededModal
+      <RecommandPlanUpgradeModal
         open={activeModal === 'limitExceeded'}
         onOpenChange={(open) => !open && setActiveModal(null)}
       />

@@ -15,7 +15,6 @@ import { toast } from 'sonner';
 
 import UnlinkStoreConfirmModal from '@/components/modal/UnlinkStoreConfirmModal';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,

@@ -22,9 +22,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
         <AlertDialogHeader>
-          <AlertDialogTitle className='typo-heading-16 w-full text-center'>
-            쇼핑몰 연동 해제
-          </AlertDialogTitle>
+          <AlertDialogTitle>쇼핑몰 연동 해제</AlertDialogTitle>
           <AlertDialogDescription className='mx-auto text-center'>
             쇼핑몰 연동을 해제하시겠습니까?
           </AlertDialogDescription>

@@ -123,7 +123,11 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
-      className={cn('text-base leading-none font-medium', className)}
+      className={cn(
+        // 'text-base leading-none font-medium',
+        'typo-body-18 w-full text-center font-medium',
+        className
+      )}
       {...props}
     />
   );
@@ -138,6 +142,7 @@ function DialogDescription({
       data-slot='dialog-description'
       className={cn(
         'text-muted-foreground *:[a]:hover:text-foreground text-sm *:[a]:underline *:[a]:underline-offset-3',
+        'whitespace-pre-line',
         className
       )}
       {...props}
