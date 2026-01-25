@@ -15,7 +15,7 @@ const SupportSection = ({ id }: { id: string }) => {
 
       <div className='wrapper'>
         <div className='text-center *:text-balance'>
-          <p className='typo-eyebrow-14 text-brand-10 mb-2'>고객지원</p>
+          <p className='typo-eyebrow-14 text-brand-sun mb-2'>고객지원</p>
           <h2 className='typo-display-36 relative inline-block text-white'>
             리플메이트에 궁금한 점이 있으신가요?
           </h2>
@@ -41,7 +41,7 @@ const SupportSection = ({ id }: { id: string }) => {
         <div className='mt-12 text-center'>
           <div className='typo-body-18 text-primary-foreground/90'>
             리뷰 관리가 쉬워지면{' '}
-            <span className='text-brand-11/90 relative z-10'>
+            <span className='text-brand-yellow/90 relative z-10'>
               매출이 달라집니다
             </span>
           </div>

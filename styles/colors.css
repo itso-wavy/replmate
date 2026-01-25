@@ -15,13 +15,15 @@
   --color-brand-8: #00b47b;
   --color-brand-9: #6ac8a0; 
   /* --color-brand-9: #24c582;  */
-  --color-brand-10: #ffb407;
-  --color-brand-11: #ffdf1b;
   --color-brand-12: #ad9dfb;
   --color-brand-13: #aaaef5;
   --color-brand-14: #efe8fd;
-  --color-brand-15: #EE0121;
-  --color-brand-16: #ff7300;
+
+  --color-brand-ruby: #d6004b;
+  --color-brand-red: #EE0121;
+  --color-brand-orange: #ff7300;
+  --color-brand-sun: #ffb407;
+  --color-brand-yellow: #ffdf1b;
 
   --color-warmgray-50: #edede8;
   --color-warmgray-100: #e6e6e0;
@@ -44,6 +46,12 @@
   --color-coupang-store-theme: #0073E9;
 
   /* BRAND COLOR */
+  --color-brand-ruby: #d6004b;
+  --color-brand-red: #EE0121;
+  --color-brand-orange: #ff7300;
+  --color-brand-sun: #ffb407;
+  --color-brand-yellow: #ffdf1b;
+
   --color-brand-0: #005cf2;
   --color-brand-1: #629eff;
   --color-brand-2: #a5c1ee;
@@ -57,13 +65,12 @@
   --color-brand-8: #00b47b;
   --color-brand-9: #6ac8a0; 
   /* --color-brand-9: #24c582;  */
-  --color-brand-10: #ffb407;
-  --color-brand-11: #ffdf1b;
   --color-brand-12: #ad9dfb;
   --color-brand-13: #aaaef5;
   --color-brand-14: #efe8fd;
-  --color-brand-15: #EE0121;
-  --color-brand-16: #ff7300;
+  --color-brand-15: #d6004b;
+  --color-brand-16: #EE0121;
+  --color-brand-17: #ff7300;
 
   --color-warmgray-50: #edede8;
   --color-warmgray-100: #e6e6e0;
@@ -95,9 +102,10 @@
   --secondary-foreground: #ffffff;
   --accent: #edede8a0;
   --accent-foreground: #0a0a0a;
-  --destructive: var(--color-brand-16);
+  --destructive: var(--color-brand-orange);
   --destructive-foreground: #fef2f2;
   --color-success: var(--color-brand-8);
+  --color-error: var(--color-brand-ruby);
 
   /* Form */
   --input: #e4e5e7;

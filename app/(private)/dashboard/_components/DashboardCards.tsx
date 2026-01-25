@@ -171,7 +171,7 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
               value={(replyQuotaRest / replyQuotaTotal) * 100}
               className='w-full'
               trackClassName='bg-gray-900/5'
-              indicatorClassName='bg-brand-10'
+              indicatorClassName='bg-brand-sun'
             />
           </ItemFooter>
         </ItemContent>

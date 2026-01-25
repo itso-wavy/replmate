@@ -85,7 +85,7 @@ export const FileUploadField = ({
               <button
                 type='button'
                 onClick={() => onRemoveFile(index)}
-                className='hover:text-brand-10 ml-2 p-0.5 text-gray-400'
+                className='hover:text-brand-sun ml-2 p-0.5 text-gray-400'
               >
                 <X className='size-4.5' />
               </button>

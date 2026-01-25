@@ -14,7 +14,7 @@ export const RequiredMark = ({
   return (
     <span
       className={cn(
-        'typo-caption-12 text-brand-10 relative bottom-1 -left-1',
+        'typo-caption-12 text-brand-sun relative bottom-1 -left-1',
         className
       )}
       {...props}

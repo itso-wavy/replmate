@@ -32,7 +32,7 @@ const FeaturesSection = ({ id }: { id: string }) => {
             description='하루 1시간 걸리던 리뷰 관리, 5분이면 충분합니다. 클릭 한 번으로 최적의 답글을 생성하세요.'
           />
           <FeatureCard
-            icon={<SmileyIcon className='text-brand-10' size={32} />}
+            icon={<SmileyIcon className='text-brand-sun' size={32} />}
             title='감정 노동 ZERO'
             description='악성 리뷰에 스트레스 받지 마세요. AI가 감정을 배제하고 가장 정중하고 적절한 대응을 해드립니다.'
           />

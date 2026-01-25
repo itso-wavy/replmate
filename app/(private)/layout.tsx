@@ -24,7 +24,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
       <div className='relative hidden min-h-svh flex-col md:flex'>
         <PrivateHeader navMenu={DASHBOARD_MENU} />
 
-        <main className='to-brand-10/15 mx-auto flex w-full max-w-[1900px] flex-1 flex-col overflow-hidden bg-linear-180 from-white from-50% to-85% px-[20px]'>
+        <main className='to-brand-sun/15 mx-auto flex w-full max-w-[1900px] flex-1 flex-col overflow-hidden bg-linear-180 from-white from-50% to-85% px-[20px]'>
           <div className='flex flex-1 flex-row gap-2 pt-2 pb-6'>
             {/* <div className='bg-blue-100'>sidebar left</div> */}
             <div
