@@ -17,9 +17,9 @@ const alertVariants = cva(
           'bg-teal-50 [&>*]:data-[slot=alert-title]:text-teal-800 [&>*]:data-[slot=alert-description]:text-teal-700 [&_button]:bg-teal-200 [&>svg]:text-teal-500 [&_button]:text-teal-800 [&_button]:hover:bg-teal-200/60',
         info: 'bg-indigo-50 [&>*]:data-[slot=alert-title]:text-indigo-800 [&>*]:data-[slot=alert-description]:text-indigo-800/80 [&_button]:bg-indigo-200 [&>svg]:text-indigo-500 [&_button]:text-indigo-800 [&_button]:hover:bg-indigo-200/60',
         warning:
-          'bg-yellow-50 [&>*]:data-[slot=alert-title]:text-yellow-800 [&>*]:data-[slot=alert-description]:text-yellow-700 [&_button]:bg-yellow-200 [&>svg]:text-yellow-500 [&_button]:text-yellow-800 [&_button]:hover:bg-yellow-200/60',
+          'bg-yellow-50 [&>*]:data-[slot=alert-title]:text-yellow-800 [&>*]:data-[slot=alert-description]:text-[#c39020] [&_button]:bg-yellow-200 [&>svg]:text-yellow-500 [&_button]:text-yellow-800 [&_button]:hover:bg-yellow-200/60',
         error:
-          'bg-rose-50 [&>*]:data-[slot=alert-title]:text-rose-800 [&>*]:data-[slot=alert-description]:text-rose-700 [&_button]:bg-rose-200 [&>svg]:text-rose-500 [&_button]:text-rose-800 [&_button]:hover:bg-rose-200/60',
+          'bg-rose-50 [&>*]:data-[slot=alert-title]:text-error [&>*]:data-[slot=alert-description]:text-rose-700 [&_button]:bg-rose-200 [&>svg]:text-rose-500 [&_button]:text-error [&_button]:hover:bg-rose-200/60',
       },
     },
     defaultVariants: {
