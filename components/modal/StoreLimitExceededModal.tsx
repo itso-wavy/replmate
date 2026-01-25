@@ -1,6 +1,7 @@
 // 쇼핑몰 수 강제 조정 모달
 import { useForm } from 'react-hook-form';
 
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
@@ -18,13 +19,7 @@ import { StoreDto } from '@/types';
 
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from '../ui/field';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import { CommonModalProps } from './types';
 
 interface ModalProps extends CommonModalProps {
@@ -69,8 +64,23 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
     onOpenChange(false);
   };
 
+  // X 버튼 클릭만 허용, 백드롭 클릭, ESC 키(escape-key) 등은 차단
+  const handleOpenChange = (
+    newOpen: boolean,
+    eventDetails: DialogPrimitive.Root.ChangeEventDetails
+  ) => {
+    // 모달을 닫으려고 할 때만 체크
+    if (!newOpen) {
+      if (eventDetails.reason === 'close-press') {
+        onOpenChange(newOpen);
+      }
+      return;
+    }
+    onOpenChange(newOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='p-0'>
         <form
           onSubmit={form.handleSubmit(handleSaveSelection)}
