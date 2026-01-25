@@ -124,7 +124,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                         className={field.value && seletedStore?.triggerStyle}
                       >
                         <SelectValue placeholder='쇼핑몰을 선택해 주세요'>
-                          {field.value && seletedStore?.label}
+                          {!field.value
+                            ? '쇼핑몰을 선택해 주세요'
+                            : seletedStore?.label}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
