@@ -15,6 +15,7 @@ import { AlertType, AlertVariant } from '@/types';
 import { Alert, AlertAction, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
 
+// FIXME:
 export interface CustomAlertProps {
   id: string;
   variant: AlertVariant;

@@ -1,15 +1,4 @@
-import { Alert, AlertType, PlatformType, StoreDto } from '@/types';
-
-export const storeAlert: Alert = {
-  id: '1',
-  createdAt: new Date('2025-12-01'),
-  variant: 'info',
-  type: AlertType.PAYMENT_FAILED,
-  title: '구독 플랜 변경으로 쇼핑몰 조정이 필요합니다.',
-  description:
-    '2025.01.01부터 무료 플랜(쇼핑몰 최대 1개 · 상품 최대 20개)이 적용됩니다.\n현재 쇼핑몰 2개, 상품 30개가 등록되어 있어 조정이 필요합니다. 기한 내 조정하지 않으실 경우, 최근 등록된 순서대로 자동 비활성화 처리됩니다.',
-  // href: '/subscribe',
-};
+import { PlatformType, StoreDto } from '@/types';
 
 export const dummyStores: StoreDto[] = [
   {

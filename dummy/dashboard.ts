@@ -1,41 +1,5 @@
 import { DashboardReply } from '@/app/(private)/dashboard/_components';
-import { Alert, AlertType, AuthProvider } from '@/types';
-
-export const dummyAlerts: Alert[] = [
-  {
-    id: '1',
-    createdAt: new Date('2025-12-01'),
-    variant: 'error',
-    type: AlertType.PAYMENT_FAILED,
-    title:
-      '정기 결제에 실패했습니다. D-2 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해 주세요.',
-    href: '/subscribe',
-  },
-  {
-    id: '2',
-    createdAt: new Date('2025-12-11'),
-    variant: 'warning',
-    type: AlertType.STORE_AUTH_REJECTED,
-    title: '쇼핑몰 관리자 인증이 반려되었습니다.',
-    href: '/stores',
-  },
-  {
-    id: '3',
-    createdAt: new Date('2025-12-12'),
-    variant: 'warning',
-    type: AlertType.STORE_LIMIT_EXCEEDED,
-    title: '구독 플랜 변경으로 쇼핑몰 수 조정이 필요합니다.',
-    href: '/stores',
-  },
-  {
-    id: '4',
-    createdAt: new Date('2025-12-30'),
-    variant: 'warning',
-    type: AlertType.PRODUCT_LIMIT_EXCEEDED,
-    title: '구독 플랜 변경으로 상품 수 조정이 필요합니다.',
-    href: '/products',
-  },
-];
+import { AuthProvider } from '@/types';
 
 export const dummyUser = {
   user: {

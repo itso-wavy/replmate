@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { compareDesc } from 'date-fns';
 
 import { StoreLimitExceededModal } from '@/components/modal';
-import { dummyStores, storeAlert } from '@/dummy/stores';
+import { dummyStoreAlert } from '@/dummy/alerts';
+import { dummyStores } from '@/dummy/stores';
 import { dummySubscription } from '@/dummy/subscription';
 
 import { DashboardLayout } from '../_components';
@@ -37,7 +38,7 @@ const StoresPage = () => {
           </span>
         </span>
       }
-      alerts={[storeAlert]}
+      alerts={[dummyStoreAlert]}
     >
       <div className='grid auto-rows-[minmax(350px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
         {/* 최신 순 정렬 */}

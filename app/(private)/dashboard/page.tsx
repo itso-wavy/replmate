@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { dummyAlerts, dummyReplies } from '@/dummy/dashboard';
+import { dummyDashboardAlerts } from '@/dummy/alerts';
+import { dummyReplies } from '@/dummy/dashboard';
 import { dummySubscription } from '@/dummy/subscription';
 import { useUser } from '@/store/authStore';
 import { Alert, AlertType } from '@/types';
@@ -45,7 +46,7 @@ const DashboardPage = () => {
   return (
     <DashboardLayout
       heading='대시보드'
-      alerts={sortDashboardAlerts(dummyAlerts)}
+      alerts={sortDashboardAlerts(dummyDashboardAlerts)}
     >
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
