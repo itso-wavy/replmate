@@ -39,17 +39,21 @@ const getPlatformConfig = (platform: string) => {
     case 'naver_smart_store':
       return {
         name: '네이버 스마트스토어',
-        cardStyle: 'to-smart-store-theme/10',
+        // cardStyle: 'to-smart-store-theme/10',
         textStyle: 'text-smart-store-theme',
       };
     case 'naver_brand_store':
       return {
         name: '네이버 브랜드스토어',
-        cardStyle: 'to-brand-store-theme/10',
+        // cardStyle: 'to-brand-store-theme/10',
         textStyle: 'text-brand-store-theme',
       };
     default:
-      return { name: '', cardStyle: '', textStyle: '' };
+      return {
+        name: '',
+        //  cardStyle: '',
+        textStyle: '',
+      };
   }
 };
 
@@ -139,7 +143,8 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     {
       condition: connection.isWaiting,
       label: '승인 대기',
-      className: 'typo-14 border-brand-11 text-brand-10 font-semibold',
+      // className: 'typo-14 border-brand-11 text-brand-10 font-semibold',
+      className: 'typo-14 border-primary text-primary font-semibold',
     },
     {
       condition: connection.isVerified,
@@ -149,7 +154,8 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     {
       condition: connection.isRejected,
       label: '반려',
-      className: 'bg-brand-11 text-foreground font-semibold',
+      // className: 'bg-brand-11 text-foreground font-semibold',
+      className: 'bg-foreground text-orange-300 font-medium',
     },
     {
       condition: connection.isDeactivationScheduled,
@@ -167,7 +173,8 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     <Card
       className={cn(
         'group/card from-warmgray-100/10 relative gap-0 bg-gradient-to-b hover:shadow-md',
-        config.cardStyle
+        // config.cardStyle
+        'to-gray-50'
       )}
     >
       <CardHeader className='flex items-start justify-between'>
@@ -240,7 +247,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
           </div>
 
           <div>
-            <span className='mb-[7px] block text-xs font-medium text-gray-400'>
+            <span className='mb-2 block text-xs font-medium text-gray-400'>
               Status
             </span>
             <div className='flex flex-wrap items-center gap-2'>
@@ -258,7 +265,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
               )}
             </div>
             {connection.isRejected && (
-              <p className='text-destructive typo-body-14 mt-4 leading-none font-medium'>
+              <p className='text-destructive typo-body-14 mt-3 leading-none font-medium'>
                 * 삭제 후 다시 등록해 주세요.
               </p>
             )}
