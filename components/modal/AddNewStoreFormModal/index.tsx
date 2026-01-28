@@ -87,6 +87,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    maxLength={15}
                     autoComplete='off'
                     placeholder='예: 메인 쇼핑몰'
                     onChange={handleNameInputChange}
@@ -165,6 +166,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
+                      maxLength={100}
                       placeholder='/ 이후 주소를 입력해 주세요'
                       onChange={handleUrlChange}
                     />
@@ -172,10 +174,10 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       type='button'
                       variant='secondary'
                       className='h-9!'
-                      disabled={!form.watch('url')}
+                      disabled={fieldState.invalid}
                       onClick={handleDuplicateCheck}
                     >
-                      중복 확인
+                      {form.watch('isUrlAvailable') ? '확인 완료' : '중복 확인'}
                     </Button>
                   </div>
                   <FieldMessage variant='error' messages={[fieldState.error]} />

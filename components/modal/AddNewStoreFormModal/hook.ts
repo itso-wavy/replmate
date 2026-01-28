@@ -112,7 +112,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
 
   /**
    * 파일 검증 및 추가 공통 로직
-   * JPG/PNG/PDF, 건당 5MB 이하, 최대 3개까지 업로드 가능
+   * JPEG/PNG/PDF, 건당 5MB 이하, 최대 3개까지 업로드 가능
    * 규격 위반 시 업로드 차단 및 에러 토스트 표시
    */
   const validateAndAddFiles = (files: File[]) => {
@@ -127,7 +127,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       // 형식 검증
       const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
-        toast.error('지원하지 않는 파일 형식입니다. (JPG, PNG, PDF만 가능)');
+        toast.error('지원하지 않는 파일 형식입니다. (JPEG, PNG, PDF만 가능)');
         return;
       }
 
@@ -141,7 +141,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
         (uploaded) => uploaded.name === file.name && uploaded.size === file.size
       );
       if (isDuplicate) {
-        toast.error('이미 추가된 파일입니다.');
+        toast.error('이미 등록된 파일입니다.');
         return;
       }
     }

@@ -55,13 +55,13 @@ export const useStoreCard = (store: StoreDto) => {
 
   // 입력 가능한 문자 검증: 한글, 영문, 숫자, 하이픈, 언더스코어, 괄호, 공백
   const isValidCharacter = (char: string) => {
-    const validPattern = /^[a-zA-Z0-9가-힣\s\-_()]*$/;
+    const validPattern = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s\-_()]*$/;
     return validPattern.test(char);
   };
 
   const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    if (newValue.length <= 31 && isValidCharacter(newValue)) {
+    if (newValue.length <= 15 && isValidCharacter(newValue)) {
       setEditValue(newValue);
     }
   };
@@ -69,8 +69,21 @@ export const useStoreCard = (store: StoreDto) => {
   const handleSaveName = async () => {
     const trimmedValue = editValue.trim();
 
-    if (trimmedValue.length < 2) {
-      toast.error('별칭은 2자 이상 입력해주세요.');
+    const isInvalid =
+      trimmedValue.length < 2 ||
+      trimmedValue.length > 15 ||
+      !isValidCharacter(trimmedValue);
+    if (isInvalid) {
+      if (trimmedValue.length < 2) {
+        toast.error('별칭은 2자 이상 입력해 주세요.');
+      }
+      if (trimmedValue.length > 15) {
+        toast.error('최대 15자까지 입력 가능합니다.');
+      }
+      if (!isValidCharacter(trimmedValue)) {
+        toast.error('허용되지 않은 문자가 포함되어 있습니다.');
+      }
+
       setEditValue(store.name);
       setIsNameEditMode(false);
       return;

@@ -56,7 +56,7 @@ export const FileUploadField = ({
           파일을 업로드 해주세요
         </div>
         <div className='typo-caption-12 mt-1 text-gray-400'>
-          최대 5MB, JPG/PNG/PDF
+          최대 5MB, JPEG/PNG/PDF
         </div>
       </button>
 
