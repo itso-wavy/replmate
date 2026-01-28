@@ -1,7 +1,25 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import type { AuthAction, AuthState } from '@/types';
+import { UserDomain } from '@/types';
+
+export interface AuthState {
+  user: UserDomain | null;
+  isAuthenticated?: boolean;
+  accessToken: string;
+  refreshToken: string;
+  // sessionId: string,
+}
+
+export interface AuthAction {
+  setAuth: (data: {
+    user: UserDomain;
+    accessToken: string;
+    refreshToken: string;
+    // sessionId: string;
+  }) => void;
+  clearAuth: () => void;
+}
 
 const initialState: AuthState = {
   user: null,

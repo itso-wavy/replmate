@@ -1,4 +1,4 @@
-import { AlertType } from './enums';
+import { AlertType } from '../enums';
 
 export type AlertVariant = 'success' | 'info' | 'warning' | 'error';
 

@@ -5,7 +5,7 @@ import NaverProvider from 'next-auth/providers/naver';
 
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
-import { User } from '@/types';
+import { UserDto } from '@/types';
 
 // import EmailProvider from "next-auth/providers/email"  // 향후 추가
 
@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
         refreshToken: token.backendRefreshToken as string,
         // sessionId: token.backendSessionId as string,
       };
-      session.user = token.backendUser as User;
+      session.user = token.backendUser as UserDto;
 
       return session;
     },
