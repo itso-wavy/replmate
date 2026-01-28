@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from 'react';
 
-import { compareDesc } from 'date-fns';
-
 import { StoreLimitExceededModal } from '@/components/modal';
 import { dummyStoreAlert } from '@/dummy/alerts';
 import { dummyStores } from '@/dummy/stores';
 import { dummySubscription } from '@/dummy/subscription';
+import { sortStoreList } from '@/lib/utils';
 
 import { DashboardLayout } from '../_components';
 import { AddNewCard, StoreCard } from './_components';
 
 const StoresPage = () => {
   const [isPlanLimitModalOpen, setIsPlanLimitModalOpen] = useState(false);
+  const sortedStoreList = sortStoreList(dummyStores);
 
   useEffect(() => {
     // TODO: 백엔드에서 '조정 필요' 상태 확인
-    const needsAdjustment = true; // 임시
+    const needsAdjustment = false; // 임시
     if (needsAdjustment) setIsPlanLimitModalOpen(true);
   }, []);
 
@@ -25,6 +25,7 @@ const StoresPage = () => {
     <DashboardLayout
       heading='쇼핑몰 연동'
       description={
+        // FIXME:
         <span className='align-center flex'>
           <span>연동할 쇼핑몰을 등록해 주세요.</span>
           <span className='align-center text-warmgray-900 typo-body-16 ml-0.5 flex font-medium *:inline-block *:h-0'>
@@ -40,21 +41,16 @@ const StoresPage = () => {
       }
       alerts={[dummyStoreAlert]}
     >
-      <div className='grid auto-rows-[minmax(350px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
-        {/* 최신 순 정렬 */}
-        {[...dummyStores]
-          .sort((a, b) =>
-            compareDesc(new Date(a.createdAt), new Date(b.createdAt))
-          )
-          .map((store) => (
-            <StoreCard key={store.id} store={store} />
-          ))}
+      <div className='grid auto-rows-[minmax(315px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
+        {sortedStoreList.map((store) => (
+          <StoreCard key={store.id} store={store} />
+        ))}
         <AddNewCard />
       </div>
 
       {isPlanLimitModalOpen && (
         <StoreLimitExceededModal
-          stores={dummyStores}
+          stores={sortedStoreList}
           maxAllowed={3} // TODO: 새롭게 변경될 플랜의 맥스 연동 수
           open={isPlanLimitModalOpen}
           onOpenChange={setIsPlanLimitModalOpen}
