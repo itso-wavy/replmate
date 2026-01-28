@@ -1,5 +1,5 @@
+import { UsageEventType } from '../enums';
 import { Pagination } from './common';
-import { UsageEventType } from './enums';
 
 // ============================================================================
 // 사용량 (Usage)
@@ -34,7 +34,6 @@ export interface UsageLedgerDto {
 }
 
 export type UsageHistoryList = Pagination & { items: UsageLedgerDto[] };
-
 
 // ============================================================================
 // 대시보드용 (프론트엔드 전용)

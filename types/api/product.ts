@@ -23,10 +23,10 @@ export interface ProductDto {
 export interface ProductDetailDto {
   id: number;
   storeId: number;
-  externalId: string | null;
-  category: string | null;
   name: string;
   price: number | null;
+  externalId: string | null;
+  category: string | null;
   avgRating: number | null;
   reviewCount: number | null;
   productUrl: string | null;

@@ -1,4 +1,4 @@
-import { TermsType } from './enums';
+import { TermsType } from '../enums';
 
 // ============================================================================
 // 약관 (Terms)

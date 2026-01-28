@@ -1,4 +1,4 @@
-import { PlatformType } from './enums';
+import { PlatformType } from '../enums';
 
 // ============================================================================
 // 스토어 (Stores)
