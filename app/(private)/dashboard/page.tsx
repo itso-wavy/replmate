@@ -61,7 +61,7 @@ const DashboardPage = () => {
 
         <Card className='block p-4'>
           <div className='flex w-full items-center justify-between pt-1 pb-2'>
-            <h2 className='typo-heading-18 px-2'>최근 생성된 리플</h2>
+            <div className='typo-heading-18 px-2'>최근 생성된 리플</div>
             <Button variant='ghost' onClick={() => router.push('/replys')}>
               전체 보기
             </Button>

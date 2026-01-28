@@ -86,6 +86,8 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     statusBadges,
   } = useStoreCard(store);
 
+  const activeBadge = statusBadges.find((badge) => badge.condition);
+
   return (
     <Card
       className={cn(
@@ -131,7 +133,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
             onBlur={handleSaveName}
             onKeyDown={handleNameKeyDown}
             autoFocus
-            maxLength={31}
+            maxLength={15}
             className='typo-heading-24! mb-px rounded-[8px] bg-transparent px-0 text-gray-900'
           />
         ) : (
@@ -168,25 +170,18 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
               Status
             </span>
             <div className='flex flex-wrap items-center'>
-              {statusBadges.map(
-                (badge) =>
-                  badge.condition && (
-                    <div className='flex items-center gap-2'>
-                      <Badge
-                        key={badge.label}
-                        size='md'
-                        className={badge.className}
-                      >
-                        {badge.label}
-                      </Badge>
+              {activeBadge && (
+                <div className='flex items-center gap-2'>
+                  <Badge size='md' className={activeBadge.className}>
+                    {activeBadge.label}
+                  </Badge>
 
-                      {connection.isRejected && (
-                        <p className='text-destructive typo-body-14 leading-none font-medium'>
-                          * 삭제 후 다시 등록해 주세요.
-                        </p>
-                      )}
-                    </div>
-                  )
+                  {connection.isRejected && (
+                    <p className='text-destructive typo-body-14 leading-none font-medium'>
+                      * 삭제 후 다시 등록해 주세요.
+                    </p>
+                  )}
+                </div>
               )}
             </div>
             {/* {connection.isRejected && (
