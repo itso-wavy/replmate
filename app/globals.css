@@ -166,7 +166,7 @@ button:not([disabled]) {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 6px;
-  background: var(--color-warmgray-300);
+  background: #c5c5c2;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -64,7 +64,7 @@ const PriceSection = ({ id }: { id: string }) => {
     <section id={id} className='pt-[80px] pb-[150px]'>
       <div className='wrapper'>
         <div className='mb-16 text-center *:text-balance'>
-          <p className='typo-eyebrow-14 text-brand-12 mb-2'>요금제</p>
+          <p className='typo-eyebrow-14 text-brand-violet mb-2'>요금제</p>
           <h2 className='typo-display-36'>합리적인 가격으로 시작하세요</h2>
           <p className='text-muted-foreground typo-body-16 mt-3'>
             초기 비용 없이 무료로 시작하고, 매출 규모에 맞춰 업그레이드하세요.
@@ -80,7 +80,7 @@ const PriceSection = ({ id }: { id: string }) => {
           아직 확신이 안 서시나요? 카드 등록 없이{' '}
           <button
             onClick={() => router.push('/login')}
-            className='text-brand-0 font-medium'
+            className='text-brand-500 font-medium'
           >
             [평생 무료 플랜]
           </button>
@@ -99,12 +99,12 @@ const PriceCard = ({ plan }: any) => {
       className={cn(
         'bg-accent/20 relative flex h-full flex-col overflow-visible transition-all lg:py-8',
         plan.popular
-          ? 'border-brand-12 shadow-primary/10 ring-brand-12 z-10 bg-white shadow-xl ring-2 md:scale-105'
-          : 'hover:border-brand-5 border border-transparent'
+          ? 'border-brand-violet shadow-primary/10 ring-brand-violet z-10 bg-white shadow-xl ring-2 md:scale-105'
+          : 'hover:border-brand-mint border border-transparent'
       )}
     >
       {plan.popular && (
-        <div className='typo-caption-12 bg-brand-12 text-primary-foreground absolute top-0 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-full px-3 py-1.5 whitespace-nowrap shadow-lg'>
+        <div className='typo-caption-12 bg-brand-violet text-primary-foreground absolute top-0 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-full px-3 py-1.5 whitespace-nowrap shadow-lg'>
           <SparkleIcon size={10} className='mr-1' />
           MOST POPULAR
         </div>
@@ -132,7 +132,7 @@ const PriceCard = ({ plan }: any) => {
           {plan.features.map((feature: string) => (
             <div key={feature} className='flex items-center'>
               <div
-                className={`bg-brand-9/20 mr-3 flex flex-shrink-0 rounded-full p-1`}
+                className={`bg-brand-green/20 mr-3 flex flex-shrink-0 rounded-full p-1`}
               >
                 <CheckIcon size={10} className='text-muted-foreground' />
               </div>
@@ -147,8 +147,8 @@ const PriceCard = ({ plan }: any) => {
           onClick={() => router.push('/login')}
           className={cn(
             'hover:bg-foreground hover:text-primary-foreground mt-6 w-full',
-            plan.popular && 'bg-brand-12 text-primary-foreground',
-            plan.recommand && 'bg-brand-1 text-primary-foreground'
+            plan.popular && 'bg-brand-violet text-primary-foreground',
+            plan.recommand && 'bg-brand-400 text-primary-foreground'
           )}
         >
           {plan.cta}

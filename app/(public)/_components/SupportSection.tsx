@@ -25,7 +25,7 @@ const SupportSection = ({ id }: { id: string }) => {
           {/* <Button
             size='lg'
             onClick={() => router.push('/login')}
-            className='from-brand-main to-brand-main/50 bg-gradient-to-r transition-colors hover:bg-white'
+            className='from-primary to-primary/50 bg-gradient-to-r transition-colors hover:bg-white'
           >
             무료로 시작하기
           </Button> */}
@@ -33,7 +33,7 @@ const SupportSection = ({ id }: { id: string }) => {
             size='lg'
             variant='secondary'
             onClick={openReplmateSupportEmail}
-            className='from-primary to-brand-2/50 h-12 bg-gradient-to-r transition-colors md:h-14'
+            className='from-primary to-brand-200 h-12 bg-gradient-to-r transition-colors md:h-14'
           >
             도입 문의하기
           </Button>
@@ -41,7 +41,7 @@ const SupportSection = ({ id }: { id: string }) => {
         <div className='mt-12 text-center'>
           <div className='typo-body-18 text-primary-foreground/90'>
             리뷰 관리가 쉬워지면{' '}
-            <span className='text-brand-yellow/90 relative z-10'>
+            <span className='text-brand-sun relative z-10'>
               매출이 달라집니다
             </span>
           </div>

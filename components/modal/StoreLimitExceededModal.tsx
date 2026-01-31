@@ -105,7 +105,7 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
                     orientation='horizontal'
                     className={cn(
                       'rounded-sm border border-gray-200 bg-white p-3',
-                      selectedStoreIds.includes(storeId) && 'border-brand-2'
+                      selectedStoreIds.includes(storeId) && 'border-brand-200'
                     )}
                   >
                     <Checkbox

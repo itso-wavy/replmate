@@ -59,11 +59,11 @@ const TypewriterText = React.memo(
         contentEditable
         suppressContentEditableWarning={true}
         spellCheck={false}
-        className='focus-visible:caret-brand-1 block focus-visible:outline-none'
+        className='focus-visible:caret-brand-400 block focus-visible:outline-none'
       >
         {displayedText}
         {displayedText.length < text.length && (
-          <span className='bg-brand-1 ml-1 inline-block h-4 w-0.5 animate-pulse align-middle'></span>
+          <span className='bg-brand-400 ml-1 inline-block h-4 w-0.5 animate-pulse align-middle'></span>
         )}
       </span>
     );
@@ -92,7 +92,7 @@ const HeroSection = ({ id }: { id: string }) => {
       className='from-warmgray-100 relative bg-gradient-to-b to-white to-50% pt-33 pb-20 md:pt-37 md:pb-32'
     >
       <div className='wrapper relative flex flex-col items-center text-center'>
-        <Badge className='text-brand-1 animate-bounce-slow typo-caption-14 border-border mb-4 border bg-white/90 px-3.5 py-3 shadow-xs'>
+        <Badge className='text-primary animate-bounce-slow typo-caption-14 border-border mb-4 border bg-white/90 px-3.5 py-3 shadow-xs'>
           ✨ AI 기반 스마트 리뷰 관리
         </Badge>
 
@@ -101,7 +101,7 @@ const HeroSection = ({ id }: { id: string }) => {
           <br />
           이제{' '}
           <span className='relative mx-1 inline-block'>
-            <span className='from-primary to-brand-5 relative z-10 bg-gradient-to-r bg-clip-text text-transparent'>
+            <span className='from-primary to-brand-mint relative z-10 bg-gradient-to-r bg-clip-text text-transparent'>
               리플메이트 AI
             </span>
             <span className='bg-brand-yellow/80 animate-highlighter absolute bottom-2 left-0 z-0 h-4 w-0 -rotate-1 rounded-full md:h-5' />
@@ -117,23 +117,23 @@ const HeroSection = ({ id }: { id: string }) => {
             size='lg'
             // variant='primary'
             onClick={() => router.push('/login')}
-            className='bg-primary/50 hover:bg-primary/30 from-primary to-primary/50 hover:from-brand-17/50 transition-color h-12 bg-gradient-to-r duration-500 md:h-14'
+            className='bg-primary/50 hover:bg-primary/30 from-primary to-primary/50 hover:from-brand-400 7/50 transition-color h-12 bg-gradient-to-r duration-500 md:h-14'
           >
             무료로 시작하기
           </Button> */}
           <Button
             size='lg'
             onClick={() => router.push('/login')}
-            className='group from-brand-0 to-brand-2 relative bg-gradient-to-r hover:bg-transparent'
+            className='group from-brand-600 to-brand-300 relative bg-gradient-to-r hover:bg-transparent'
           >
             <div
               aria-hidden='true'
               className='pointer-events-none absolute inset-0 border-r border-b border-l border-solid border-[#f3f7fe]'
             />
-            <div className='text-white transition-all duration-200 group-hover:text-shadow-[0px_0px_50px_#2effa7]'>
+            <div className='text-white transition-all duration-200 group-hover:text-shadow-[0px_0px_10px_#2effa7]'>
               무료로 시작하기
             </div>
-            <div className='pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_5px_0px_var(--color-brand-14)] group-active:shadow-[inset_0px_0px_5px_1px_var(--color-brand-14)]' />
+            <div className='pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_5px_0px_var(--color-brand-lilac)] group-active:shadow-[inset_0px_0px_10px_1px_var(--color-brand-lilac)]' />
           </Button>
           <Button
             size='lg'
@@ -154,7 +154,7 @@ const HeroSection = ({ id }: { id: string }) => {
                 {/* Mock Chat UI */}
                 <div className='animate-scale-in flex items-start gap-4 opacity-0 delay-75'>
                   <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100'>
-                    <UserSoundIcon size={24} className='text-brand-1' />
+                    <UserSoundIcon size={24} className='text-brand-400' />
                   </div>
                   <div className='w-full rounded-2xl rounded-tl-none bg-gray-50 p-4 text-left'>
                     <div className='mb-1 flex items-center gap-2'>
@@ -169,16 +169,16 @@ const HeroSection = ({ id }: { id: string }) => {
                 </div>
 
                 <div className='animate-scale-in flex flex-row-reverse items-start gap-4 opacity-0 delay-[2200ms]'>
-                  <div className='bg-brand-14 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-white text-xl shadow-sm'>
-                    <RobotIcon size={24} className='text-brand-1' />
+                  <div className='bg-brand-lilac flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-white text-xl shadow-sm'>
+                    <RobotIcon size={24} className='text-brand-400' />
                   </div>
                   <div className='group relative w-full overflow-hidden rounded-xl rounded-tr-none border border-blue-100 bg-blue-50/50 p-4 text-left'>
                     <div className='mb-2 flex items-center justify-between'>
-                      <span className='text-brand-0 flex items-center gap-1'>
+                      <span className='text-brand-500 flex items-center gap-1'>
                         <SparkleIcon size={14} />
                         <span>AI 추천 답글</span>
                       </span>
-                      <Badge className='text-brand-1 border-blue-100'>
+                      <Badge className='text-brand-400 border-blue-100'>
                         수정 / 복사 지원
                       </Badge>
                     </div>

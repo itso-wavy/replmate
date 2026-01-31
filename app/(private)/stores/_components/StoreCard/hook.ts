@@ -126,7 +126,7 @@ export const useStoreCard = (store: StoreDto) => {
     {
       condition: connection.isWaiting,
       label: '승인 대기',
-      className: 'typo-14 border-primary text-primary font-semibold',
+      className: 'border-primary text-primary font-semibold',
     },
     {
       condition: connection.isVerified,
@@ -146,7 +146,34 @@ export const useStoreCard = (store: StoreDto) => {
     {
       condition: connection.isDeactivated,
       label: '비활성',
-      className: 'bg-foreground text-brand-3 font-medium',
+      className: 'bg-foreground text-brand-100 font-medium',
+    },
+  ];
+  const statusLabels = [
+    {
+      condition: connection.isWaiting,
+      label: '승인 대기',
+      className: 'text-primary font-semibold',
+    },
+    {
+      condition: connection.isVerified,
+      label: '활성',
+      className: 'text-brand-500 font-medium',
+    },
+    {
+      condition: connection.isRejected,
+      label: '반려',
+      className: 'text-foreground font-medium',
+    },
+    {
+      condition: connection.isDeactivationScheduled,
+      label: '비활성화 예정',
+      className: 'border-destructive text-destructive font-medium',
+    },
+    {
+      condition: connection.isDeactivated,
+      label: '비활성',
+      className: 'bg-foreground text-brand-100 font-medium',
     },
   ];
 
@@ -169,5 +196,6 @@ export const useStoreCard = (store: StoreDto) => {
     config,
     connection,
     statusBadges,
+    statusLabels,
   };
 };

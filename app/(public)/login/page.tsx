@@ -61,7 +61,7 @@ export const LoginPage = () => {
         <div className='absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:36px_36px]' />
         {/* Rainbow Pattern */}
         <div className='absolute top-[250px] left-1/2 size-[80px] -translate-x-1/2 -translate-y-1/2 scale-x-[1.6] opacity-10'>
-          <div className='absolute -inset-24 bg-[conic-gradient(from_0deg,var(--color-brand-1)_0deg,var(--color-brand-9)_123deg,transparent_200deg,var(--color-brand-2)_270deg,var(--color-brand-yellow)_300deg,var(--color-brand-1)_340deg)] mix-blend-overlay blur-[50px] saturate-[2]' />
+          <div className='absolute -inset-24 bg-[conic-gradient(from_0deg,var(--color-brand-400)_0deg,var(--color-brand-green)_123deg,transparent_200deg,var(--color-brand-200)_270deg,var(--color-brand-yellow)_300deg,var(--color-brand-400)_340deg)] mix-blend-overlay blur-[50px] saturate-[2]' />
         </div>
       </div>
 
