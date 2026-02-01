@@ -11,17 +11,29 @@ const getPlatformConfig = (platform: string) => {
     case 'naver_smart_store':
       return {
         name: '네이버 스마트스토어',
-        textStyle: 'text-smart-store-theme/90',
+        platformStyle: 'text-smart-store-theme/90',
       };
     case 'naver_brand_store':
       return {
         name: '네이버 브랜드스토어',
-        textStyle: 'text-brand-store-theme/90',
+        platformStyle: 'text-brand-store-theme/90',
       };
+    /*  case 'naver_smart_store':
+      return {
+        name: '네이버 스마트스토어',
+        platformStyle:
+          'bg-smart-store-theme/10 rounded-[4px] px-2 py-0.5 w-fit',
+      };
+    case 'naver_brand_store':
+      return {
+        name: '네이버 브랜드스토어',
+        platformStyle:
+          'bg-brand-store-theme/10 rounded-[4px] px-2 py-0.5 w-fit',
+      }; */
     default:
       return {
         name: '',
-        textStyle: '',
+        platformStyle: '',
         cardStyle: '',
       };
   }
@@ -49,29 +61,27 @@ const getConnectionStatus = (store: StoreDto) => {
     case 'deactivation_pending':
       activeStatus = 'active';
       statusLabel = '비활성화 예정';
-      badgeStyle =
-        'bg-brand-200 text-destructive/80 border-2 border-destructive/80';
+      badgeStyle = 'text-destructive bg-brand-200';
       break;
     case 'approval_pending':
       activeStatus = 'waiting';
       statusLabel = '승인 대기';
-      badgeStyle =
-        'text-background bg-foreground border-2 border-foreground [&_svg]:animate-spin';
+      badgeStyle = 'text-background bg-foreground [&_svg]:animate-spin';
       break;
     case 'rejected':
       activeStatus = 'inactive';
       statusLabel = '반려';
-      badgeStyle = 'text-background bg-foreground border-2 border-foreground';
+      badgeStyle = 'text-destructive bg-foreground';
       break;
     case 'deactivated':
       activeStatus = 'inactive';
       statusLabel = '비활성';
-      badgeStyle = 'bg-foreground text-background border-2 border-foreground';
+      badgeStyle = 'bg-foreground text-background';
       break;
     default:
       activeStatus = 'active';
       statusLabel = '활성';
-      badgeStyle = 'bg-brand-200 text-foreground border-2 border-brand-200';
+      badgeStyle = 'bg-brand-200 text-foreground';
   }
 
   const isActive = activeStatus === 'active';
