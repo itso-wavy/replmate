@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -16,7 +16,6 @@ interface UseAddNewStoreFormProps {
 
 export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<AddNewStoreFormData>({
@@ -187,6 +186,25 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   };
 
   /**
+   * 폼 유효성 검증 실패 핸들러
+   * - 서버측 유효성 에러(maxLength, regex)와 필수 항목 누락을 구분하여 토스트 노출
+   */
+  const onInvalid = (errors: FieldErrors<AddNewStoreFormData>) => {
+    // 서버측 유효성 에러 우선 확인
+    if (errors.name?.type === 'too_big') {
+      toast.error('최대 15자까지 입력 가능합니다.');
+      return;
+    }
+    if (
+      errors.name?.type === 'invalid_string' ||
+      errors.url?.type === 'invalid_string'
+    ) {
+      toast.error('허용되지 않은 문자가 포함되어 있습니다.');
+      return;
+    }
+  };
+
+  /**
    * 폼 제출 핸들러
    * 1. 스토어 생성 API 호출
    * 2. 인증 파일 업로드 (있을 경우)
@@ -195,10 +213,8 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    */
   const onSubmit = async (data: AddNewStoreFormData) => {
     try {
-      setIsSubmitting(true);
-
       // TODO: API 통신 임시 주석 처리 (테스트용)
-      // // 1. 스토어 생성 API 호출
+      // // 1. 스토어 아이템 생성 API 호출
       // const response = await api.post(ENDPOINTS.STORE.CREATE_STORE, {
       //   name: data.name,
       //   platform: data.platform,
@@ -231,13 +247,20 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       form.reset(); // 폼 초기화
       setUploadedFiles([]); // 파일 초기화
     } catch (error: any) {
-      // 4. 실패 처리
+      // 4. 실패 처리 - 모달 유지
       console.error('스토어 등록 실패:', error);
-      toast.error(
-        '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.'
-      );
-    } finally {
-      setIsSubmitting(false);
+
+      const serverMessage = error.response?.data?.message;
+
+      if (serverMessage?.includes('자까지')) {
+        toast.error(serverMessage);
+      } else if (serverMessage?.includes('허용되지 않은')) {
+        toast.error(serverMessage);
+      } else {
+        toast.error(
+          '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.'
+        );
+      }
     }
   };
 
@@ -245,7 +268,6 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     form,
     uploadedFiles,
     fileInputRef,
-    isSubmitting,
     handleNameInputChange,
     handleUrlChange,
     handleDuplicateCheck,
@@ -253,6 +275,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     handleFileDrop,
     handleFileChange,
     handleRemoveFile,
+    onInvalid,
     onSubmit,
   };
 };

@@ -52,7 +52,6 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     form,
     uploadedFiles,
     fileInputRef,
-    isSubmitting,
     handleNameInputChange,
     handleUrlChange,
     handleDuplicateCheck,
@@ -60,6 +59,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     handleFileDrop,
     handleFileChange,
     handleRemoveFile,
+    onInvalid,
     onSubmit,
   } = useAddNewStoreForm({
     closeModal: () => onOpenChange(false), // 모달 닫기
@@ -71,7 +71,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
         <DialogHeader>
           <DialogTitle className='typo-heading-20!'>쇼핑몰 등록</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
           <FieldGroup>
             {/* 별칭 입력 필드 */}
             <Controller
@@ -220,13 +220,13 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
             />
 
             {/* 안내 메시지 */}
-            <FieldDescription className='text-brand-4 text-center'>
+            <FieldDescription className='text-foreground text-center'>
               제출하신 정보와 인증 파일은 검토 후 최대 24시간 내 승인됩니다.
             </FieldDescription>
 
             {/* 제출 버튼 */}
-            <Button type='submit' disabled={isSubmitting}>
-              {isSubmitting ? '등록 중...' : '등록하기'}
+            <Button type='submit' disabled={form.formState.isSubmitting}>
+              등록하기
             </Button>
           </FieldGroup>
         </form>
