@@ -98,18 +98,15 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     setIsUnlinkModalOpen,
     config,
     connection,
-    statusConfig,
   } = useStoreCard(store);
 
   // const activeBadge = statusBadges.find((badge) => badge.condition);
-  const currentStatusConfig = statusConfig[connection.detailStatus];
 
   return (
     <Card
       className={cn(
         'group/card from-background relative gap-0 bg-gradient-to-b to-gray-100 hover:shadow-md'
         // config.cardStyle
-        // connection.isActive && 'from-gray-100'
       )}
     >
       <CardHeader className='flex items-center justify-between'>
@@ -197,18 +194,13 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
               <div className='flex items-center gap-2'>
                 <Badge
                   size='md'
-                  className={cn(
-                    'mt-1 gap-1.5',
-                    currentStatusConfig.isActive
-                      ? 'bg-brand-200 text-foreground'
-                      : 'text-background bg-destructive/80'
-                  )}
+                  className={cn('mt-1 gap-1.5', connection.badgeStyle)}
                 >
                   <ProgressSvg
-                    status={currentStatusConfig.iconStatus}
+                    status={connection.activeStatus}
                     className='size-3.5'
                   />
-                  {currentStatusConfig.label}
+                  {connection.statusLabel}
                 </Badge>
 
                 {connection.detailStatus === 'rejected' && (

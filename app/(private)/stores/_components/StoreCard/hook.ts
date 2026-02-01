@@ -42,56 +42,47 @@ const getConnectionStatus = (store: StoreDto) => {
   const detailStatus: DetailStatus = statuses[store.id % statuses.length];
 
   // 대분류는 세부 상태에서 파생
-  const activeStatus: ActiveStatus =
-    detailStatus === 'normal' || detailStatus === 'deactivation_pending'
-      ? 'active'
-      : 'inactive';
+  let activeStatus: ActiveStatus | null = null;
+  let statusLabel: string = '';
+  let badgeStyle: string = '';
+  switch (detailStatus) {
+    case 'deactivation_pending':
+      activeStatus = 'active';
+      statusLabel = '비활성화 예정';
+      badgeStyle =
+        'bg-brand-200 text-destructive/80 border-2 border-destructive/80';
+      break;
+    case 'approval_pending':
+      activeStatus = 'waiting';
+      statusLabel = '승인 대기';
+      badgeStyle =
+        'text-background bg-foreground border-2 border-foreground [&_svg]:animate-spin';
+      break;
+    case 'rejected':
+      activeStatus = 'inactive';
+      statusLabel = '반려';
+      badgeStyle = 'text-background bg-foreground border-2 border-foreground';
+      break;
+    case 'deactivated':
+      activeStatus = 'inactive';
+      statusLabel = '비활성';
+      badgeStyle = 'bg-foreground text-background border-2 border-foreground';
+      break;
+    default:
+      activeStatus = 'active';
+      statusLabel = '활성';
+      badgeStyle = 'bg-brand-200 text-foreground border-2 border-brand-200';
+  }
 
-  // 링크 버튼 활성화 여부
   const isActive = activeStatus === 'active';
-
-  // 강조 표시 여부 (반려, 비활성화 예정)
-  const isHighlighted =
-    detailStatus === 'rejected' || detailStatus === 'deactivation_pending';
 
   return {
     isActive,
-    detailStatus, // 세부 상태
-    isHighlighted, // 강조 표시 필요 여부
+    activeStatus,
+    statusLabel,
+    badgeStyle,
+    detailStatus,
   };
-};
-
-type IconStatus = 'waiting' | 'inactive' | 'active' | 'half';
-
-export const statusConfig: Record<
-  DetailStatus,
-  { label: string; iconStatus: IconStatus; isActive: boolean }
-> = {
-  normal: {
-    label: '활성',
-    iconStatus: 'active',
-    isActive: true,
-  },
-  deactivation_pending: {
-    label: '비활성화 예정',
-    iconStatus: 'half',
-    isActive: true,
-  },
-  approval_pending: {
-    label: '승인 대기',
-    iconStatus: 'waiting',
-    isActive: false,
-  },
-  rejected: {
-    label: '반려',
-    iconStatus: 'inactive',
-    isActive: false,
-  },
-  deactivated: {
-    label: '비활성',
-    iconStatus: 'inactive',
-    isActive: false,
-  },
 };
 
 export const useStoreCard = (store: StoreDto) => {
@@ -191,6 +182,5 @@ export const useStoreCard = (store: StoreDto) => {
     // 계산된 값
     config,
     connection,
-    statusConfig,
   };
 };
