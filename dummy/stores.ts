@@ -1,6 +1,7 @@
-import { PlatformType, StoreDto } from '@/types';
+import type { StoreDomain } from '@/types/domain';
+import { PlatformType } from '@/types/enums';
 
-export const dummyStores: StoreDto[] = [
+export const dummyStores: StoreDomain[] = [
   {
     id: 1,
     name: '쇼핑몰A',
@@ -8,10 +9,10 @@ export const dummyStores: StoreDto[] = [
     platform: PlatformType.NAVER_SMART_STORE,
     isActive: true,
     isVerified: true,
-    verifiedAt: '2024-07-01T09:15:00Z',
-    lastProductSyncedAt: '2024-07-20T02:45:10Z',
-    createdAt: '2024-06-15T10:00:00Z',
-    updatedAt: '2024-07-20T02:45:10Z',
+    verifiedAt: new Date('2024-07-01T09:15:00Z'),
+    lastProductSyncedAt: new Date('2024-07-20T02:45:10Z'),
+    createdAt: new Date('2024-06-15T10:00:00Z'),
+    updatedAt: new Date('2024-07-20T02:45:10Z'),
   },
   {
     id: 2,
@@ -21,9 +22,9 @@ export const dummyStores: StoreDto[] = [
     isActive: true,
     isVerified: false,
     verifiedAt: null,
-    lastProductSyncedAt: '2024-07-18T13:22:40Z',
-    createdAt: '2024-05-03T08:30:00Z',
-    updatedAt: '2024-07-18T13:22:40Z',
+    lastProductSyncedAt: new Date('2024-07-18T13:22:40Z'),
+    createdAt: new Date('2024-05-03T08:30:00Z'),
+    updatedAt: new Date('2024-07-18T13:22:40Z'),
   },
   {
     id: 3,
@@ -32,10 +33,10 @@ export const dummyStores: StoreDto[] = [
     platform: PlatformType.NAVER_SMART_STORE,
     isActive: false,
     isVerified: true,
-    verifiedAt: '2024-03-12T01:05:30Z',
-    lastProductSyncedAt: '2024-04-02T23:11:05Z',
-    createdAt: '2024-02-10T04:20:00Z',
-    updatedAt: '2024-04-02T23:11:05Z',
+    verifiedAt: new Date('2024-03-12T01:05:30Z'),
+    lastProductSyncedAt: new Date('2024-04-02T23:11:05Z'),
+    createdAt: new Date('2024-02-10T04:20:00Z'),
+    updatedAt: new Date('2024-04-02T23:11:05Z'),
   },
   {
     id: 4,
@@ -44,10 +45,10 @@ export const dummyStores: StoreDto[] = [
     platform: PlatformType.NAVER_SMART_STORE,
     isActive: true,
     isVerified: true,
-    verifiedAt: '2024-08-01T10:00:00Z',
-    lastProductSyncedAt: '2024-08-02T15:30:00Z',
-    createdAt: '2024-07-25T09:00:00Z',
-    updatedAt: '2024-08-02T15:30:00Z',
+    verifiedAt: new Date('2024-08-01T10:00:00Z'),
+    lastProductSyncedAt: new Date('2024-08-02T15:30:00Z'),
+    createdAt: new Date('2024-07-25T09:00:00Z'),
+    updatedAt: new Date('2024-08-02T15:30:00Z'),
   },
   {
     id: 5,
@@ -56,10 +57,10 @@ export const dummyStores: StoreDto[] = [
     platform: PlatformType.NAVER_BRAND_STORE,
     isActive: true,
     isVerified: true,
-    verifiedAt: '2024-08-05T11:20:00Z',
-    lastProductSyncedAt: '2024-08-06T09:10:00Z',
-    createdAt: '2024-08-01T14:00:00Z',
-    updatedAt: '2024-08-06T09:10:00Z',
+    verifiedAt: new Date('2024-08-05T11:20:00Z'),
+    lastProductSyncedAt: new Date('2024-08-06T09:10:00Z'),
+    createdAt: new Date('2024-08-01T14:00:00Z'),
+    updatedAt: new Date('2024-08-06T09:10:00Z'),
   },
   // {
   //   id: 6,

@@ -1,0 +1,43 @@
+import type { UserDomain } from '@/types/domain';
+
+export const dummyUsers: UserDomain[] = [
+  {
+    id: 1,
+    email: 'admin@replmate.com',
+    name: '김관리',
+    phoneNumber: '010-1234-5678',
+    authProvider: 'google',
+    authProviderId: 'google_123456789',
+    isVerified: true,
+    verifiedAt: new Date('2025-01-10T05:30:00Z'),
+    createdAt: new Date('2025-01-10T05:30:00Z'),
+    updatedAt: new Date('2025-01-15T08:20:00Z'),
+    needsTermsAgreement: false,
+  },
+  {
+    id: 2,
+    email: 'seller@example.com',
+    name: '이판매',
+    phoneNumber: '010-2345-6789',
+    authProvider: 'kakao',
+    authProviderId: 'kakao_987654321',
+    isVerified: true,
+    verifiedAt: new Date('2025-01-12T10:15:00Z'),
+    createdAt: new Date('2025-01-12T10:15:00Z'),
+    updatedAt: new Date('2025-01-20T14:00:00Z'),
+    needsTermsAgreement: false,
+  },
+  {
+    id: 3,
+    email: 'newbie@test.com',
+    name: '박신규',
+    phoneNumber: null,
+    authProvider: 'naver',
+    authProviderId: 'naver_1122334455',
+    isVerified: false,
+    verifiedAt: null,
+    createdAt: new Date('2025-01-28T16:45:00Z'),
+    updatedAt: new Date('2025-01-28T16:45:00Z'),
+    needsTermsAgreement: true,
+  },
+];
