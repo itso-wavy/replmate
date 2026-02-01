@@ -47,10 +47,10 @@ const DashboardPlanCard = ({
     >
       <div className='flex w-full flex-col justify-between'>
         <ItemTitle>
-          <div className='text-warmgray-600 rounded-full'>
+          <div className='text-foreground-description'>
             <CreditCard size={14} />
           </div>
-          <span className='text-muted-foreground typo-button-14! font-medium!'>
+          <span className='typo-button-14! text-foreground-description font-medium!'>
             이용 중인 플랜
           </span>
         </ItemTitle>
@@ -61,7 +61,7 @@ const DashboardPlanCard = ({
               {subscription.planName}
             </span>
             {!isIdentifyed && (
-              <span className='typo-caption-14 text-muted-foreground'>
+              <span className='typo-caption-14 text-foreground-description'>
                 {' '}
                 (본인 인증 필요)
               </span>
@@ -69,7 +69,7 @@ const DashboardPlanCard = ({
           </ItemDescription>
 
           <ItemFooter>
-            <div className='text-muted-foreground typo-caption-12 mt-2'>
+            <div className='text-foreground-description typo-caption-12 mt-2'>
               <span>다음 갱신일: </span>
               <span>
                 {isIdentifyed
@@ -81,7 +81,7 @@ const DashboardPlanCard = ({
         </ItemContent>
       </div>
 
-      <div className='group-hover:bg-warmgray-100/30 text-warmgray-400 absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2'>
+      <div className='absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2 text-zinc-400 group-hover:bg-zinc-200/60'>
         <MoveUpRight className='duration-1000 group-hover:scale-110' />
       </div>
     </Item>
@@ -103,10 +103,10 @@ const DashboardTodayCard = ({
     >
       <div className='flex w-full flex-col justify-between'>
         <ItemTitle>
-          <div className='text-warmgray-600 rounded-full'>
+          <div className='text-foreground-description'>
             <ListChecks size={14} />
           </div>
-          <span className='text-muted-foreground typo-button-14! font-medium!'>
+          <span className='text-foreground-description typo-button-14! font-medium!'>
             오늘의 작업
           </span>
         </ItemTitle>
@@ -120,7 +120,7 @@ const DashboardTodayCard = ({
           </ItemDescription>
 
           <ItemFooter>
-            <div className='text-muted-foreground typo-caption-12 mt-2'>
+            <div className='text-foreground-description typo-caption-12 mt-2'>
               {!todayReplyCount
                 ? '작성된 리플이 없습니다.'
                 : '작성된 리플을 확인해보세요!'}
@@ -128,7 +128,7 @@ const DashboardTodayCard = ({
           </ItemFooter>
         </ItemContent>
       </div>
-      <div className='group-hover:bg-warmgray-100/30 text-warmgray-400 absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2'>
+      <div className='absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2 text-zinc-400 group-hover:bg-zinc-200/60'>
         <MoveUpRight className='duration-1000 group-hover:scale-110' />
       </div>
     </Item>
@@ -148,10 +148,10 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
     >
       <div className='flex w-full flex-col justify-between'>
         <ItemTitle>
-          <div className='text-warmgray-600 rounded-full'>
+          <div className='text-foreground-description'>
             <MessageSquareHeart size={14} />
           </div>
-          <span className='text-muted-foreground typo-button-14! font-medium!'>
+          <span className='text-foreground-description typo-button-14! font-medium!'>
             잔여 리플
           </span>
         </ItemTitle>
@@ -170,14 +170,14 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
             <Progress
               value={(replyQuotaRest / replyQuotaTotal) * 100}
               className='w-full'
-              trackClassName='bg-gray-900/5'
-              indicatorClassName='bg-brand-sun'
+              trackClassName='bg-gray-900/8'
+              indicatorClassName='bg-primary'
             />
           </ItemFooter>
         </ItemContent>
       </div>
 
-      <div className='group-hover:bg-warmgray-100/30 text-warmgray-400 absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2'>
+      <div className='absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2 text-zinc-400 group-hover:bg-zinc-200/60'>
         <MoveUpRight className='duration-1000 group-hover:scale-110' />
       </div>
     </Item>
@@ -195,10 +195,10 @@ const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
     >
       <div className='flex w-full flex-col justify-between'>
         <ItemTitle>
-          <div className='text-warmgray-600 rounded-full'>
+          <div className='text-foreground-description'>
             <Store size={14} />
           </div>
-          <span className='text-muted-foreground typo-button-14! font-medium!'>
+          <span className='text-foreground-description typo-button-14! font-medium!'>
             연동된 쇼핑몰
           </span>
         </ItemTitle>
@@ -212,14 +212,14 @@ const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
           </ItemDescription>
 
           <ItemFooter>
-            <div className='text-muted-foreground typo-caption-12 mt-2'>
+            <div className='text-foreground-description typo-caption-12 mt-2'>
               {'현재 정상 연동 중입니다.'}
             </div>
           </ItemFooter>
         </ItemContent>
       </div>
 
-      <div className='group-hover:bg-warmgray-100/30 text-warmgray-400 absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2'>
+      <div className='absolute top-3.5 right-3.5 mb-auto ml-auto rotate-6 rounded-full p-2 text-zinc-400 group-hover:bg-zinc-200/60'>
         <MoveUpRight className='duration-1000 group-hover:scale-110' />
       </div>
     </Item>

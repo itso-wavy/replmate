@@ -37,7 +37,7 @@ const AddNewCard = () => {
   };
 
   return (
-    <Card className='group outline-border bg-warmgray-100/10 ring-0 outline-[1.5px] transition-all duration-200 ease-out outline-dashed hover:rotate-1 hover:shadow-lg active:rotate-3'>
+    <Card className='group outline-border bg-zinc-300/10 ring-0 outline-[1.5px] transition-all duration-200 ease-out outline-dashed hover:rotate-1 hover:shadow-lg active:rotate-3'>
       <button
         onClick={handleNewCardClick}
         className='flex h-full w-full items-center justify-center'

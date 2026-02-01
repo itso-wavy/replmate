@@ -26,15 +26,21 @@ interface HeaderProps {
     label: string;
     href: string;
   }[];
+  className?: string;
 }
-const PrivateHeader = ({ navMenu }: HeaderProps) => {
+const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const handleLogoutModal = () => setShowLogoutModal(true);
 
   return (
-    <header className='sticky top-0 right-0 left-0 z-50 h-[64px] bg-white/30 backdrop-blur-[8px] backdrop-saturate-180'>
+    <header
+      className={cn(
+        'sticky top-0 right-0 left-0 z-50 h-[64px] bg-white/30 backdrop-blur-[8px] backdrop-saturate-180',
+        className
+      )}
+    >
       <div className='wrapper flex h-full items-center justify-between'>
         <Logo href='/dashboard' />
         {/* Navigation */}
@@ -44,9 +50,9 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
               key={menu.label}
               href={menu.href}
               className={cn(
-                'typo-button-14 text-foreground/80 hover:bg-accent hover:text-foreground rounded-[8px] px-3 py-2 transition-all duration-200 hover:font-medium',
+                'typo-button-14 text-foreground/80 hover:bg-brand-600/10 hover:text-foreground active:bg-brand-700/18 rounded-[8px] px-3 py-2 transition-all duration-200 hover:font-medium',
                 pathname === menu.href &&
-                  'bg-accent text-foreground font-medium'
+                  'bg-brand-600/15 text-foreground font-medium'
               )}
             >
               {menu.label}
@@ -56,27 +62,25 @@ const PrivateHeader = ({ navMenu }: HeaderProps) => {
 
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger>
-            <div className='text-foreground/80 hover:bg-accent hover:text-foreground rounded-[8px] p-2 transition-all duration-200'>
+            <div className='text-foreground/80 hover:text-foreground rounded-[8px] bg-white/70 p-2 transition-all duration-200 hover:bg-white'>
               <ProfileSvg className='h-[22px] w-[22px]' />
             </div>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuLabel className='text-warmgray-400 pb-1.5 font-medium'>
-                Email
-              </DropdownMenuLabel>
-              <div className='typo-caption-14 text-brand-400 px-3 pb-2 wrap-break-word'>
+              <DropdownMenuLabel className='pb-1.5'>Email</DropdownMenuLabel>
+              <div className='typo-link-14 text-primary px-3 pb-2 wrap-break-word'>
                 user@replmate.com
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push('/account')}>
-                <Settings className='text-warmgray-600 size-4' />
+                <Settings className='text-muted-foreground size-4' />
                 <span>계정 관리</span>
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={handleLogoutModal}>
-                <LogOut className='text-warmgray-600 size-4' />
+                <LogOut className='text-muted-foreground size-4' />
                 <span>로그아웃</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>

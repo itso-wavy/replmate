@@ -122,7 +122,9 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
                     >
                       <div className='flex flex-col'>
                         <span className='truncate'>{store.name}</span>
-                        <span className='text-warmgray-500'>{store.url}</span>
+                        <span className='text-foreground-description-muted'>
+                          {store.url}
+                        </span>
                       </div>
                     </FieldLabel>
                   </Field>

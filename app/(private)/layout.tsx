@@ -22,17 +22,21 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* md 사이즈 이상 정상 화면 */}
       <div className='relative hidden min-h-svh flex-col md:flex'>
-        <PrivateHeader navMenu={DASHBOARD_MENU} />
+        <PrivateHeader
+          navMenu={DASHBOARD_MENU}
+          className='from-brand-500/15 to-brand-400/10 bg-radial'
+        />
 
-        <main className='to-brand-400/10 mx-auto flex w-full max-w-[1900px] flex-1 flex-col overflow-hidden bg-linear-180 from-white from-50% to-85% px-[20px]'>
+        <main className='from-brand-400/10 mx-auto flex w-full max-w-[1900px] flex-1 flex-col overflow-hidden bg-linear-180 from-0% to-white to-10% px-[20px]'>
           <div className='flex flex-1 flex-row gap-2 pt-2 pb-6'>
             {/* <div className='bg-blue-100'>sidebar left</div> */}
             <div
               id='dashboard'
-              className='ring-foreground/15 relative mx-auto flex w-full flex-1 flex-col rounded-2xl bg-white ring-1'
+              className='relative mx-auto flex w-full flex-1 flex-col rounded-2xl'
             >
-              {/* <div className='bg-background-muted/30 absolute inset-0 rounded-2xl'> */}
-              <div className='absolute inset-0 overflow-y-auto rounded-2xl bg-white'>
+              {/* ring-1 ring-foreground/15 bg-white */}
+              <div className='bg-background-muted/30 absolute inset-0 overflow-y-auto rounded-2xl shadow-[inset_0_3px_10px_-11px_var(--color-brand-900)]'>
+                {/* <div className='absolute inset-0 overflow-y-auto rounded-2xl '> */}
                 {children}
               </div>
             </div>
