@@ -11,13 +11,13 @@ import {
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
 import { dummySubscription } from '@/dummy/subscription';
-import { useUser } from '@/store/authStore';
+import { AuthStore } from '@/store/authStore';
 
 type ActiveModal = 'verification' | 'limitExceeded' | 'addNewStore' | null;
 
 const AddNewCard = () => {
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
-  const user = useUser();
+  const user = AuthStore.useUser();
 
   const handleNewCardClick = () => {
     const isVerified = user?.isVerified;

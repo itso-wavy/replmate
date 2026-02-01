@@ -1,5 +1,10 @@
 import { StoreDto } from '@/types';
 
+export const getActiveStoreList = (stores: StoreDto[]) => {
+  // 활성 상태의 쇼핑몰만 걸러내는 함수
+  return stores.filter((store) => store.isActive && store.isVerified);
+};
+
 export const sortStoreList = (stores: StoreDto[]) => {
   /* 
   ∙ 기본 정렬: 등록일 최신순 (DESC)

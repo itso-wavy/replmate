@@ -11,7 +11,7 @@ import { useAuthStore } from '@/store/authStore';
 export default function AuthCallbackPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const setAuth = useAuthStore((state) => state.actions.setAuth);
 
   useEffect(() => {
     if (status === 'loading') return;
