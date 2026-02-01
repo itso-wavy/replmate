@@ -10,7 +10,7 @@ export interface ProductDto {
   storeId: number;
   name: string;
   price: number | null;
-  currency?: string;
+  currency: string;
   imageUrl: string | null;
   isTarget: boolean;
   reviewCount: number | null;

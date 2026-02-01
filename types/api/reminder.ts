@@ -1,3 +1,5 @@
+import type { ReminderCategory, ReminderEvent, ReminderLevel } from '../enums';
+
 // ============================================================================
 // 알림 (Reminders)
 // ============================================================================
@@ -5,13 +7,11 @@
 // GET /api/v1/reminders 리마인더 목록 조회
 export interface ReminderDto {
   id: number;
-  userId: number;
-  category: string;
-  level: string;
+  category: ReminderCategory;
+  event: ReminderEvent;
+  level: ReminderLevel;
   title: string;
   message: string;
-  actionUrl: string | null;
-  isRead: boolean;
-  readAt: string | null;
+  meta: Record<string, unknown>;
   createdAt: string;
 }

@@ -24,13 +24,10 @@ export interface UsageLedgerDto {
   id: number;
   eventType: UsageEventType;
   deltaQuantity: number;
-  storeId: number;
-  planId: number;
+  storeId: number | null;
+  planId: number | null;
   occurredAt: string;
-  meta: {
-    replyId?: number;
-    reviewId?: number;
-  };
+  meta: Record<string, unknown> | null;
 }
 
 export type UsageHistoryList = Pagination & { items: UsageLedgerDto[] };

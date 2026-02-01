@@ -16,7 +16,7 @@ export interface UserDto {
   verifiedAt: string | null;
   createdAt: string;
   updatedAt: string;
-  needsTermsAgreement?: boolean;
+  needsTermsAgreement: boolean;
 }
 
 // GET /api/v1/users/me/plan 유저 플랜 조회
@@ -27,24 +27,18 @@ export interface UserPlanResponseData {
 
 export interface SubscriptionDto {
   id: number;
-  userId: number;
-  planId: number;
   status: string;
+  startedAt: string;
   currentPeriodStart: string;
   currentPeriodEnd: string;
   cancelAtPeriodEnd: boolean;
-  createdAt: string;
-  updatedAt: string;
+  canceledAt: string | null;
 }
 
 // GET /api/v1/users/me/notification-settings 알림 설정 조회
 export interface NotificationSettingsDto {
-  userId: number;
   emailEnabled: boolean;
-  pushEnabled: boolean;
   smsEnabled: boolean;
-  marketingEnabled: boolean;
-  createdAt: string;
   updatedAt: string;
 }
 

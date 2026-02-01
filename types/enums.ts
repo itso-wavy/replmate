@@ -90,3 +90,22 @@ export enum AlertType {
   STORE_ADJUSTMENT_SCHEDULED = 'STORE_ADJUSTMENT_SCHEDULED ',
   PRODUCT_ADJUSTMENT_SCHEDULED = 'PRODUCT_ADJUSTMENT_SCHEDULED',
 }
+
+// 리마인더 카테고리 (Swagger 기준)
+export type ReminderCategory = 'plan' | 'store' | 'product';
+
+// 리마인더 레벨 (Swagger 기준)
+export type ReminderLevel = 'INFO' | 'WARNING' | 'ERROR';
+
+// 리마인더 이벤트 (Swagger 기준)
+export type ReminderEvent =
+  | 'plan_expiring_soon'
+  | 'plan_expired'
+  | 'quota_running_low'
+  | 'store_verification_required'
+  | 'store_auth_expired'
+  | 'product_sync_needed'
+  | 'product_limit_reached';
+
+// 리플 상태 (Swagger 기준)
+export type ReplyStatus = 'draft' | 'edited' | 'exported' | 'reset';

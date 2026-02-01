@@ -7,12 +7,10 @@
 // GET /api/v1/contacts/{contact_id} 문의 단건 조회
 export interface ContactDto {
   id: number;
-  userId: number;
-  category: string;
+  name: string;
+  email: string;
   subject: string;
-  message: string;
-  status: string;
+  content: string;
+  isRead: boolean;
   createdAt: string;
-  updatedAt: string;
-  resolvedAt: string | null;
 }

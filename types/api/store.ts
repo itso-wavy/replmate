@@ -21,7 +21,10 @@ export interface StoreDto {
 
 // GET /api/v1/stores/{store_id}/reply-options 스토어 리플 옵션 조회
 export interface StoreReplyOptionsDto {
-  tone: string | null;
-  lengthType: string | null;
+  storeId: number;
+  tone: string;
+  lengthType: string;
   includeEmoji: boolean;
+  brandGuideline: string | null;
+  updatedAt: string;
 }
