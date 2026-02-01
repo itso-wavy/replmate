@@ -4,43 +4,94 @@ import { toast } from 'sonner';
 
 import { api } from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
-import { StoreDto } from '@/types';
+import type { ActiveStatus, DetailStatus, StoreDto } from '@/types';
 
 const getPlatformConfig = (platform: string) => {
   switch (platform) {
     case 'naver_smart_store':
       return {
         name: '네이버 스마트스토어',
-        textStyle: 'text-smart-store-theme',
+        textStyle: 'text-smart-store-theme/90',
       };
     case 'naver_brand_store':
       return {
         name: '네이버 브랜드스토어',
-        textStyle: 'text-brand-store-theme',
+        textStyle: 'text-brand-store-theme/90',
       };
     default:
       return {
         name: '',
         textStyle: '',
+        cardStyle: '',
       };
   }
 };
 
 const getConnectionStatus = (store: StoreDto) => {
-  // TODO: 백엔드 스키마 확정 후 조건식 구체화 필요. 넷 중 하나의 조건만 가질 수 있음
-  const isVerified = store.id === 2; // 활성
-  const isWaiting = store.id === 3; // 인증 대기 중
-  const isRejected = store.id === 4; // 인증 반려
-  const isDeactivationScheduled = store.id === 5; // 비활성화 예정
-  const isDeactivated = store.id === 1; // 비활성
+  // TODO: 백엔드 스키마 확정 후 조건식 구체화
+  // 예시: store.status 값으로 판단
+
+  // 임시: UI 테스트용: store.id를 시드로 사용하여 일관된 랜덤 상태 생성
+  const statuses: DetailStatus[] = [
+    'normal',
+    'deactivation_pending',
+    'approval_pending',
+    'rejected',
+    'deactivated',
+  ];
+  const detailStatus: DetailStatus = statuses[store.id % statuses.length];
+
+  // 대분류는 세부 상태에서 파생
+  const activeStatus: ActiveStatus =
+    detailStatus === 'normal' || detailStatus === 'deactivation_pending'
+      ? 'active'
+      : 'inactive';
+
+  // 링크 버튼 활성화 여부
+  const isActive = activeStatus === 'active';
+
+  // 강조 표시 여부 (반려, 비활성화 예정)
+  const isHighlighted =
+    detailStatus === 'rejected' || detailStatus === 'deactivation_pending';
 
   return {
-    isVerified,
-    isWaiting,
-    isRejected,
-    isDeactivationScheduled,
-    isDeactivated,
+    isActive,
+    detailStatus, // 세부 상태
+    isHighlighted, // 강조 표시 필요 여부
   };
+};
+
+type IconStatus = 'waiting' | 'inactive' | 'active' | 'half';
+
+export const statusConfig: Record<
+  DetailStatus,
+  { label: string; iconStatus: IconStatus; isActive: boolean }
+> = {
+  normal: {
+    label: '활성',
+    iconStatus: 'active',
+    isActive: true,
+  },
+  deactivation_pending: {
+    label: '비활성화 예정',
+    iconStatus: 'half',
+    isActive: true,
+  },
+  approval_pending: {
+    label: '승인 대기',
+    iconStatus: 'waiting',
+    isActive: false,
+  },
+  rejected: {
+    label: '반려',
+    iconStatus: 'inactive',
+    isActive: false,
+  },
+  deactivated: {
+    label: '비활성',
+    iconStatus: 'inactive',
+    isActive: false,
+  },
 };
 
 export const useStoreCard = (store: StoreDto) => {
@@ -122,61 +173,6 @@ export const useStoreCard = (store: StoreDto) => {
     }
   };
 
-  const statusBadges = [
-    {
-      condition: connection.isWaiting,
-      label: '승인 대기',
-      className: 'border-primary text-primary font-semibold',
-    },
-    {
-      condition: connection.isVerified,
-      label: '활성',
-      className: 'text-background bg-primary font-medium',
-    },
-    {
-      condition: connection.isRejected,
-      label: '반려',
-      className: 'bg-foreground text-orange-300 font-medium',
-    },
-    {
-      condition: connection.isDeactivationScheduled,
-      label: '비활성화 예정',
-      className: 'border-destructive text-destructive font-medium',
-    },
-    {
-      condition: connection.isDeactivated,
-      label: '비활성',
-      className: 'bg-foreground text-brand-100 font-medium',
-    },
-  ];
-  const statusLabels = [
-    {
-      condition: connection.isWaiting,
-      label: '승인 대기',
-      className: 'text-primary font-semibold',
-    },
-    {
-      condition: connection.isVerified,
-      label: '활성',
-      className: 'text-brand-500 font-medium',
-    },
-    {
-      condition: connection.isRejected,
-      label: '반려',
-      className: 'text-foreground font-medium',
-    },
-    {
-      condition: connection.isDeactivationScheduled,
-      label: '비활성화 예정',
-      className: 'border-destructive text-destructive font-medium',
-    },
-    {
-      condition: connection.isDeactivated,
-      label: '비활성',
-      className: 'bg-foreground text-brand-100 font-medium',
-    },
-  ];
-
   return {
     // 상태
     isNameEditMode,
@@ -195,7 +191,6 @@ export const useStoreCard = (store: StoreDto) => {
     // 계산된 값
     config,
     connection,
-    statusBadges,
-    statusLabels,
+    statusConfig,
   };
 };

@@ -10,7 +10,9 @@ import {
   Unlink,
 } from 'lucide-react';
 
+import { ProgressSvg } from '@/assets/svg';
 import UnlinkStoreConfirmModal from '@/components/modal/UnlinkStoreConfirmModal';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -32,10 +34,15 @@ import { useStoreCard } from './hook';
 
 interface ActionLinkButtonProps {
   href: string;
+  disabled?: boolean;
   children: React.ReactNode;
 }
 
-const ActionLinkButton = ({ href, children }: ActionLinkButtonProps) => {
+const ActionLinkButton = ({
+  href,
+  disabled = false,
+  children,
+}: ActionLinkButtonProps) => {
   {
     /* <Button
         variant='link'
@@ -61,10 +68,19 @@ const ActionLinkButton = ({ href, children }: ActionLinkButtonProps) => {
   return (
     <Link
       href={href}
-      className='typo-link-14 group border-border text-foreground inline-flex h-11 flex-1 shrink-0 items-center justify-center gap-1.5 rounded-4xl border bg-white px-3.5 font-semibold whitespace-nowrap transition-all duration-300 hover:flex-2 hover:bg-gray-50'
+      className={cn(
+        'typo-link-14 group border-border text-foreground inline-flex h-11 flex-1 shrink-0 cursor-auto items-center justify-center gap-1.5 rounded-4xl border bg-gray-100 px-3.5 font-semibold whitespace-nowrap transition-all duration-300',
+        !disabled && 'cursor-pointer bg-white hover:flex-2 hover:bg-gray-50'
+      )}
+      onClick={(e) => disabled && e.preventDefault()}
     >
       {children}
-      <ChevronRight className='h-4 w-4 text-gray-400 group-hover:ml-auto' />
+      <ChevronRight
+        className={cn(
+          'h-4 w-4 text-gray-400',
+          !disabled && 'group-hover:ml-auto'
+        )}
+      />
     </Link>
   );
 };
@@ -82,45 +98,61 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
     setIsUnlinkModalOpen,
     config,
     connection,
-    statusLabels,
+    statusConfig,
   } = useStoreCard(store);
 
-  const activeLabel = statusLabels.find((label) => label.condition);
+  // const activeBadge = statusBadges.find((badge) => badge.condition);
+  const currentStatusConfig = statusConfig[connection.detailStatus];
 
   return (
     <Card
       className={cn(
-        'group/card from-background relative gap-0 bg-gradient-to-b hover:shadow-md',
+        'group/card from-background relative gap-0 bg-gradient-to-b to-gray-100 hover:shadow-md'
         // config.cardStyle
-        'to-gray-100'
+        // connection.isActive && 'from-gray-100'
       )}
     >
       <CardHeader className='flex items-center justify-between'>
-        {isNameEditMode ? (
-          <Input
-            ref={inputRef}
-            type='text'
-            value={editValue}
-            onChange={handleNameInputChange}
-            onBlur={handleSaveName}
-            onKeyDown={handleNameKeyDown}
-            autoFocus
-            maxLength={15}
-            className='typo-heading-24! text-foreground mb-px rounded-[8px] bg-transparent px-0'
-          />
-        ) : (
-          <button
-            type='button'
-            onClick={() => setIsNameEditMode(true)}
-            className='relative flex items-end py-1'
-          >
-            <div className='typo-heading-24 text-foreground truncate'>
-              {store.name}
-            </div>
+        <div className='flex flex-col'>
+          {isNameEditMode ? (
+            <Input
+              ref={inputRef}
+              type='text'
+              value={editValue}
+              onChange={handleNameInputChange}
+              onBlur={handleSaveName}
+              onKeyDown={handleNameKeyDown}
+              autoFocus
+              maxLength={15}
+              className='typo-heading-24! text-foreground mb-px rounded-[8px] bg-transparent px-0'
+            />
+          ) : (
+            <button
+              type='button'
+              onClick={() => setIsNameEditMode(true)}
+              className='relative flex items-end py-1'
+            >
+              <div className='typo-heading-24 text-foreground truncate'>
+                {store.name}
+              </div>
 
-            <SquarePen className='text-ring relative bottom-1.5 left-1.5 hidden size-4 group-hover/card:block' />
-          </button>
-        )}
+              <SquarePen className='text-brand-500 relative bottom-1.5 left-1.5 hidden size-4 group-hover/card:block' />
+            </button>
+          )}
+
+          {/* Store URL */}
+          <div>
+            <a
+              href={store.url}
+              target='_blank'
+              rel='noreferrer'
+              className='typo-link-14 text-foreground-description-muted flex items-center gap-1 underline-offset-4 hover:underline'
+            >
+              <span className='truncate'>{store.url}</span>
+              <ExternalLink className='h-3 w-3' />
+            </a>
+          </div>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -146,7 +178,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
             <span className='typo-eyebrow-12 text-foreground-description-muted mb-1 block font-medium'>
               Platform
             </span>
-            <p className={cn('typo-eyebrow-14', config.textStyle)}>
+            <p className={cn('typo-button-14', config.textStyle)}>
               {config.name}
             </p>
             {/* <div className='typo-caption-12 text-muted-foreground mt-0.5 flex items-center gap-1'>
@@ -155,69 +187,58 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
             </div> */}
           </div>
 
-          {/* Store URL */}
-          <div>
-            <span className='typo-eyebrow-12 text-foreground-description-muted mb-1 block font-medium'>
-              Store URL
-            </span>
-            <a
-              href={store.url}
-              target='_blank'
-              rel='noreferrer'
-              className='typo-button-14 flex items-center gap-1 text-gray-600 hover:text-gray-900 hover:underline'
-            >
-              <span className='truncate'>{store.url}</span>
-              <ExternalLink className='h-3 w-3' />
-            </a>
-          </div>
-
           {/* Status */}
           <div>
             <span className='typo-eyebrow-12 text-foreground-description-muted mb-1 block font-medium'>
               Status
             </span>
-            {activeLabel && (
-              <p
-                className={cn(
-                  'typo-body-16 font-medium',
-                  activeLabel.className
-                )}
-              >
-                {activeLabel.label}
-              </p>
-            )}
-            {/*  <div className='flex flex-wrap items-center'>
-              {activeBadge && (
-                <div className='flex items-center gap-2'>
-                  <Badge size='md' className={activeBadge.className}>
-                    {activeBadge.label}
-                  </Badge>
 
-                  {connection.isRejected && (
-                    <p className='text-destructive typo-body-14 leading-none font-medium'>
-                      * 삭제 후 다시 등록해 주세요.
-                    </p>
+            <div className='flex flex-wrap items-center'>
+              <div className='flex items-center gap-2'>
+                <Badge
+                  size='md'
+                  className={cn(
+                    'mt-1 gap-1.5',
+                    currentStatusConfig.isActive
+                      ? 'bg-brand-200 text-foreground'
+                      : 'text-background bg-destructive/80'
                   )}
-                </div>
-              )}
-            </div> */}
-            {/* {connection.isRejected && (
-              <p className='text-destructive typo-body-14 mt-3 leading-none font-medium'>
-                * 삭제 후 다시 등록해 주세요.
-              </p>
-            )} */}
+                >
+                  <ProgressSvg
+                    status={currentStatusConfig.iconStatus}
+                    className='size-3.5'
+                  />
+                  {currentStatusConfig.label}
+                </Badge>
+
+                {connection.detailStatus === 'rejected' && (
+                  <p className='text- typo-body-16 text-destructive mt-1 leading-none font-medium'>
+                    * 연동 해제 후 다시 등록해 주세요.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>
 
       <CardFooter className='mt-auto flex gap-2'>
-        <ActionLinkButton href={`/products?storeId=${store.id}`}>
+        <ActionLinkButton
+          href={`/products?storeId=${store.id}`}
+          disabled={!connection.isActive}
+        >
           상품 관리
         </ActionLinkButton>
-        <ActionLinkButton href={`/options?storeId=${store.id}`}>
+        <ActionLinkButton
+          href={`/options?storeId=${store.id}`}
+          disabled={!connection.isActive}
+        >
           리플 옵션
         </ActionLinkButton>
-        <ActionLinkButton href={`/replys?storeId=${store.id}`}>
+        <ActionLinkButton
+          href={`/replys?storeId=${store.id}`}
+          disabled={!connection.isActive}
+        >
           리플 확인
         </ActionLinkButton>
       </CardFooter>

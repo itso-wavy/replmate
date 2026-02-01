@@ -27,6 +27,6 @@ export * from './domain/auth';
 // export * from './domain/product';
 // export * from './domain/reminder';
 // export * from './domain/reply';
-// export * from './domain/store';
+export * from './domain/store';
 // export * from './domain/term';
 // export * from './domain/usage';
