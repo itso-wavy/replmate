@@ -16,7 +16,7 @@ import { TermModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { dummyUser } from '@/dummy/dashboard';
-import { useIsAuthenticated, useSetAuth } from '@/store/authStore';
+import { AuthStore } from '@/store/authStore';
 import { AuthProvider, TermsType } from '@/types';
 
 import { PublicHeader } from '../_components';
@@ -25,9 +25,9 @@ import { PublicHeader } from '../_components';
 
 export const LoginPage = () => {
   const router = useRouter();
-  const setAuth = useSetAuth();
-  // const
-  const isAuthenticated = useIsAuthenticated();
+  const { setAuth } = AuthStore.useActions();
+
+  const isAuthenticated = AuthStore.useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(true);
   const [showTermOfUseModal, setShowTermOfUseModal] = useState(false);
   const [showPrivacyTermModal, setShowPrivacyTermModal] = useState(false);

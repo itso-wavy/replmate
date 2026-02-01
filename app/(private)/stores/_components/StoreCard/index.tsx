@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import {
   ChevronRight,
@@ -28,21 +28,33 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { StoreStore } from '@/store/storeStore';
 import { StoreDto } from '@/types';
 
 import { useStoreCard } from './hook';
 
 interface ActionLinkButtonProps {
   href: string;
+  storeId: number;
   disabled?: boolean;
   children: React.ReactNode;
 }
 
 const ActionLinkButton = ({
   href,
+  storeId,
   disabled = false,
   children,
 }: ActionLinkButtonProps) => {
+  const router = useRouter();
+  const { setSelectedStore } = StoreStore.useActions();
+
+  const handleClick = () => {
+    if (disabled) return;
+    setSelectedStore(storeId);
+    router.push(href);
+  };
+
   {
     /* <Button
         variant='link'
@@ -66,13 +78,14 @@ const ActionLinkButton = ({
   }
 
   return (
-    <Link
-      href={href}
+    <button
+      type='button'
+      onClick={handleClick}
+      disabled={disabled}
       className={cn(
         'typo-link-14 group border-border text-foreground inline-flex h-11 flex-1 shrink-0 cursor-auto items-center justify-center gap-1.5 rounded-4xl border bg-gray-100 px-3.5 font-semibold whitespace-nowrap transition-all duration-300',
         !disabled && 'cursor-pointer bg-white hover:flex-2 hover:bg-gray-50'
       )}
-      onClick={(e) => disabled && e.preventDefault()}
     >
       {children}
       <ChevronRight
@@ -81,7 +94,7 @@ const ActionLinkButton = ({
           !disabled && 'group-hover:ml-auto'
         )}
       />
-    </Link>
+    </button>
   );
 };
 
@@ -175,7 +188,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
             <span className='typo-eyebrow-12 text-foreground-description-muted mb-1 block font-medium'>
               Platform
             </span>
-            <p className={cn('typo-button-14', config.textStyle)}>
+            <p className={cn('typo-button-14', config.platformStyle)}>
               {config.name}
             </p>
             {/* <div className='typo-caption-12 text-muted-foreground mt-0.5 flex items-center gap-1'>
@@ -204,7 +217,7 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
                 </Badge>
 
                 {connection.detailStatus === 'rejected' && (
-                  <p className='text- typo-body-16 text-destructive mt-1 leading-none font-medium'>
+                  <p className='text- typo-body-16 text-destructive mt-2 leading-none font-medium'>
                     * 연동 해제 후 다시 등록해 주세요.
                   </p>
                 )}
@@ -216,19 +229,22 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
 
       <CardFooter className='mt-auto flex gap-2'>
         <ActionLinkButton
-          href={`/products?storeId=${store.id}`}
+          href='/products'
+          storeId={store.id}
           disabled={!connection.isActive}
         >
           상품 관리
         </ActionLinkButton>
         <ActionLinkButton
-          href={`/options?storeId=${store.id}`}
+          href='/options'
+          storeId={store.id}
           disabled={!connection.isActive}
         >
           리플 옵션
         </ActionLinkButton>
         <ActionLinkButton
-          href={`/replys?storeId=${store.id}`}
+          href='/replys'
+          storeId={store.id}
           disabled={!connection.isActive}
         >
           리플 확인

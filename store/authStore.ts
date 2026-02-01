@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { combine, devtools, persist } from 'zustand/middleware';
 
 import { UserDomain } from '@/types';
 
-export interface AuthState {
+interface AuthState {
   user: UserDomain | null;
   isAuthenticated?: boolean;
   accessToken: string;
@@ -11,14 +11,16 @@ export interface AuthState {
   // sessionId: string,
 }
 
-export interface AuthAction {
-  setAuth: (data: {
-    user: UserDomain;
-    accessToken: string;
-    refreshToken: string;
-    // sessionId: string;
-  }) => void;
-  clearAuth: () => void;
+interface AuthAction {
+  actions: {
+    setAuth: (data: {
+      user: UserDomain;
+      accessToken: string;
+      refreshToken: string;
+      // sessionId: string;
+    }) => void;
+    clearAuth: () => void;
+  };
 }
 
 const initialState: AuthState = {
@@ -32,20 +34,25 @@ const initialState: AuthState = {
 export const useAuthStore = create<AuthState & AuthAction>()(
   devtools(
     persist(
-      (set, _get) => ({
-        ...initialState,
-        setAuth: (data) => {
-          set({
-            ...data,
-            isAuthenticated: true,
-          });
-        },
-        clearAuth: () => {
-          set({
-            ...initialState,
-          });
-        },
-      }),
+      combine(
+        initialState,
+
+        (set, _get) => ({
+          actions: {
+            setAuth: (data) => {
+              set({
+                ...data,
+                isAuthenticated: true,
+              });
+            },
+            clearAuth: () => {
+              set({
+                ...initialState,
+              });
+            },
+          },
+        })
+      ),
       {
         name: 'auth-store',
         partialize: (state) => ({
@@ -55,16 +62,24 @@ export const useAuthStore = create<AuthState & AuthAction>()(
           // sessionId: state.sessionId,
         }),
       }
-    )
+    ),
+    {
+      name: 'auth-storage',
+    }
   )
 );
 
-export const useUser = () => useAuthStore((state) => state.user);
-export const useIsAuthenticated = () =>
-  useAuthStore((state) => state.isAuthenticated);
-export const useAccessToken = () => useAuthStore((state) => state.accessToken);
-export const useRefreshToken = () =>
-  useAuthStore((state) => state.refreshToken);
-// export const useSessionId = () => useAuthStore((state) => state.sessionId);
-export const useSetAuth = () => useAuthStore((state) => state.setAuth);
-export const useClearAuth = () => useAuthStore((state) => state.clearAuth);
+const useUser = () => useAuthStore((state) => state.user);
+const useIsAuthenticated = () => useAuthStore((state) => state.isAuthenticated);
+const useAccessToken = () => useAuthStore((state) => state.accessToken);
+const useRefreshToken = () => useAuthStore((state) => state.refreshToken);
+//  const useSessionId = () => useAuthStore((state) => state.sessionId);
+const useAuthActions = () => useAuthStore((state) => state.actions);
+
+export const AuthStore = {
+  useUser,
+  useIsAuthenticated,
+  useAccessToken,
+  useRefreshToken,
+  useActions: useAuthActions,
+} as const;
