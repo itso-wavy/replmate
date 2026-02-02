@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 
 import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 
 import {
   AlertDialog,
@@ -14,9 +15,11 @@ import { CommonModalProps } from './types';
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
+  const { clearUser } = UserStore.useActions();
   const { clearAuth } = AuthStore.useActions();
 
   const handleLogout = () => {
+    clearUser();
     clearAuth();
     router.push('/');
   };

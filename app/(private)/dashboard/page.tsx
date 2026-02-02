@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { dummyDashboardAlerts } from '@/dummy/alerts';
 import { dummyReplies } from '@/dummy/dashboard';
 import { dummySubscription } from '@/dummy/subscription';
-import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 import { Alert, AlertType } from '@/types';
 
 import { DashboardLayout } from '../_components';
@@ -21,7 +21,7 @@ import {
 
 const DashboardPage = () => {
   const router = useRouter();
-  const user = AuthStore.useUser();
+  const user = UserStore.useUser();
 
   const sortDashboardAlerts = (alerts: Alert[]) => {
     const paymentFailureAlerts = [];
