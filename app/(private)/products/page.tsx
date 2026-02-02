@@ -16,7 +16,7 @@ const ProductsPage = () => {
         <div className='flex w-full items-center justify-between pt-1 pb-2'>
           <StoreCombobox />
 
-          {/* <ProductCountIndicator /> */}
+          <ProductCountIndicator />
         </div>
 
         {/* <StoreProductsTable maxRows={20} /> */}

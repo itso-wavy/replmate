@@ -1,7 +1,8 @@
 import { DashboardReply } from '@/app/(private)/dashboard/_components';
+import type { LoginResponseDomain } from '@/types';
 import { AuthProvider } from '@/types';
 
-export const dummyUser = {
+export const dummyUser: LoginResponseDomain = {
   user: {
     id: 1,
     email: 'user@replmae.com',
@@ -10,9 +11,9 @@ export const dummyUser = {
     authProvider: AuthProvider.GOOGLE,
     authProviderId: '123',
     isVerified: false,
-    verifiedAt: '2026-01-15',
-    createdAt: '2026-01-15',
-    updatedAt: '2026-01-15',
+    verifiedAt: null,
+    createdAt: new Date('2026-01-15'),
+    updatedAt: new Date('2026-01-15'),
     needsTermsAgreement: true,
   },
   accessToken: '123',
