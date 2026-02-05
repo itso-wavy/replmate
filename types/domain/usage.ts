@@ -1,11 +1,10 @@
-import type { UsageEventType } from '@/types/enums';
+import type { Pagination } from '@/types/api/common';
 import type {
-  UsageQuotaDto,
   TestUsageQuotaDto,
   UsageLedgerDto,
-  UsageQuotaSubscription,
+  UsageQuotaDto,
 } from '@/types/api/usage';
-import type { Pagination } from '@/types/api/common';
+import type { UsageEventType } from '@/types/enums';
 
 /**
  * 사용량 쿼터 Domain 타입
@@ -131,8 +130,9 @@ export function toUsageLedgerDomainList(
  * @param dto - API에서 받은 UsageQuotaSubscription
  * @returns UsageQuotaSubscriptionDomain 객체
  */
+// FIXME:
 export function toUsageQuotaSubscriptionDomain(
-  dto: UsageQuotaSubscription
+  dto: any
 ): UsageQuotaSubscriptionDomain {
   return {
     planName: dto.planName,

@@ -19,7 +19,7 @@ const ProductsPage = () => {
           <ProductCountIndicator />
         </div>
 
-        {/* <StoreProductsTable maxRows={20} /> */}
+        <StoreProductsTable maxRows={20} />
       </Card>
     </DashboardLayout>
   );

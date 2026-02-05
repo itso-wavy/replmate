@@ -5,6 +5,9 @@ import type {
 } from '@/types/api/user';
 import type { PlanDomain } from './plan';
 
+// Re-export PlanDomain for convenience
+export type { PlanDomain };
+
 // ============================================================================
 // 사용자 도메인
 // ============================================================================

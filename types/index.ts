@@ -31,3 +31,6 @@ export * from './domain/store';
 // export * from './domain/term';
 export * from './domain/usage';
 export * from './domain/user';
+
+// Page types
+export * from './domain/pages';
