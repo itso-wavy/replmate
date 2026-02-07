@@ -8,32 +8,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { dummyProducts } from '@/dummy/products';
+import { getTotalTargetProductCount } from '@/dummy/products';
 import { dummyStores } from '@/dummy/stores';
-import { dummySubscription } from '@/dummy/subscription';
 import { getActiveStoreList } from '@/lib/utils';
 import { UserStore } from '@/store/userStore';
-import { ProductDomain } from '@/types';
 
-// interface ProductCountIndicatorProps {
-//   selectedTotalProducts: number;
-//   capableTotalProducts: number;
-// }
-
-/* 
-{
-  selectedTotalProducts,
-  capableTotalProducts,
-}: ProductCountIndicatorProps
- */
 const ProductCountIndicator = () => {
   const planInfo = UserStore.usePlanInfo();
   const activeStores = getActiveStoreList(dummyStores);
+  const activeStoreIds = activeStores.map((store) => store.id);
 
-  // TODO: API 기반 데이터로 변경하기
-  const selectedTotalProducts = dummyProducts.filter(
-    (p: ProductDomain) => p.isTarget
-  ).length;
+  // 활성 스토어들의 전체 타겟 상품 개수
+  const selectedTotalProducts = getTotalTargetProductCount(activeStoreIds);
   const capableTotalProducts = planInfo?.maxProductPerStore || 10;
 
   return (

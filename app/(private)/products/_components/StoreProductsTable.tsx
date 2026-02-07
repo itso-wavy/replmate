@@ -17,8 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { dummyProducts } from '@/dummy/products';
+import { getProductsByStoreId } from '@/dummy/products';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { StoreStore } from '@/store/storeStore';
 import { ProductDomain } from '@/types';
 
 // Make some columns!
@@ -80,9 +81,11 @@ interface StoreProductsTableProps {
 }
 
 const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
-  // 최신순 정렬
+  const selectedStoreId = StoreStore.useSelectedStoreId();
+
+  // 선택된 스토어의 상품 목록 조회 + 최신순 정렬
   const filteredAndSortedProducts = useMemo(() => {
-    const products = dummyProducts;
+    const products = getProductsByStoreId(selectedStoreId);
 
     // 등록일 기준 내림차순 정렬 (최신순)
     const sorted = [...products].sort((a, b) => {
@@ -92,7 +95,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
     });
 
     return sorted.slice(0, maxRows);
-  }, [maxRows]);
+  }, [selectedStoreId, maxRows]);
 
   const table = useReactTable({
     data: filteredAndSortedProducts,
