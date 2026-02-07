@@ -14,7 +14,4 @@ export interface PlanDto {
   maxStoreCount: number;
   maxProductPerStore: number;
   maxTestPerDay: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
 }

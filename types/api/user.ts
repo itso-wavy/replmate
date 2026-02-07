@@ -50,4 +50,28 @@ export interface ReceiptRequestDto {
   status: string;
   requestedAt: string;
   processedAt: string | null;
+  note: string | null;
+}
+
+// DELETE /api/v1/users/me 사용자 탈퇴 요청
+export interface DeleteUserRequest {
+  forfeitSubscriptionAgreed: boolean;
+}
+
+// DELETE /api/v1/users/me/plan 플랜 해지 응답
+export interface CancelSubscriptionResponse {
+  subscription: SubscriptionDto;
+  message: string;
+}
+
+// POST /api/v1/users/me/plan/reactivate 플랜 재활성화 응답
+export interface ReactivateSubscriptionResponse {
+  subscription: SubscriptionDto;
+  message: string;
+}
+
+// GET /api/v1/users/me/plan 사용자 플랜 정보 (user 필드 제거)
+export interface UserPlanInfo {
+  subscription: SubscriptionDto;
+  plan: PlanDto;
 }

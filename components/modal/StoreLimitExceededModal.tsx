@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { StoreLimitedFormData, storeLimitedSchema } from '@/lib/validation';
-import { StoreDto } from '@/types';
+import { StoreDomain } from '@/types';
 
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
@@ -23,7 +23,7 @@ import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import { CommonModalProps } from './types';
 
 interface ModalProps extends CommonModalProps {
-  stores: StoreDto[]; // 현재 연동 중인 쇼핑몰 목록
+  stores: StoreDomain[]; // 현재 연동 중인 쇼핑몰 목록
   maxAllowed: number; // 변경될 플랜의 최대 허용 개수
 }
 

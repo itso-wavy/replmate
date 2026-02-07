@@ -1,4 +1,4 @@
-import type { PlanDomain } from '@/types/domain';
+import type { PlanDomain } from '@/types';
 
 export const dummyPlans: PlanDomain[] = [
   {
@@ -12,9 +12,6 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 1,
     maxProductPerStore: 10,
     maxTestPerDay: 5,
-    isActive: true,
-    createdAt: new Date('2024-01-01T00:00:00Z'),
-    updatedAt: new Date('2025-01-01T00:00:00Z'),
   },
   {
     id: 2,
@@ -27,9 +24,6 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 2,
     maxProductPerStore: 50,
     maxTestPerDay: 20,
-    isActive: true,
-    createdAt: new Date('2024-01-01T00:00:00Z'),
-    updatedAt: new Date('2025-01-01T00:00:00Z'),
   },
   {
     id: 3,
@@ -42,9 +36,6 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 5,
     maxProductPerStore: 200,
     maxTestPerDay: 50,
-    isActive: true,
-    createdAt: new Date('2024-01-01T00:00:00Z'),
-    updatedAt: new Date('2025-01-01T00:00:00Z'),
   },
   {
     id: 4,
@@ -57,8 +48,5 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 20,
     maxProductPerStore: 1000,
     maxTestPerDay: 200,
-    isActive: true,
-    createdAt: new Date('2024-01-01T00:00:00Z'),
-    updatedAt: new Date('2025-01-01T00:00:00Z'),
   },
 ];

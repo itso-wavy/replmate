@@ -1,17 +1,32 @@
-import type { PlatformType } from '@/types/enums';
-import type { StoreDto, StoreReplyOptionsDto } from '@/types/api/store';
+import type {
+  StoreDto,
+  StoreDetailDto,
+  StoreReplyOptionsDto,
+} from '@/types/api/store';
+import type { StoreStatus } from '@/types/enums';
 
 /**
- * 스토어 Domain 타입
- * API DTO의 날짜 문자열을 Date 객체로 변환
+ * 스토어 Domain 타입 (간소화)
+ * 스토어 목록 조회 시 사용
  */
 export interface StoreDomain {
   id: number;
   name: string;
+  platform: string;
   url: string;
-  platform: PlatformType;
-  isActive: boolean;
-  isVerified: boolean;
+  status: StoreStatus;
+}
+
+/**
+ * 스토어 상세 Domain 타입
+ * 스토어 상세 조회 시 사용
+ */
+export interface StoreDetailDomain {
+  id: number;
+  name: string;
+  platform: string;
+  url: string;
+  status: StoreStatus;
   verifiedAt: Date | null;
   lastProductSyncedAt: Date | null;
   createdAt: Date;
@@ -49,10 +64,24 @@ export function toStoreDomain(dto: StoreDto): StoreDomain {
   return {
     id: dto.id,
     name: dto.name,
-    url: dto.url,
     platform: dto.platform,
-    isActive: dto.isActive,
-    isVerified: dto.isVerified,
+    url: dto.url,
+    status: dto.status,
+  };
+}
+
+/**
+ * StoreDetailDto를 StoreDetailDomain으로 변환
+ * @param dto - API에서 받은 StoreDetailDto
+ * @returns StoreDetailDomain 객체
+ */
+export function toStoreDetailDomain(dto: StoreDetailDto): StoreDetailDomain {
+  return {
+    id: dto.id,
+    name: dto.name,
+    platform: dto.platform,
+    url: dto.url,
+    status: dto.status,
     verifiedAt: dto.verifiedAt ? new Date(dto.verifiedAt) : null,
     lastProductSyncedAt: dto.lastProductSyncedAt
       ? new Date(dto.lastProductSyncedAt)

@@ -18,11 +18,11 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
-import { UsageQuotaSubscription } from '@/types';
+import { UsageQuotaSubscriptionDomain } from '@/types';
 
 interface DashboardCardProps {
   isIdentifyed?: boolean;
-  subscription: UsageQuotaSubscription;
+  subscription: UsageQuotaSubscriptionDomain;
 }
 
 const DashboardPlanCard = ({
@@ -73,7 +73,7 @@ const DashboardPlanCard = ({
               <span>다음 갱신일: </span>
               <span>
                 {isIdentifyed
-                  ? `${subscription.updatedAt} (D-${getDday(subscription.updatedAt)})`
+                  ? `${subscription.updatedAt.toISOString().split('T')[0]} (D-${getDday(subscription.updatedAt.toISOString())})`
                   : '-'}
               </span>
             </div>

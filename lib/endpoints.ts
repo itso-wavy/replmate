@@ -40,20 +40,17 @@ export const TERMS_ENDPOINTS = {
 export const PLAN_ENDPOINTS = {
   // 전체 플랜 목록
   GET_PLANS: `${API_BASE}/plans`,
-
-  // 플랜 관리 (관리자 전용)
-  UPDATE_PLAN: (planId: number) => `${API_BASE}/plans/${planId}`,
 } as const;
 
 // ============================================================================
 // 스토어 (Stores)
 // ============================================================================
 export const STORE_ENDPOINTS = {
-  // 유저 스토어 목록 조회
-  GET_MY_STORES: `${API_BASE}/stores/me`,
+  // 유저 스토어 목록 조회 (경로 변경: /stores/me -> /users/me/stores)
+  GET_MY_STORES: `${API_BASE}/users/me/stores`,
   // 플랫폼 목록 조회
   GET_PLATFORMS: `${API_BASE}/stores/platforms`,
-  // 스토어 URL 중복 확인
+  // 스토어 URL 중복 확인 (GET으로 변경, query param 사용)
   CHECK_STORE_URL: `${API_BASE}/stores/url-check`,
   // 스토어 리플 옵션 조회
   GET_REPLY_OPTIONS: (storeId: string | number) =>
@@ -74,9 +71,13 @@ export const STORE_ENDPOINTS = {
   // 스토어별 상품 목록 조회
   GET_STORE_PRODUCTS: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}/products`,
-  // 스토어 인증 이미지 업로드
-  UPLOAD_VERIFICATION_IMAGE: (storeId: string | number) =>
+  // Presigned URL 발급
+  GET_PRESIGNED_URL: `${API_BASE}/stores/presigned-url`,
+  // 인증 이미지 업데이트 (imageKey 기반)
+  UPDATE_VERIFICATION_IMAGE: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}/verification-image`,
+  // 스토어 벌크 업데이트
+  UPDATE_STORES_BULK: `${API_BASE}/users/me/stores`,
 } as const;
 
 // ============================================================================
@@ -184,6 +185,24 @@ export const JOB_ENDPOINTS = {
 } as const;
 
 // ============================================================================
+// 결제 (Payments)
+// ============================================================================
+
+export const PAYMENT_ENDPOINTS = {
+  // 토스 결제 콜백
+  TOSS_CALLBACK: `${API_BASE}/payments/toss/callback`,
+} as const;
+
+// ============================================================================
+// 서비스 정보 (Service Info)
+// ============================================================================
+
+export const SERVICE_INFO_ENDPOINTS = {
+  // 서비스 정보 조회
+  GET_SERVICE_INFO: `${API_BASE}/service-info`,
+} as const;
+
+// ============================================================================
 // API 메타데이터 (개발/참고용)
 // ============================================================================
 
@@ -215,4 +234,5 @@ export const ENDPOINTS = {
   REMINDER: REMINDER_ENDPOINTS,
   CONTACT: CONTACT_ENDPOINTS,
   JOB: JOB_ENDPOINTS,
+  SERVICE_INFO: SERVICE_INFO_ENDPOINTS,
 } as const;

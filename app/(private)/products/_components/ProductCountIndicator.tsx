@@ -8,10 +8,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { dummyProducts } from '@/dummy/products';
 import { dummyStores } from '@/dummy/stores';
 import { dummySubscription } from '@/dummy/subscription';
 import { getActiveStoreList } from '@/lib/utils';
 import { UserStore } from '@/store/userStore';
+import { ProductDomain } from '@/types';
 
 // interface ProductCountIndicatorProps {
 //   selectedTotalProducts: number;
@@ -29,7 +31,10 @@ const ProductCountIndicator = () => {
   const activeStores = getActiveStoreList(dummyStores);
 
   // TODO: API 기반 데이터로 변경하기
-  const { selectedTotalProducts, capableTotalProducts } = dummySubscription;
+  const selectedTotalProducts = dummyProducts.filter(
+    (p: ProductDomain) => p.isTarget
+  ).length;
+  const capableTotalProducts = planInfo?.maxProductPerStore || 10;
 
   return (
     <Card className='bg-input/30 border-input px-3 py-2'>

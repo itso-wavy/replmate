@@ -74,10 +74,10 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const { refreshToken, clearAuth } = useAuthStore.getState();
+      const { refreshToken, actions } = useAuthStore.getState();
 
       if (!refreshToken) {
-        clearAuth();
+        actions.clearAuth();
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
@@ -116,7 +116,8 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // 토큰 갱신 실패 시 로그아웃
         processQueue(refreshError as AxiosError, null);
-        clearAuth();
+        const { actions } = useAuthStore.getState();
+        actions.clearAuth();
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }

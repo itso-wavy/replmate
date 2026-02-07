@@ -29,7 +29,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
-import { StoreDto } from '@/types';
+import { StoreDomain } from '@/types';
 
 import { useStoreCard } from './hook';
 
@@ -98,7 +98,7 @@ const ActionLinkButton = ({
   );
 };
 
-const StoreCard = ({ store }: { store: StoreDto }) => {
+const StoreCard = ({ store }: { store: StoreDomain }) => {
   const {
     isNameEditMode,
     editValue,
@@ -210,13 +210,13 @@ const StoreCard = ({ store }: { store: StoreDto }) => {
                   className={cn('mt-1 gap-1.5', connection.badgeStyle)}
                 >
                   <ProgressSvg
-                    status={connection.activeStatus}
+                    status={connection.iconStatus}
                     className='size-3.5'
                   />
                   {connection.statusLabel}
                 </Badge>
 
-                {connection.detailStatus === 'rejected' && (
+                {store.status === 'rejected' && (
                   <p className='text- typo-body-16 text-destructive mt-2 leading-none font-medium'>
                     * 연동 해제 후 다시 등록해 주세요.
                   </p>

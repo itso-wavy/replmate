@@ -134,7 +134,7 @@ const RecentRepliesTable = ({
             </TableRow>
           ))
         ) : (
-          <TableRow>
+          <TableRow className='hover:bg-inherit'>
             <TableCell
               colSpan={columns.length}
               className='typo-body-14 text-muted-foreground h-[200px] text-center'

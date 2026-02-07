@@ -109,3 +109,11 @@ export type ReminderEvent =
 
 // 리플 상태 (Swagger 기준)
 export type ReplyStatus = 'draft' | 'edited' | 'exported' | 'reset';
+
+// 스토어 상태 (Swagger 260207 기준)
+export type StoreStatus =
+  | 'pending' // 승인 대기
+  | 'rejected' // 반려
+  | 'inactive' // 비활성
+  | 'active' // 활성
+  | 'deactivating'; // 비활성화 진행중

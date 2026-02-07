@@ -15,6 +15,25 @@ const DashboardLayout = ({
   alerts,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
+  // 대시보드 진입 시 플랜 정보 조회
+  // useEffect(() => {
+  //   const fetchPlanInfo = async () => {
+  //     try {
+  //       const response = await api.get<UserPlanResponseData>(
+  //         ENDPOINTS.USER.GET_USER_PLAN
+  //       );
+  //       setPlanInfo({
+  //         plan: response.data.plan,
+  //         subscription: response.data.subscription,
+  //       });
+  //     } catch (error) {
+  //       console.error('Failed to fetch plan info:', error);
+  //     }
+  //   };
+
+  //   fetchPlanInfo();
+  // }, [setPlanInfo]);
+
   return (
     <div className='text-foreground relative mx-auto py-5'>
       <div className='border-border w-full space-y-2 border-b px-7 py-5'>

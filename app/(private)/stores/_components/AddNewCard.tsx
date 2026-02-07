@@ -52,6 +52,8 @@ const AddNewCard = () => {
         onOpenChange={(open) => !open && setActiveModal(null)}
       />
       <RecommandPlanUpgradeModal
+        title='쇼핑몰 등록'
+        description={`등록 가능한 쇼핑몰 한도를 초과했습니다.\n더 많은 쇼핑몰을 연동하려면 플랜을 업그레이드 해주세요.`}
         open={activeModal === 'limitExceeded'}
         onOpenChange={(open) => !open && setActiveModal(null)}
       />

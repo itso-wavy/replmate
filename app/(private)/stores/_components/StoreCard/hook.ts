@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import { ProgressSvgProps } from '@/assets/svg';
 import { api } from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
-import type { ActiveStatus, DetailStatus, StoreDto } from '@/types';
+import type { StoreDomain } from '@/types';
 
 const getPlatformConfig = (platform: string) => {
   switch (platform) {
@@ -39,63 +40,49 @@ const getPlatformConfig = (platform: string) => {
   }
 };
 
-const getConnectionStatus = (store: StoreDto) => {
-  // TODO: 백엔드 스키마 확정 후 조건식 구체화
-  // 예시: store.status 값으로 판단
-
-  // 임시: UI 테스트용: store.id를 시드로 사용하여 일관된 랜덤 상태 생성
-  const statuses: DetailStatus[] = [
-    'normal',
-    'deactivation_pending',
-    'approval_pending',
-    'rejected',
-    'deactivated',
-  ];
-  const detailStatus: DetailStatus = statuses[store.id % statuses.length];
-
-  // 대분류는 세부 상태에서 파생
-  let activeStatus: ActiveStatus | null = null;
+const getConnectionStatus = (store: StoreDomain) => {
+  let iconStatus: ProgressSvgProps['status'] | null = null;
   let statusLabel: string = '';
   let badgeStyle: string = '';
-  switch (detailStatus) {
-    case 'deactivation_pending':
-      activeStatus = 'active';
+  switch (store.status) {
+    case 'deactivating':
+      iconStatus = 'active';
       statusLabel = '비활성화 예정';
-      badgeStyle = 'text-destructive bg-brand-200';
+      badgeStyle =
+        'outline-destructive/40 outline-3 text-foreground bg-brand-200';
       break;
-    case 'approval_pending':
-      activeStatus = 'waiting';
+    case 'pending':
+      iconStatus = 'waiting';
       statusLabel = '승인 대기';
       badgeStyle = 'text-background bg-foreground [&_svg]:animate-spin';
       break;
     case 'rejected':
-      activeStatus = 'inactive';
+      iconStatus = 'inactive';
       statusLabel = '반려';
       badgeStyle = 'text-destructive bg-foreground';
       break;
-    case 'deactivated':
-      activeStatus = 'inactive';
+    case 'inactive':
+      iconStatus = 'inactive';
       statusLabel = '비활성';
       badgeStyle = 'bg-foreground text-background';
       break;
     default:
-      activeStatus = 'active';
+      iconStatus = 'active';
       statusLabel = '활성';
       badgeStyle = 'bg-brand-200 text-foreground';
   }
 
-  const isActive = activeStatus === 'active';
+  const isActive = iconStatus === 'active';
 
   return {
     isActive,
-    activeStatus,
     statusLabel,
     badgeStyle,
-    detailStatus,
+    iconStatus,
   };
 };
 
-export const useStoreCard = (store: StoreDto) => {
+export const useStoreCard = (store: StoreDomain) => {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [editValue, setEditValue] = useState(store.name);
   const [isLoading, setIsLoading] = useState(false);

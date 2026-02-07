@@ -14,8 +14,13 @@ import {
 } from '../ui/alert-dialog';
 import { CommonModalProps } from './types';
 
+interface ModalProps extends CommonModalProps {
+  title: string;
+  description: string;
+}
+
 // 쇼핑몰 수 한도 초과 모달
-const Modal = ({ open, onOpenChange }: CommonModalProps) => {
+const Modal = ({ title, description, open, onOpenChange }: ModalProps) => {
   const router = useRouter();
 
   const handleAction = () => {
@@ -26,8 +31,10 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
         <AlertDialogHeader>
-          <AlertDialogTitle>쇼핑몰 등록</AlertDialogTitle>
-          <AlertDialogDescription className='mx-auto text-center'>{`등록 가능한 쇼핑몰 한도를 초과했습니다.\n더 많은 쇼핑몰을 연동하려면 플랜을 업그레이드 해주세요.`}</AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription className='mx-auto text-center'>
+            {description}
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>

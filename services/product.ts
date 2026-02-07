@@ -1,14 +1,16 @@
 import { api } from '@/lib/api';
 import { PRODUCT_ENDPOINTS } from '@/lib/endpoints';
+import type {
+  ProductDetailDto,
+  ProductDto,
+  ProductInfoDto,
+} from '@/types/api/product';
 import {
   ProductDetailDomain,
-  ProductDetailDto,
   ProductDomain,
-  ProductDto,
   toProductDetailDomain,
-  toProductDomain,
   toProductDomainList,
-} from '@/types';
+} from '@/types/domain/product';
 
 // ============================================================================
 // 상품 조회
@@ -44,16 +46,17 @@ export async function getProductDetail(
 
 /**
  * 상품 타겟 여부 변경
+ * 응답: ProductInfoDto (product + job)
  */
 export async function updateProduct(
   productId: string | number,
   data: Partial<{
     isTarget: boolean;
   }>
-): Promise<ProductDomain> {
-  const response = await api.patch<ProductDto>(
+): Promise<ProductInfoDto> {
+  const response = await api.patch<ProductInfoDto>(
     PRODUCT_ENDPOINTS.UPDATE_PRODUCT(productId),
     data
   );
-  return toProductDomain(response.data);
+  return response.data;
 }

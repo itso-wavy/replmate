@@ -1,4 +1,4 @@
-import type { UserDomain } from '@/types/domain';
+import type { UserDomain } from '@/types';
 
 export const dummyUsers: UserDomain[] = [
   {

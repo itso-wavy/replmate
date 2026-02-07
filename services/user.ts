@@ -1,19 +1,24 @@
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
+import type { PlanDto } from '@/types/api/plan';
+import type {
+  CancelSubscriptionResponse,
+  DeleteUserRequest,
+  NotificationSettingsDto,
+  ReactivateSubscriptionResponse,
+  SubscriptionDto,
+  UserDto,
+  UserPlanInfo,
+} from '@/types/api/user';
+import { PlanDomain, toPlanDomain } from '@/types/domain/plan';
 import {
   NotificationSettingsDomain,
-  NotificationSettingsDto,
-  PlanDto,
   SubscriptionDomain,
-  SubscriptionDto,
   UserDomain,
-  UserDto,
-  UserWithPlanDomain,
   toNotificationSettingsDomain,
-  toPlanDomain,
   toSubscriptionDomain,
   toUserDomain,
-} from '@/types';
+} from '@/types/domain/user';
 
 // ============================================================================
 // 사용자 정보
@@ -30,8 +35,8 @@ export async function getUser(): Promise<UserDomain> {
 /**
  * 사용자 탈퇴
  */
-export async function deleteUser(): Promise<void> {
-  await api.delete(USER_ENDPOINTS.DELETE_USER);
+export async function deleteUser(data: DeleteUserRequest): Promise<void> {
+  await api.delete(USER_ENDPOINTS.DELETE_USER, { data });
 }
 
 // ============================================================================
@@ -39,17 +44,20 @@ export async function deleteUser(): Promise<void> {
 // ============================================================================
 
 /**
- * 사용자의 플랜 정보 조회 (사용자 + 플랜 + 구독 정보)
+ * 사용자 플랜 정보 (플랜 + 구독 정보)
  */
-export async function getUserPlan(): Promise<UserWithPlanDomain> {
-  const response = await api.get<{
-    user: UserDto;
-    plan: PlanDto;
-    subscription: SubscriptionDto;
-  }>(USER_ENDPOINTS.GET_USER_PLAN);
+export interface UserPlanDomain {
+  plan: PlanDomain;
+  subscription: SubscriptionDomain;
+}
+
+/**
+ * 사용자의 플랜 정보 조회 (플랜 + 구독 정보, user 필드 제거)
+ */
+export async function getUserPlan(): Promise<UserPlanDomain> {
+  const response = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
 
   return {
-    user: toUserDomain(response.data.user),
     plan: toPlanDomain(response.data.plan),
     subscription: toSubscriptionDomain(response.data.subscription),
   };
@@ -68,21 +76,21 @@ export async function changePlan(planId: number): Promise<SubscriptionDomain> {
 /**
  * 플랜 해지 (다음 결제일에 자동 해지)
  */
-export async function cancelPlan(): Promise<SubscriptionDomain> {
-  const response = await api.delete<SubscriptionDto>(
+export async function cancelPlan(): Promise<CancelSubscriptionResponse> {
+  const response = await api.delete<CancelSubscriptionResponse>(
     USER_ENDPOINTS.CANCEL_PLAN
   );
-  return toSubscriptionDomain(response.data);
+  return response.data;
 }
 
 /**
  * 플랜 재활성화 (해지 취소)
  */
-export async function reactivatePlan(): Promise<SubscriptionDomain> {
-  const response = await api.post<SubscriptionDto>(
+export async function reactivatePlan(): Promise<ReactivateSubscriptionResponse> {
+  const response = await api.post<ReactivateSubscriptionResponse>(
     USER_ENDPOINTS.REACTIVATE_PLAN
   );
-  return toSubscriptionDomain(response.data);
+  return response.data;
 }
 
 // ============================================================================

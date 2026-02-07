@@ -60,7 +60,7 @@ const StoreCombobox = () => {
 
   return (
     <Combobox
-      items={[]}
+      items={activeStores}
       value={selectedStoreId}
       onValueChange={handleValueChange}
     >

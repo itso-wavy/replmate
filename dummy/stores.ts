@@ -1,66 +1,40 @@
-import type { StoreDomain } from '@/types/domain';
-import { PlatformType } from '@/types/enums';
+import type { StoreDomain } from '@/types';
 
 export const dummyStores: StoreDomain[] = [
   {
     id: 1,
     name: '쇼핑몰A',
     url: 'https://smartstore.naver.com/mangomarket',
-    platform: PlatformType.NAVER_SMART_STORE,
-    isActive: true,
-    isVerified: true,
-    verifiedAt: new Date('2024-07-01T09:15:00Z'),
-    lastProductSyncedAt: new Date('2024-07-20T02:45:10Z'),
-    createdAt: new Date('2024-06-15T10:00:00Z'),
-    updatedAt: new Date('2024-07-20T02:45:10Z'),
+    platform: 'naver-smartstore',
+    status: 'active',
   },
   {
     id: 2,
     name: '쇼핑몰B',
     url: 'https://brandstore.naver.com/sorahome',
-    platform: PlatformType.NAVER_BRAND_STORE,
-    isActive: true,
-    isVerified: false,
-    verifiedAt: null,
-    lastProductSyncedAt: new Date('2024-07-18T13:22:40Z'),
-    createdAt: new Date('2024-05-03T08:30:00Z'),
-    updatedAt: new Date('2024-07-18T13:22:40Z'),
+    platform: 'naver-brandstore',
+    status: 'rejected',
   },
   {
     id: 3,
     name: '쇼핑몰C',
     url: 'https://smartstore.naver.com/rumiatelier',
-    platform: PlatformType.NAVER_SMART_STORE,
-    isActive: false,
-    isVerified: true,
-    verifiedAt: new Date('2024-03-12T01:05:30Z'),
-    lastProductSyncedAt: new Date('2024-04-02T23:11:05Z'),
-    createdAt: new Date('2024-02-10T04:20:00Z'),
-    updatedAt: new Date('2024-04-02T23:11:05Z'),
+    platform: 'naver-smartstore',
+    status: 'deactivating',
   },
   {
     id: 4,
     name: '쇼핑몰D',
     url: 'https://smartstore.naver.com/dailylook',
-    platform: PlatformType.NAVER_SMART_STORE,
-    isActive: true,
-    isVerified: true,
-    verifiedAt: new Date('2024-08-01T10:00:00Z'),
-    lastProductSyncedAt: new Date('2024-08-02T15:30:00Z'),
-    createdAt: new Date('2024-07-25T09:00:00Z'),
-    updatedAt: new Date('2024-08-02T15:30:00Z'),
+    platform: 'naver-smartstore',
+    status: 'inactive',
   },
   {
     id: 5,
     name: '쇼핑몰E',
     url: 'https://brandstore.naver.com/techworld',
-    platform: PlatformType.NAVER_BRAND_STORE,
-    isActive: true,
-    isVerified: true,
-    verifiedAt: new Date('2024-08-05T11:20:00Z'),
-    lastProductSyncedAt: new Date('2024-08-06T09:10:00Z'),
-    createdAt: new Date('2024-08-01T14:00:00Z'),
-    updatedAt: new Date('2024-08-06T09:10:00Z'),
+    platform: 'naver-brandstore',
+    status: 'pending',
   },
   // {
   //   id: 6,
@@ -73,6 +47,8 @@ export const dummyStores: StoreDomain[] = [
   //   lastProductSyncedAt: null,
   //   createdAt: '2024-08-10T16:45:00Z',
   //   updatedAt: '2024-08-10T16:45:00Z',
+  //  status: 'deactivated'
+
   // },
   // {
   //   id: 7,
@@ -85,6 +61,8 @@ export const dummyStores: StoreDomain[] = [
   //   lastProductSyncedAt: '2024-06-01T10:00:00Z',
   //   createdAt: '2024-05-15T11:30:00Z',
   //   updatedAt: '2024-06-01T10:00:00Z',
+  //  status: 'deactivated'
+
   // },
   // {
   //   id: 8,
@@ -97,5 +75,6 @@ export const dummyStores: StoreDomain[] = [
   //   lastProductSyncedAt: '2024-08-13T14:20:00Z',
   //   createdAt: '2024-08-11T10:00:00Z',
   //   updatedAt: '2024-08-13T14:20:00Z',
+  //  status: 'deactivated'
   // },
 ];

@@ -7,16 +7,14 @@ import type { Pagination } from '@/types/api/common';
  */
 export interface ProductDomain {
   id: number;
-  storeId: number;
   name: string;
+  externalId: string | null;
   price: number | null;
   currency: string;
-  imageUrl: string | null;
   isTarget: boolean;
+  avgRating: number | null;
   reviewCount: number | null;
-  lastReviewSyncedAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
+  registeredAt: Date | null;
 }
 
 /**
@@ -60,18 +58,14 @@ export interface ProductWithStore extends ProductDomain {
 export function toProductDomain(dto: ProductDto): ProductDomain {
   return {
     id: dto.id,
-    storeId: dto.storeId,
     name: dto.name,
+    externalId: dto.externalId,
     price: dto.price,
     currency: dto.currency,
-    imageUrl: dto.imageUrl,
     isTarget: dto.isTarget,
+    avgRating: dto.avgRating,
     reviewCount: dto.reviewCount,
-    lastReviewSyncedAt: dto.lastReviewSyncedAt
-      ? new Date(dto.lastReviewSyncedAt)
-      : null,
-    createdAt: new Date(dto.createdAt),
-    updatedAt: new Date(dto.updatedAt),
+    registeredAt: dto.registeredAt ? new Date(dto.registeredAt) : null,
   };
 }
 

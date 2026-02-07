@@ -1,15 +1,25 @@
 import { api } from '@/lib/api';
 import { STORE_ENDPOINTS } from '@/lib/endpoints';
-import {
-  PlatformType,
-  StoreDomain,
+import type {
+  PresignedUrlDto,
+  PresignedUrlRequest,
+  StoreDetailDto,
   StoreDto,
-  StoreReplyOptionsDomain,
+  StoreInfoDto,
   StoreReplyOptionsDto,
+  StoreUrlCheckInfoDto,
+  UpdateStoresRequest,
+} from '@/types/api/store';
+import type { PlatformType } from '@/types/enums';
+import {
+  StoreDomain,
+  StoreDetailDomain,
+  StoreReplyOptionsDomain,
   toStoreDomain,
   toStoreDomainList,
+  toStoreDetailDomain,
   toStoreReplyOptionsDomain,
-} from '@/types';
+} from '@/types/domain/store';
 
 // ============================================================================
 // 스토어 조회
@@ -28,11 +38,11 @@ export async function getMyStores(): Promise<StoreDomain[]> {
  */
 export async function getStoreDetail(
   storeId: string | number
-): Promise<StoreDomain> {
-  const response = await api.get<StoreDto>(
+): Promise<StoreDetailDomain> {
+  const response = await api.get<StoreDetailDto>(
     STORE_ENDPOINTS.GET_STORE_DETAIL(storeId)
   );
-  return toStoreDomain(response.data);
+  return toStoreDetailDomain(response.data);
 }
 
 /**
@@ -49,26 +59,27 @@ export async function getPlatforms(): Promise<PlatformType[]> {
 
 /**
  * 스토어 생성
+ * 응답: StoreInfoDto (job + store)
  */
 export async function createStore(data: {
   name: string;
   url: string;
   platform: PlatformType;
-}): Promise<StoreDomain> {
-  const response = await api.post<StoreDto>(STORE_ENDPOINTS.CREATE_STORE, data);
-  return toStoreDomain(response.data);
+}): Promise<StoreInfoDto> {
+  const response = await api.post<StoreInfoDto>(
+    STORE_ENDPOINTS.CREATE_STORE,
+    data
+  );
+  return response.data;
 }
 
 /**
- * 스토어 URL 중복 확인
+ * 스토어 URL 중복 확인 (GET 방식, query param 사용)
  */
-export async function checkStoreUrl(url: string): Promise<{
-  isAvailable: boolean;
-  message: string;
-}> {
-  const response = await api.post<{ isAvailable: boolean; message: string }>(
+export async function checkStoreUrl(url: string): Promise<StoreUrlCheckInfoDto> {
+  const response = await api.get<StoreUrlCheckInfoDto>(
     STORE_ENDPOINTS.CHECK_STORE_URL,
-    { url }
+    { params: { url } }
   );
   return response.data;
 }
@@ -130,27 +141,43 @@ export async function updateReplyOptions(
 }
 
 // ============================================================================
-// 스토어 인증
+// 스토어 인증 (Presigned URL 방식)
 // ============================================================================
 
 /**
- * 스토어 인증 이미지 업로드
+ * Presigned URL 발급
  */
-export async function uploadVerificationImage(
-  storeId: string | number,
-  file: File
-): Promise<StoreDomain> {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const response = await api.post<StoreDto>(
-    STORE_ENDPOINTS.UPLOAD_VERIFICATION_IMAGE(storeId),
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
+export async function getPresignedUrl(
+  data: PresignedUrlRequest
+): Promise<PresignedUrlDto> {
+  const response = await api.post<PresignedUrlDto>(
+    STORE_ENDPOINTS.GET_PRESIGNED_URL,
+    data
   );
-  return toStoreDomain(response.data);
+  return response.data;
+}
+
+/**
+ * 인증 이미지 업데이트 (imageKey 기반)
+ */
+export async function updateVerificationImage(
+  storeId: string | number,
+  imageKey: string
+): Promise<void> {
+  await api.put(STORE_ENDPOINTS.UPDATE_VERIFICATION_IMAGE(storeId), {
+    imageKey,
+  });
+}
+
+/**
+ * 스토어 벌크 업데이트
+ */
+export async function updateStoresBulk(
+  data: UpdateStoresRequest
+): Promise<StoreDto[]> {
+  const response = await api.patch<StoreDto[]>(
+    STORE_ENDPOINTS.UPDATE_STORES_BULK,
+    data
+  );
+  return response.data;
 }

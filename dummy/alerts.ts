@@ -40,7 +40,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     variant: 'warning',
     title: '쇼핑몰 연동이 필요합니다.',
     description:
-      '현재 연동된 쇼핑몰이 없어 서비스 이용이 제한됩니다. 쇼핑몰을 연동해 주세요.',
+      '현재 사용 가능한 쇼핑몰이 없어 서비스 이용이 제한됩니다. 쇼핑몰 상태를 확인해 주세요.',
     href: '/stores',
   },
   [AlertType.STORE_ADJUSTMENT_REQUIRED_DETAIL]: {

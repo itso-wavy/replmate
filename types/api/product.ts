@@ -1,4 +1,5 @@
 import { Pagination } from './common';
+import type { JobTicketDto } from './job';
 
 // ============================================================================
 // 상품 (Products)
@@ -7,16 +8,14 @@ import { Pagination } from './common';
 // GET /api/v1/stores/{store_id}/products?page=1&size=20
 export interface ProductDto {
   id: number;
-  storeId: number;
   name: string;
+  externalId: string | null;
   price: number | null;
   currency: string;
-  imageUrl: string | null;
   isTarget: boolean;
+  avgRating: number | null;
   reviewCount: number | null;
-  lastReviewSyncedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  registeredAt: string | null;
 }
 
 // GET /api/v1/products/{product_id}
@@ -34,6 +33,12 @@ export interface ProductDetailDto {
   isNew: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+// ?곹뭹 ?낅뜲?댄듃 ?묐떟
+export interface ProductInfoDto {
+  product: ProductDetailDto;
+  job: JobTicketDto | null;
 }
 
 export type ProductList = Pagination & { items: ProductDto[] };

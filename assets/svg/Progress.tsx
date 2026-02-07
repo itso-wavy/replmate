@@ -1,4 +1,4 @@
-interface ProgressSvgProps {
+export interface ProgressSvgProps {
   status: 'waiting' | 'inactive' | 'active' | 'half';
   className?: string;
 }

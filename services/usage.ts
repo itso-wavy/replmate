@@ -1,13 +1,18 @@
 import { api } from '@/lib/api';
 import { USAGE_ENDPOINTS } from '@/lib/endpoints';
-import {
-  UsageLedgerDomain,
+import type {
+  TestUsageQuotaDto,
   UsageLedgerDto,
-  UsageQuotaDomain,
   UsageQuotaDto,
+} from '@/types/api/usage';
+import {
+  TestUsageQuotaDomain,
+  UsageLedgerDomain,
+  UsageQuotaDomain,
+  toTestUsageQuotaDomain,
   toUsageLedgerDomainList,
   toUsageQuotaDomain,
-} from '@/types';
+} from '@/types/domain/usage';
 
 // ============================================================================
 // 사용량 조회
@@ -23,10 +28,16 @@ export async function getUsageQuota(): Promise<UsageQuotaDomain> {
 
 /**
  * 테스트 사용량 조회 (일일 테스트 사용량)
+ * storeId 파라미터 필수
  */
-export async function getTestQuota(): Promise<UsageQuotaDomain> {
-  const response = await api.get<UsageQuotaDto>(USAGE_ENDPOINTS.GET_TEST_QUOTA);
-  return toUsageQuotaDomain(response.data);
+export async function getTestQuota(
+  storeId: number
+): Promise<TestUsageQuotaDomain> {
+  const response = await api.get<TestUsageQuotaDto>(
+    USAGE_ENDPOINTS.GET_TEST_QUOTA,
+    { params: { storeId } }
+  );
+  return toTestUsageQuotaDomain(response.data);
 }
 
 /**

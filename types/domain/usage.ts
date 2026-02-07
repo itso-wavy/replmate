@@ -19,7 +19,7 @@ export interface UsageQuotaDomain {
  * 테스트 사용량 쿼터 Domain 타입
  */
 export interface TestUsageQuotaDomain {
-  userId: number;
+  storeId: number;
   remaining: number;
   updatedAt: Date;
 }
@@ -91,7 +91,7 @@ export function toTestUsageQuotaDomain(
   dto: TestUsageQuotaDto
 ): TestUsageQuotaDomain {
   return {
-    userId: dto.userId,
+    storeId: dto.storeId,
     remaining: dto.remaining,
     updatedAt: new Date(dto.updatedAt),
   };

@@ -11,16 +11,16 @@
   /* --color-brand-13: #aaaef5; */
 
   --color-brand-ruby: #d6004b;
-  --color-brand-red: #EE0121;
+  --color-brand-red: #ee0121;
   --color-brand-orange: #ff7300;
   --color-brand-sun: #ffb407;
   --color-brand-yellow: #ffdf1b;
-  --color-brand-green: #6ac8a0; 
+  --color-brand-green: #6ac8a0;
   --color-brand-mint: #0ac5b2;
   --color-brand-cloudy: #88c5d6;
   --color-brand-lilac: #efe8fd;
   --color-brand-violet: #ad9dfb;
-  
+
   --color-warmgray-100: #e6e6e0;
   --color-warmgray-200: #e1e1de;
   --color-warmgray-400: #aaa9a7;
@@ -32,27 +32,28 @@
   /* STORE COLOR */
   --color-kakao-theme: #fee500;
   --color-naver-theme: #03a94d;
-  --color-smart-store-theme: #03C75A;
+  --color-smart-store-theme: #03c75a;
   --color-brand-store-theme: #7346f3;
-  --color-coupang-store-theme: #0073E9;
+  --color-coupang-store-theme: #0073e9;
 
   /* BRAND COLOR */
-  --color-brand-50: #EBF3FF;
-  --color-brand-100: #D8E7FF;
-  --color-brand-200: #B0CFFF;
-  --color-brand-300: #89B6FF;
-  --color-brand-400: #629EFF;
-  --color-brand-500: #3B7CF5;
-  --color-brand-600: #2665E5;
-  --color-brand-700: #114ED4;
-  --color-brand-800: #1641AA;
-  --color-brand-900: #1B3380;
+  --color-brand-50: #ebf3ff;
+  --color-brand-100: #d8e7ff;
+  --color-brand-200: #b0cfff;
+  --color-brand-300: #89b6ff;
+  --color-brand-400: #629eff;
+  --color-brand-500: #3b7cf5;
+  --color-brand-600: #2665e5;
+  --color-brand-700: #114ed4;
+  --color-brand-800: #1641aa;
+  --color-brand-900: #1b3380;
 
-  --color-brand-red: #EE0121;
+  --color-brand-ruby: #d6004b;
+  --color-brand-red: #ee0121;
   --color-brand-orange: #ff7300;
   --color-brand-sun: #ffb407;
   --color-brand-yellow: #ffdf1b;
-  --color-brand-green: #6ac8a0; 
+  --color-brand-green: #6ac8a0;
   --color-brand-mint: #0ac5b2;
   --color-brand-cloudy: #88c5d6;
   --color-brand-lilac: #efe8fd;
@@ -65,7 +66,7 @@
   --color-warmgray-600: #716f6d;
 
   /* STATUS COLOR */
-  --color-success: #00b47b; 
+  --color-success: #00b47b;
   --color-error: #d6004b;
 
   /* Foundation */

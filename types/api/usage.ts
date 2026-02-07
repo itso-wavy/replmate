@@ -14,7 +14,7 @@ export interface UsageQuotaDto {
 
 // GET /api/v1/usage/test-quota 오늘 남은 리플 테스트 사용량
 export interface TestUsageQuotaDto {
-  userId: number;
+  storeId: number;
   remaining: number;
   updatedAt: string;
 }

@@ -2,7 +2,6 @@ import type { PlanDto } from '@/types/api/plan';
 
 /**
  * 플랜 Domain 타입
- * API DTO의 날짜 문자열을 Date 객체로 변환
  */
 export interface PlanDomain {
   id: number;
@@ -15,9 +14,6 @@ export interface PlanDomain {
   maxStoreCount: number;
   maxProductPerStore: number;
   maxTestPerDay: number;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 /**
@@ -37,9 +33,6 @@ export function toPlanDomain(dto: PlanDto): PlanDomain {
     maxStoreCount: dto.maxStoreCount,
     maxProductPerStore: dto.maxProductPerStore,
     maxTestPerDay: dto.maxTestPerDay,
-    isActive: dto.isActive,
-    createdAt: new Date(dto.createdAt),
-    updatedAt: new Date(dto.updatedAt),
   };
 }
 

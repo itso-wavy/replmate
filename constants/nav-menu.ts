@@ -26,7 +26,7 @@ export const DASHBOARD_MENU = [
     href: '/dashboard',
   },
   {
-    label: '쇼핑몰 연동',
+    label: '쇼핑몰 관리',
     href: '/stores',
   },
   {
