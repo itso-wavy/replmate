@@ -18,6 +18,8 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
+import { dummyStores } from '@/dummy';
+import { getActiveStoreList } from '@/lib/utils';
 import { UsageQuotaSubscriptionDomain } from '@/types';
 
 interface DashboardCardProps {
@@ -184,8 +186,9 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
   );
 };
 
-const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
+const DashboardStoresCard = () => {
   const router = useRouter();
+  const activeStores = getActiveStoreList(dummyStores);
 
   return (
     <Item
@@ -206,7 +209,8 @@ const DashboardStoresCard = ({ subscription }: DashboardCardProps) => {
         <ItemContent>
           <ItemDescription className='text-foreground mt-6'>
             <span className='typo-heading-24 font-medium'>
-              {subscription.storeQuotaUsed || 0}
+              {/* 연동된 쇼핑몰 → 쇼핑몰 연동 페이지 (쇼핑몰 수는 활성 쇼핑몰(ACTIVE_SHOPS) 합산( ‘활성/비활성화 예정’ 상태의 쇼핑몰)) */}
+              {activeStores.length || 0}
             </span>
             <span className='typo-caption-14 font-medium'> 건</span>
           </ItemDescription>

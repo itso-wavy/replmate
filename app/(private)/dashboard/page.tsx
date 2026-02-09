@@ -56,7 +56,7 @@ const DashboardPage = () => {
           />
           <DashboardTodayCard todayReplyCount={0} />
           <DashboardReplyCard subscription={dummySubscription} />
-          <DashboardStoresCard subscription={dummySubscription} />
+          <DashboardStoresCard />
         </div>
 
         <Card className='block p-4'>

@@ -6,7 +6,7 @@ import { StoreLimitExceededModal } from '@/components/modal';
 import { dummyStoreAlert } from '@/dummy/alerts';
 import { dummyStores } from '@/dummy/stores';
 import { dummySubscription } from '@/dummy/subscription';
-import { sortStoreList } from '@/lib/utils';
+import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
 
 import { DashboardLayout } from '../_components';
 import { AddNewCard, StoreCard } from './_components';
@@ -14,6 +14,7 @@ import { AddNewCard, StoreCard } from './_components';
 const StoresPage = () => {
   const [isPlanLimitModalOpen, setIsPlanLimitModalOpen] = useState(false);
   const sortedStoreList = sortStoreList(dummyStores);
+  const registeredStores = getRegisteredStoreList(dummyStores).length;
 
   useEffect(() => {
     // TODO: 백엔드에서 '조정 필요' 상태 확인
@@ -29,11 +30,11 @@ const StoresPage = () => {
           <span>연동할 쇼핑몰을 등록해 주세요.</span>
           <span className='align-center typo-body-16 ml-0.5 flex font-medium text-zinc-900 *:inline-block *:h-0'>
             <span className='typo-link-14'>(</span>
-            {/* 인증 완료 상태인 현재 등록 쇼핑몰 수 */}
-            <span>등록된 쇼핑몰 {dummySubscription.storeQuotaUsed}</span>
+            {/* 승인 대기/활성/비활성화 예정 쇼핑몰 수의 합산*/}
+            <span>등록된 쇼핑몰 {registeredStores || 0}</span>
             <span>/</span>
             {/* 최대 허용 쇼핑몰 수 */}
-            <span>{dummySubscription.storeQuotaTotal}개</span>
+            <span>{dummySubscription.storeQuotaTotal || 0}개</span>
             <span className='typo-link-14'>)</span>
           </span>
         </span>
