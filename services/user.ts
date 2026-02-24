@@ -1,6 +1,5 @@
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
-import type { PlanDto } from '@/types/api/plan';
 import type {
   CancelSubscriptionResponse,
   DeleteUserRequest,

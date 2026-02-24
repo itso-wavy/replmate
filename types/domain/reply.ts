@@ -1,9 +1,4 @@
-import type {
-  ReplyDto,
-  ReviewDto,
-  TestReplyDto,
-  SentimentType,
-} from '@/types/api/reply';
+import type { ReplyDto, ReviewDto, SentimentType } from '@/types/api/reply';
 import type { Pagination } from '@/types/api/common';
 import { toProductDomain, type ProductDomain } from './product';
 
@@ -12,6 +7,8 @@ import { toProductDomain, type ProductDomain } from './product';
  */
 export interface ReviewDomain {
   id: number;
+  /** 리뷰 작성자 (예: "yu****"). API DTO에 없는 프론트엔드 전용 필드 */
+  reviewer: string | null;
   rating: number | null;
   content: string;
   reviewedAt: Date | null;
@@ -20,6 +17,7 @@ export interface ReviewDomain {
 /**
  * 리플 Domain 타입
  * API DTO의 날짜 문자열을 Date 객체로 변환
+ * NOTE: editedText, status, tone 등 추가 필드는 실제 백엔드 응답에 포함될 수 있어 유지합니다.
  */
 export interface ReplyDomain {
   id: number;
@@ -32,20 +30,10 @@ export interface ReplyDomain {
   lengthType: string | null;
   includeEmoji: boolean;
   usageCount: number;
+  sentimentScore: number | null;
   exportedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
-}
-
-/**
- * 테스트 리플 Domain 타입
- */
-export interface TestReplyDomain {
-  aiText: string;
-  tone: string | null;
-  lengthType: string | null;
-  includeEmoji: boolean;
-  usageCount: number;
 }
 
 /**
@@ -59,7 +47,6 @@ export type ReplyListDomain = Pagination & { items: ReplyDomain[] };
  */
 export interface ReplyWithSentiment extends ReplyDomain {
   sentiment?: SentimentType;
-  sentimentScore?: number;
 }
 
 /**
@@ -70,6 +57,7 @@ export interface ReplyWithSentiment extends ReplyDomain {
 export function toReviewDomain(dto: ReviewDto): ReviewDomain {
   return {
     id: dto.id,
+    reviewer: null,
     rating: dto.rating,
     content: dto.content,
     reviewedAt: dto.reviewedAt ? new Date(dto.reviewedAt) : null,
@@ -93,6 +81,7 @@ export function toReplyDomain(dto: ReplyDto): ReplyDomain {
     lengthType: dto.lengthType,
     includeEmoji: dto.includeEmoji,
     usageCount: dto.usageCount,
+    sentimentScore: null,
     exportedAt: dto.exportedAt ? new Date(dto.exportedAt) : null,
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
@@ -106,21 +95,6 @@ export function toReplyDomain(dto: ReplyDto): ReplyDomain {
  */
 export function toReplyDomainList(dtos: ReplyDto[]): ReplyDomain[] {
   return dtos.map(toReplyDomain);
-}
-
-/**
- * TestReplyDto를 TestReplyDomain으로 변환
- * @param dto - API에서 받은 TestReplyDto
- * @returns TestReplyDomain 객체
- */
-export function toTestReplyDomain(dto: TestReplyDto): TestReplyDomain {
-  return {
-    aiText: dto.aiText,
-    tone: dto.tone,
-    lengthType: dto.lengthType,
-    includeEmoji: dto.includeEmoji,
-    usageCount: dto.usageCount,
-  };
 }
 
 /**

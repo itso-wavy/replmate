@@ -1,7 +1,7 @@
 import { api } from '@/lib/api';
 import { REPLY_ENDPOINTS } from '@/lib/endpoints';
 import type { JobTicketDto } from '@/types/api/job';
-import type { ReplyDto } from '@/types/api/reply';
+import type { CreateTestReplyRequest, ReplyDto } from '@/types/api/reply';
 import { ReplyDomain, toReplyDomainList } from '@/types/domain/reply';
 
 // ============================================================================
@@ -32,17 +32,14 @@ export async function getReplies(params: {
 // ============================================================================
 
 /**
- * 리플 테스트 (미리보기)
+ * 테스트 AI 리플 생성
+ * POST /api/v1/replies/test
  * 비동기 Job 방식 - 202 Accepted, JobTicketDto 반환
- * storeId 필수
+ * Job 결과는 GET /api/v1/jobs/{job_id} 또는 SSE 스트림으로 조회
  */
-export async function testReply(data: {
-  reviewText: string;
-  storeId: number;
-  tone?: string;
-  lengthType?: string;
-  includeEmoji?: boolean;
-}): Promise<JobTicketDto> {
+export async function testReply(
+  data: CreateTestReplyRequest
+): Promise<JobTicketDto> {
   const response = await api.post<JobTicketDto>(
     REPLY_ENDPOINTS.TEST_REPLY,
     data

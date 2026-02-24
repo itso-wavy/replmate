@@ -8,6 +8,7 @@ import type {
   StoreInfoDto,
   StoreReplyOptionsDto,
   StoreUrlCheckInfoDto,
+  UpdateStoreRequest,
   UpdateStoresRequest,
 } from '@/types/api/store';
 import type { PlatformType } from '@/types/enums';
@@ -59,12 +60,14 @@ export async function getPlatforms(): Promise<PlatformType[]> {
 
 /**
  * 스토어 생성
+ * verificationImageKey: presigned URL로 업로드 후 받은 imageKey
  * 응답: StoreInfoDto (job + store)
  */
 export async function createStore(data: {
   name: string;
   url: string;
   platform: PlatformType;
+  verificationImageKey: string;
 }): Promise<StoreInfoDto> {
   const response = await api.post<StoreInfoDto>(
     STORE_ENDPOINTS.CREATE_STORE,
@@ -85,15 +88,16 @@ export async function checkStoreUrl(url: string): Promise<StoreUrlCheckInfoDto> 
 }
 
 /**
- * 스토어 활성화 상태 변경
+ * 스토어 업데이트 (활성화 상태, 비활성화 예약 등)
+ * PATCH /api/v1/stores/{store_id}
  */
-export async function updateStoreStatus(
+export async function updateStore(
   storeId: string | number,
-  isActive: boolean
+  data: UpdateStoreRequest
 ): Promise<StoreDomain> {
   const response = await api.patch<StoreDto>(
     STORE_ENDPOINTS.UPDATE_STORE_STATUS(storeId),
-    { isActive }
+    data
   );
   return toStoreDomain(response.data);
 }
@@ -146,6 +150,8 @@ export async function updateReplyOptions(
 
 /**
  * Presigned URL 발급
+ * POST /api/v1/stores/presigned-url
+ * 응답의 uploadUrl로 S3에 직접 업로드 후 imageKey를 사용
  */
 export async function getPresignedUrl(
   data: PresignedUrlRequest
@@ -159,6 +165,7 @@ export async function getPresignedUrl(
 
 /**
  * 인증 이미지 업데이트 (imageKey 기반)
+ * PUT /api/v1/stores/{store_id}/verification-image
  */
 export async function updateVerificationImage(
   storeId: string | number,
@@ -171,13 +178,14 @@ export async function updateVerificationImage(
 
 /**
  * 스토어 벌크 업데이트
+ * PATCH /api/v1/users/me/stores
  */
 export async function updateStoresBulk(
   data: UpdateStoresRequest
-): Promise<StoreDto[]> {
+): Promise<StoreDomain[]> {
   const response = await api.patch<StoreDto[]>(
     STORE_ENDPOINTS.UPDATE_STORES_BULK,
     data
   );
-  return response.data;
+  return toStoreDomainList(response.data);
 }

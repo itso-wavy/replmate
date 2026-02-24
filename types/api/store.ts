@@ -5,18 +5,17 @@ import type { JobTicketDto } from './job';
 // 스토어 (Stores)
 // ============================================================================
 
-// GET /api/v1/stores/me 연동한 스토어 목록
-// GET /api/v1/stores/{store_id} 스토어 상세 조회
+// GET /api/v1/users/me/stores 내 스토어 목록
+// PATCH /api/v1/stores/{store_id} 스토어 업데이트 응답
 export interface StoreDto {
   id: number;
   name: string;
   url: string;
   platform: string;
-  status: StoreStatus; // FIXME: 백엔드 추가 필드
+  status: StoreStatus;
 }
 
-// GET /api/v1/stores/{store_id}/reply-options 스토어 리플 옵션 조회
-// GET /api/v1/stores/{store_id} ?ㅽ넗???곸꽭 議고쉶
+// GET /api/v1/stores/{store_id} 스토어 상세 조회
 export interface StoreDetailDto {
   id: number;
   name: string;
@@ -29,43 +28,52 @@ export interface StoreDetailDto {
   updatedAt: string;
 }
 
-// ?ㅽ넗???앹꽦 ?묐떟 (Job + Store)
+// POST /api/v1/stores 스토어 생성 응답 (Job + Store)
 export interface StoreInfoDto {
   job: JobTicketDto;
   store: StoreDetailDto;
 }
 
-// URL 以묐났 ?뺤씤 ?묐떟
+// GET /api/v1/stores/url-check URL 중복 확인 응답
 export interface StoreUrlCheckInfoDto {
   exists: boolean;
   url: string | null;
 }
 
-// Presigned URL ?붿껌
+// POST /api/v1/stores/presigned-url Presigned URL 요청
 export interface PresignedUrlRequest {
   filename: string;
   contentType: string;
 }
 
-// Presigned URL ?묐떟
+// POST /api/v1/stores/presigned-url Presigned URL 응답
 export interface PresignedUrlDto {
-  presignedUrl: string;
+  uploadUrl: string;
   imageKey: string;
-  expiresIn: number;
 }
 
-// ?ㅽ넗??踰뚰겕 ?낅뜲?댄듃 ?붿껌
+// PATCH /api/v1/stores/{store_id} 스토어 단건 업데이트 요청
+export interface UpdateStoreRequest {
+  url?: string;
+  isActive?: boolean;
+  isDeactivationScheduled?: boolean;
+  deactivationScheduledAt?: string;
+}
+
+// PATCH /api/v1/users/me/stores 스토어 벌크 업데이트 요청
 export interface UpdateStoresRequest {
   storeIds: number[];
   isDeactivationScheduled?: boolean;
   deactivationScheduledAt?: string;
 }
 
-// ?몄쬆 ?대?吏 ?낅뜲?댄듃 ?붿껌
+// PUT /api/v1/stores/{store_id}/verification-image 인증 이미지 업데이트 요청
 export interface UpdateVerificationImageRequest {
   imageKey: string;
 }
 
+// GET /api/v1/stores/{store_id}/reply-options 리플 옵션 조회
+// PUT /api/v1/stores/{store_id}/reply-options 리플 옵션 수정 응답
 export interface StoreReplyOptionsDto {
   storeId: number;
   tone: string;

@@ -15,3 +15,6 @@ export * from './plan';
 
 // 사용량 서비스
 export * from './usage';
+
+// 서비스 정보
+export * from './info';

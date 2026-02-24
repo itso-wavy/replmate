@@ -20,7 +20,7 @@ export interface UserDto {
 }
 
 // GET /api/v1/users/me/plan 유저 플랜 조회
-export interface UserPlanResponseData {
+export interface UserPlanInfo {
   subscription: SubscriptionDto;
   plan: PlanDto;
 }
@@ -42,7 +42,7 @@ export interface NotificationSettingsDto {
   updatedAt: string;
 }
 
-// POST /api/v1/users/me/receipt 영수증 요청
+// POST /api/v1/users/me/receipt 영수증 요청 응답
 export interface ReceiptRequestDto {
   id: number;
   userId: number;
@@ -60,18 +60,16 @@ export interface DeleteUserRequest {
 
 // DELETE /api/v1/users/me/plan 플랜 해지 응답
 export interface CancelSubscriptionResponse {
-  subscription: SubscriptionDto;
-  message: string;
+  subscriptionId: number;
+  planName: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
 }
 
-// POST /api/v1/users/me/plan/reactivate 플랜 재활성화 응답
+// POST /api/v1/users/me/plan/reactivate 플랜 재활성화(해지 철회) 응답
 export interface ReactivateSubscriptionResponse {
-  subscription: SubscriptionDto;
-  message: string;
-}
-
-// GET /api/v1/users/me/plan 사용자 플랜 정보 (user 필드 제거)
-export interface UserPlanInfo {
-  subscription: SubscriptionDto;
-  plan: PlanDto;
+  subscriptionId: number;
+  planName: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
 }
