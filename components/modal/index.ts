@@ -13,7 +13,7 @@ export { default as VerificationRequiredModal } from './VerificationRequiredModa
 
 // Products
 export { default as ProductSaveConfirmModal } from './ProductSaveConfirmModal';
-// export { default as UnsavedProductChangesModal } from './UnsavedProductChangesModal';
+export { default as UnsavedProductChangesModal } from './UnsavedProductChangesModal';
 
 /*
 ▣ 플랜 업그레이드 유도 팝업
@@ -24,13 +24,4 @@ export { default as ProductSaveConfirmModal } from './ProductSaveConfirmModal';
   open={activeModal === 'limitExceeded'}
   onOpenChange={(open) => !open && setActiveModal(null)}
 /> 
-
-▣ 이탈 확인 팝업(상품 관리)
-`
-상품 선택 저장
-
-저장하지 않은 변경 사항이 있습니다. 
-저장하지 않고 이동하시겠습니까?
-
-취소/확인
-` */
+*/

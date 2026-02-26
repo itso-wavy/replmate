@@ -5,15 +5,18 @@
  */
 import { format, isValid, parse, parseISO } from 'date-fns';
 
-export const formatDate = (dateString: Date | string) => {
+export const formatDate = (
+  dateString: Date | string,
+  formatStr: string | undefined = 'yyyy.MM.dd'
+) => {
   const date =
     typeof dateString === 'string'
       ? dateString.includes('.')
-        ? parse(dateString, 'yyyy.MM.dd', new Date())
+        ? parse(dateString, formatStr, new Date())
         : parseISO(dateString)
       : dateString;
 
   if (!isValid(date)) return '';
 
-  return format(date, 'yyyy.MM.dd');
+  return format(date, formatStr);
 };

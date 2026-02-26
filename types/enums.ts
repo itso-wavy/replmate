@@ -116,4 +116,4 @@ export type StoreStatus =
   | 'rejected' // 반려
   | 'inactive' // 비활성
   | 'active' // 활성
-  | 'deactivating'; // 비활성화 진행중
+  | 'deactivating'; // 비활성화 예정

@@ -1,18 +1,21 @@
 import { PropsWithChildren } from 'react';
 
 import CustomAlert from '@/components/global/CustomAlert';
+import { cn } from '@/lib/utils';
 import { Alert } from '@/types';
 
 interface DashboardLayoutProps {
   heading?: string;
   description?: string | React.ReactNode;
   alerts?: Alert[];
+  className?: string;
 }
 
 const DashboardLayout = ({
   heading,
   description,
   alerts,
+  className,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
   // 대시보드 진입 시 플랜 정보 조회
@@ -35,7 +38,7 @@ const DashboardLayout = ({
   // }, [setPlanInfo]);
 
   return (
-    <div className='text-foreground relative mx-auto py-5'>
+    <div className={cn('text-foreground relative mx-auto py-5', className)}>
       <div className='border-border w-full space-y-2 border-b px-7 py-5'>
         {heading && <h1 className='typo-display-36'>{heading}</h1>}
         {description && (

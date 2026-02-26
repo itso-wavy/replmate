@@ -36,6 +36,13 @@ export const dummyStores: StoreDomain[] = [
     platform: 'naver-brandstore',
     status: 'pending',
   },
+  {
+    id: 6,
+    name: '쇼핑몰F',
+    url: 'https://smartstore.naver.com/petparadise',
+    platform: 'naver-smartstore',
+    status: 'active',
+  },
   // {
   //   id: 6,
   //   name: '쇼핑몰F',

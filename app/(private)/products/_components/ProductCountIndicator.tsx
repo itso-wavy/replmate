@@ -37,10 +37,10 @@ const ProductCountIndicator = () => {
         <span className='mr-2 ml-1.5'>전체 상품</span>
         <div className='flex h-0 items-center'>
           <span className='text-primary typo-body-16 font-semibold'>
-            {selectedTotalProducts | 0}
+            {selectedTotalProducts || 0}
           </span>
           <span className='mx-1'>/</span>
-          <span className='font-semibold'>{capableTotalProducts | 0}</span>
+          <span className='font-semibold'>{capableTotalProducts || 0}</span>
         </div>
         <span className='ml-0.5'>개</span>
       </div>
