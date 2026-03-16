@@ -7,13 +7,10 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 // ============================================================================
 
 export const OAUTH_ENDPOINTS = {
-  // OAuth 로그인
-  // GET_KAKAO_CALLBACK: `${API_BASE}/oauths/kakao/login`,
-  // GET_GOOGLE_CALLBACK: `${API_BASE}/oauths/google/login`,
-  // GET_NAVER_CALLBACK: `${API_BASE}/oauths/naver/login`,
-  KAKAO: `${API_BASE}/oauths/kakao`,
-  GOOGLE: `${API_BASE}/oauths/google`,
-  NAVER: `${API_BASE}/oauths/naver`,
+  // OAuth 로그인 시작 (백엔드가 소셜 OAuth 처리)
+  KAKAO_LOGIN: `${API_BASE}/oauths/kakao/login`,
+  GOOGLE_LOGIN: `${API_BASE}/oauths/google/login`,
+  NAVER_LOGIN: `${API_BASE}/oauths/naver/login`,
 };
 
 export const SESSION_ENDPOINTS = {
