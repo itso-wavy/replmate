@@ -5,17 +5,14 @@ import { useRouter } from 'next/navigation';
 
 import { useEffect, useState } from 'react';
 
-import { CheckIcon } from '@phosphor-icons/react/dist/ssr';
-
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
-import { TermModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { AuthStore } from '@/store/authStore';
-import { AuthProvider, TermsType } from '@/types';
+import { AuthProvider } from '@/types';
 
 import { PublicHeader } from '../_components';
 
@@ -24,8 +21,6 @@ export const LoginPage = () => {
 
   const isAuthenticated = AuthStore.useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(true);
-  const [showTermOfUseModal, setShowTermOfUseModal] = useState(false);
-  const [showPrivacyTermModal, setShowPrivacyTermModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -42,8 +37,8 @@ export const LoginPage = () => {
   const handleSocialLogin = (provider: AuthProvider) => {
     window.open(
       loginUrls[provider],
-      'social-login',
-      'width=500,height=600,left=400,top=200'
+      'social login', // 팝업 창 이름
+      'width=500,height=600,left=400,top=200' // 팝업 옵션(크기/위치)
     );
   };
 
@@ -112,45 +107,6 @@ export const LoginPage = () => {
                 <NaverSvg className='absolute left-[20px] text-white' />
                 <span>네이버 로그인</span>
               </Button>
-            </div>
-
-            {/* Legal Disclaimer & Links */}
-            <div className='mt-10'>
-              <p className='typo-body-14 text-muted-foreground mb-3'>
-                계속 진행하면 다음 약관에 동의한 것으로 간주합니다.
-              </p>
-              <div className='typo-caption-12 text-muted-foreground flex justify-center gap-6 text-center font-medium'>
-                <button
-                  type='button'
-                  onClick={() => setShowTermOfUseModal(true)}
-                  className='group flex cursor-pointer items-center gap-1.5 transition-colors'
-                >
-                  <CheckIcon size={10} strokeWidth={3} />
-                  <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
-                    이용 약관
-                  </span>
-                </button>
-                <button
-                  type='button'
-                  onClick={() => setShowPrivacyTermModal(true)}
-                  className='group flex cursor-pointer items-center gap-1.5 transition-colors'
-                >
-                  <CheckIcon size={10} strokeWidth={3} />
-                  <span className='group-hover:decoration-foreground underline decoration-gray-300 underline-offset-4'>
-                    개인정보 처리방침
-                  </span>
-                </button>
-                <TermModal
-                  id={TermsType.TERMS}
-                  open={showTermOfUseModal}
-                  onOpenChange={setShowTermOfUseModal}
-                />
-                <TermModal
-                  id={TermsType.PRIVACY}
-                  open={showPrivacyTermModal}
-                  onOpenChange={setShowPrivacyTermModal}
-                />
-              </div>
             </div>
           </div>
         )}
