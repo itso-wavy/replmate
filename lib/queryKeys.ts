@@ -1,4 +1,4 @@
-import type { ReplyStatus } from '@/types/enums';
+import type { ReplyStatus, TermsType } from '@/types/enums';
 
 export const queryKeys = {
   user: {
@@ -42,5 +42,10 @@ export const queryKeys = {
   plans: {
     all: () => ['plans'] as const,
     list: (includeFree?: boolean) => ['plans', includeFree] as const,
+  },
+  terms: {
+    all: () => ['terms'] as const,
+    list: () => ['terms', 'list'] as const,
+    byType: (type: TermsType) => ['terms', type] as const,
   },
 };

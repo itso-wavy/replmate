@@ -3,5 +3,6 @@ export * from './usePlans';
 export * from './useProducts';
 export * from './useReplies';
 export * from './useStores';
+export * from './useTerms';
 export * from './useUsage';
 export * from './useUser';

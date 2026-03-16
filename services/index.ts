@@ -18,3 +18,6 @@ export * from './usage';
 
 // 서비스 정보
 export * from './info';
+
+// 약관
+export * from './terms';
