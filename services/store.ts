@@ -11,7 +11,6 @@ import type {
   UpdateStoreRequest,
   UpdateStoresRequest,
 } from '@/types/api/store';
-import type { PlatformType } from '@/types/enums';
 import {
   StoreDomain,
   StoreDetailDomain,
@@ -48,9 +47,10 @@ export async function getStoreDetail(
 
 /**
  * 지원 플랫폼 목록 조회
+ * GET /api/v1/stores/platforms → string[] (swagger: BaseResponse_List_str__)
  */
-export async function getPlatforms(): Promise<PlatformType[]> {
-  const response = await api.get<PlatformType[]>(STORE_ENDPOINTS.GET_PLATFORMS);
+export async function getPlatforms(): Promise<string[]> {
+  const response = await api.get<string[]>(STORE_ENDPOINTS.GET_PLATFORMS);
   return response.data;
 }
 
@@ -66,7 +66,7 @@ export async function getPlatforms(): Promise<PlatformType[]> {
 export async function createStore(data: {
   name: string;
   url: string;
-  platform: PlatformType;
+  platform: string; // GET /stores/platforms에서 반환된 값 사용
   verificationImageKey: string;
 }): Promise<StoreInfoDto> {
   const response = await api.post<StoreInfoDto>(

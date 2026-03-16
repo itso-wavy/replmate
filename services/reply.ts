@@ -1,30 +1,41 @@
 import { api } from '@/lib/api';
 import { REPLY_ENDPOINTS } from '@/lib/endpoints';
 import type { JobTicketDto } from '@/types/api/job';
-import type { CreateTestReplyRequest, ReplyDto } from '@/types/api/reply';
-import { ReplyDomain, toReplyDomainList } from '@/types/domain/reply';
+import type { CreateTestReplyRequest, ReplyList } from '@/types/api/reply';
+import type { ReplyStatus } from '@/types/enums';
+import { ReplyListDomain, toReplyDomainList } from '@/types/domain/reply';
 
 // ============================================================================
 // 리플 조회
 // ============================================================================
 
 /**
- * 리플 목록 조회
- * storeId 필수
+ * 리플 목록 조회 (페이지네이션)
+ * GET /api/v1/replies?storeId=1&status=draft&todayOnly=true&page=1&size=20
+ * @param params.storeId - 필수: 스토어 ID
+ * @param params.reviewId - 선택: 특정 리뷰의 리플만 조회
+ * @param params.status - 선택: 리플 상태 필터 (draft | edited | exported | reset)
+ * @param params.todayOnly - 선택: 오늘 생성된 리플만 조회 (기본값: true)
+ * @param params.page - 선택: 페이지 번호 (기본값: 1)
+ * @param params.size - 선택: 페이지 크기 (기본값: 20)
+ * @returns 리플 목록 + 페이지네이션 정보
  */
 export async function getReplies(params: {
   storeId: number;
-  productId?: number;
   reviewId?: number;
-  status?: string;
+  status?: ReplyStatus;
   todayOnly?: boolean;
   page?: number;
   size?: number;
-}): Promise<ReplyDomain[]> {
-  const response = await api.get<ReplyDto[]>(REPLY_ENDPOINTS.GET_REPLIES, {
+}): Promise<ReplyListDomain> {
+  const response = await api.get<ReplyList>(REPLY_ENDPOINTS.GET_REPLIES, {
     params,
   });
-  return toReplyDomainList(response.data);
+  const { items, ...pagination } = response.data;
+  return {
+    ...pagination,
+    items: toReplyDomainList(items),
+  };
 }
 
 // ============================================================================

@@ -2,12 +2,12 @@ import { api } from '@/lib/api';
 import { USAGE_ENDPOINTS } from '@/lib/endpoints';
 import type {
   TestUsageQuotaDto,
-  UsageLedgerDto,
+  UsageHistoryList,
   UsageQuotaDto,
 } from '@/types/api/usage';
 import {
   TestUsageQuotaDomain,
-  UsageLedgerDomain,
+  UsageHistoryListDomain,
   UsageQuotaDomain,
   toTestUsageQuotaDomain,
   toUsageLedgerDomainList,
@@ -19,7 +19,7 @@ import {
 // ============================================================================
 
 /**
- * 구독 사용량 조회 (월별 리플 생성 사용량)
+ * 구독 사용량 조회 (이번 달 남은 리플 생성 사용량)
  */
 export async function getUsageQuota(): Promise<UsageQuotaDomain> {
   const response = await api.get<UsageQuotaDto>(USAGE_ENDPOINTS.GET_QUOTA);
@@ -27,8 +27,8 @@ export async function getUsageQuota(): Promise<UsageQuotaDomain> {
 }
 
 /**
- * 테스트 사용량 조회 (일일 테스트 사용량)
- * storeId 파라미터 필수
+ * 테스트 사용량 조회 (오늘 남은 리플 테스트 사용량)
+ * @param storeId - 필수: 스토어 ID
  */
 export async function getTestQuota(
   storeId: number
@@ -41,17 +41,21 @@ export async function getTestQuota(
 }
 
 /**
- * 사용 내역 조회
+ * 사용 이력 조회 (페이지네이션)
+ * GET /api/v1/usage/history?page=1&size=20
+ * @returns 사용 이력 목록 + 페이지네이션 정보
  */
 export async function getUsageHistory(params?: {
-  startDate?: string;
-  endDate?: string;
   page?: number;
   size?: number;
-}): Promise<UsageLedgerDomain[]> {
-  const response = await api.get<UsageLedgerDto[]>(
+}): Promise<UsageHistoryListDomain> {
+  const response = await api.get<UsageHistoryList>(
     USAGE_ENDPOINTS.GET_USAGE_HISTORY,
     { params }
   );
-  return toUsageLedgerDomainList(response.data);
+  const { items, ...pagination } = response.data;
+  return {
+    ...pagination,
+    items: toUsageLedgerDomainList(items),
+  };
 }

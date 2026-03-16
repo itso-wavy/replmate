@@ -2,12 +2,12 @@ import { api } from '@/lib/api';
 import { PRODUCT_ENDPOINTS } from '@/lib/endpoints';
 import type {
   ProductDetailDto,
-  ProductDto,
   ProductInfoDto,
+  ProductList,
 } from '@/types/api/product';
 import {
   ProductDetailDomain,
-  ProductDomain,
+  ProductListDomain,
   toProductDetailDomain,
   toProductDomainList,
 } from '@/types/domain/product';
@@ -17,15 +17,23 @@ import {
 // ============================================================================
 
 /**
- * 스토어별 상품 목록 조회
+ * 스토어별 상품 목록 조회 (페이지네이션)
+ * GET /api/v1/stores/{store_id}/products?page=1&size=20
+ * @returns 상품 목록 + 페이지네이션 정보
  */
 export async function getProducts(
-  storeId: string | number
-): Promise<ProductDomain[]> {
-  const response = await api.get<ProductDto[]>(
-    PRODUCT_ENDPOINTS.GET_PRODUCTS(storeId)
+  storeId: string | number,
+  params?: { page?: number; size?: number }
+): Promise<ProductListDomain> {
+  const response = await api.get<ProductList>(
+    PRODUCT_ENDPOINTS.GET_PRODUCTS(storeId),
+    { params }
   );
-  return toProductDomainList(response.data);
+  const { items, ...pagination } = response.data;
+  return {
+    ...pagination,
+    items: toProductDomainList(items),
+  };
 }
 
 /**
