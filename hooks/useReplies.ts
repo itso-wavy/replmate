@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/queryKeys';
-import { getReplies } from '@/services/reply';
+import { getReplies, testReply } from '@/services/reply';
+import type { CreateTestReplyRequest } from '@/types/api/reply';
 import type { ReplyStatus } from '@/types/enums';
 
 interface UseRepliesParams {
@@ -18,4 +19,9 @@ export const useReplies = (params: UseRepliesParams) =>
     queryKey: queryKeys.replies.list(params),
     queryFn: () => getReplies(params),
     enabled: !!params.storeId,
+  });
+
+export const useTestReply = () =>
+  useMutation({
+    mutationFn: (data: CreateTestReplyRequest) => testReply(data),
   });

@@ -2,15 +2,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/queryKeys';
 import {
+  checkStoreUrl,
+  createStore,
   deleteStore,
   getMyStores,
   getPlatforms,
+  getPresignedUrl,
   getReplyOptions,
   getStoreDetail,
   updateReplyOptions,
   updateStore,
+  updateStoresBulk,
+  updateVerificationImage,
 } from '@/services/store';
-import type { UpdateStoreRequest } from '@/types/api/store';
+import type {
+  PresignedUrlRequest,
+  UpdateStoreRequest,
+  UpdateStoresRequest,
+} from '@/types/api/store';
 
 export const useMyStores = () =>
   useQuery({
@@ -78,5 +87,42 @@ export const useUpdateReplyOptions = (storeId: number) => {
       qc.invalidateQueries({
         queryKey: queryKeys.stores.replyOptions(storeId),
       }),
+  });
+};
+
+export const useCreateStore = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: createStore,
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
+  });
+};
+
+export const useCheckStoreUrl = () =>
+  useMutation({
+    mutationFn: (url: string) => checkStoreUrl(url),
+  });
+
+export const useGetPresignedUrl = () =>
+  useMutation({
+    mutationFn: (data: PresignedUrlRequest) => getPresignedUrl(data),
+  });
+
+export const useUpdateVerificationImage = () =>
+  useMutation({
+    mutationFn: ({
+      storeId,
+      imageKey,
+    }: {
+      storeId: number;
+      imageKey: string;
+    }) => updateVerificationImage(storeId, imageKey),
+  });
+
+export const useUpdateStoresBulk = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UpdateStoresRequest) => updateStoresBulk(data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
   });
 };

@@ -2,11 +2,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/queryKeys';
 import {
+  agreeTerms,
+  cancelPlan,
+  changePlan,
+  deleteUser,
   getNotificationSettings,
   getUser,
   getUserPlan,
+  reactivatePlan,
+  requestReceipt,
   updateNotificationSettings,
+  verifyIdentity,
 } from '@/services/user';
+import type { DeleteUserRequest } from '@/types/api/user';
+
 export const useUser = () =>
   useQuery({
     queryKey: queryKeys.user.me(),
@@ -32,5 +41,55 @@ export const useUpdateNotificationSettings = () => {
       updateNotificationSettings(settings),
     onSuccess: () =>
       qc.invalidateQueries({ queryKey: queryKeys.user.notifications() }),
+  });
+};
+
+export const useDeleteUser = () =>
+  useMutation({
+    mutationFn: (data: DeleteUserRequest) => deleteUser(data),
+  });
+
+export const useChangePlan = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (planId: number) => changePlan(planId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+  });
+};
+
+export const useCancelPlan = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: cancelPlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+  });
+};
+
+export const useReactivatePlan = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: reactivatePlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+  });
+};
+
+export const useRequestReceipt = () =>
+  useMutation({
+    mutationFn: requestReceipt,
+  });
+
+export const useAgreeTerms = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (termsIds: number[]) => agreeTerms(termsIds),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.me() }),
+  });
+};
+
+export const useVerifyIdentity = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: verifyIdentity,
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.me() }),
   });
 };
