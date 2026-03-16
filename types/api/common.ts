@@ -2,7 +2,6 @@
 // API 공통 타입
 // ============================================================================
 export interface Pagination {
-  // id: number;
   currentPage: number;
   size: number;
   totalCount: number;
@@ -16,8 +15,8 @@ export interface ApiResponse<T = unknown> {
   httpStatus: number | null;
   messageKo: string | null;
   messageEn: string | null;
-  errorKey: string | null;
-  errorCode: number | null; // 에러 코드
+  error: string | null; // 에러 코드 키 (swagger: "error")
+  errorCode: number | null; // 숫자 에러 코드
   devNote: string | null;
 }
 

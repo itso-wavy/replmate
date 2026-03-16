@@ -3,9 +3,11 @@
 // ============================================================================
 
 // Job 티켓 (비동기 작업 생성 시 반환)
+// swagger 기준 필드: jobId, status
+// type 필드는 swagger에 명시되지 않으나 백엔드 응답에 포함될 수 있어 optional 유지
 export interface JobTicketDto {
   jobId: string;
-  type: string;
+  type?: string;
   status: string;
 }
 

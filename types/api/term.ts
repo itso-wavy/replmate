@@ -21,3 +21,8 @@ export interface AgreedTermDto {
   isRequired: boolean;
   agreedAt: string;
 }
+
+// POST /api/v1/users/me/terms-agreements 약관 동의 응답 데이터
+export interface AgreeTermsResponseData {
+  agreedTerms: AgreedTermDto[];
+}
