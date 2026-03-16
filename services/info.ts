@@ -6,14 +6,13 @@ import { SERVICE_INFO_ENDPOINTS } from '@/lib/endpoints';
 // ============================================================================
 
 // GET /api/v1/service-info 응답
-// 주의: 이 DTO는 백엔드가 snake_case 필드명을 그대로 반환합니다 (swagger 260316 기준)
 export interface ServiceInfoDto {
-  service_name: string;
+  serviceName: string;
   email: string;
-  business_name: string;
+  businessName: string;
   ceo: string;
-  business_registration_number: string;
-  mail_order_sales_registration: string;
+  businessRegistrationNumber: string;
+  mailOrderSalesRegistration: string;
   address: string;
 }
 
