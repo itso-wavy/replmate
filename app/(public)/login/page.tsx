@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { CheckIcon } from '@phosphor-icons/react/dist/ssr';
-import { signIn } from 'next-auth/react';
-import { toast } from 'sonner';
 
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
@@ -15,17 +13,14 @@ import { NaverSvg } from '@/assets/svg';
 import { TermModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { dummyUser } from '@/dummy/dashboard';
+import { ENDPOINTS } from '@/lib/endpoints';
 import { AuthStore } from '@/store/authStore';
 import { AuthProvider, TermsType } from '@/types';
 
 import { PublicHeader } from '../_components';
 
-// import { OAUTH_ENDPOINTS } from '@/services/api';
-
 export const LoginPage = () => {
   const router = useRouter();
-  const { setAuth } = AuthStore.useActions();
 
   const isAuthenticated = AuthStore.useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(true);
@@ -38,19 +33,18 @@ export const LoginPage = () => {
     } else setIsLoading(false);
   }, [isAuthenticated]);
 
-  const handleSocialLogin = async (provider: AuthProvider) => {
-    try {
-      // await signIn(provider, {
-      //   callbackUrl: '/auth/callback',
-      //   redirect: false,
-      // });
+  const loginUrls: Record<AuthProvider, string> = {
+    [AuthProvider.GOOGLE]: ENDPOINTS.OAUTH.GOOGLE_LOGIN,
+    [AuthProvider.KAKAO]: ENDPOINTS.OAUTH.KAKAO_LOGIN,
+    [AuthProvider.NAVER]: ENDPOINTS.OAUTH.NAVER_LOGIN,
+  };
 
-      setAuth(dummyUser);
-
-      router.push('/dashboard');
-    } catch (err) {
-      toast.error('SNS 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.');
-    }
+  const handleSocialLogin = (provider: AuthProvider) => {
+    window.open(
+      loginUrls[provider],
+      'social-login',
+      'width=500,height=600,left=400,top=200'
+    );
   };
 
   return (

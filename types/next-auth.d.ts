@@ -1,30 +1,16 @@
-import { DefaultSession } from 'next-auth';
-
-import { User } from '@/type/auth';
+import { UserDto } from '@/types/api/user';
 
 declare module 'next-auth' {
-  interface Session {
-    backendAuth: {
-      accessToken: string;
-      refreshToken: string;
-      // sessionId: string;
-    };
-    user: User;
-  }
+  // User에 UserDto 필드 병합 (id는 string 유지)
+  interface User extends Omit<UserDto, 'id'> {}
 
-  interface Account {
-    backendAccessToken?: string;
-    backendRefreshToken?: string;
-    backendSessionId?: string;
-    backendUser?: User;
+  interface Session {
+    user: UserDto;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    backendAccessToken?: string;
-    backendRefreshToken?: string;
-    backendSessionId?: string;
-    backendUser?: User;
+    user?: UserDto;
   }
 }

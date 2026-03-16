@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 
 import { Toaster } from '@/components/ui/sonner';
 
+import Providers from './_providers';
 import './globals.css';
 
 const pretendard = localFont({
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} selection:bg-primary/40 selection:text-foreground antialiased select-none`}
       >
-        {children}
+        <Providers>{children}</Providers>
 
         <Toaster position='bottom-center' expand={false} closeButton={false} />
       </body>

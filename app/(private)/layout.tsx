@@ -1,11 +1,15 @@
+'use client';
+
 import Logo from '@/components/global/Logo';
 import { DASHBOARD_MENU } from '@/constants/nav-menu';
 
-import { PrivateHeader } from './_components';
+import { PrivateHeader, SessionSync } from './_components';
 
 const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
+      <SessionSync />
+
       {/* md 사이즈 미만 대체 화면 */}
       <div className='wrapper'>
         <div className='typo-body-16 text-foreground grid h-svh place-content-center text-center md:hidden'>
