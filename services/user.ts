@@ -5,10 +5,9 @@ import type {
   DeleteUserRequest,
   NotificationSettingsDto,
   ReactivateSubscriptionResponse,
-  SubscriptionDto,
-  UserDto,
   UserPlanInfo,
 } from '@/types/api/user';
+import type { AgreeTermsResponseData } from '@/types/api/term';
 import { PlanDomain, toPlanDomain } from '@/types/domain/plan';
 import {
   NotificationSettingsDomain,
@@ -27,7 +26,9 @@ import {
  * 현재 로그인한 사용자 정보 조회
  */
 export async function getUser(): Promise<UserDomain> {
-  const response = await api.get<UserDto>(USER_ENDPOINTS.GET_USER);
+  const response = await api.get<import('@/types/api/user').UserDto>(
+    USER_ENDPOINTS.GET_USER
+  );
   return toUserDomain(response.data);
 }
 
@@ -51,7 +52,7 @@ export interface UserPlanDomain {
 }
 
 /**
- * 사용자의 플랜 정보 조회 (플랜 + 구독 정보, user 필드 제거)
+ * 사용자의 플랜 정보 조회 (플랜 + 구독 정보)
  */
 export async function getUserPlan(): Promise<UserPlanDomain> {
   const response = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
@@ -64,12 +65,15 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
 
 /**
  * 플랜 변경
+ * 결제 주문을 생성하고 결제 URL을 반환합니다.
+ * 실제 플랜 변경은 결제 완료 후 webhook에서 처리됩니다.
+ * @returns 결제 URL (string) 또는 무료 플랜 변경 시 null
  */
-export async function changePlan(planId: number): Promise<SubscriptionDomain> {
-  const response = await api.put<SubscriptionDto>(USER_ENDPOINTS.CHANGE_PLAN, {
+export async function changePlan(planId: number): Promise<string | null> {
+  const response = await api.put<string | null>(USER_ENDPOINTS.CHANGE_PLAN, {
     planId,
   });
-  return toSubscriptionDomain(response.data);
+  return response.data;
 }
 
 /**
@@ -97,14 +101,12 @@ export async function reactivatePlan(): Promise<ReactivateSubscriptionResponse> 
 // ============================================================================
 
 /**
- * 영수증 요청
+ * 영수증 발급 요청
+ * 요청 바디 없음 (세션 쿠키로 사용자 식별)
+ * 24시간 내 재요청 불가 / 대기 중인 요청이 있으면 추가 요청 불가
  */
-export async function requestReceipt(data: {
-  email: string;
-  year: number;
-  month: number;
-}): Promise<void> {
-  await api.post(USER_ENDPOINTS.REQUEST_RECEIPT, data);
+export async function requestReceipt(): Promise<void> {
+  await api.post(USER_ENDPOINTS.REQUEST_RECEIPT);
 }
 
 // ============================================================================
@@ -113,11 +115,16 @@ export async function requestReceipt(data: {
 
 /**
  * 약관 동의
+ * @returns 동의한 약관 목록
  */
-export async function agreeTerms(termsIds: number[]): Promise<void> {
-  await api.post(USER_ENDPOINTS.AGREE_TERMS, {
-    termsIds,
-  });
+export async function agreeTerms(
+  termsIds: number[]
+): Promise<AgreeTermsResponseData | null> {
+  const response = await api.post<AgreeTermsResponseData>(
+    USER_ENDPOINTS.AGREE_TERMS,
+    { termsIds }
+  );
+  return response.data;
 }
 
 // ============================================================================
@@ -135,7 +142,8 @@ export async function getNotificationSettings(): Promise<NotificationSettingsDom
 }
 
 /**
- * 알림 설정 수정
+ * 알림 설정 수정 (부분 수정 가능)
+ * PATCH /api/v1/users/me/notification-settings
  */
 export async function updateNotificationSettings(
   settings: Partial<{
@@ -143,7 +151,7 @@ export async function updateNotificationSettings(
     smsEnabled: boolean;
   }>
 ): Promise<NotificationSettingsDomain> {
-  const response = await api.put<NotificationSettingsDto>(
+  const response = await api.patch<NotificationSettingsDto>(
     USER_ENDPOINTS.UPDATE_NOTIFICATION_SETTINGS,
     settings
   );
@@ -155,16 +163,13 @@ export async function updateNotificationSettings(
 // ============================================================================
 
 /**
- * 본인인증
+ * 본인인증 완료 처리
+ * 요청 바디 없음 (본인인증 서비스 연동 후 세션 기반으로 호출)
+ * is_verified를 true로 설정하고 pending 구독을 trial로 변경합니다.
  */
-export async function verifyIdentity(data: {
-  name: string;
-  phoneNumber: string;
-  verificationCode: string;
-}): Promise<UserDomain> {
-  const response = await api.post<UserDto>(
-    USER_ENDPOINTS.VERIFY_IDENTITY,
-    data
+export async function verifyIdentity(): Promise<UserDomain> {
+  const response = await api.post<import('@/types/api/user').UserDto>(
+    USER_ENDPOINTS.VERIFY_IDENTITY
   );
   return toUserDomain(response.data);
 }
