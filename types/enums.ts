@@ -64,9 +64,10 @@ export enum AuthProvider {
 }
 
 export enum TermsType {
-  TERMS = 'terms',
-  PRIVACY = 'privacy',
-  MARKETING = 'marketing',
+  TERMS_OF_SERVICE = 'terms_of_service', // 서비스 이용약관
+  PRIVACY_POLICY = 'privacy_policy', // 개인정보 처리방침
+  PERSONAL_INFO_COLLECTION = 'privacy_consent', // 개인정보 수집 및 이용
+  MARKETING_CONSENT = 'marketing_consent', // 마케팅 정보 수신 동의
 }
 
 export enum PlatformType {
