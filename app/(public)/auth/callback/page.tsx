@@ -4,26 +4,32 @@ import { useEffect } from 'react';
 
 import { signIn } from 'next-auth/react';
 
+import { AUTH_PROVIDER_ID } from '@/constants/auth';
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
+import { UserDto } from '@/types';
 
 export default function AuthCallbackPage() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const res = await api.get(ENDPOINTS.USER.GET_USER);
-        const user = res.data.data;
+        const res = await api.get<UserDto>(ENDPOINTS.USER.GET_USER);
+        const user = res.data;
 
-        await signIn('backend-session', {
+        await signIn(AUTH_PROVIDER_ID.BACKEND_SESSION, {
           user: JSON.stringify(user),
           redirect: false,
         });
 
+        const destination = user.needsTermsAgreement
+          ? '/terms-agreement'
+          : '/dashboard';
+
         if (window.opener) {
-          window.opener.location.replace('/dashboard');
+          window.opener.location.replace(destination);
           window.close();
         } else {
-          window.location.replace('/dashboard');
+          window.location.replace(destination);
         }
       } catch {
         if (window.opener) {

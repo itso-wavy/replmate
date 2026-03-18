@@ -56,7 +56,7 @@ export const LoginPage = () => {
 
       <PublicHeader />
 
-      <div className='wrapper flex flex-1 items-center justify-center'>
+      <main className='wrapper flex flex-1 items-center justify-center'>
         {isLoading && (
           <div className='grid place-content-center'>
             <Spinner />
@@ -110,7 +110,7 @@ export const LoginPage = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

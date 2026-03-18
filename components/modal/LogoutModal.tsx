@@ -1,7 +1,10 @@
 import { useRouter } from 'next/navigation';
 
+import { signOut } from 'next-auth/react';
+
+import api from '@/lib/api';
+import { ENDPOINTS } from '@/lib/endpoints';
 import { AuthStore } from '@/store/authStore';
-import { UserStore } from '@/store/userStore';
 
 import {
   AlertDialog,
@@ -15,15 +18,18 @@ import { CommonModalProps } from './types';
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
-  const { clearUser } = UserStore.useActions();
   const { clearAuth } = AuthStore.useActions();
 
-  const handleLogout = () => {
-    clearUser();
+  const handleLogout = async () => {
+    try {
+      await api.post(ENDPOINTS.SESSION.LOGOUT);
+    } catch (_) {}
+
     clearAuth();
+
+    await signOut({ callbackUrl: '/', redirect: false });
     router.push('/');
   };
-
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
