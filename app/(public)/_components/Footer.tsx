@@ -12,6 +12,7 @@ import { TermsType } from '@/types';
 const Footer = () => {
   const [showTermOfUseModal, setShowTermOfUseModal] = useState(false);
   const [showPrivacyTermModal, setShowPrivacyTermModal] = useState(false);
+  const [showServiceTermModal, setShowServiceTermModal] = useState(false);
 
   return (
     <footer className='bg-gray-50 py-8 text-gray-400 md:py-16 md:pt-20'>
@@ -60,20 +61,32 @@ const Footer = () => {
               onClick={() => setShowPrivacyTermModal(true)}
               className='hover:text-secondary/90'
             >
-              개인정보처리방침
+              개인정보 처리방침
+            </button>
+            <button
+              type='button'
+              onClick={() => setShowServiceTermModal(true)}
+              className='hover:text-secondary/90'
+            >
+              개인정보 수집 및 이용
             </button>
           </div>
         </div>
       </div>
       <TermModal
-        id={TermsType.TERMS}
+        id={TermsType.TERMS_OF_SERVICE}
         open={showTermOfUseModal}
         onOpenChange={setShowTermOfUseModal}
       />
       <TermModal
-        id={TermsType.PRIVACY}
+        id={TermsType.PRIVACY_POLICY}
         open={showPrivacyTermModal}
         onOpenChange={setShowPrivacyTermModal}
+      />
+      <TermModal
+        id={TermsType.PERSONAL_INFO_COLLECTION}
+        open={showServiceTermModal}
+        onOpenChange={setShowServiceTermModal}
       />
     </footer>
   );
