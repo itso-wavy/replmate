@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { AuthStore } from '@/store/authStore';
 
 interface HeaderProps {
   navMenu: {
@@ -29,6 +30,7 @@ interface HeaderProps {
   className?: string;
 }
 const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
+  const user = AuthStore.useUser();
   const router = useRouter();
   const pathname = usePathname();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -71,7 +73,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
             <DropdownMenuGroup>
               <DropdownMenuLabel className='pb-1.5'>Email</DropdownMenuLabel>
               <div className='typo-link-14 text-primary px-3 pb-2 wrap-break-word'>
-                user@replmate.com
+                {user?.email ?? ''}
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push('/account')}>
