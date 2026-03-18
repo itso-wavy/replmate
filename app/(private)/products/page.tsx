@@ -38,3 +38,14 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+
+/*
+▣ 플랜 업그레이드 유도 팝업
+
+ <RecommandPlanUpgradeModal
+  title='상품 선택 저장'
+  description={`등록 가능한 상품 한도를 초과 했습니다.\n더 많은 상품을 선택하려면 플랜을 업그레이드해주세요.`}
+  open={activeModal === 'limitExceeded'}
+  onOpenChange={(open) => !open && setActiveModal(null)}
+/> 
+*/

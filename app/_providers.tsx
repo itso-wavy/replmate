@@ -15,7 +15,11 @@ import { SessionProvider } from 'next-auth/react';
 import { toast } from 'sonner';
 
 const getErrorMessage = (error: unknown): string => {
-  // FIXME: 에러 핸들링 계층 보완 필요
+  /*  FIXME: 에러 핸들링 계층 보완 필요
+  - QueryCache, MutationCache의 onError에 Sonner toast 연결
+  - AxiosError의 messageKo 필드를 우선 표시, 없으면 기본 메시지 fallback
+  - 개별 훅에서 onError 핸들러 없이도 API 에러 자동 toast 처리
+  */
   if (error instanceof AxiosError) {
     return error.response?.data?.messageKo ?? '오류가 발생했습니다.';
   }

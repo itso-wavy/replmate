@@ -27,8 +27,3 @@ const ReplysPage = () => {
 };
 
 export default ReplysPage;
-
-/* 
-플랫폼: 네이버 브랜드 스토어
-상품명: [80일분] 얼라이브 원스데일리 포맨 종합 멀티 남성 비타민 80정 1박스
-캡처 2개 필요 */

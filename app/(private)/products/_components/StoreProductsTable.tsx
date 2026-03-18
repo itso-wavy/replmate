@@ -34,7 +34,7 @@ import {
   getProductsByStoreId,
   getTotalTargetProductCount,
 } from '@/dummy/products';
-import { formatDate, formatPrice, getActiveStoreList } from '@/lib/utils';
+import { formatDate, formatPrice } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
 import { UserStore } from '@/store/userStore';
 import { ProductDomain } from '@/types';
@@ -133,7 +133,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
         header: '상품명',
         accessorFn: (row) => row.name,
         cell: ({ getValue }) => (
-          <div className='max-w-[200px] truncate' title={getValue() as string}>
+          <div className='truncate' title={getValue() as string}>
             {getValue() as string}
           </div>
         ),
@@ -144,7 +144,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
         accessorFn: (row) => row.price,
         cell: ({ getValue }) => {
           const price = getValue() as number | null;
-          return <div>{price !== null ? `${formatPrice(price)}원` : '-'}</div>;
+          return <div>{price !== null ? `${formatPrice(price)}` : '-'}</div>;
         },
       },
       {
