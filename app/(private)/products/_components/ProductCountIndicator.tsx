@@ -30,7 +30,7 @@ const ProductCountIndicator = () => {
             <AlertCircle size={14} className='text-primary' />
           </TooltipTrigger>
           <TooltipContent className='bg-brand-800 *:bg-brand-800 px-4 whitespace-pre-line'>
-            <p>{`활성화 상태의 모든 쇼핑몰에서 관리 대상으로 선택한 상품의 합산을 나타냅니다.`}</p>
+            <p>{`현재 활성화된 전체 쇼핑몰의 상품 선택 합계입니다.`}</p>
           </TooltipContent>
         </Tooltip>
 
