@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Fragment } from 'react';
 import { Chip, ToastList, TaskForm, useToast } from '.';
 import {
   buildWeeks,
@@ -30,7 +30,7 @@ function CalendarV2() {
 
   useEffect(() => {
     loadFromSupabase();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTasksForDay = useCallback(
@@ -194,297 +194,312 @@ function CalendarV2() {
       `}</style>
 
       {/* Header */}
-      <div style={{ marginBottom: 28 }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 16,
-            marginBottom: 14,
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: 11,
-                letterSpacing: 4,
-                color: '#aaaabc',
-                fontFamily: "'DM Mono', monospace",
-                textTransform: 'uppercase',
-              }}
-            >
-              2026
-            </div>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: 38,
-                fontWeight: 700,
-                letterSpacing: -1,
-                color: '#1a1a2e',
-                lineHeight: 1.1,
-              }}
-            >
-              ReplMate Frontend
-            </h1>
-            <div
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: 16,
+          marginBottom: 28,
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: 4,
+              color: '#aaaabc',
+              fontFamily: "'DM Mono', monospace",
+              textTransform: 'uppercase',
+            }}
+          >
+            2026
+          </div>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: 38,
+              fontWeight: 700,
+              letterSpacing: -1,
+              color: '#1a1a2e',
+              lineHeight: 1.1,
+            }}
+          >
+            ReplMate Frontend
+          </h1>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              marginTop: 4,
+              flexWrap: 'wrap',
+            }}
+          >
+            <span
               style={{
                 fontSize: 13,
                 color: '#aaaabc',
                 fontFamily: "'DM Mono', monospace",
-                marginTop: 4,
+                marginRight: 12,
               }}
             >
               Mar - Apr 2026 · 58.5h+
-            </div>
-          </div>
-          <div
-            style={{
-              marginLeft: 'auto',
-              display: 'flex',
-              gap: 8,
-              alignItems: 'center',
-              paddingTop: 8,
-            }}
-          >
-            <button
-              className='btn'
-              onClick={loadFromSupabase}
-              disabled={loading}
-              style={{
-                background: '#fff',
-                color: '#555570',
-                border: '1px solid #e0e0ee',
-              }}
-            >
-              {loading ? '처리중...' : '불러오기'}
-            </button>
-            <button
-              className='btn'
-              onClick={syncToSupabase}
-              disabled={loading}
-              style={{ background: '#1a1a2e', color: '#fff' }}
-            >
-              {loading ? '처리중...' : 'Supabase 저장'}
-            </button>
-            <button
-              className='btn'
-              onClick={() => setModal({ mode: 'add', task: emptyTask() })}
-              style={{ background: '#3b5bdb', color: '#fff' }}
-            >
-              + 태스크 추가
-            </button>
+            </span>
+            {/* 범례 */}
+            {CATEGORIES.map(cat => {
+              const c = CATEGORY_COLORS[cat];
+              return (
+                <div
+                  key={cat}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    fontSize: 12,
+                    color: c.text,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: 2,
+                      background: c.border,
+                      display: 'inline-block',
+                    }}
+                  />
+                  {cat}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* 범례 */}
         <div
           style={{
+            marginLeft: 'auto',
             display: 'flex',
-            gap: 12,
-            flexWrap: 'wrap',
+            gap: 8,
             alignItems: 'center',
+            paddingBottom: 4,
           }}
         >
-          {CATEGORIES.map(cat => {
-            const c = CATEGORY_COLORS[cat];
-            return (
-              <div
-                key={cat}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  fontSize: 12,
-                  color: c.text,
-                }}
-              >
-                <span
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 2,
-                    background: c.border,
-                    display: 'inline-block',
-                  }}
-                />
-                {cat}
-              </div>
-            );
-          })}
-          <div
+          <span
             style={{
-              marginLeft: 'auto',
               fontSize: 11,
               color: '#aaaabc',
               fontFamily: "'DM Mono', monospace",
+              marginRight: 8,
             }}
           >
             {tasks.length}개 태스크
-          </div>
+          </span>
+          <button
+            className='btn'
+            onClick={loadFromSupabase}
+            disabled={loading}
+            style={{
+              background: '#fff',
+              color: '#555570',
+              border: '1px solid #e0e0ee',
+            }}
+          >
+            {loading ? '처리중...' : '불러오기'}
+          </button>
+          <button
+            className='btn'
+            onClick={syncToSupabase}
+            disabled={loading}
+            style={{ background: '#1a1a2e', color: '#fff' }}
+          >
+            {loading ? '처리중...' : 'Supabase 저장'}
+          </button>
+          <button
+            className='btn'
+            onClick={() => setModal({ mode: 'add', task: emptyTask() })}
+            style={{ background: '#3b5bdb', color: '#fff' }}
+          >
+            + 태스크 추가
+          </button>
         </div>
       </div>
 
       {/* Calendar */}
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-      {MONTHS.map(({ year, month, label }) => {
-        const weeks = buildWeeks(year, month);
-        return (
-          <div key={`${year}-${month}`} style={{ flex: 1, minWidth: 0 }}>
-            <div className='month-label'>
-              {label} {year}
-            </div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-                gap: 4,
-                marginBottom: 4,
-              }}
-            >
-              {DAY_LABELS.map((d, i) => (
+      <div style={{ display: 'flex', gap: 40, alignItems: 'flex-start' }}>
+        {MONTHS.map(({ year, month, label }, idx) => {
+          const weeks = buildWeeks(year, month);
+          return (
+            <Fragment key={`${year}-${month}`}>
+              {idx > 0 && (
                 <div
-                  key={d}
                   style={{
-                    textAlign: 'center',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    padding: '5px 0',
-                    color:
-                      i === 0 ? '#e03131' : i === 6 ? '#1971c2' : '#aaaabc',
+                    width: 1,
+                    background: '#e0e0ee',
+                    alignSelf: 'stretch',
+                  }}
+                />
+              )}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className='month-label'>
+                  {label} {year}
+                </div>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+                    gap: 4,
+                    marginBottom: 4,
                   }}
                 >
-                  {d}
-                </div>
-              ))}
-            </div>
-            {weeks.map((wk, wi) => (
-              <div
-                key={wi}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-                  gap: 4,
-                  marginBottom: 4,
-                }}
-              >
-                {wk.map((cell, di) => {
-                  if (!cell) return <div key={di} style={{ minHeight: 130 }} />;
-                  const { day, year: cy, month: cm } = cell;
-                  const dateStr = toStr(cy, cm, day);
-                  const todayCell = isToday(cy, cm, day);
-                  const isOver = dragOver === dateStr;
-                  const isSun = di === 0,
-                    isSat = di === 6;
-                  const dayTasks = getTasksForDay(cy, cm, day);
-                  const key = `${year}-${month}-${wi}-${di}`;
-                  const isExp = !!expanded[key];
-                  const visible = isExp ? dayTasks : dayTasks.slice(0, VISIBLE);
-                  const hiddenCount = dayTasks.length - VISIBLE;
-
-                  return (
+                  {DAY_LABELS.map((d, i) => (
                     <div
-                      key={di}
-                      className={`day-cell${isOver ? ' drop-target' : ''}`}
-                      onClick={() =>
-                        setModal({ mode: 'add', task: emptyTask(dateStr) })
-                      }
-                      onDragOver={e => onDragOver(e, dateStr)}
-                      onDrop={e => onDrop(e, dateStr)}
-                      onDragLeave={() => setDragOver(null)}
+                      key={d}
                       style={{
-                        minHeight: 130,
-                        background: '#fff',
-                        borderRadius: 10,
-                        padding: '10px 9px 8px',
-                        border: todayCell
-                          ? '1.5px solid #3b5bdb88'
-                          : '1px solid #e0e0ee',
-                        boxShadow: todayCell
-                          ? '0 0 0 3px #3b5bdb14'
-                          : '0 1px 3px #0000000a',
+                        textAlign: 'center',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        padding: '5px 0',
+                        color:
+                          i === 0 ? '#e03131' : i === 6 ? '#1971c2' : '#aaaabc',
                       }}
                     >
-                      <div style={{ marginBottom: 7 }}>
-                        {todayCell ? (
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: 24,
-                              height: 24,
-                              borderRadius: 6,
-                              background: '#3b5bdb',
-                              color: '#fff',
-                              fontSize: 12,
-                              fontWeight: 700,
-                            }}
-                          >
-                            {day}
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              fontSize: 13,
-                              fontWeight: 600,
-                              color: isSun
-                                ? '#e0303160'
-                                : isSat
-                                  ? '#1971c260'
-                                  : '#8888a0',
-                            }}
-                          >
-                            {day}
-                          </span>
-                        )}
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 3,
-                        }}
-                      >
-                        {visible.map(task => (
-                          <Chip
-                            key={task.id}
-                            task={task}
-                            past={isPast(task)}
-                            isDragging={dragging?.id === task.id}
-                            onDragStart={onDragStart}
-                            onDragEnd={onDragEnd}
-                            onEdit={() =>
-                              setModal({ mode: 'edit', task: { ...task } })
-                            }
-                            onSaveActual={h => updateActualHours(task.id, h)}
-                          />
-                        ))}
-                        {hiddenCount > 0 && !isExp && (
-                          <button
-                            className='more-btn'
-                            onClick={e => toggleExpand(key, e)}
-                          >
-                            +{hiddenCount}개 더 보기
-                          </button>
-                        )}
-                        {hiddenCount > 0 && isExp && (
-                          <button
-                            className='more-btn'
-                            onClick={e => toggleExpand(key, e)}
-                          >
-                            접기
-                          </button>
-                        )}
-                      </div>
+                      {d}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+                {weeks.map((wk, wi) => (
+                  <div
+                    key={wi}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+                      gap: 4,
+                      marginBottom: 4,
+                    }}
+                  >
+                    {wk.map((cell, di) => {
+                      if (!cell)
+                        return <div key={di} style={{ minHeight: 130 }} />;
+                      const { day, year: cy, month: cm } = cell;
+                      const dateStr = toStr(cy, cm, day);
+                      const todayCell = isToday(cy, cm, day);
+                      const isOver = dragOver === dateStr;
+                      const isSun = di === 0,
+                        isSat = di === 6;
+                      const dayTasks = getTasksForDay(cy, cm, day);
+                      const key = `${year}-${month}-${wi}-${di}`;
+                      const isExp = !!expanded[key];
+                      const visible = isExp
+                        ? dayTasks
+                        : dayTasks.slice(0, VISIBLE);
+                      const hiddenCount = dayTasks.length - VISIBLE;
+
+                      return (
+                        <div
+                          key={di}
+                          className={`day-cell${isOver ? ' drop-target' : ''}`}
+                          onClick={() =>
+                            setModal({ mode: 'add', task: emptyTask(dateStr) })
+                          }
+                          onDragOver={e => onDragOver(e, dateStr)}
+                          onDrop={e => onDrop(e, dateStr)}
+                          onDragLeave={() => setDragOver(null)}
+                          style={{
+                            minHeight: 130,
+                            background: '#fff',
+                            borderRadius: 10,
+                            padding: '10px 9px 8px',
+                            border: todayCell
+                              ? '1.5px solid #3b5bdb88'
+                              : '1px solid #e0e0ee',
+                            boxShadow: todayCell
+                              ? '0 0 0 3px #3b5bdb14'
+                              : '0 1px 3px #0000000a',
+                          }}
+                        >
+                          <div style={{ marginBottom: 7 }}>
+                            {todayCell ? (
+                              <span
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: 24,
+                                  height: 24,
+                                  borderRadius: 6,
+                                  background: '#3b5bdb',
+                                  color: '#fff',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {day}
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  fontSize: 13,
+                                  fontWeight: 600,
+                                  color: isSun
+                                    ? '#e0303160'
+                                    : isSat
+                                      ? '#1971c260'
+                                      : '#8888a0',
+                                }}
+                              >
+                                {day}
+                              </span>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: 3,
+                            }}
+                          >
+                            {visible.map(task => (
+                              <Chip
+                                key={task.id}
+                                task={task}
+                                past={isPast(task)}
+                                isDragging={dragging?.id === task.id}
+                                onDragStart={onDragStart}
+                                onDragEnd={onDragEnd}
+                                onEdit={() =>
+                                  setModal({ mode: 'edit', task: { ...task } })
+                                }
+                                onSaveActual={h =>
+                                  updateActualHours(task.id, h)
+                                }
+                              />
+                            ))}
+                            {hiddenCount > 0 && !isExp && (
+                              <button
+                                className='more-btn'
+                                onClick={e => toggleExpand(key, e)}
+                              >
+                                +{hiddenCount}개 더 보기
+                              </button>
+                            )}
+                            {hiddenCount > 0 && isExp && (
+                              <button
+                                className='more-btn'
+                                onClick={e => toggleExpand(key, e)}
+                              >
+                                접기
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        );
-      })}
+            </Fragment>
+          );
+        })}
       </div>
 
       {/* Modal */}

@@ -47,7 +47,7 @@ export const emptyTask = dateStr => ({
   priority: 'medium',
   start_date: dateStr || TODAY_STR,
   end_date: dateStr || TODAY_STR,
-  category: '개발',
+  category: 'UI/로직',
   note: '',
   actual_hours: null,
 });
