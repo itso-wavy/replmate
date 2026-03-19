@@ -1,6 +1,7 @@
-import { TODAY_STR } from '../constants';
-
 // ─── 유틸 ────────────────────────────────────
+export function getTodayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
 export function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -37,7 +38,7 @@ export function buildWeeks(year, month) {
   return weeks;
 }
 export function isPast(t) {
-  return toNum(t.end_date) < toNum(TODAY_STR);
+  return toNum(t.end_date) < toNum(getTodayStr());
 }
 
 export const emptyTask = dateStr => ({
@@ -45,8 +46,8 @@ export const emptyTask = dateStr => ({
   name: '',
   estimated_hours: '',
   priority: 'medium',
-  start_date: dateStr || TODAY_STR,
-  end_date: dateStr || TODAY_STR,
+  start_date: dateStr || getTodayStr(),
+  end_date: dateStr || getTodayStr(),
   category: 'UI/로직',
   note: '',
   actual_hours: null,

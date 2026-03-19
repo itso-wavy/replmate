@@ -3,6 +3,7 @@ import { Chip, ToastList, TaskForm, useToast } from '.';
 import {
   buildWeeks,
   emptyTask,
+  getTodayStr,
   isPast,
   shiftDate,
   toNum,
@@ -14,7 +15,6 @@ import {
   CATEGORY_COLORS,
   DAY_LABELS,
   MONTHS,
-  TODAY_STR,
   VISIBLE,
 } from '../constants';
 
@@ -158,7 +158,7 @@ function CalendarV2() {
     setExpanded(p => ({ ...p, [key]: !p[key] }));
   };
 
-  const isToday = (y, m, d) => toStr(y, m, d) === TODAY_STR;
+  const isToday = (y, m, d) => toStr(y, m, d) === getTodayStr();
 
   return (
     <div

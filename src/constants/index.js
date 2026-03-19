@@ -19,4 +19,3 @@ export const MONTHS = [
   { year: 2026, month: 4, label: 'April' },
 ];
 export const VISIBLE = 3;
-export const TODAY_STR = new Date().toISOString().slice(0, 10);
