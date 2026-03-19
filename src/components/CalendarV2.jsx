@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Chip, ToastList, TaskForm, useToast } from '.';
 import {
   buildWeeks,
@@ -27,6 +27,11 @@ function CalendarV2() {
   const [dragging, setDragging] = useState(null);
   const [dragOver, setDragOver] = useState(null);
   const { toasts, add: toast } = useToast();
+
+  useEffect(() => {
+    loadFromSupabase();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getTasksForDay = useCallback(
     (y, m, d) => {
@@ -321,10 +326,11 @@ function CalendarV2() {
       </div>
 
       {/* Calendar */}
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
       {MONTHS.map(({ year, month, label }) => {
         const weeks = buildWeeks(year, month);
         return (
-          <div key={`${year}-${month}`} style={{ marginBottom: 32 }}>
+          <div key={`${year}-${month}`} style={{ flex: 1, minWidth: 0 }}>
             <div className='month-label'>
               {label} {year}
             </div>
@@ -479,6 +485,7 @@ function CalendarV2() {
           </div>
         );
       })}
+      </div>
 
       {/* Modal */}
       {modal && (
