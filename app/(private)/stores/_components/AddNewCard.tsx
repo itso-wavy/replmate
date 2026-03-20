@@ -10,19 +10,20 @@ import {
   VerificationRequiredModal,
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
-import { dummySubscription } from '@/dummy/subscription';
-import { UserStore } from '@/store/userStore';
+import { useUser } from '@/hooks/useUser';
 
 type ActiveModal = 'verification' | 'limitExceeded' | 'addNewStore' | null;
 
-const AddNewCard = () => {
+interface AddNewCardProps {
+  storeLimitExceeded: boolean;
+}
+
+const AddNewCard = ({ storeLimitExceeded }: AddNewCardProps) => {
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
-  const user = UserStore.useUser();
+  const { data: user } = useUser();
 
   const handleNewCardClick = () => {
     const isVerified = user?.isVerified;
-    const storeLimitExceeded =
-      dummySubscription.storeQuotaUsed >= dummySubscription.storeQuotaTotal;
 
     if (!isVerified) {
       // 본인 인증 미완료시

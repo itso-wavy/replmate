@@ -5,6 +5,8 @@ import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
+import { useUpdateStoresBulk } from '@/hooks/useStores';
+
 import {
   Dialog,
   DialogContent,
@@ -28,6 +30,8 @@ interface ModalProps extends CommonModalProps {
 }
 
 const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
+  const { mutateAsync: updateStoresBulk, isPending } = useUpdateStoresBulk();
+
   const form = useForm<StoreLimitedFormData>({
     resolver: zodResolver(storeLimitedSchema(maxAllowed)),
     defaultValues: {
@@ -57,11 +61,23 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
     }
   };
 
-  const handleSaveSelection = (data: StoreLimitedFormData) => {
-    // TODO: API 호출로 선택된 쇼핑몰만 활성 상태 유지
-    console.log('data: ', data);
-    toast.success('선택한 쇼핑몰이 유지됩니다.');
-    onOpenChange(false);
+  const handleSaveSelection = async (data: StoreLimitedFormData) => {
+    // 미선택된 쇼핑몰을 비활성화 예정으로 업데이트
+    const selectedIds = data.storeIds.map(Number);
+    const unselectedIds = stores
+      .map((s) => s.id)
+      .filter((id) => !selectedIds.includes(id));
+
+    try {
+      await updateStoresBulk({
+        storeIds: unselectedIds,
+        isDeactivationScheduled: true,
+      });
+      toast.success('선택한 쇼핑몰이 유지됩니다.');
+      onOpenChange(false);
+    } catch {
+      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   // X 버튼 클릭만 허용, 백드롭 클릭, ESC 키(escape-key) 등은 차단
@@ -135,10 +151,7 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
 
           <DialogFooter>
             <Button
-              disabled={
-                // selectedStoreIds.length === 0 ||
-                selectedStoreIds.length > maxAllowed
-              }
+              disabled={selectedStoreIds.length > maxAllowed || isPending}
               className='w-full'
             >
               선택한 쇼핑몰 유지하기

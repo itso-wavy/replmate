@@ -15,6 +15,7 @@ const StoresPage = () => {
     registeredStoreCount,
     storeQuotaTotal,
     needsAdjustment,
+    storeLimitExceeded,
     alerts,
   } = useStoresPage();
 
@@ -45,7 +46,7 @@ const StoresPage = () => {
         {sortedStores.map((store) => (
           <StoreCard key={store.id} store={store} />
         ))}
-        <AddNewCard />
+        <AddNewCard storeLimitExceeded={storeLimitExceeded} />
       </div>
 
       {isPlanLimitModalOpen && (

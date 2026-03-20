@@ -4,10 +4,8 @@ import { FieldErrors, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
-import api from '@/lib/api';
-import { ENDPOINTS } from '@/lib/endpoints';
+import { useCheckStoreUrl, useCreateStore, useGetPresignedUrl } from '@/hooks/useStores';
 import { AddNewStoreFormData, addNewStoreSchema } from '@/lib/validation';
 
 interface UseAddNewStoreFormProps {
@@ -17,6 +15,10 @@ interface UseAddNewStoreFormProps {
 export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const checkUrlMutation = useCheckStoreUrl();
+  const getPresignedUrlMutation = useGetPresignedUrl();
+  const createStoreMutation = useCreateStore();
 
   const form = useForm<AddNewStoreFormData>({
     resolver: zodResolver(addNewStoreSchema),
@@ -72,29 +74,18 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     // URL 필드가 유효하지 않다면 리턴
     if (form.getFieldState('url').invalid) return;
 
-    const platform = form.getValues('platform');
     const url = form.getValues('url');
 
-    // TODO: API 통신 임시 주석 처리 (테스트용)
-    form.setValue('isUrlAvailable', true, { shouldValidate: true });
-
-    // try {
-    //   // API 호출: 중복 확인
-    //   const response = await api.post(ENDPOINTS.STORE.CHECK_STORE_URL, {
-    //     platform,
-    //     url,
-    //   });
-
-    //   if (response.data.available) {
-    // form.setValue('isUrlAvailable', true, { shouldValidate: true });
-    //   } else {
-    // form.setValue('isUrlAvailable', false, { shouldValidate: true });
-    //   }
-    // } catch (error: any) {
-    //   toast(
-    //     error.response?.data?.message || '중복 확인 중 에러가 발생했습니다'
-    //   );
-    // }
+    try {
+      const result = await checkUrlMutation.mutateAsync(url);
+      // exists: true → 이미 등록된 URL
+      form.setValue('isUrlAvailable', !result.exists, { shouldValidate: true });
+      if (result.exists) {
+        form.setError('isUrlAvailable', { message: '이미 등록된 URL입니다' });
+      }
+    } catch {
+      toast.error('중복 확인 중 오류가 발생했습니다.');
+    }
   };
 
   /**
@@ -206,61 +197,45 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
 
   /**
    * 폼 제출 핸들러
-   * 1. 스토어 생성 API 호출
-   * 2. 인증 파일 업로드 (있을 경우)
+   * 1. presigned URL 발급 → S3 직접 업로드 → imageKey 획득
+   * 2. 스토어 생성 API 호출 (verificationImageKey 포함)
    * 3. 성공 시: '쇼핑몰 등록이 완료되었습니다.' 토스트 + 모달 닫기 + 폼 초기화
-   * 4. 실패 시: '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.' 토스트
+   * 4. 실패 시: 토스트
    */
   const onSubmit = async (data: AddNewStoreFormData) => {
     try {
-      // TODO: API 통신 임시 주석 처리 (테스트용)
-      // // 1. 스토어 아이템 생성 API 호출
-      // const response = await api.post(ENDPOINTS.STORE.CREATE_STORE, {
-      //   name: data.name,
-      //   platform: data.platform,
-      //   url: data.url,
-      // });
+      // 1. presigned URL 발급 + S3 직접 업로드
+      const file = uploadedFiles[0];
+      const { uploadUrl, imageKey } =
+        await getPresignedUrlMutation.mutateAsync({
+          filename: file.name,
+          contentType: file.type,
+        });
 
-      // const storeId = response.data.id;
+      // S3에 직접 PUT (Axios 인터셉터 제외)
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type },
+      });
 
-      // // 2. 인증 파일 업로드 (있을 경우)
-      // if (uploadedFiles.length > 0) {
-      //   const formData = new FormData();
-      //   uploadedFiles.forEach((file) => {
-      //     formData.append('files', file);
-      //   });
-
-      //   await api.post(
-      //     ENDPOINTS.STORE.UPLOAD_VERIFICATION_IMAGE(storeId),
-      //     formData,
-      //     {
-      //       headers: {
-      //         'Content-Type': 'multipart/form-data',
-      //       },
-      //     }
-      //   );
-      // }
+      // 2. 스토어 생성
+      await createStoreMutation.mutateAsync({
+        name: data.name,
+        url: data.url,
+        platform: data.platform,
+        verificationImageKey: imageKey,
+      });
 
       // 3. 성공 처리
       toast.success('쇼핑몰 등록이 완료되었습니다.');
       closeModal();
-      form.reset(); // 폼 초기화
-      setUploadedFiles([]); // 파일 초기화
-    } catch (error: any) {
-      // 4. 실패 처리 - 모달 유지
-      console.error('스토어 등록 실패:', error);
-
-      const serverMessage = error.response?.data?.message;
-
-      if (serverMessage?.includes('자까지')) {
-        toast.error(serverMessage);
-      } else if (serverMessage?.includes('허용되지 않은')) {
-        toast.error(serverMessage);
-      } else {
-        toast.error(
-          '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.'
-        );
-      }
+      form.reset();
+      setUploadedFiles([]);
+    } catch {
+      toast.error(
+        '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.'
+      );
     }
   };
 

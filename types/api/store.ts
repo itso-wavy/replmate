@@ -54,6 +54,7 @@ export interface PresignedUrlDto {
 
 // PATCH /api/v1/stores/{store_id} 스토어 단건 업데이트 요청
 export interface UpdateStoreRequest {
+  name?: string;
   url?: string;
   isActive?: boolean;
   isDeactivationScheduled?: boolean;

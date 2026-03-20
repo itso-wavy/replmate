@@ -25,29 +25,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { PlatformType } from '@/types';
+import { usePlatforms } from '@/hooks/useStores';
 
 import { CommonModalProps } from '../types';
 import { FileUploadField } from './components';
 import { useAddNewStoreForm } from './hook';
 
-export const availableStores = [
-  {
-    label: '네이버 스마트스토어',
-    value: PlatformType.NAVER_SMART_STORE,
-    itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
-    // 부모 요소의 bg를 바꾸려면???
-    triggerStyle: 'bg-smart-store-theme/8',
-  },
-  {
-    label: '네이버 브랜드스토어',
-    value: PlatformType.NAVER_BRAND_STORE,
-    itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',
-    triggerStyle: 'bg-brand-store-theme/8',
-  },
-];
+const getPlatformUiConfig = (value: string) => {
+  switch (value) {
+    case 'naver_smart_store':
+      return {
+        label: '네이버 스마트스토어',
+        itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
+        triggerStyle: 'bg-smart-store-theme/8',
+      };
+    case 'naver_brand_store':
+      return {
+        label: '네이버 브랜드스토어',
+        itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',
+        triggerStyle: 'bg-brand-store-theme/8',
+      };
+    default:
+      return { label: value, itemStyle: '', triggerStyle: '' };
+  }
+};
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
+  const { data: platforms = [] } = usePlatforms();
   const {
     form,
     uploadedFiles,
@@ -102,9 +106,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
               name='platform'
               control={form.control}
               render={({ field, fieldState }) => {
-                const seletedStore = availableStores.find(
-                  (s) => s.value === field.value
-                );
+                const selectedConfig = field.value
+                  ? getPlatformUiConfig(field.value)
+                  : null;
 
                 return (
                   <Field>
@@ -122,24 +126,27 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       <SelectTrigger
                         id={field.name}
                         aria-invalid={fieldState.invalid}
-                        className={field.value && seletedStore?.triggerStyle}
+                        className={field.value && selectedConfig?.triggerStyle}
                       >
                         <SelectValue placeholder='쇼핑몰을 선택해 주세요'>
                           {!field.value
                             ? '쇼핑몰을 선택해 주세요'
-                            : seletedStore?.label}
+                            : selectedConfig?.label}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {availableStores.map((store) => (
-                          <SelectItem
-                            key={store.value}
-                            value={store.value}
-                            className={store.itemStyle}
-                          >
-                            {store.label}
-                          </SelectItem>
-                        ))}
+                        {platforms.map((platformValue) => {
+                          const config = getPlatformUiConfig(platformValue);
+                          return (
+                            <SelectItem
+                              key={platformValue}
+                              value={platformValue}
+                              className={config.itemStyle}
+                            >
+                              {config.label}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                     <FieldMessage

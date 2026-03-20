@@ -252,6 +252,7 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
       </CardFooter>
 
       <UnlinkStoreConfirmModal
+        storeId={store.id}
         open={isUnlinkModalOpen}
         onOpenChange={setIsUnlinkModalOpen}
       />

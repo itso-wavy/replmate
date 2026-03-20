@@ -3,8 +3,7 @@ import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { ProgressSvgProps } from '@/assets/svg';
-import { api } from '@/lib/api';
-import { ENDPOINTS } from '@/lib/endpoints';
+import { useUpdateStore } from '@/hooks/useStores';
 import type { StoreDomain } from '@/types';
 
 const getPlatformConfig = (platform: string) => {
@@ -85,9 +84,10 @@ const getConnectionStatus = (store: StoreDomain) => {
 export const useStoreCard = (store: StoreDomain) => {
   const [isNameEditMode, setIsNameEditMode] = useState(false);
   const [editValue, setEditValue] = useState(store.name);
-  const [isLoading, setIsLoading] = useState(false);
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { mutateAsync: updateStore, isPending: isLoading } = useUpdateStore();
 
   const config = getPlatformConfig(store.platform);
   const connection = getConnectionStatus(store);
@@ -136,19 +136,14 @@ export const useStoreCard = (store: StoreDomain) => {
     if (isLoading) return;
 
     try {
-      setIsLoading(true);
-      await api.patch(ENDPOINTS.STORE.UPDATE_STORE_STATUS(store.id), {
-        name: trimmedValue,
-      });
+      await updateStore({ storeId: store.id, data: { name: trimmedValue } });
       setIsNameEditMode(false);
       toast.success('별칭이 수정되었습니다.');
-    } catch (error) {
+    } catch {
       // 실패 시 기존 값으로 복구
       setEditValue(store.name);
       setIsNameEditMode(false);
       toast.error('별칭 수정에 실패했습니다.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
