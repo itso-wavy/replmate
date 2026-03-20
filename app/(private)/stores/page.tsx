@@ -3,24 +3,24 @@
 import { useEffect, useState } from 'react';
 
 import { StoreLimitExceededModal } from '@/components/modal';
-import { dummyStoreAlert } from '@/dummy/alerts';
-import { dummyStores } from '@/dummy/stores';
-import { dummySubscription } from '@/dummy/subscription';
-import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
 
 import { DashboardLayout } from '../_components';
 import { AddNewCard, StoreCard } from './_components';
+import { useStoresPage } from './_hooks/useStoresPage';
 
 const StoresPage = () => {
   const [isPlanLimitModalOpen, setIsPlanLimitModalOpen] = useState(false);
-  const sortedStoreList = sortStoreList(dummyStores);
-  const registeredStores = getRegisteredStoreList(dummyStores).length;
+  const {
+    sortedStores,
+    registeredStoreCount,
+    storeQuotaTotal,
+    needsAdjustment,
+    alerts,
+  } = useStoresPage();
 
   useEffect(() => {
-    // TODO: 백엔드에서 '조정 필요' 상태 확인
-    const needsAdjustment = false; // 임시
     if (needsAdjustment) setIsPlanLimitModalOpen(true);
-  }, []);
+  }, [needsAdjustment]);
 
   return (
     <DashboardLayout
@@ -31,18 +31,18 @@ const StoresPage = () => {
           <span className='align-center typo-body-16 ml-0.5 flex font-medium text-zinc-900 *:inline-block *:h-0'>
             <span className='typo-link-14'>(</span>
             {/* 승인 대기/활성/비활성화 예정 쇼핑몰 수의 합산*/}
-            <span>등록된 쇼핑몰 {registeredStores || 0}</span>
+            <span>등록된 쇼핑몰 {registeredStoreCount}</span>
             <span>/</span>
             {/* 최대 허용 쇼핑몰 수 */}
-            <span>{dummySubscription.storeQuotaTotal || 0}개</span>
+            <span>{storeQuotaTotal}개</span>
             <span className='typo-link-14'>)</span>
           </span>
         </span>
       }
-      alerts={[dummyStoreAlert]}
+      alerts={alerts}
     >
       <div className='grid auto-rows-[minmax(315px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
-        {sortedStoreList.map((store) => (
+        {sortedStores.map((store) => (
           <StoreCard key={store.id} store={store} />
         ))}
         <AddNewCard />
@@ -50,8 +50,8 @@ const StoresPage = () => {
 
       {isPlanLimitModalOpen && (
         <StoreLimitExceededModal
-          stores={sortedStoreList}
-          maxAllowed={3} // TODO: 새롭게 변경될 플랜의 맥스 연동 수
+          stores={sortedStores}
+          maxAllowed={storeQuotaTotal}
           open={isPlanLimitModalOpen}
           onOpenChange={setIsPlanLimitModalOpen}
         />
