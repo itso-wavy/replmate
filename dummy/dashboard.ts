@@ -1,23 +1,19 @@
 import { DashboardReply } from '@/app/(private)/dashboard/_components';
-import type { LoginResponseDomain } from '@/types';
+import type { UserDomain } from '@/types';
 import { AuthProvider } from '@/types';
 
-export const dummyUser: LoginResponseDomain = {
-  user: {
-    id: 1,
-    email: 'user@replmae.com',
-    name: '김리플',
-    phoneNumber: '010-1234-5678',
-    authProvider: AuthProvider.GOOGLE,
-    authProviderId: '123',
-    isVerified: false,
-    verifiedAt: null,
-    createdAt: new Date('2026-01-15'),
-    updatedAt: new Date('2026-01-15'),
-    needsTermsAgreement: true,
-  },
-  accessToken: '123',
-  refreshToken: '123',
+export const dummyUser: UserDomain = {
+  id: 1,
+  email: 'user@replmae.com',
+  name: '김리플',
+  phoneNumber: '010-1234-5678',
+  authProvider: AuthProvider.GOOGLE,
+  authProviderId: '123',
+  isVerified: false,
+  verifiedAt: null,
+  createdAt: new Date('2026-01-15'),
+  updatedAt: new Date('2026-01-15'),
+  needsTermsAgreement: true,
 };
 
 export const dummyReplies: DashboardReply[] = [
