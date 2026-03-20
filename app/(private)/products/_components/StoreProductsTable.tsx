@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import {
   ColumnDef,
@@ -9,9 +9,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { toast } from 'sonner';
-
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Pagination,
@@ -29,83 +26,28 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { dummyStores } from '@/dummy';
-import {
-  getProductsByStoreId,
-  getTotalTargetProductCount,
-} from '@/dummy/products';
 import { formatDate, formatPrice } from '@/lib/utils';
-import { StoreStore } from '@/store/storeStore';
-import { UserStore } from '@/store/userStore';
 import { ProductDomain } from '@/types';
 
 interface StoreProductsTableProps {
-  maxRows?: number;
+  products: ProductDomain[];
+  selectedIds: Set<string>;
+  onToggle: (id: string) => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  isLoading?: boolean;
 }
 
-const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
-  const selectedStoreId = StoreStore.useSelectedStoreId();
-  const planInfo = UserStore.usePlanInfo();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-
-  // 스토어 변경 시 초기화
-  useEffect(() => {
-    setCurrentPage(1);
-    setSelectedIds(new Set());
-  }, [selectedStoreId]);
-
-  const maxAllowed = planInfo?.maxProductPerStore || 0;
-  const itemsPerPage = maxRows;
-
-  const currentStore = dummyStores.find((s) => s.id === selectedStoreId);
-
-  const products = useMemo(() => {
-    if (!selectedStoreId) return [];
-    return getProductsByStoreId(selectedStoreId);
-  }, [selectedStoreId]);
-
-  const totalPages = Math.ceil(products.length / itemsPerPage);
-
-  const paginatedProducts = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return products.slice(start, start + itemsPerPage);
-  }, [products, currentPage, itemsPerPage]);
-
-  const handleToggle = (id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        if (next.size >= maxAllowed) {
-          toast.error(`최대 ${maxAllowed}개까지 선택할 수 있습니다.`);
-          return prev;
-        }
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const handleSave = () => {
-    setLastSaved(new Date());
-    toast.success('저장되었습니다.');
-  };
-
-  const formatLastSaved = (date: Date) => {
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const h = String(date.getHours()).padStart(2, '0');
-    const m = String(date.getMinutes()).padStart(2, '0');
-    const s = String(date.getSeconds()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd} ${h}시 ${m}분 ${s}초`;
-  };
-
-  // 컬럼 정의
+const StoreProductsTable = ({
+  products,
+  selectedIds,
+  onToggle,
+  currentPage,
+  totalPages,
+  onPageChange,
+  isLoading,
+}: StoreProductsTableProps) => {
   const columns: ColumnDef<ProductDomain>[] = useMemo(
     () => [
       {
@@ -114,7 +56,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
         cell: ({ row }) => (
           <Checkbox
             checked={selectedIds.has(row.original.id.toString())}
-            onCheckedChange={() => handleToggle(row.original.id.toString())}
+            onCheckedChange={() => onToggle(row.original.id.toString())}
           />
         ),
         size: 40,
@@ -178,11 +120,11 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
         },
       },
     ],
-    [selectedIds, maxAllowed]
+    [selectedIds, onToggle]
   );
 
   const table = useReactTable({
-    data: paginatedProducts,
+    data: products,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -212,7 +154,16 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {isLoading ? (
+            <TableRow className='hover:bg-inherit'>
+              <TableCell
+                colSpan={columns.length}
+                className='typo-body-14 text-muted-foreground h-[400px] text-center'
+              >
+                불러오는 중...
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -241,7 +192,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
             <PaginationItem>
               <PaginationPrevious
                 className='hover:bg-accent cursor-pointer'
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
               />
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
@@ -254,7 +205,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
                   <PaginationItem key={page}>
                     <PaginationLink
                       isActive={page === currentPage}
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() => onPageChange(page)}
                       className='cursor-pointer'
                     >
                       {page}
@@ -267,9 +218,7 @@ const StoreProductsTable = ({ maxRows = 15 }: StoreProductsTableProps) => {
             <PaginationItem>
               <PaginationNext
                 className='hover:bg-accent cursor-pointer'
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
+                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
               />
             </PaginationItem>
           </PaginationContent>

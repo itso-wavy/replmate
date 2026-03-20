@@ -1,5 +1,3 @@
-import { useRouter } from 'next/navigation';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,9 +10,11 @@ import {
 } from '../ui/alert-dialog';
 import { CommonModalProps } from './types';
 
-// 쇼핑몰 수 한도 초과 모달
+// 미저장 변경사항 이탈 확인 모달
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
-  const handleAction = () => {};
+  const handleAction = () => {
+    onOpenChange(false);
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

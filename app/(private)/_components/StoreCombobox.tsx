@@ -11,7 +11,7 @@ import {
   ComboboxItem,
   ComboboxList,
 } from '@/components/ui/combobox';
-import { dummyStores } from '@/dummy/stores';
+import { useMyStores } from '@/hooks/useStores';
 import { getActiveStoreList, sortStoreList } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
 
@@ -25,7 +25,8 @@ const StoreCombobox = () => {
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { setSelectedStore } = StoreStore.useActions();
 
-  const activeStores = sortStoreList(getActiveStoreList(dummyStores));
+  const { data: stores = [] } = useMyStores();
+  const activeStores = sortStoreList(getActiveStoreList(stores));
 
   // 초기값 설정 로직 (우선순위: 마지막 선택 > 최신 등록)
   const initialStoreId = useMemo(() => {

@@ -1,7 +1,3 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,14 +10,13 @@ import {
 } from '../ui/alert-dialog';
 import { CommonModalProps } from './types';
 
-// 쇼핑몰 수 한도 초과 모달
-const Modal = ({ open, onOpenChange }: CommonModalProps) => {
-  const router = useRouter();
+interface ModalProps extends CommonModalProps {
+  onConfirm: () => void | Promise<void>;
+  isPending?: boolean;
+}
 
-  const handleAction = () => {
-    router.push('/subscribe');
-  };
-
+// 상품 선택 저장 확인 모달
+const Modal = ({ open, onOpenChange, onConfirm, isPending }: ModalProps) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
@@ -34,8 +29,10 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>
-          <AlertDialogCancel>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={handleAction}>저장하기</AlertDialogAction>
+          <AlertDialogCancel disabled={isPending}>취소</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} disabled={isPending}>
+            저장하기
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
