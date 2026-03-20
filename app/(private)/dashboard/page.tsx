@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { UserStore } from '@/store/userStore';
-import type { Alert } from '@/types';
 import { AlertType } from '@/types';
+import type { Alert } from '@/types';
 
 import { DashboardLayout } from '../_components';
 import {
@@ -32,7 +32,7 @@ const DashboardPage = () => {
   const router = useRouter();
   const user = UserStore.useUser();
 
-  const { stores, subscription, todayReplyCount, recentReplies, isLoading } =
+  const { stores, alerts, subscription, todayReplyCount, recentReplies, isLoading } =
     useDashboardPage();
 
   if (isLoading || !subscription) {
@@ -49,7 +49,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <DashboardLayout heading='대시보드' alerts={sortDashboardAlerts([])}>
+    <DashboardLayout heading='대시보드' alerts={sortDashboardAlerts(alerts)}>
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           <DashboardPlanCard

@@ -2,16 +2,19 @@
 
 import { useMemo } from 'react';
 
+import { useReminders } from '@/hooks/useReminders';
 import { useReplies } from '@/hooks/useReplies';
 import { useMyStores } from '@/hooks/useStores';
 import { useUsageQuota } from '@/hooks/useUsage';
 import { useUserPlan } from '@/hooks/useUser';
+import { toAlert } from '@/constants/alerts';
 import { getActiveStoreList } from '@/lib/utils';
-import type { UsageQuotaSubscriptionDomain } from '@/types';
+import type { Alert, UsageQuotaSubscriptionDomain } from '@/types';
 
 import type { DashboardReply } from '../_components';
 
 export function useDashboardPage() {
+  const { data: remindersData } = useReminders();
   const { data: stores, isLoading: isStoresLoading } = useMyStores();
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: usageQuota, isLoading: isQuotaLoading } = useUsageQuota();
@@ -50,6 +53,15 @@ export function useDashboardPage() {
     };
   }, [userPlan, usageQuota, activeStores]);
 
+  // ReminderDomain → Alert 변환
+  const alerts = useMemo<Alert[]>(() => {
+    if (!remindersData) return [];
+    return remindersData.flatMap((r) => {
+      const alert = toAlert(r);
+      return alert ? [alert] : [];
+    });
+  }, [remindersData]);
+
   // ReplyDomain → DashboardReply 변환
   const recentReplies = useMemo<DashboardReply[]>(() => {
     if (!recentRepliesData?.items) return [];
@@ -75,6 +87,7 @@ export function useDashboardPage() {
   return {
     stores: stores ?? [],
     activeStores,
+    alerts,
     subscription,
     todayReplyCount: todayRepliesData?.totalCount ?? 0,
     recentReplies,
