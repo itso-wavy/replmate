@@ -69,7 +69,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
             </div>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent>
+          <DropdownMenuContent className='w-fit'>
             <DropdownMenuGroup>
               <DropdownMenuLabel className='pb-1.5'>Email</DropdownMenuLabel>
               <div className='typo-link-14 text-primary px-3 pb-2 wrap-break-word'>
