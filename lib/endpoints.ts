@@ -8,14 +8,13 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 export const OAUTH_ENDPOINTS = {
   // OAuth 로그인 시작 (백엔드가 소셜 OAuth 처리)
+  OAUTHS_SAMPLE: `${API_BASE}/oauths/sample/callback`,
   KAKAO_LOGIN: `${API_BASE}/oauths/kakao/login`,
   GOOGLE_LOGIN: `${API_BASE}/oauths/google/login`,
   NAVER_LOGIN: `${API_BASE}/oauths/naver/login`,
 };
 
 export const SESSION_ENDPOINTS = {
-  // 세션 관리
-  SESSION_REFRESH: `${API_BASE}/session/refresh`,
   LOGOUT: `${API_BASE}/session/logout`,
 } as const;
 
@@ -37,6 +36,37 @@ export const TERMS_ENDPOINTS = {
 export const PLAN_ENDPOINTS = {
   // 전체 플랜 목록
   GET_PLANS: `${API_BASE}/plans`,
+} as const;
+
+// ============================================================================
+// 사용자 (Users)
+// ============================================================================
+
+export const USER_ENDPOINTS = {
+  // 사용자 정보
+  GET_USER: `${API_BASE}/users/me`,
+
+  // 사용자 탈퇴
+  DELETE_USER: `${API_BASE}/users/me`,
+
+  // 사용자 플랜
+  GET_USER_PLAN: `${API_BASE}/users/me/plan`,
+  CHANGE_PLAN: `${API_BASE}/users/me/plan`,
+  CANCEL_PLAN: `${API_BASE}/users/me/plan`,
+  REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
+
+  // 영수증 요청
+  REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
+
+  // 약관 동의
+  AGREE_TERMS: `${API_BASE}/users/me/terms-agreements`,
+
+  // 알림 설정
+  GET_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
+  UPDATE_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
+
+  // 본인인증
+  VERIFY_IDENTITY: `${API_BASE}/users/me/verify-identity`,
 } as const;
 
 // ============================================================================
@@ -118,37 +148,6 @@ export const USAGE_ENDPOINTS = {
 } as const;
 
 // ============================================================================
-// 사용자 (Users)
-// ============================================================================
-
-export const USER_ENDPOINTS = {
-  // 사용자 정보
-  GET_USER: `${API_BASE}/users/me`,
-
-  // 사용자 탈퇴
-  DELETE_USER: `${API_BASE}/users/me`,
-
-  // 사용자 플랜
-  GET_USER_PLAN: `${API_BASE}/users/me/plan`,
-  CHANGE_PLAN: `${API_BASE}/users/me/plan`,
-  CANCEL_PLAN: `${API_BASE}/users/me/plan`,
-  REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
-
-  // 영수증 요청
-  REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
-
-  // 약관 동의
-  AGREE_TERMS: `${API_BASE}/users/me/terms-agreements`,
-
-  // 알림 설정
-  GET_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
-  UPDATE_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
-
-  // 본인인증
-  VERIFY_IDENTITY: `${API_BASE}/users/me/verify-identity`,
-} as const;
-
-// ============================================================================
 // 알림 (Reminders)
 // ============================================================================
 
@@ -162,12 +161,8 @@ export const REMINDER_ENDPOINTS = {
 // ============================================================================
 
 export const CONTACT_ENDPOINTS = {
-  // 문의 목록
-  GET_CONTACTS: `${API_BASE}/contacts`,
   // 문의 생성
   CREATE_CONTACT: `${API_BASE}/contacts`,
-  // 문의 단건 조회
-  GET_CONTACT: (contactId: number) => `${API_BASE}/contacts/${contactId}`,
 } as const;
 
 // ============================================================================
