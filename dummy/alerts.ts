@@ -6,7 +6,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     createdAt: new Date(),
     type: AlertType.PAYMENT_FAILED,
     variant: 'error',
-    title: `정기 결제에 실패했습니다. D-2 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해 주세요.`,
+    title: `결제 실패로 인해 서비스가 무료 플랜으로 전환되었습니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해 주세요.`,
     href: '/subscribe',
   },
   [AlertType.STORE_AUTH_REJECTED]: {
