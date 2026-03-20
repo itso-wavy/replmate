@@ -11,7 +11,7 @@ import { NaverSvg } from '@/assets/svg';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { ENDPOINTS } from '@/lib/endpoints';
-import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 import { AuthProvider } from '@/types';
 
 import { PublicHeader } from '../_components';
@@ -19,7 +19,7 @@ import { PublicHeader } from '../_components';
 export const LoginPage = () => {
   const router = useRouter();
 
-  const isAuthenticated = AuthStore.useIsAuthenticated();
+  const isAuthenticated = UserStore.useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

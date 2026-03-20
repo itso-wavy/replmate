@@ -60,9 +60,13 @@ const DashboardPage = () => {
         </div>
 
         <Card className='block p-4'>
-          <div className='flex w-full items-center justify-between pt-1 pb-2'>
+          <div className='flex h-[56px] w-full items-center justify-between pt-1 pb-2'>
             <div className='typo-heading-18 px-2'>최근 생성된 리플</div>
-            <Button variant='ghost' onClick={() => router.push('/replys')}>
+            <Button
+              variant='outline'
+              onClick={() => router.push('/replys')}
+              className='h-[36px]! rounded-[12px] bg-transparent'
+            >
               전체 보기
             </Button>
           </div>

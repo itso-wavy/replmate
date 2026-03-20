@@ -34,32 +34,28 @@ export const useUserStore = create<UserState & UserAction>()(
               planInfo: data.plan,
               subscription: data.subscription,
             }),
-          clearUser: () =>
-            set({
-              user: null,
-              planInfo: null,
-              subscription: null,
-            }),
+          clearUser: () => set({ user: null, planInfo: null, subscription: null }),
         },
       })),
       {
         name: 'user-store',
-        storage: createJSONStorage(() => sessionStorage),
+        storage: createJSONStorage(() => localStorage),
+        partialize: (state) => ({ user: state.user }), // user만 localStorage 영속
       }
     ),
-    {
-      name: 'user-storage',
-    }
+    { name: 'user-storage' }
   )
 );
 
 const useUser = () => useUserStore((state) => state.user);
+const useIsAuthenticated = () => useUserStore((state) => state.user !== null);
 const usePlanInfo = () => useUserStore((state) => state.planInfo);
 const useSubscription = () => useUserStore((state) => state.subscription);
 const useUserActions = () => useUserStore((state) => state.actions);
 
 export const UserStore = {
   useUser,
+  useIsAuthenticated,
   usePlanInfo,
   useSubscription,
   useActions: useUserActions,

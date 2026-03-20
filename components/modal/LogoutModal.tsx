@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
-import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 
 import {
   AlertDialog,
@@ -18,14 +18,14 @@ import { CommonModalProps } from './types';
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
-  const { clearAuth } = AuthStore.useActions();
+  const { clearUser } = UserStore.useActions();
 
   const handleLogout = async () => {
     try {
       await api.post(ENDPOINTS.SESSION.LOGOUT);
     } catch (_) {}
 
-    clearAuth();
+    clearUser();
 
     await signOut({ callbackUrl: '/', redirect: false });
     router.push('/');

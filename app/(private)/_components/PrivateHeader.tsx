@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 
 interface HeaderProps {
   navMenu: {
@@ -30,7 +30,7 @@ interface HeaderProps {
   className?: string;
 }
 const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
-  const user = AuthStore.useUser();
+  const user = UserStore.useUser();
   const router = useRouter();
   const pathname = usePathname();
   const [showLogoutModal, setShowLogoutModal] = useState(false);

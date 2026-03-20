@@ -4,22 +4,20 @@ import { useEffect } from 'react';
 
 import { useSession } from 'next-auth/react';
 
-import { AuthStore } from '@/store/authStore';
+import { UserStore } from '@/store/userStore';
 import { toUserDomain } from '@/types/domain/user';
 
 function SessionSync() {
   const { data: session, status } = useSession();
-  const { setAuth, clearAuth } = AuthStore.useActions();
-  const isAuthenticated = AuthStore.useIsAuthenticated();
+  const { setUser, clearUser } = UserStore.useActions();
+  const isAuthenticated = UserStore.useIsAuthenticated();
 
   useEffect(() => {
     if (status === 'loading') return;
     if (session?.user && !isAuthenticated) {
-      setAuth({
-        user: toUserDomain(session.user),
-      });
+      setUser(toUserDomain(session.user));
     } else if (status === 'unauthenticated' && isAuthenticated) {
-      clearAuth();
+      clearUser();
     }
   }, [session, status]);
 
