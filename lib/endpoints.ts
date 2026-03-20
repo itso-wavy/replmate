@@ -19,26 +19,6 @@ export const SESSION_ENDPOINTS = {
 } as const;
 
 // ============================================================================
-// 약관 (Terms)
-// ============================================================================
-
-export const TERMS_ENDPOINTS = {
-  // 약관 조회
-  GET_TERMS_LIST: `${API_BASE}/terms`,
-  GET_TERMS_TYPES: `${API_BASE}/terms/types`,
-  GET_TERMS_BY_TYPE: (type: TermsType) => `${API_BASE}/terms/type/${type}`,
-} as const;
-
-// ============================================================================
-// 플랜 (Plans)
-// ============================================================================
-
-export const PLAN_ENDPOINTS = {
-  // 전체 플랜 목록
-  GET_PLANS: `${API_BASE}/plans`,
-} as const;
-
-// ============================================================================
 // 사용자 (Users)
 // ============================================================================
 
@@ -67,6 +47,39 @@ export const USER_ENDPOINTS = {
 
   // 본인인증
   VERIFY_IDENTITY: `${API_BASE}/users/me/verify-identity`,
+} as const;
+
+// ============================================================================
+// 약관 (Terms)
+// ============================================================================
+
+export const TERMS_ENDPOINTS = {
+  // 약관 조회
+  GET_TERMS_LIST: `${API_BASE}/terms`,
+  GET_TERMS_TYPES: `${API_BASE}/terms/types`,
+  GET_TERMS_BY_TYPE: (type: TermsType) => `${API_BASE}/terms/type/${type}`,
+} as const;
+
+// ============================================================================
+// 플랜 (Plans)
+// ============================================================================
+
+export const PLAN_ENDPOINTS = {
+  // 전체 플랜 목록
+  GET_PLANS: `${API_BASE}/plans`,
+} as const;
+
+// ============================================================================
+// 결제 (Payments)
+// ============================================================================
+
+export const PAYMENT_ENDPOINTS = {
+  // 결제 콜백 응답 샘플
+  SAMPLE_CALLBACK: `${API_BASE}/payments/sample/callback`,
+  // Mock 결제 처리
+  MOCK_PAYMENT: (orderId: string) => `${API_BASE}/payments/mock/${orderId}`,
+  // 토스 결제 콜백
+  TOSS_CALLBACK: `${API_BASE}/payments/toss/callback`,
 } as const;
 
 // ============================================================================
@@ -100,6 +113,8 @@ export const STORE_ENDPOINTS = {
     `${API_BASE}/stores/${storeId}/products`,
   // Presigned URL 발급
   GET_PRESIGNED_URL: `${API_BASE}/stores/presigned-url`,
+  // Presigned URL 테스트 업로드
+  TEST_UPLOAD: `${API_BASE}/stores/test-upload`,
   // 인증 이미지 업데이트 (imageKey 기반)
   UPDATE_VERIFICATION_IMAGE: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}/verification-image`,
@@ -177,18 +192,8 @@ export const JOB_ENDPOINTS = {
 } as const;
 
 // ============================================================================
-// 결제 (Payments)
-// ============================================================================
-
-export const PAYMENT_ENDPOINTS = {
-  // 토스 결제 콜백
-  TOSS_CALLBACK: `${API_BASE}/payments/toss/callback`,
-} as const;
-
-// ============================================================================
 // 서비스 정보 (Service Info)
 // ============================================================================
-
 export const SERVICE_INFO_ENDPOINTS = {
   // 서비스 정보 조회
   GET_SERVICE_INFO: `${API_BASE}/service-info`,
@@ -216,13 +221,14 @@ export const API_METADATA = {
 export const ENDPOINTS = {
   OAUTH: OAUTH_ENDPOINTS,
   SESSION: SESSION_ENDPOINTS,
+  USER: USER_ENDPOINTS,
   TERMS: TERMS_ENDPOINTS,
   PLAN: PLAN_ENDPOINTS,
+  PAYMENT: PAYMENT_ENDPOINTS,
   STORE: STORE_ENDPOINTS,
   PRODUCT: PRODUCT_ENDPOINTS,
   REPLY: REPLY_ENDPOINTS,
   USAGE: USAGE_ENDPOINTS,
-  USER: USER_ENDPOINTS,
   REMINDER: REMINDER_ENDPOINTS,
   CONTACT: CONTACT_ENDPOINTS,
   JOB: JOB_ENDPOINTS,

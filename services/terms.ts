@@ -12,6 +12,15 @@ export async function getTermsList(): Promise<TermsDto[]> {
 }
 
 /**
+ * 약관 타입 목록 조회
+ * GET /api/v1/terms/types → string[]
+ */
+export async function getTermsTypes(): Promise<string[]> {
+  const response = await api.get<string[]>(TERMS_ENDPOINTS.GET_TERMS_TYPES);
+  return response.data;
+}
+
+/**
  * 약관 타입별 조회
  */
 export async function getTermsByType(type: TermsType): Promise<TermsDto> {

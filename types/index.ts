@@ -15,6 +15,7 @@ export * from './api/user';
 export * from './api/contact';
 export * from './api/reminder';
 export * from './api/job';
+export * from './api/payment';
 
 // Domain types
 export * from './domain/alert';
