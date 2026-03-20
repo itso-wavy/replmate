@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { dummyDashboardAlerts } from '@/dummy/alerts';
-import { dummyReplies } from '@/dummy/dashboard';
-import { dummySubscription } from '@/dummy/subscription';
+import { Skeleton } from '@/components/ui/skeleton';
 import { UserStore } from '@/store/userStore';
-import { Alert, AlertType } from '@/types';
+import type { Alert } from '@/types';
+import { AlertType } from '@/types';
 
 import { DashboardLayout } from '../_components';
 import {
@@ -18,45 +17,48 @@ import {
   DashboardTodayCard,
   RecentRepliesTable,
 } from './_components';
+import { useDashboardPage } from './_hooks/useDashboardPage';
+
+const sortDashboardAlerts = (alerts: Alert[]) => {
+  const sorted = [...alerts].sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  );
+  const payment = sorted.filter((a) => a.type === AlertType.PAYMENT_FAILED);
+  const others = sorted.filter((a) => a.type !== AlertType.PAYMENT_FAILED);
+  return payment.concat(others).slice(0, 3);
+};
 
 const DashboardPage = () => {
   const router = useRouter();
   const user = UserStore.useUser();
 
-  const sortDashboardAlerts = (alerts: Alert[]) => {
-    const paymentFailureAlerts = [];
-    const otherAlerts = [];
-    const sortedAlerts = alerts.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  const { stores, subscription, todayReplyCount, recentReplies, isLoading } =
+    useDashboardPage();
+
+  if (isLoading || !subscription) {
+    return (
+      <DashboardLayout heading='대시보드' alerts={[]}>
+        <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className='h-[160px] rounded-2xl' />
+          ))}
+        </div>
+        <Skeleton className='h-[300px] rounded-2xl' />
+      </DashboardLayout>
     );
-
-    for (const alert of sortedAlerts) {
-      if (alert.type === AlertType.PAYMENT_FAILED) {
-        paymentFailureAlerts.push(alert);
-      } else {
-        otherAlerts.push(alert);
-      }
-    }
-
-    const top3Alerts = paymentFailureAlerts.concat(otherAlerts).slice(0, 3);
-
-    return top3Alerts;
-  };
+  }
 
   return (
-    <DashboardLayout
-      heading='대시보드'
-      alerts={sortDashboardAlerts(dummyDashboardAlerts)}
-    >
+    <DashboardLayout heading='대시보드' alerts={sortDashboardAlerts([])}>
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           <DashboardPlanCard
-            isIdentifyed={user?.isVerified!}
-            subscription={dummySubscription}
+            isIdentifyed={user?.isVerified ?? false}
+            subscription={subscription}
           />
-          <DashboardTodayCard todayReplyCount={0} />
-          <DashboardReplyCard subscription={dummySubscription} />
-          <DashboardStoresCard />
+          <DashboardTodayCard todayReplyCount={todayReplyCount} />
+          <DashboardReplyCard subscription={subscription} />
+          <DashboardStoresCard stores={stores} />
         </div>
 
         <Card className='block p-4'>
@@ -71,7 +73,7 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          <RecentRepliesTable replies={dummyReplies} />
+          <RecentRepliesTable replies={recentReplies} />
         </Card>
       </>
     </DashboardLayout>

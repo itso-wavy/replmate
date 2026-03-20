@@ -18,9 +18,8 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
-import { dummyStores } from '@/dummy';
 import { getActiveStoreList } from '@/lib/utils';
-import { UsageQuotaSubscriptionDomain } from '@/types';
+import type { StoreDomain, UsageQuotaSubscriptionDomain } from '@/types';
 
 interface DashboardCardProps {
   isIdentifyed?: boolean;
@@ -186,9 +185,9 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
   );
 };
 
-const DashboardStoresCard = () => {
+const DashboardStoresCard = ({ stores }: { stores: StoreDomain[] }) => {
   const router = useRouter();
-  const activeStores = getActiveStoreList(dummyStores);
+  const activeStores = getActiveStoreList(stores);
 
   return (
     <Item

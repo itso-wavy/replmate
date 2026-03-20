@@ -48,4 +48,9 @@ export const queryKeys = {
     list: () => ['terms', 'list'] as const,
     byType: (type: TermsType) => ['terms', type] as const,
   },
+  reminders: {
+    all: () => ['reminders'] as const,
+    list: (params?: { category?: string; level?: string }) =>
+      ['reminders', 'list', params] as const,
+  },
 };

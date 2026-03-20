@@ -14,6 +14,7 @@ import {
   updateNotificationSettings,
   verifyIdentity,
 } from '@/services/user';
+import { UserStore } from '@/store/userStore';
 import type { DeleteUserRequest } from '@/types/api/user';
 
 export const useUser = () =>
@@ -88,8 +89,13 @@ export const useAgreeTerms = () => {
 
 export const useVerifyIdentity = () => {
   const qc = useQueryClient();
+  const { setUser } = UserStore.useActions();
   return useMutation({
     mutationFn: verifyIdentity,
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.me() }),
+    onSuccess: async () => {
+      const updatedUser = await getUser();
+      setUser(updatedUser);
+      qc.invalidateQueries({ queryKey: queryKeys.user.me() });
+    },
   });
 };
