@@ -32,7 +32,7 @@ import { CommonModalProps } from '../types';
 import { FileUploadField } from './components';
 import { useAddNewStoreForm } from './hook';
 
-const getPlatformUiConfig = (value: PlatformType) => {
+const getPlatformUiConfig = (value: string) => {
   switch (value) {
     case PlatformType.NAVER_SMART_STORE:
       return {
