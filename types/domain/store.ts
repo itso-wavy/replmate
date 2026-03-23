@@ -1,6 +1,6 @@
 import type {
-  StoreDto,
   StoreDetailDto,
+  StoreDto,
   StoreReplyOptionsDto,
 } from '@/types/api/store';
 import type { StoreStatus } from '@/types/enums';

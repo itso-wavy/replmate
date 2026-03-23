@@ -6,7 +6,8 @@ import { ProgressSvgProps } from '@/assets/svg';
 import { useUpdateStore } from '@/hooks/useStores';
 import { PlatformType, type StoreDomain } from '@/types';
 
-const getPlatformConfig = (platform: PlatformType) => {
+// FIXME: 배포 테스트를 위해 platform: PlatformType을 string으로 수정함
+const getPlatformConfig = (platform: string) => {
   switch (platform) {
     case PlatformType.NAVER_SMART_STORE:
       return {
