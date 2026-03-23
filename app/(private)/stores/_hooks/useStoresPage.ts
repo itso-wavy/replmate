@@ -8,7 +8,8 @@ import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
 import type { Alert } from '@/types';
 
 export function useStoresPage() {
-  const { data: stores = [], isLoading: isStoresLoading } = useMyStores();
+  const { data: myStoresData, isLoading: isStoresLoading } = useMyStores();
+  const stores = myStoresData?.stores ?? [];
   const { data: planData, isLoading: isPlanLoading } = useUserPlan();
   const { data: reminders = [] } = useReminders();
 

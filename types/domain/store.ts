@@ -1,4 +1,5 @@
 import type {
+  MyStoresResponseDto,
   StoreDetailDto,
   StoreDto,
   StoreReplyOptionsDto,
@@ -98,6 +99,27 @@ export function toStoreDetailDomain(dto: StoreDetailDto): StoreDetailDomain {
  */
 export function toStoreDomainList(dtos: StoreDto[]): StoreDomain[] {
   return dtos.map(toStoreDomain);
+}
+
+/**
+ * 내 스토어 목록 + 쿼터 정보
+ */
+export interface StoreQuota {
+  maxStoreCount: number;
+  currentStoreCount: number;
+  remaining: number;
+}
+
+export interface MyStoresResult {
+  stores: StoreDomain[];
+  storeQuota: StoreQuota;
+}
+
+export function toMyStoresResult(dto: MyStoresResponseDto): MyStoresResult {
+  return {
+    stores: dto.stores.map(toStoreDomain),
+    storeQuota: dto.storeQuota,
+  };
 }
 
 /**

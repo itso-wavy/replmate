@@ -15,7 +15,8 @@ import type { DashboardReply } from '../_components';
 
 export function useDashboardPage() {
   const { data: remindersData } = useReminders();
-  const { data: stores, isLoading: isStoresLoading } = useMyStores();
+  const { data: myStoresData, isLoading: isStoresLoading } = useMyStores();
+  const stores = myStoresData?.stores;
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: usageQuota, isLoading: isQuotaLoading } = useUsageQuota();
 

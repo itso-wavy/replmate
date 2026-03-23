@@ -5,7 +5,18 @@ import type { JobTicketDto } from './job';
 // 스토어 (Stores)
 // ============================================================================
 
-// GET /api/v1/users/me/stores 내 스토어 목록
+// GET /api/v1/users/me/stores 내 스토어 목록 응답
+export interface MyStoresResponseDto {
+  storeQuota: StoreQuotaDto;
+  stores: StoreDto[];
+}
+
+export interface StoreQuotaDto {
+  maxStoreCount: number;
+  currentStoreCount: number;
+  remaining: number;
+}
+
 // PATCH /api/v1/stores/{store_id} 스토어 업데이트 응답
 export interface StoreDto {
   id: number;

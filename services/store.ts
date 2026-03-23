@@ -1,6 +1,7 @@
 import { api } from '@/lib/api';
 import { STORE_ENDPOINTS } from '@/lib/endpoints';
 import type {
+  MyStoresResponseDto,
   PresignedUrlDto,
   PresignedUrlRequest,
   StoreDetailDto,
@@ -12,9 +13,11 @@ import type {
   UpdateStoresRequest,
 } from '@/types/api/store';
 import {
+  type MyStoresResult,
   StoreDomain,
   StoreDetailDomain,
   StoreReplyOptionsDomain,
+  toMyStoresResult,
   toStoreDomain,
   toStoreDomainList,
   toStoreDetailDomain,
@@ -28,9 +31,11 @@ import {
 /**
  * 내 스토어 목록 조회
  */
-export async function getMyStores(): Promise<StoreDomain[]> {
-  const response = await api.get<StoreDto[]>(STORE_ENDPOINTS.GET_MY_STORES);
-  return toStoreDomainList(response.data);
+export async function getMyStores(): Promise<MyStoresResult> {
+  const response = await api.get<MyStoresResponseDto>(
+    STORE_ENDPOINTS.GET_MY_STORES
+  );
+  return toMyStoresResult(response.data);
 }
 
 /**

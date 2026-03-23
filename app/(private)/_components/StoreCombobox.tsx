@@ -25,7 +25,8 @@ const StoreCombobox = () => {
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { setSelectedStore } = StoreStore.useActions();
 
-  const { data: stores = [] } = useMyStores();
+  const { data: myStoresData } = useMyStores();
+  const stores = myStoresData?.stores ?? [];
   const activeStores = sortStoreList(getActiveStoreList(stores));
 
   // 초기값 설정 로직 (우선순위: 마지막 선택 > 최신 등록)

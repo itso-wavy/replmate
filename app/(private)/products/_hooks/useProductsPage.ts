@@ -28,7 +28,8 @@ function setsEqual(a: Set<string>, b: Set<string>) {
 export function useProductsPage() {
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { data: planData } = useUserPlan();
-  const { data: stores = [] } = useMyStores();
+  const { data: myStoresData } = useMyStores();
+  const stores = myStoresData?.stores ?? [];
 
   const selectedStore = stores.find((s) => s.id === selectedStoreId);
 
