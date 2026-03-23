@@ -26,7 +26,6 @@ const AddNewCard = ({ storeLimitExceeded }: AddNewCardProps) => {
     const isVerified = user?.isVerified;
 
     if (!isVerified) {
-      // 본인 인증 미완료시
       setActiveModal('verification');
     } else if (storeLimitExceeded) {
       // 쇼핑몰 수 한도 초과시

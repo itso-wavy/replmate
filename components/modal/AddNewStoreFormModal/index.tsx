@@ -26,20 +26,21 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { usePlatforms } from '@/hooks/useStores';
+import { PlatformType } from '@/types';
 
 import { CommonModalProps } from '../types';
 import { FileUploadField } from './components';
 import { useAddNewStoreForm } from './hook';
 
-const getPlatformUiConfig = (value: string) => {
+const getPlatformUiConfig = (value: PlatformType) => {
   switch (value) {
-    case 'naver_smart_store':
+    case PlatformType.NAVER_SMART_STORE:
       return {
         label: '네이버 스마트스토어',
         itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
         triggerStyle: 'bg-smart-store-theme/8',
       };
-    case 'naver_brand_store':
+    case PlatformType.NAVER_BRAND_STORE:
       return {
         label: '네이버 브랜드스토어',
         itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',

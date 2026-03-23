@@ -4,16 +4,16 @@ import { toast } from 'sonner';
 
 import { ProgressSvgProps } from '@/assets/svg';
 import { useUpdateStore } from '@/hooks/useStores';
-import type { StoreDomain } from '@/types';
+import { PlatformType, type StoreDomain } from '@/types';
 
-const getPlatformConfig = (platform: string) => {
+const getPlatformConfig = (platform: PlatformType) => {
   switch (platform) {
-    case 'naver_smart_store':
+    case PlatformType.NAVER_SMART_STORE:
       return {
         name: '네이버 스마트스토어',
         platformStyle: 'text-smart-store-theme/90',
       };
-    case 'naver_brand_store':
+    case PlatformType.NAVER_BRAND_STORE:
       return {
         name: '네이버 브랜드스토어',
         platformStyle: 'text-brand-store-theme/90',
@@ -47,8 +47,7 @@ const getConnectionStatus = (store: StoreDomain) => {
     case 'deactivating':
       iconStatus = 'active';
       statusLabel = '비활성화 예정';
-      badgeStyle =
-        'outline-destructive/40 outline-3 text-foreground bg-brand-200';
+      badgeStyle = 'border-brand-200 border-2 text-foreground bg-background';
       break;
     case 'pending':
       iconStatus = 'waiting';

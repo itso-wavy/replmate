@@ -71,7 +71,8 @@ export enum TermsType {
 }
 
 export enum PlatformType {
-  NAVER_SMART_STORE = 'naver_smart_store',
+  // FIXME: API가 'naver'를 반환 중 — 백엔드에서 값 통일 후 제거 필요
+  NAVER_SMART_STORE = 'naver',
   NAVER_BRAND_STORE = 'naver_brand_store',
 }
 

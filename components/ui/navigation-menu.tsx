@@ -29,6 +29,7 @@ function NavigationMenuList({
   ...props
 }: NavigationMenuPrimitive.List.Props) {
   return (
+    // @ts-ignore - base-ui List ref 타입 불일치 (라이브러리 버그)
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
       className={cn(
@@ -45,6 +46,7 @@ function NavigationMenuItem({
   ...props
 }: NavigationMenuPrimitive.Item.Props) {
   return (
+    // @ts-ignore - base-ui Item ref 타입 불일치 (라이브러리 버그)
     <NavigationMenuPrimitive.Item
       data-slot="navigation-menu-item"
       className={cn("relative", className)}
@@ -137,6 +139,7 @@ function NavigationMenuIndicator({
   ...props
 }: NavigationMenuPrimitive.Icon.Props) {
   return (
+    // @ts-ignore - base-ui Icon ref 타입 불일치 (라이브러리 버그)
     <NavigationMenuPrimitive.Icon
       data-slot="navigation-menu-indicator"
       className={cn(
