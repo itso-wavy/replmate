@@ -23,8 +23,7 @@ const Modal = ({ open, onOpenChange, onConfirm, isPending }: ModalProps) => {
         <AlertDialogHeader>
           <AlertDialogTitle>상품 선택 저장</AlertDialogTitle>
           <AlertDialogDescription className='mx-auto text-center'>
-            저장된 상품은 자정에 리뷰가 수집되며, 이후 리플이 자동 생성됩니다.
-            선택한 상품을 저장하시겠습니까?
+            {`저장된 상품은 자정에 리뷰가 수집되며, 이후 리플이 자동 생성됩니다.\n선택한 상품을 저장하시겠습니까?`}
           </AlertDialogDescription>
         </AlertDialogHeader>
 

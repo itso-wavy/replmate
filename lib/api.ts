@@ -9,6 +9,8 @@ export const api = axios.create({
   withCredentials: true, // session_id 쿠키 자동 전송
 });
 
+let isRedirecting = false;
+
 api.interceptors.response.use(
   (response) => {
     // BaseResponse<T> 래퍼에서 data 필드 추출
@@ -24,9 +26,10 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    // 401: 세션 만료 → 로그인 페이지로
+    // 401: 세션 만료 → 로그인 페이지로 (중복 리다이렉트 방지)
     if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !isRedirecting) {
+        isRedirecting = true;
         window.location.href = '/login';
       }
     }
