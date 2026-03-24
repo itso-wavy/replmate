@@ -15,7 +15,11 @@ import { useMyStores } from '@/hooks/useStores';
 import { getActiveStoreList, sortStoreList } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
 
-const StoreCombobox = () => {
+interface StoreComboboxProps {
+  onStoreChange?: (storeId: number) => void;
+}
+
+const StoreCombobox = ({ onStoreChange }: StoreComboboxProps = {}) => {
   /*
    * 초기 선택값은 아래 우선순위에 따라 자동 선택
    * 1순위 (컨텍스트): 이전 페이지(쇼핑몰 연동/대시보드)에서 특정 쇼핑몰의 '바로가기'를 눌러서 들어온 경우, 그 쇼핑몰이 선택됨(storeId prop으로 받기)
@@ -47,9 +51,11 @@ const StoreCombobox = () => {
     }
   }, [initialStoreId, selectedStoreId, setSelectedStore]);
 
-  // Combobox의 onChange 핸들러 추가 필요
   const handleValueChange = (storeId: number | null) => {
-    if (storeId !== null) {
+    if (storeId === null) return;
+    if (onStoreChange) {
+      onStoreChange(storeId);
+    } else {
       setSelectedStore(storeId);
     }
   };

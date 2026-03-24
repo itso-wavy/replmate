@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { toast } from 'sonner';
 
 import { useProducts, useUpdateProduct } from '@/hooks/useProducts';
 import { useMyStores } from '@/hooks/useStores';
 import { useUserPlan } from '@/hooks/useUser';
+import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { StoreStore } from '@/store/storeStore';
 
 const PAGE_SIZE = 20;
@@ -26,7 +29,9 @@ function setsEqual(a: Set<string>, b: Set<string>) {
 }
 
 export function useProductsPage() {
+  const router = useRouter();
   const selectedStoreId = StoreStore.useSelectedStoreId();
+  const { setSelectedStore } = StoreStore.useActions();
   const { data: planData } = useUserPlan();
   const { data: myStoresData } = useMyStores();
   const stores = myStoresData?.stores ?? [];
@@ -40,6 +45,9 @@ export function useProductsPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [activeModal, setActiveModal] = useState<ProductModalType>(null);
+
+  // 스토어 전환 가드용: 전환하려는 storeId 보관
+  const pendingStoreIdRef = useRef<number | null>(null);
 
   const { data: productData, isLoading: isProductsLoading } = useProducts(
     selectedStoreId ?? 0,
@@ -72,6 +80,49 @@ export function useProductsPage() {
     [selectedIds, initialIds]
   );
 
+  // --- 네비게이션 가드 연동 ---
+  const pendingUrl = NavigationGuardStore.usePendingUrl();
+  const { setGuard, clearGuard, clearPending } =
+    NavigationGuardStore.useActions();
+
+  const { mutateAsync: updateProduct } = useUpdateProduct(
+    selectedStoreId ?? 0
+  );
+
+  const performSave = useCallback(async () => {
+    const added = [...selectedIds].filter((id) => !initialIds.has(id));
+    const removed = [...initialIds].filter((id) => !selectedIds.has(id));
+
+    await Promise.all([
+      ...added.map((id) =>
+        updateProduct({ productId: Number(id), data: { isTarget: true } })
+      ),
+      ...removed.map((id) =>
+        updateProduct({ productId: Number(id), data: { isTarget: false } })
+      ),
+    ]);
+
+    setInitialIds(new Set(selectedIds));
+    setLastSaved(new Date());
+  }, [selectedIds, initialIds, updateProduct]);
+
+  // isDirty 변경 시 가드 등록/해제
+  useEffect(() => {
+    setGuard(isDirty, performSave);
+  }, [isDirty, performSave, setGuard]);
+
+  // unmount 시 가드 해제
+  useEffect(() => {
+    return () => clearGuard();
+  }, [clearGuard]);
+
+  // pendingUrl이 설정되면 unsavedChanges 모달 표시
+  useEffect(() => {
+    if (pendingUrl && isDirty) {
+      setActiveModal('unsavedChanges');
+    }
+  }, [pendingUrl, isDirty]);
+
   const handleToggle = (id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -100,31 +151,65 @@ export function useProductsPage() {
     setSelectedIds(new Set(initialIds));
   };
 
-  const { mutateAsync: updateProduct } = useUpdateProduct(
-    selectedStoreId ?? 0
-  );
-
   const handleConfirmSave = async () => {
-    const added = [...selectedIds].filter((id) => !initialIds.has(id));
-    const removed = [...initialIds].filter((id) => !selectedIds.has(id));
-
     try {
-      await Promise.all([
-        ...added.map((id) =>
-          updateProduct({ productId: Number(id), data: { isTarget: true } })
-        ),
-        ...removed.map((id) =>
-          updateProduct({ productId: Number(id), data: { isTarget: false } })
-        ),
-      ]);
-
-      setInitialIds(new Set(selectedIds));
-      setLastSaved(new Date());
+      await performSave();
       setActiveModal(null);
       toast.success('저장이 완료되었습니다.');
     } catch {
       toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
+  };
+
+  // --- UnsavedChangesModal 콜백 ---
+  const handleLeaveWithoutSaving = () => {
+    setActiveModal(null);
+    // 스토어 전환 케이스
+    if (pendingStoreIdRef.current !== null) {
+      setSelectedStore(pendingStoreIdRef.current);
+      pendingStoreIdRef.current = null;
+      return;
+    }
+    // 페이지 이동 케이스
+    if (pendingUrl) {
+      const url = pendingUrl;
+      clearPending();
+      clearGuard();
+      router.push(url);
+    }
+  };
+
+  const handleSaveAndLeave = async () => {
+    try {
+      await performSave();
+      toast.success('저장이 완료되었습니다.');
+      setActiveModal(null);
+      // 스토어 전환 케이스
+      if (pendingStoreIdRef.current !== null) {
+        setSelectedStore(pendingStoreIdRef.current);
+        pendingStoreIdRef.current = null;
+        return;
+      }
+      // 페이지 이동 케이스
+      if (pendingUrl) {
+        const url = pendingUrl;
+        clearPending();
+        clearGuard();
+        router.push(url);
+      }
+    } catch {
+      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  // 스토어 전환 가드
+  const handleStoreChange = (storeId: number) => {
+    if (isDirty) {
+      pendingStoreIdRef.current = storeId;
+      setActiveModal('unsavedChanges');
+      return;
+    }
+    setSelectedStore(storeId);
   };
 
   // 브라우저 탭 이탈/새로고침 가드
@@ -156,5 +241,8 @@ export function useProductsPage() {
     handleSave,
     handleConfirmSave,
     handleReset,
+    handleStoreChange,
+    handleLeaveWithoutSaving,
+    handleSaveAndLeave,
   };
 }

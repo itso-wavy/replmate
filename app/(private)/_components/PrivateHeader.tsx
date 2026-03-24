@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { UserStore } from '@/store/userStore';
 
 interface HeaderProps {
@@ -36,6 +37,17 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const handleLogoutModal = () => setShowLogoutModal(true);
 
+  const isDirty = NavigationGuardStore.useIsDirty();
+  const { setPendingUrl } = NavigationGuardStore.useActions();
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    if (href === pathname) return; // 같은 페이지면 무시
+    if (isDirty) {
+      e.preventDefault();
+      setPendingUrl(href);
+    }
+  };
+
   return (
     <header
       className={cn(
@@ -51,6 +63,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
             <Link
               key={menu.label}
               href={menu.href}
+              onClick={(e) => handleNavClick(e, menu.href)}
               className={cn(
                 'typo-button-14 text-foreground/80 hover:bg-brand-600/10 hover:text-foreground active:bg-brand-700/18 rounded-[8px] px-3 py-2 transition-all duration-200 hover:font-medium',
                 pathname === menu.href &&

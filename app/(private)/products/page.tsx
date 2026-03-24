@@ -2,16 +2,15 @@
 
 import { useMemo } from 'react';
 
-import { toAlert } from '@/constants/alerts';
-import { useReminders } from '@/hooks/useReminders';
-import type { Alert } from '@/types';
-
 import {
   ProductSaveConfirmModal,
   RecommandPlanUpgradeModal,
   UnsavedProductChangesModal,
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
+import { toAlert } from '@/constants/alerts';
+import { useReminders } from '@/hooks/useReminders';
+import type { Alert } from '@/types';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import {
@@ -49,6 +48,9 @@ const ProductsPage = () => {
     handleSave,
     handleConfirmSave,
     handleReset,
+    handleStoreChange,
+    handleLeaveWithoutSaving,
+    handleSaveAndLeave,
   } = useProductsPage();
 
   return (
@@ -60,7 +62,7 @@ const ProductsPage = () => {
       <Card className='flex flex-1 flex-col gap-0 overflow-visible px-0 py-0 *:px-4'>
         {/* Controls Bar */}
         <div className='bg-background sticky top-0 z-10 flex w-full items-center justify-between rounded-t-2xl py-4 shadow-[0_3px_5px_0_rgba(0,0,0,0.05)]'>
-          <StoreCombobox />
+          <StoreCombobox onStoreChange={handleStoreChange} />
 
           <ProductCountIndicator
             selectedCount={selectedIds.size}
@@ -109,6 +111,8 @@ const ProductsPage = () => {
       <UnsavedProductChangesModal
         open={activeModal === 'unsavedChanges'}
         onOpenChange={(open) => !open && setActiveModal(null)}
+        onLeaveWithoutSaving={handleLeaveWithoutSaving}
+        onSaveAndLeave={handleSaveAndLeave}
       />
     </DashboardLayout>
   );
