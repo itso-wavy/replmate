@@ -76,7 +76,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
         </nav>
 
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger suppressHydrationWarning>
             <div className='text-foreground/80 hover:text-foreground rounded-[8px] bg-white/70 p-2 transition-all duration-200 hover:bg-white'>
               <ProfileSvg className='h-[22px] w-[22px]' />
             </div>
