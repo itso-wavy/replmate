@@ -1,4 +1,7 @@
 import axios, { AxiosError } from 'axios';
+import { signOut } from 'next-auth/react';
+
+import { useUserStore } from '@/store/userStore';
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -26,11 +29,11 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    // 401: 세션 만료 → 로그인 페이지로 (중복 리다이렉트 방지)
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined' && !isRedirecting) {
         isRedirecting = true;
-        window.location.href = '/login';
+        useUserStore.getState().actions.clearUser(); // Zustand + localStorage 초기화
+        signOut({ callbackUrl: '/login' }); // NextAuth 쿠키 제거 + 리다이렉트
       }
     }
     return Promise.reject(error);
