@@ -89,7 +89,9 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
                 {user?.email ?? ''}
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push('/account')}>
+              <DropdownMenuItem
+                onClick={() => router.push('/settings/account')}
+              >
                 <Settings className='text-muted-foreground size-4' />
                 <span>계정 관리</span>
               </DropdownMenuItem>

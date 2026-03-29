@@ -1,5 +1,6 @@
 // common
-export { default as PrivateHeader } from './PrivateHeader';
-export { default as DashboardLayout } from './DashboardLayout';
-export { default as StoreCombobox } from './StoreCombobox';
+export * from './DashboardLayout';
+
 export { default as SessionSync } from './SessionSync';
+export { default as PrivateHeader } from './PrivateHeader';
+export { default as StoreCombobox } from './StoreCombobox';

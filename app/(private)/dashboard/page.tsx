@@ -32,8 +32,14 @@ const DashboardPage = () => {
   const router = useRouter();
   const user = UserStore.useUser();
 
-  const { stores, alerts, subscription, todayReplyCount, recentReplies, isLoading } =
-    useDashboardPage();
+  const {
+    stores,
+    alerts,
+    subscription,
+    todayReplyCount,
+    recentReplies,
+    isLoading,
+  } = useDashboardPage();
 
   if (isLoading || !subscription) {
     return (
