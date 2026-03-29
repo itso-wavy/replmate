@@ -8,6 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+
 interface ProductCountIndicatorProps {
   selectedCount: number;
   maxAllowed: number;
@@ -24,7 +25,7 @@ const ProductCountIndicator = ({
           <TooltipTrigger>
             <AlertCircle size={14} className='text-primary' />
           </TooltipTrigger>
-          <TooltipContent className='bg-brand-800 *:bg-brand-800 px-4 whitespace-pre-line'>
+          <TooltipContent>
             <p>{`현재 활성화된 전체 쇼핑몰의 상품 선택 합계입니다.`}</p>
           </TooltipContent>
         </Tooltip>

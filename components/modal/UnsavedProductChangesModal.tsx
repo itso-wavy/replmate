@@ -11,6 +11,8 @@ import {
 import { CommonModalProps } from './types';
 
 interface ModalProps extends CommonModalProps {
+  title: string;
+  description?: string;
   onLeaveWithoutSaving: () => void;
   onSaveAndLeave: () => void | Promise<void>;
   isPending?: boolean;
@@ -20,6 +22,8 @@ interface ModalProps extends CommonModalProps {
 const Modal = ({
   open,
   onOpenChange,
+  title,
+  description,
   onLeaveWithoutSaving,
   onSaveAndLeave,
   isPending,
@@ -28,15 +32,17 @@ const Modal = ({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
         <AlertDialogHeader>
-          <AlertDialogTitle>저장하지 않은 변경 사항</AlertDialogTitle>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className='mx-auto text-center'>
-            저장하지 않은 변경 사항이 있습니다.
-            {'\n'}저장하지 않고 이동하시겠습니까?
+            {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>
-          <AlertDialogCancel disabled={isPending} onClick={onLeaveWithoutSaving}>
+          <AlertDialogCancel
+            disabled={isPending}
+            onClick={onLeaveWithoutSaving}
+          >
             저장 안 함
           </AlertDialogCancel>
           <AlertDialogAction disabled={isPending} onClick={onSaveAndLeave}>

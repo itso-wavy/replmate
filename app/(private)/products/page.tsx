@@ -111,6 +111,8 @@ const ProductsPage = () => {
       <UnsavedProductChangesModal
         open={activeModal === 'unsavedChanges'}
         onOpenChange={(open) => !open && setActiveModal(null)}
+        title='저장하지 않은 변경 사항'
+        description={`저장하지 않은 변경 사항이 있습니다.\n저장하지 않고 이동하시겠습니까?`}
         onLeaveWithoutSaving={handleLeaveWithoutSaving}
         onSaveAndLeave={handleSaveAndLeave}
       />
