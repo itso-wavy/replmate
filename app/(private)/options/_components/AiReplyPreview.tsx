@@ -1,93 +1,111 @@
 'use client';
 
+import { Save } from 'lucide-react';
+
+import TextAreaWithCount from '@/components/global/TextAreaWithCount';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { Textarea } from '@/components/ui/textarea';
+
+import { DashboardContentsTitle } from '../../_components';
 
 const TEST_REVIEW_MAX = 100;
 
 interface AiReplyPreviewProps {
+  optionData: {
+    lastSaved: Date;
+    previewUsed: number;
+    previewLimit: number;
+  };
   testReview: string;
-  onTestReviewChange: (value: string) => void;
+  setTestReview: (value: string) => void;
+  testReviewPlaceholder: string;
   generatedReply: string;
   isGenerating: boolean;
   onGenerate: () => void;
-  dailyUsed: number;
-  dailyLimit: number;
+  handleSave: () => void;
 }
 
 const AiReplyPreview = ({
+  optionData,
   testReview,
-  onTestReviewChange,
+  setTestReview,
+  testReviewPlaceholder,
   generatedReply,
   isGenerating,
   onGenerate,
-  dailyUsed,
-  dailyLimit,
+  handleSave,
 }: AiReplyPreviewProps) => {
-  const isLimitReached = dailyUsed >= dailyLimit;
+  const isLimitReached = optionData.previewUsed >= optionData.previewLimit;
 
   return (
-    <div className='flex flex-col gap-5'>
-      <div className='flex items-center justify-between'>
-        <span className='text-muted-foreground typo-body-14'>
-          일일 {dailyUsed} / {dailyLimit}회 사용
-        </span>
-      </div>
+    <div>
+      <DashboardContentsTitle level='tertiary'>
+        리플 미리보기
+      </DashboardContentsTitle>
+      <div className='flex flex-col'>
+        <div className='flex flex-col gap-3'>
+          <div className='flex items-center space-x-2'>
+            <DashboardContentsTitle level='quaternary'>
+              테스트 리뷰
+            </DashboardContentsTitle>
 
-      <div className='flex flex-col gap-3'>
-        <span className='typo-body-16 font-medium'>
-          테스트 리뷰 (최대 {TEST_REVIEW_MAX}자)
-        </span>
-        <div className='relative'>
-          <Textarea
-            placeholder='예: 배송 너무 느려서 불편했어요.'
+            <p className='typo-caption-14 text-foreground-description'>
+              일일{' '}
+              <span className='text-primary font-medium'>
+                {optionData.previewUsed}
+              </span>
+              <span className='mx-0.5'>/</span>
+              <span className='text-primary font-medium'>
+                {optionData.previewLimit}
+              </span>
+              회 사용
+            </p>
+          </div>
+          <TextAreaWithCount
             value={testReview}
-            onChange={(e) => {
-              if (e.target.value.length <= TEST_REVIEW_MAX) {
-                onTestReviewChange(e.target.value);
-              }
-            }}
-            className='min-h-[100px] resize-none text-sm'
+            onChange={setTestReview}
+            maxLength={TEST_REVIEW_MAX}
+            placeholder={`예: ${testReviewPlaceholder}`}
+            className='min-h-[120px]'
           />
-          <span className='text-muted-foreground typo-caption-12 absolute right-3 bottom-2'>
-            {testReview.length} / {TEST_REVIEW_MAX}
-          </span>
+          <div className='mt-2 flex justify-end'>
+            <Button
+              isPending={isGenerating}
+              onClick={onGenerate}
+              disabled={!testReview.trim() || isGenerating || isLimitReached}
+            >
+              AI 리플 생성하기
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <Button
-        onClick={onGenerate}
-        disabled={!testReview.trim() || isGenerating || isLimitReached}
-        className='w-full'
-        size='default'
-      >
-        {isGenerating ? (
-          <>
-            <Spinner className='size-4' />
-            생성 중...
-          </>
-        ) : (
-          'AI 리플 생성하기'
-        )}
-      </Button>
+        <div className='mt-1 flex flex-col gap-3'>
+          <DashboardContentsTitle level='quaternary'>
+            AI 생성 리플
+          </DashboardContentsTitle>
 
-      <div className='flex flex-col gap-3'>
-        <span className='typo-body-16 font-semibold'>AI 생성 리플</span>
-        <div className='border-primary/20 bg-primary/5 min-h-[140px] rounded-xl border-2 p-5'>
-          {isGenerating ? (
-            <div className='flex items-center justify-center py-8'>
-              <Spinner className='size-6' />
-            </div>
-          ) : generatedReply ? (
-            <p className='typo-body-16 leading-relaxed whitespace-pre-wrap'>
-              {generatedReply}
-            </p>
-          ) : (
-            <p className='text-muted-foreground typo-body-14'>
-              생성된 리플이 여기에 표시됩니다.
-            </p>
-          )}
+          <div className='border-primary/20 bg-primary/5 flex field-sizing-content min-h-[120px] resize-none rounded-xl border-2 p-5 px-4 py-3 transition-colors'>
+            {isGenerating ? (
+              <div className='flex w-full items-center justify-center py-8'>
+                <Spinner className='size-5' />
+              </div>
+            ) : generatedReply ? (
+              <p className='typo-body-14 whitespace-pre-wrap'>
+                {generatedReply}
+              </p>
+            ) : (
+              <p className='typo-body-14 text-blue-500'>
+                생성된 리플이 여기에 표시됩니다.
+              </p>
+            )}
+          </div>
+
+          <div className='mt-2 flex items-center justify-end'>
+            <Button onClick={handleSave}>
+              <Save />
+              옵션 저장
+            </Button>
+          </div>
         </div>
       </div>
     </div>

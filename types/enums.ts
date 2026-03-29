@@ -1,9 +1,16 @@
+/** 리플 옵션 타입 */
 // 리플 톤
 export enum ReplyTone {
   FRIENDLY = 'friendly',
   FORMAL = 'formal',
   AUTO = 'auto',
 }
+
+export const replyToneLabelMap: Record<ReplyTone, string> = {
+  [ReplyTone.FRIENDLY]: '친근하게',
+  [ReplyTone.FORMAL]: '정중하게',
+  [ReplyTone.AUTO]: '자동(맞춤)',
+} as const;
 
 // 리플 길이
 export enum ReplyLength {
@@ -12,6 +19,74 @@ export enum ReplyLength {
   AUTO = 'auto',
 }
 
+export const replyLengthLabelMap: Record<ReplyLength, string> = {
+  [ReplyLength.SHORT]: '짧게',
+  [ReplyLength.AUTO]: '자동(맞춤)',
+  [ReplyLength.LONG]: '길게',
+} as const;
+
+export const replyLengthSteps: ReplyLength[] = [
+  ReplyLength.SHORT,
+  ReplyLength.AUTO,
+  ReplyLength.LONG,
+];
+
+// 이모지 포함 여부
+export const replyEmojiOptions = [
+  { value: true, label: '포함' },
+  { value: false, label: '미포함' },
+] as const;
+
+/** 스토어 관련 타입 */
+// 스토어 관리자 인증 상태
+export enum VerificationStatus {
+  PENDING = 'pending', // 검증 대기
+  SUCCESS = 'success', // 검증 성공
+  FAILED = 'failed', // 검증 실패
+}
+
+// 스토어 플랫폼 타입
+export enum PlatformType {
+  // FIXME: API가 'naver'를 반환 중 — 백엔드에서 값 통일 후 제거 필요
+  NAVER_SMART_STORE = 'naver',
+  NAVER_BRAND_STORE = 'naver_brand_store',
+}
+
+// 스토어 상태 (Swagger 260207 기준)
+export type StoreStatus =
+  | 'pending' // 승인 대기
+  | 'rejected' // 반려
+  | 'inactive' // 비활성
+  | 'active' // 활성
+  | 'deactivating'; // 비활성화 예정
+
+// 리플 상태 (Swagger 기준)
+export type ReplyStatus = 'draft' | 'edited' | 'exported' | 'reset';
+
+// 구독 상태
+export enum SubscriptionStatus {
+  ACTIVE = 'active',
+  CANCELED = 'canceled',
+  TRIAL = 'trial',
+  PAST_DUE = 'past_due',
+}
+
+// 인증 제공자
+export enum AuthProvider {
+  GOOGLE = 'google',
+  KAKAO = 'kakao',
+  NAVER = 'naver',
+}
+
+// 약관 타입
+export enum TermsType {
+  TERMS_OF_SERVICE = 'terms_of_service', // 서비스 이용약관
+  PRIVACY_POLICY = 'privacy_policy', // 개인정보 처리방침
+  PERSONAL_INFO_COLLECTION = 'privacy_consent', // 개인정보 수집 및 이용
+  MARKETING_CONSENT = 'marketing_consent', // 마케팅 정보 수신 동의
+}
+
+/** 알림 */
 // 알림 타입
 export enum ReminderType {
   SUBSCRIPTION_STORE_CHANGE = 'subscription_store_change', // 구독 플랜 변경으로 인한 쇼핑몰 수 조정 알림
@@ -41,41 +116,7 @@ export enum ContactStatus {
   ANSWERED = 'answered', // 답변 완료
 }
 
-// 스토어 관리자 인증 상태
-export enum VerificationStatus {
-  PENDING = 'pending', // 검증 대기
-  SUCCESS = 'success', // 검증 성공
-  FAILED = 'failed', // 검증 실패
-}
-
-// 구독 상태
-export enum SubscriptionStatus {
-  ACTIVE = 'active',
-  CANCELED = 'canceled',
-  TRIAL = 'trial',
-  PAST_DUE = 'past_due',
-}
-
-// 인증 제공자
-export enum AuthProvider {
-  GOOGLE = 'google',
-  KAKAO = 'kakao',
-  NAVER = 'naver',
-}
-
-export enum TermsType {
-  TERMS_OF_SERVICE = 'terms_of_service', // 서비스 이용약관
-  PRIVACY_POLICY = 'privacy_policy', // 개인정보 처리방침
-  PERSONAL_INFO_COLLECTION = 'privacy_consent', // 개인정보 수집 및 이용
-  MARKETING_CONSENT = 'marketing_consent', // 마케팅 정보 수신 동의
-}
-
-export enum PlatformType {
-  // FIXME: API가 'naver'를 반환 중 — 백엔드에서 값 통일 후 제거 필요
-  NAVER_SMART_STORE = 'naver',
-  NAVER_BRAND_STORE = 'naver_brand_store',
-}
-
+// TODO: 알람 클라이언트 선언 타입
 export enum AlertType {
   // Error
   PAYMENT_FAILED = 'PAYMENT_FAILED ',
@@ -108,14 +149,3 @@ export type ReminderEvent =
   | 'store_auth_expired'
   | 'product_sync_needed'
   | 'product_limit_reached';
-
-// 리플 상태 (Swagger 기준)
-export type ReplyStatus = 'draft' | 'edited' | 'exported' | 'reset';
-
-// 스토어 상태 (Swagger 260207 기준)
-export type StoreStatus =
-  | 'pending' // 승인 대기
-  | 'rejected' // 반려
-  | 'inactive' // 비활성
-  | 'active' // 활성
-  | 'deactivating'; // 비활성화 예정

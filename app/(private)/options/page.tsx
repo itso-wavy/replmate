@@ -2,40 +2,56 @@
 
 import { useState } from 'react';
 
+import { Save } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ReplyLength, ReplyTone } from '@/types/enums';
+import { formatDate } from '@/lib/utils';
+import { ReplyLength, ReplyTone } from '@/types';
 
-import { DashboardLayout, StoreCombobox } from '../_components';
 import {
-  AiReplyPreview,
-  BrandGuidelineInput,
-  OptionToggleGroup,
-} from './_components';
+  DashboardContentsTitle,
+  DashboardLayout,
+  StoreCombobox,
+} from '../_components';
+import { AiReplyPreview, OptionSettings } from './_components';
 
-const TONE_OPTIONS = [
-  { label: '친근하게', value: ReplyTone.FRIENDLY },
-  { label: '정중하게', value: ReplyTone.FORMAL },
-  { label: '자동(맞춤)', value: ReplyTone.AUTO },
-];
+const DEFAULT_OPTIONS = {
+  replyTone: ReplyTone.AUTO,
+  replyLength: ReplyLength.AUTO,
+  includeEmoji: false,
+  brandGuideline: '',
+  testReviewPlaceholder: '배송 너무 느려서 불편했어요.',
+};
 
-const LENGTH_OPTIONS = [
-  { label: '짧게', value: ReplyLength.SHORT },
-  { label: '길게', value: ReplyLength.LONG },
-  { label: '자동(맞춤)', value: ReplyLength.AUTO },
-];
+const dummyOptionData = {
+  lastSaved: new Date(`2026.03.24 14:30`),
+  previewUsed: 0,
+  previewLimit: 5,
+  options: {
+    replyTone: undefined,
+    replyLength: undefined,
+    includeEmoji: undefined,
+    brandGuideline: '',
+  },
+};
 
-const EMOJI_OPTIONS = [
-  { label: '포함', value: true },
-  { label: '미포함', value: false },
-];
+const options = dummyOptionData.options;
 
 const OptionsPage = () => {
-  // 옵션 상태 (추후 useOptionsPage 훅으로 이동)
-  const [tone, setTone] = useState<ReplyTone>(ReplyTone.AUTO);
-  const [length, setLength] = useState<ReplyLength>(ReplyLength.AUTO);
-  const [includeEmoji, setIncludeEmoji] = useState(false);
-  const [brandGuideline, setBrandGuideline] = useState('');
+  // 옵션 설정
+  const [replyTone, setReplyTone] = useState<ReplyTone>(
+    options?.replyTone || DEFAULT_OPTIONS.replyTone
+  );
+  const [length, setLength] = useState<ReplyLength>(
+    options?.replyLength || DEFAULT_OPTIONS.replyLength
+  );
+  const [includeEmoji, setIncludeEmoji] = useState<boolean>(
+    options?.includeEmoji ?? DEFAULT_OPTIONS.includeEmoji
+  );
+  const [brandGuideline, setBrandGuideline] = useState<string>(
+    options?.brandGuideline || DEFAULT_OPTIONS.brandGuideline
+  );
 
   // AI 미리보기 상태
   const [testReview, setTestReview] = useState('');
@@ -43,6 +59,8 @@ const OptionsPage = () => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerate = async () => {
+    // TODO: 버튼 클릭 가능 여부 재체크하기
+
     setIsGenerating(true);
     setGeneratedReply('');
     // TODO: API 연동 (POST /replies/test)
@@ -62,77 +80,48 @@ const OptionsPage = () => {
     <DashboardLayout
       heading='리플 옵션'
       description='설정한 옵션은 다음 리플 생성 시점부터 적용됩니다.'
+      alerts={alerts}
     >
       <Card className='flex flex-1 flex-col gap-0 overflow-visible px-0 py-0 *:px-4'>
         {/* Controls Bar */}
-        <div className='bg-background sticky top-0 z-10 flex w-full items-center justify-between rounded-t-2xl py-4 shadow-[0_3px_5px_0_rgba(0,0,0,0.05)]'>
+        <div className='bg-background sticky top-0 z-10 flex w-full items-center justify-start rounded-t-2xl py-4 shadow-[0_3px_5px_0_rgba(0,0,0,0.05)]'>
           <StoreCombobox
           // onStoreChange={handleStoreChange}
           />
 
-          {/* TODO: */}
-          <div className='flex items-center gap-3'>
-            <span className='text-muted-foreground typo-caption-12'>
-              {/* 마지막 저장: 2026.03.24 14:30 */}
-            </span>
-            <Button variant={'primary'} onClick={handleSave}>
-              저장하기
-            </Button>
-          </div>
+          {dummyOptionData.lastSaved && (
+            <p className='typo-caption-14 text-foreground-description ml-2.5'>
+              <span>마지막 저장:</span>{' '}
+              <span className='font-medium'>
+                {formatDate(dummyOptionData.lastSaved, 'yyyy.MM.dd HH:mm')}
+              </span>
+            </p>
+          )}
         </div>
 
         {/* 2컬럼: 좌(옵션 설정) / 우(AI 미리보기) */}
-        <div className='grid h-[500px] grid-cols-[2fr_3fr] *:my-6'>
-          <div className='border-r px-4 py-2'>
-            <p className='typo-heading-18 mb-2 py-4'>옵션 설정</p>
+        <div className='grid grid-cols-1 py-4 *:my-2 *:px-4 *:py-2 *:first:border-b *:first:pb-8 lg:grid-cols-[2fr_3fr] lg:py-0 lg:*:my-6 lg:*:first:border-r lg:*:first:border-b-0 lg:*:first:pb-0'>
+          <OptionSettings
+            replyTone={replyTone}
+            setReplyTone={setReplyTone}
+            length={length}
+            setLength={setLength}
+            includeEmoji={includeEmoji}
+            setIncludeEmoji={setIncludeEmoji}
+            brandGuideline={brandGuideline}
+            setBrandGuideline={setBrandGuideline}
+          />
 
-            <div className='flex flex-col gap-4'>
-              <OptionToggleGroup
-                label='톤앤매너'
-                tooltip={`생성될 리플의 말투를 결정합니다.\n * 친근하게: 부드러운 구어체 위주\n * 정중하게: 격식 있고 객관적인 사실 위주\n * 자동(맞춤): 리뷰 분위기에 맞춰 AI가 적절한 톤을 판단`}
-                options={TONE_OPTIONS}
-                defaultValue={ReplyTone.AUTO}
-                value={tone}
-                onChange={setTone}
-              />
-              <OptionToggleGroup
-                label='리플 길이'
-                tooltip={`생성될 리플의 분량을 결정합니다.\n * 짧게: 핵심만 간결하게 (1~2줄)\n * 길게: 풍성하고 자세하게 (3~5줄)\n * 자동(맞춤): 리뷰 내용에 맞춰 적절한 길이로 생성`}
-                options={LENGTH_OPTIONS}
-                defaultValue={ReplyLength.AUTO}
-                value={length}
-                onChange={setLength}
-              />
-              <OptionToggleGroup
-                label='이모지 사용'
-                tooltip={`포함 선택 시, 문맥에 어울리는 이모지를\n최대 2개까지 문장에 자동으로 추가합니다.`}
-                options={EMOJI_OPTIONS}
-                defaultValue={false}
-                value={includeEmoji}
-                onChange={setIncludeEmoji}
-              />
-              <BrandGuidelineInput
-                label='브랜드 가이드라인'
-                tooltip={`AI가 리플 생성 시 참고해야 할 사항을 적어주세요.\n * 예: "친절하게 응대해줘", "마지막엔 꼭 '감사합니다'를 붙여줘" 등`}
-                value={brandGuideline}
-                onChange={setBrandGuideline}
-              />
-            </div>
-          </div>
-
-          <div className='px-4 py-2'>
-            <p className='typo-heading-18 mb-2 py-4'>AI 리플 미리보기</p>
-
-            <AiReplyPreview
-              testReview={testReview}
-              onTestReviewChange={setTestReview}
-              generatedReply={generatedReply}
-              isGenerating={isGenerating}
-              onGenerate={handleGenerate}
-              dailyUsed={0}
-              dailyLimit={5}
-            />
-          </div>
+          <AiReplyPreview
+            optionData={dummyOptionData}
+            testReview={testReview}
+            setTestReview={setTestReview}
+            testReviewPlaceholder={DEFAULT_OPTIONS.testReviewPlaceholder}
+            generatedReply={generatedReply}
+            isGenerating={isGenerating}
+            onGenerate={handleGenerate}
+            handleSave={handleSave}
+          />
         </div>
       </Card>
     </DashboardLayout>
@@ -140,3 +129,28 @@ const OptionsPage = () => {
 };
 
 export default OptionsPage;
+
+/* TODO:
+1. 테스트 리뷰 항목 미입력 상태로 'ai 리플 생성하기'시에 플레이스 홀더로 사용하던 값(배송 너무 느려서 불편했어요.)으로 리뷰 생성하기
+
+2. 'ai 리플 생성하기' 버튼 활성화 조건
+  * 일일 잔여 횟수 남아있음
+  * 현재 ai 리플 생성 중이 아님
+  * 일일 잔여 횟수 전부 소진 상태이면 토스트 띄우기 ('일일 테스트 횟수 N회를 모두 소진했습니다.')
+  * 버튼 클릭 핸들러 내에서도 위 조건을 재차 확인해야 함
+  * 버튼 클릭 후 리플 생성 성공시 잔여 리플 수 업데이트 
+  * 리플 생성 실패시 토스트 노출('일시적인 오류로 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.)
+3. '저장하기' 버튼
+  * 클릭 후 저장 완료시 토스트 노출('저장이 완료되었습니다.') 및 마지막 저장 일시 업데이트
+  * 클릭 후 저장 실패 시 에러 토스트 노출('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.)
+  * 저장하지 않고 이탈 시도시 팝업 등장. 아래 코드 참고
+    <UnsavedProductChangesModal
+      open={activeModal === 'unsavedChanges'}
+      onOpenChange={(open) => !open && setActiveModal(null)}
+      title='옵션 설정 저장'
+      description={`저장하지 않은 변경 사항이 있습니다.\n저장하지 않고 이동하시겠습니까?`}
+      onLeaveWithoutSaving={handleLeaveWithoutSaving}
+      onSaveAndLeave={handleSaveAndLeave}
+    />
+4. 연동된 쇼핑몰이 없을시 쇼핑몰 연동 필요 Alert이 뜸
+*/
