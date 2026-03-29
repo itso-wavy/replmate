@@ -32,7 +32,7 @@ const RadioButtonGroup = <T extends string | number>({
             htmlFor={`radio-${val}`}
             className={cn(
               'flex h-9 cursor-pointer items-center rounded-full px-4 text-sm font-medium transition-colors',
-              'border-input hover:bg-accent hover:text-accent-foreground border',
+              'border-input hover:bg-accent hover:text-accent-foreground w-fit border text-nowrap',
               value === val &&
                 'bg-primary border-primary text-primary-foreground pointer-events-none'
             )}

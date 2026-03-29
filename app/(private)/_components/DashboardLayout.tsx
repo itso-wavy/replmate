@@ -21,7 +21,7 @@ interface DashboardLayoutProps {
 export const DashboardLayout = ({
   heading,
   description,
-  alerts,
+  alerts = [],
   className,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
@@ -41,13 +41,14 @@ export const DashboardLayout = ({
       </div>
 
       <div className='flex flex-col gap-4 px-4 py-4'>
-        {alerts && (
-          <div className='flex flex-col gap-1'>
-            {alerts.map((alert) => {
-              const { createdAt, ...rest } = alert;
+        {alerts?.length > 0 && (
+          <div className='flex flex-col space-y-1'>
+            {alerts &&
+              alerts.map((alert) => {
+                const { createdAt, ...rest } = alert;
 
-              return <CustomAlert key={alert.id} {...rest} />;
-            })}
+                return <CustomAlert key={alert.id} {...rest} />;
+              })}
           </div>
         )}
         {children}
@@ -95,7 +96,7 @@ export const DashboardContentsTitle = ({
 
   if (level === 'tertiary')
     return (
-      <div className={cn('typo-heading-18 mb-4', className)}>{children}</div>
+      <div className={cn('typo-heading-18 mb-5', className)}>{children}</div>
     );
 
   return (
