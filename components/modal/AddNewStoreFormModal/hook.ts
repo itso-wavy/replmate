@@ -5,8 +5,13 @@ import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
-import { useCheckStoreUrl, useCreateStore, useGetPresignedUrl } from '@/hooks/useStores';
+import {
+  useCheckStoreUrl,
+  useCreateStore,
+  useGetPresignedUrl,
+} from '@/hooks/useStores';
 import { AddNewStoreFormData, addNewStoreSchema } from '@/lib/validation';
+import { PlatformType } from '@/types';
 
 interface UseAddNewStoreFormProps {
   closeModal: () => void; // 모달을 닫는 콜백
@@ -66,6 +71,17 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    * - 사용 가능한 URL입니다(초록 글씨)
    * - 이미 등록된 URL입니다(빨간 글씨)
    */
+  const getStoreBaseUrl = (platform: string) => {
+    switch (platform) {
+      case PlatformType.NAVER_SMART_STORE:
+        return 'https://smartstore.naver.com/';
+      case PlatformType.NAVER_BRAND_STORE:
+        return 'https://brand.naver.com/';
+      default:
+        '';
+    }
+  };
+
   const handleDuplicateCheck = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -74,7 +90,8 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     // URL 필드가 유효하지 않다면 리턴
     if (form.getFieldState('url').invalid) return;
 
-    const url = form.getValues('url');
+    const baseUrl = getStoreBaseUrl(form.getValues('platform'));
+    const url = baseUrl + form.getValues('url');
 
     try {
       const result = await checkUrlMutation.mutateAsync(url);
@@ -206,11 +223,12 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     try {
       // 1. presigned URL 발급 + S3 직접 업로드
       const file = uploadedFiles[0];
-      const { uploadUrl, imageKey } =
-        await getPresignedUrlMutation.mutateAsync({
+      const { uploadUrl, imageKey } = await getPresignedUrlMutation.mutateAsync(
+        {
           filename: file.name,
           contentType: file.type,
-        });
+        }
+      );
 
       // S3에 직접 PUT (Axios 인터셉터 제외)
       await fetch(uploadUrl, {
@@ -219,10 +237,12 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
         headers: { 'Content-Type': file.type },
       });
 
+      const baseUrl = getStoreBaseUrl(data.platform);
+
       // 2. 스토어 생성
       await createStoreMutation.mutateAsync({
         name: data.name,
-        url: data.url,
+        url: baseUrl + data.url,
         platform: data.platform,
         verificationImageKey: imageKey,
       });
