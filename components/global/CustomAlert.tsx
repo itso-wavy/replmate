@@ -58,8 +58,8 @@ const CustomAlert = ({
         </AlertDescription>
       )}
       {action && (
-        <AlertAction>
-          <Button size='xs' onClick={action.onClick}>
+        <AlertAction className={!description ? 'top-1.5' : ''}>
+          <Button size='sm' onClick={action.onClick}>
             {action.label}
             <MoveRight />
           </Button>
