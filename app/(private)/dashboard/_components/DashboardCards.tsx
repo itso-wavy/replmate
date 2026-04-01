@@ -194,7 +194,7 @@ const DashboardStoresCard = ({ stores }: { stores: StoreDomain[] }) => {
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/settings/subscribe')}
+      onClick={() => router.push('/stores')}
       className='group relative cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>
