@@ -1,8 +1,9 @@
 import type {
-  UserDto,
-  SubscriptionDto,
   NotificationSettingsDto,
+  SubscriptionDto,
+  UserDto,
 } from '@/types/api/user';
+
 import type { PlanDomain } from './plan';
 
 // Re-export PlanDomain for convenience
@@ -15,12 +16,14 @@ export type { PlanDomain };
 /**
  * 사용자 도메인 모델
  */
+export type AuthProvider = 'kakao' | 'naver' | 'google';
+
 export interface UserDomain {
   id: number;
   email: string | null;
   name: string | null;
   phoneNumber: string | null;
-  authProvider: string | null;
+  authProvider: AuthProvider | null;
   authProviderId: string | null;
   isVerified: boolean;
   verifiedAt: Date | null;
@@ -79,9 +82,7 @@ export function toUserDomain(dto: UserDto): UserDomain {
 /**
  * SubscriptionDto → SubscriptionDomain 변환
  */
-export function toSubscriptionDomain(
-  dto: SubscriptionDto,
-): SubscriptionDomain {
+export function toSubscriptionDomain(dto: SubscriptionDto): SubscriptionDomain {
   return {
     ...dto,
     startedAt: new Date(dto.startedAt),
@@ -95,7 +96,7 @@ export function toSubscriptionDomain(
  * NotificationSettingsDto → NotificationSettingsDomain 변환
  */
 export function toNotificationSettingsDomain(
-  dto: NotificationSettingsDto,
+  dto: NotificationSettingsDto
 ): NotificationSettingsDomain {
   return {
     ...dto,

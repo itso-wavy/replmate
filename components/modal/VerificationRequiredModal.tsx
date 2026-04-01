@@ -19,7 +19,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
 
   const handleAction = () => {
-    router.push('/account');
+    router.push('/settings/account');
   };
 
   return (

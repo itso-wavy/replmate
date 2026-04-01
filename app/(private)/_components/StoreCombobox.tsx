@@ -76,6 +76,7 @@ const StoreCombobox = ({ onStoreChange }: StoreComboboxProps = {}) => {
         placeholder='쇼핑몰을 선택해 주세요.'
         value={displayValue}
         readOnly
+        className='*:cursor-pointer'
       />
       <ComboboxContent>
         <ComboboxEmpty className='mt-3'>

@@ -11,7 +11,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     variant: 'error',
     // TODO: meta.daysLeft로 D-N 동적 치환 필요
     title: `정기 결제에 실패했습니다. D-? 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해주세요.`,
-    href: '/subscribe',
+    href: '/settings/subscribe',
   },
   [AlertType.STORE_AUTH_REJECTED]: {
     id: 'alert-store-auth-rejected',
@@ -106,9 +106,10 @@ export function toAlert(reminder: ReminderDomain): Alert | null {
         ...base,
         id: String(reminder.id),
         createdAt: reminder.createdAt,
-        title: daysLeft != null
-          ? `정기 결제에 실패했습니다. D-${daysLeft} 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해주세요.`
-          : base.title,
+        title:
+          daysLeft != null
+            ? `정기 결제에 실패했습니다. D-${daysLeft} 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해주세요.`
+            : base.title,
       };
     }
     case 'store_auth_expired':

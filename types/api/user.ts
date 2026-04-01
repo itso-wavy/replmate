@@ -10,7 +10,7 @@ export interface UserDto {
   email: string | null;
   name: string | null;
   phoneNumber: string | null;
-  authProvider: string | null;
+  authProvider: 'kakao' | 'naver' | 'google' | null;
   authProviderId: string | null;
   isVerified: boolean;
   verifiedAt: string | null;

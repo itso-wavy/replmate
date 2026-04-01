@@ -24,7 +24,7 @@ const Modal = ({ title, description, open, onOpenChange }: ModalProps) => {
   const router = useRouter();
 
   const handleAction = () => {
-    router.push('/subscribe');
+    router.push('/settings/subscribe');
   };
 
   return (
