@@ -40,72 +40,76 @@ const ReplyTextBox = ({
   };
 
   return (
-    <div className='rounded-lg bg-blue-100/50 p-4'>
-      <div className='relative'>
-        {/* 리플 컨텐츠 */}
-        <p className='text-foreground-description-muted font-medium select-none'>
-          AI 생성 리플
-        </p>
-        <p
-          ref={textRef}
+    <div className='grid grid-cols-[auto_80px_80px] gap-2 *:rounded-[12px]'>
+      {/* 리플 컨텐츠 */}
+      <div className='flex-1 bg-blue-100/50 p-4'>
+        <div className='relative'>
+          <p className='typo-eyebrow-14 text-foreground-description-muted select-none'>
+            AI 생성 리플
+          </p>
+
+          <p
+            ref={textRef}
+            className={cn(
+              'typo-body-14 mt-1.5 whitespace-pre-line transition-all duration-300 select-all',
+              !expanded && 'line-clamp-3'
+            )}
+          >
+            {text}
+          </p>
+
+          <p className='text-brand-400 typo-caption-12 absolute top-0 right-0 ml-2'>
+            {formatDate(createdAt)} 작성됨
+          </p>
+        </div>
+      </div>
+
+      {/* 펼치기/접기 버튼 */}
+      <button
+        onClick={() => setExpanded((expanded) => !expanded)}
+        className='group text-muted-foreground *:group-hover:text-foreground typo-caption-12 relative grid bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:flex *:flex-col *:items-center *:justify-center *:place-self-center *:transition-all *:duration-200 active:scale-85'
+        aria-label={expanded ? '축소' : '확장'}
+      >
+        <div
+          className={
+            !expanded ? 'scale-100 opacity-100' : 'scale-10 opacity-10'
+          }
+        >
+          <ChevronDown size={24} />
+          <span className='-mt-1'>펼치기</span>
+        </div>
+        <div
           className={cn(
-            'typo-body-14 mt-2 whitespace-pre-line transition-all duration-300',
-            !expanded && 'line-clamp-3'
+            'text-foreground',
+            !expanded ? 'scale-10 opacity-10' : 'scale-100 opacity-100'
           )}
         >
-          {text}
-        </p>
+          <ChevronUp size={24} />
+          <span className='-mt-1'>접기</span>
+        </div>
+      </button>
 
-        {/* 36x64px */}
-        <button
-          onClick={handleCopy}
-          className='hover:text-foreground absolute top-0 right-0 rounded-[8px] p-1.5 transition-all hover:bg-gray-900/5 active:scale-85'
-          aria-label='리플 복사'
-        >
-          <div className='relative size-6 *:transition-all *:duration-200'>
-            <Copy
-              className={cn(
-                `text-muted-foreground`,
-                !isCopied ? 'scale-100 opacity-100' : 'scale-10 opacity-10'
-              )}
-              size={24}
-            />
-            <Check
-              className={cn(
-                `text-brand-sun absolute top-0`,
-                !isCopied ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-              )}
-              size={24}
-            />
-          </div>
-        </button>
-
-        {isOverflow && (
-          <button
-            onClick={() => setExpanded((expanded) => !expanded)}
-            className='text-foreground-description hover:text-brand-700 mt-1 flex h-9 select-none'
-            aria-label={expanded ? '축소' : '확장'}
-          >
-            <div className='flex items-center'>
-              {!expanded ? (
-                <>
-                  <ChevronDown size={20} />
-                  <span>더보기</span>
-                </>
-              ) : (
-                <>
-                  <ChevronUp size={20} />
-                  <span>접기</span>
-                </>
-              )}
-            </div>
-          </button>
-        )}
-
-        <p className='typo-caption-12 text-foreground-description absolute right-0 bottom-0 mt-2'>
-          리플 작성일: {formatDate(createdAt)}
-        </p>
-      </div>
+      {/* 카피 버튼 */}
+      <button
+        onClick={handleCopy}
+        className='group relative grid bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:place-self-center *:transition-all *:duration-200 active:scale-85'
+        aria-label='리플 복사'
+      >
+        <Copy
+          className={cn(
+            `text-muted-foreground group-hover:text-primary`,
+            !isCopied ? 'scale-100 opacity-100' : 'scale-10 opacity-10'
+          )}
+          size={24}
+        />
+        <Check
+          className={cn(
+            `text-brand-sun`,
+            !isCopied ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
+          )}
+          size={24}
+        />
+      </button>
     </div>
   );
 };

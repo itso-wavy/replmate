@@ -34,8 +34,7 @@ export function useReplysPage({ PAGE_SIZE }: { PAGE_SIZE: number }) {
 
   return {
     hasStores,
-    // replies: data?.items ?? [],
-    replies: dummyRepliesByStore[1],
+    replies: data?.items ?? [],
     isLoading,
     currentPage,
     totalPages: data?.totalPages ?? 1,
