@@ -40,7 +40,7 @@ const ReplyTextBox = ({
   };
 
   return (
-    <div className='grid grid-cols-[auto_80px_80px] gap-2 *:rounded-[12px]'>
+    <div className='flex gap-2 *:rounded-[12px]'>
       {/* 리플 컨텐츠 */}
       <div className='flex-1 bg-blue-100/50 p-4'>
         <div className='relative'>
@@ -67,8 +67,9 @@ const ReplyTextBox = ({
       {/* 펼치기/접기 버튼 */}
       <button
         onClick={() => setExpanded((expanded) => !expanded)}
-        className='group text-muted-foreground *:group-hover:text-foreground typo-caption-12 relative grid bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:flex *:flex-col *:items-center *:justify-center *:place-self-center *:transition-all *:duration-200 active:scale-85'
+        className='group text-muted-foreground *:group-hover:text-primary typo-caption-12 relative grid w-28 bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:flex *:flex-col *:items-center *:justify-center *:place-self-center *:transition-all *:duration-200 hover:bg-gray-900/10 active:scale-85 disabled:scale-100 disabled:bg-gray-100 disabled:*:group-hover:text-inherit'
         aria-label={expanded ? '축소' : '확장'}
+        disabled={!isOverflow}
       >
         <div
           className={
@@ -76,7 +77,7 @@ const ReplyTextBox = ({
           }
         >
           <ChevronDown size={24} />
-          <span className='-mt-1'>펼치기</span>
+          <span className='-mt-1 whitespace-pre-line'>{`긴 글\n펼치기`}</span>
         </div>
         <div
           className={cn(
@@ -92,7 +93,7 @@ const ReplyTextBox = ({
       {/* 카피 버튼 */}
       <button
         onClick={handleCopy}
-        className='group relative grid bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:place-self-center *:transition-all *:duration-200 active:scale-85'
+        className='group relative grid w-28 bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:place-self-center *:transition-all *:duration-200 hover:bg-gray-900/10 active:scale-85'
         aria-label='리플 복사'
       >
         <Copy

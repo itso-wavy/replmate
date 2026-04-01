@@ -21,11 +21,11 @@ const ReplyCard = ({ reply }: { reply: ReplyDomain }) => {
   return (
     <div className='hover:border-primary h-full rounded-lg border bg-gray-50 p-6 transition-all duration-[120ms] select-text hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)]'>
       <div className='flex justify-between'>
-        <div className='ml-2'>
-          <div className='typo-body-14 text-muted-foreground mb-1.5 flex flex-wrap items-center gap-x-4'>
+        <div className='ml-2 w-full pr-1'>
+          <div className='typo-body-14 text-muted-foreground flex flex-wrap items-center gap-x-4'>
             {itemsMetadata.map(({ label, value }) => (
               <div key={label}>
-                {label}: {value}
+                {label}: <span className='select-all'>{value}</span>
               </div>
             ))}
 
@@ -39,7 +39,7 @@ const ReplyCard = ({ reply }: { reply: ReplyDomain }) => {
             )}
           </div>
 
-          <p className='typo-heading-16 flex items-center gap-2'>
+          <p className='typo-heading-16 mt-2 flex items-center gap-2 select-all'>
             {reply.product.name}
           </p>
         </div>
@@ -47,7 +47,7 @@ const ReplyCard = ({ reply }: { reply: ReplyDomain }) => {
         <SentimentBadge score={reply.sentimentScore} />
       </div>
 
-      <div className='typo-body-14 my-4 px-2 whitespace-pre-line'>
+      <div className='typo-body-14 mt-2.5 mb-3 px-2 whitespace-pre-line select-all'>
         {reply.review.content}
       </div>
 
