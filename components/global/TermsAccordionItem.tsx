@@ -59,8 +59,8 @@ const TermsAccordionItem = ({
 
         <div
           className={cn(
-            'typo-body-16 flex flex-1 items-center gap-2',
-            size === 'sm' && 'typo-body-14',
+            'flex flex-1 items-center gap-2',
+            size === 'sm' ? 'typo-body-14' : 'typo-body-16',
             !hasCheckbox && 'py-4'
           )}
         >

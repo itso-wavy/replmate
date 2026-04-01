@@ -1,23 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-
 import { CheckCircle2, CircleX } from 'lucide-react';
 
 import { TermsAccordionItem } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { TERMS_CONFIG } from '@/constants/terms';
-import { dummyNotificationSettings } from '@/dummy/account';
-import { useTermsList } from '@/hooks/useTerms';
 import { formatDate } from '@/lib/utils';
-import { UserStore } from '@/store/userStore';
 
 import {
   InnerPageLayout,
   InnerPageRow,
   InnerPageSection,
 } from '../_components';
+import { useAccountPage } from './_hooks/useAccountPage';
 
 const authProviderLabelMap: Record<string, string> = {
   google: 'Google 로그인',
@@ -26,27 +22,21 @@ const authProviderLabelMap: Record<string, string> = {
 };
 
 const AccountPage = () => {
-  const user = UserStore.useUser();
-  const { data: termsList } = useTermsList();
-
-  const [expandedTerms, setExpandedTerms] = useState<Set<string>>(new Set());
-  const toggleExpand = (type: string) =>
-    setExpandedTerms((prev) => {
-      const next = new Set(prev);
-      next.has(type) ? next.delete(type) : next.add(type);
-      return next;
-    });
-
-  const [emailEnabled, setEmailEnabled] = useState(
-    dummyNotificationSettings.emailEnabled
-  );
-  const [smsEnabled, setSmsEnabled] = useState(
-    dummyNotificationSettings.smsEnabled
-  );
-
-  const handleUserVerify = () => {};
-  const handleAlarmSettingSave = () => {};
-  const handleUserWithdraw = () => {};
+  const {
+    user,
+    termsList,
+    expandedTerms,
+    toggleExpand,
+    emailEnabled,
+    smsEnabled,
+    isUpdatingNotification,
+    handleEmailToggle,
+    handleSmsToggle,
+    isVerifying,
+    handleUserVerify,
+    isDeleting,
+    handleUserWithdraw,
+  } = useAccountPage();
 
   return (
     <InnerPageLayout heading='계정 관리'>
@@ -93,7 +83,11 @@ const AccountPage = () => {
                 <CircleX size={16} />
                 미인증
               </p>
-              <Button onClick={handleUserVerify} className='min-w-[80px]'>
+              <Button
+                onClick={handleUserVerify}
+                disabled={isVerifying}
+                className='min-w-[80px]'
+              >
                 본인인증
               </Button>
             </>
@@ -103,33 +97,23 @@ const AccountPage = () => {
 
       {/* 마케팅 및 알림 설정 */}
       <InnerPageSection heading='마케팅 및 알림 설정'>
-        <form className='flex flex-col space-y-4 rounded-xl border px-4 py-4'>
-          <InnerPageRow
-            label='이메일 수신'
-            className='justify-between *:first:font-medium'
-          >
-            <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
-          </InnerPageRow>
-          <InnerPageRow
-            label='SMS 문자 수신'
-            className='justify-between *:first:font-medium'
-          >
-            <Switch checked={smsEnabled} onCheckedChange={setSmsEnabled} />
-          </InnerPageRow>
-
-          <div className='mt-1 flex items-center justify-end gap-2'>
-            <p className='typo-body-14 text-foreground-description'>
-              필수 고지 사항 및 중요 알림은 수신 동의와 관계 없이 발송됩니다.
-            </p>
-            <Button
-              onClick={handleAlarmSettingSave}
-              variant='outline'
-              className='min-w-[80px] border-0'
-            >
-              저장하기
-            </Button>
-          </div>
-        </form>
+        <InnerPageRow label='이메일 수신' className='justify-between'>
+          <Switch
+            checked={emailEnabled}
+            onCheckedChange={handleEmailToggle}
+            disabled={isUpdatingNotification}
+          />
+        </InnerPageRow>
+        <InnerPageRow label='SMS 문자 수신' className='justify-between'>
+          <Switch
+            checked={smsEnabled}
+            onCheckedChange={handleSmsToggle}
+            disabled={isUpdatingNotification}
+          />
+        </InnerPageRow>
+        <p className='typo-body-14 text-foreground-description-muted'>
+          필수 고지 사항 및 중요 알림은 수신 동의와 관계 없이 발송됩니다.
+        </p>
       </InnerPageSection>
 
       {/* 약관 */}
@@ -156,6 +140,7 @@ const AccountPage = () => {
           </p>
           <Button
             onClick={handleUserWithdraw}
+            disabled={isDeleting}
             variant='ghost'
             className='bg-input/30 text-destructive hover:text-destructive/80 min-w-[80px] shrink-0'
           >
