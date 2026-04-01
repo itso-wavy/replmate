@@ -1,7 +1,6 @@
 import type { Alert } from '@/types/domain/alert';
 import type { ReminderDomain } from '@/types/domain/reminder';
 import { AlertType } from '@/types/enums';
-import type { ReminderEvent } from '@/types/enums';
 
 export const alertsConfig: Record<AlertType, Alert> = {
   [AlertType.PAYMENT_FAILED]: {
