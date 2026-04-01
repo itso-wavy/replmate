@@ -9,15 +9,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import TablePagination from '@/components/global/TablePagination';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Table,
   TableBody,
@@ -43,10 +37,10 @@ const StoreProductsTable = ({
   products,
   selectedIds,
   onToggle,
+  isLoading,
   currentPage,
   totalPages,
   onPageChange,
-  isLoading,
 }: StoreProductsTableProps) => {
   const columns: ColumnDef<ProductDomain>[] = useMemo(
     () => [
@@ -160,7 +154,7 @@ const StoreProductsTable = ({
                 colSpan={columns.length}
                 className='typo-body-14 text-muted-foreground h-[400px] text-center'
               >
-                불러오는 중...
+                <Spinner className='mx-auto size-6' />
               </TableCell>
             </TableRow>
           ) : table.getRowModel().rows?.length ? (
@@ -186,44 +180,11 @@ const StoreProductsTable = ({
         </TableBody>
       </Table>
 
-      <div className='py-4'>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className='hover:bg-accent cursor-pointer'
-                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              />
-            </PaginationItem>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-              if (
-                page === 1 ||
-                page === totalPages ||
-                (page >= currentPage - 2 && page <= currentPage + 2)
-              ) {
-                return (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      isActive={page === currentPage}
-                      onClick={() => onPageChange(page)}
-                      className='cursor-pointer'
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              }
-              return null;
-            })}
-            <PaginationItem>
-              <PaginationNext
-                className='hover:bg-accent cursor-pointer'
-                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+      <TablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
     </>
   );
 };

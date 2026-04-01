@@ -75,10 +75,10 @@ const ProductsPage = () => {
             products={products}
             selectedIds={selectedIds}
             onToggle={handleToggle}
+            isLoading={isLoading}
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
-            isLoading={isLoading}
           />
 
           {isDirty && (
