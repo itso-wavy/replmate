@@ -1,6 +1,7 @@
 /**
  * 이메일 링크 생성 유틸리티
  */
+import { COMPANY_META_INFO } from '@/constants/company';
 
 interface CreateMailtoLinkOptions {
   subject?: string;
@@ -40,7 +41,7 @@ export const openMailtoLink = (
 };
 
 export const openReplmateSupportEmail = () => {
-  openMailtoLink('support@replmate.com', {
+  openMailtoLink(COMPANY_META_INFO.EMAIL, {
     subject: '[리플메이트]_고객_문의',
   });
 };

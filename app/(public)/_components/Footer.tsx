@@ -6,6 +6,7 @@ import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 
 import Logo from '@/components/global/Logo';
 import { TermModal } from '@/components/modal';
+import { COMPANY_META_INFO } from '@/constants/company';
 import { openReplmateSupportEmail } from '@/lib/utils';
 import { TermsType } from '@/types';
 
@@ -25,15 +26,17 @@ const Footer = () => {
           />
 
           <div className='space-y-2 select-text'>
-            <p className='font-semibold'>(주) 리플메이트</p>
+            <p className='font-semibold'>{COMPANY_META_INFO.COMPANY_NAME}</p>
             <div className='space-y-0.5'>
               <p>
-                대표: 정태준 | 사업자등록번호: 123-45-67890 | 통신판매업신고:
-                2024-서울강남-0000
+                대표: {COMPANY_META_INFO.REPRESENTATIVE} | 사업자등록번호:{' '}
+                {COMPANY_META_INFO.BUSINESS_REGISTRATION_NUMBER} |
+                통신판매업신고:
+                {COMPANY_META_INFO.MAIL_ORDER_BUSINESS_REPORT_NUMBER}
               </p>
-              <p>주소: 서울특별시 강남구 테헤란로 123, 리플타워 4층</p>
+              <p>주소: {COMPANY_META_INFO.ADDRESS}</p>
             </div>
-            <p className='pt-2'>© 2025 Replmate. All rights reserved.</p>
+            <p className='pt-2'>© 2026 Replmate. All rights reserved.</p>
           </div>
         </div>
 
@@ -44,7 +47,7 @@ const Footer = () => {
               className='mr-2 group-hover:text-gray-400/90'
             />
             <p onClick={openReplmateSupportEmail} className='flex items-start'>
-              이메일 문의: support@replmate.com
+              이메일 문의: {COMPANY_META_INFO.EMAIL}
             </p>
           </div>
 
