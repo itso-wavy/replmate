@@ -1,21 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { dummyRepliesByStore } from '@/dummy';
-import { useMyStores } from '@/hooks';
 import { useReplies } from '@/hooks/useReplies';
-import { getActiveStoreList } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
 
 export function useReplysPage({ PAGE_SIZE }: { PAGE_SIZE: number }) {
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { setSelectedStore } = StoreStore.useActions();
   const [currentPage, setCurrentPage] = useState(1);
-
-  const { data: myStoresData } = useMyStores();
-  const stores = myStoresData?.stores ?? [];
-
-  const activeStores = useMemo(() => getActiveStoreList(stores), [stores]);
-  const hasStores = activeStores.length > 0;
 
   // 스토어 변경 시 페이지 초기화
   useEffect(() => {
@@ -33,7 +24,6 @@ export function useReplysPage({ PAGE_SIZE }: { PAGE_SIZE: number }) {
   };
 
   return {
-    hasStores,
     replies: data?.items ?? [],
     isLoading,
     currentPage,

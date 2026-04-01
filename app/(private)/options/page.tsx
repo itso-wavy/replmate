@@ -1,14 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { UnsavedProductChangesModal } from '@/components/modal';
 import { Card } from '@/components/ui/card';
-import { alertsConfig, toAlert } from '@/constants/alerts';
-import { useReminders } from '@/hooks/useReminders';
 import { formatDate } from '@/lib/utils';
-import type { Alert } from '@/types';
-import { AlertType } from '@/types/enums';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import { AiReplyPreview, OptionSettings } from './_components';
@@ -16,7 +10,6 @@ import { useOptionsPage } from './_hooks/useOptionsPage';
 
 const OptionsPage = () => {
   const {
-    hasStores,
     handleStoreChange,
     replyTone,
     setReplyTone,
@@ -42,30 +35,10 @@ const OptionsPage = () => {
     handleSaveAndLeave,
   } = useOptionsPage();
 
-  const { data: remindersData } = useReminders();
-
-  const alerts = useMemo<Alert[]>(() => {
-    const result: Alert[] = [];
-
-    if (!hasStores) {
-      result.push(alertsConfig[AlertType.STORE_CONNECTION_REQUIRED]);
-    }
-
-    if (remindersData) {
-      remindersData.forEach((r) => {
-        const alert = toAlert(r);
-        if (alert) result.push(alert);
-      });
-    }
-
-    return result;
-  }, [hasStores, remindersData]);
-
   return (
     <DashboardLayout
       heading='리플 옵션'
       description='설정한 옵션은 다음 리플 생성 시점부터 적용됩니다.'
-      alerts={alerts}
     >
       <Card className='flex flex-1 flex-col gap-0 overflow-visible px-0 py-0 *:px-4'>
         {/* Controls Bar */}

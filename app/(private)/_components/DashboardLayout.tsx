@@ -1,13 +1,16 @@
+'use client';
+
 import { PropsWithChildren } from 'react';
 
 import { AlertCircle } from 'lucide-react';
 
-import CustomAlert from '@/components/global/CustomAlert';
+import { CustomAlert } from '@/components/global';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useAlerts } from '@/hooks/useAlerts';
 import { cn } from '@/lib/utils';
 import { Alert } from '@/types';
 
@@ -21,10 +24,13 @@ interface DashboardLayoutProps {
 export const DashboardLayout = ({
   heading,
   description,
-  alerts = [],
+  alerts: propAlerts,
   className,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
+  const internalAlerts = useAlerts();
+  const alerts = propAlerts ?? internalAlerts;
+
   return (
     <div className={cn('text-foreground relative mx-auto py-5', className)}>
       <div className='border-border w-full space-y-2 border-b px-7 py-5'>
@@ -37,12 +43,11 @@ export const DashboardLayout = ({
       <div className='flex flex-col gap-4 px-4 py-4'>
         {alerts?.length > 0 && (
           <div className='flex flex-col space-y-1'>
-            {alerts &&
-              alerts.map((alert) => {
-                const { createdAt, ...rest } = alert;
+            {alerts.map((alert) => {
+              const { createdAt, ...rest } = alert;
 
-                return <CustomAlert key={alert.id} {...rest} />;
-              })}
+              return <CustomAlert key={alert.id} {...rest} />;
+            })}
           </div>
         )}
         {children}

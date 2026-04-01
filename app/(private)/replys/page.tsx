@@ -1,11 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { Card } from '@/components/ui/card';
-import { alertsConfig, toAlert } from '@/constants/alerts';
-import { useReminders } from '@/hooks';
-import { Alert, AlertType } from '@/types';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import { StoreReplysTable } from './_components';
@@ -13,7 +8,6 @@ import { useReplysPage } from './_hooks/useReplysPage';
 
 const ReplysPage = () => {
   const {
-    hasStores,
     replies,
     isLoading,
     currentPage,
@@ -24,30 +18,10 @@ const ReplysPage = () => {
     PAGE_SIZE: 20,
   });
 
-  const { data: remindersData } = useReminders();
-
-  const alerts = useMemo<Alert[]>(() => {
-    const result: Alert[] = [];
-
-    if (!hasStores) {
-      result.push(alertsConfig[AlertType.STORE_CONNECTION_REQUIRED]);
-    }
-
-    if (remindersData) {
-      remindersData.forEach((r) => {
-        const alert = toAlert(r);
-        if (alert) result.push(alert);
-      });
-    }
-
-    return result;
-  }, [hasStores, remindersData]);
-
   return (
     <DashboardLayout
       heading='리플 확인'
       description='매일 오전 6시에 새로운 리플이 업데이트됩니다.'
-      alerts={alerts}
     >
       <Card className='flex flex-1 flex-col gap-0 overflow-visible px-0 py-0 *:px-4'>
         {/* Controls Bar */}

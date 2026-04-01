@@ -1,16 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import {
   ProductSaveConfirmModal,
   RecommandPlanUpgradeModal,
   UnsavedProductChangesModal,
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
-import { toAlert } from '@/constants/alerts';
-import { useReminders } from '@/hooks/useReminders';
-import type { Alert } from '@/types';
+import { dummyProductsByStore } from '@/dummy/products';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import {
@@ -21,16 +17,6 @@ import {
 import { useProductsPage } from './_hooks/useProductsPage';
 
 const ProductsPage = () => {
-  const { data: reminders = [] } = useReminders();
-  const alerts = useMemo<Alert[]>(
-    () =>
-      reminders.flatMap((r) => {
-        const alert = toAlert(r);
-        return alert ? [alert] : [];
-      }),
-    [reminders]
-  );
-
   const {
     products,
     selectedIds,
@@ -57,7 +43,6 @@ const ProductsPage = () => {
     <DashboardLayout
       heading='상품 관리'
       description='리플을 자동 생성할 상품을 선택해 주세요.'
-      alerts={alerts}
     >
       <Card className='flex flex-1 flex-col gap-0 overflow-visible px-0 py-0 *:px-4'>
         {/* Controls Bar */}
@@ -72,7 +57,7 @@ const ProductsPage = () => {
 
         <div className='relative'>
           <StoreProductsTable
-            products={products}
+            products={dummyProductsByStore[1]} // FIXME: 더미데이터 실데이터로 교체
             selectedIds={selectedIds}
             onToggle={handleToggle}
             isLoading={isLoading}

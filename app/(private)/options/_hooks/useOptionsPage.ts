@@ -8,16 +8,14 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 
-import { useTestReply } from '@/hooks/useReplies';
 import {
-  useMyStores,
   useReplyOptions,
+  useTestQuota,
+  useTestReply,
   useUpdateReplyOptions,
-} from '@/hooks/useStores';
-import { useTestQuota } from '@/hooks/useUsage';
+} from '@/hooks';
 import { queryKeys } from '@/lib/queryKeys';
-import { getActiveStoreList } from '@/lib/utils';
-import { streamJob } from '@/services/job';
+import { streamJob } from '@/services';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { StoreStore } from '@/store/storeStore';
 import { ReplyLength, ReplyTone } from '@/types';
@@ -39,11 +37,6 @@ export function useOptionsPage() {
   const { setSelectedStore } = StoreStore.useActions();
 
   // --- 데이터 조회 ---
-  const { data: myStoresData } = useMyStores();
-  const stores = myStoresData?.stores ?? [];
-  const activeStores = useMemo(() => getActiveStoreList(stores), [stores]);
-  const hasStores = activeStores.length > 0;
-
   const { data: replyOptions, isLoading: isOptionsLoading } = useReplyOptions(
     selectedStoreId ?? 0
   );
@@ -290,7 +283,6 @@ export function useOptionsPage() {
 
   return {
     // 스토어
-    hasStores,
     handleStoreChange,
 
     // 옵션 상태

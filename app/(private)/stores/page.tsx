@@ -16,7 +16,6 @@ const StoresPage = () => {
     storeQuotaTotal,
     needsAdjustment,
     storeLimitExceeded,
-    alerts,
   } = useStoresPage();
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const StoresPage = () => {
           </span>
         </span>
       }
-      alerts={alerts}
     >
       <div className='grid auto-rows-[minmax(315px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
         {sortedStores.map((store) => (

@@ -1,18 +1,13 @@
 import { useMemo } from 'react';
 
-import { toAlert } from '@/constants/alerts';
-import { useReminders } from '@/hooks/useReminders';
 import { useMyStores } from '@/hooks/useStores';
 import { useUserPlan } from '@/hooks/useUser';
 import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
-import type { Alert } from '@/types';
 
 export function useStoresPage() {
   const { data: myStoresData, isLoading: isStoresLoading } = useMyStores();
   const stores = myStoresData?.stores ?? [];
   const { data: planData, isLoading: isPlanLoading } = useUserPlan();
-  const { data: reminders = [] } = useReminders();
-
   const sortedStores = useMemo(() => sortStoreList(stores), [stores]);
 
   const registeredStoreCount = useMemo(
@@ -30,22 +25,12 @@ export function useStoresPage() {
   const storeLimitExceeded =
     storeQuotaTotal > 0 && registeredStoreCount >= storeQuotaTotal;
 
-  const alerts = useMemo<Alert[]>(
-    () =>
-      reminders.flatMap((r) => {
-        const alert = toAlert(r);
-        return alert ? [alert] : [];
-      }),
-    [reminders]
-  );
-
   return {
     sortedStores,
     registeredStoreCount,
     storeQuotaTotal,
     needsAdjustment,
     storeLimitExceeded,
-    alerts,
     isLoading: isStoresLoading || isPlanLoading,
   };
 }

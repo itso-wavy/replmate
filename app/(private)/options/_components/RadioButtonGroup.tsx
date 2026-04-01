@@ -13,8 +13,6 @@ const RadioButtonGroup = <T extends string | number>({
   value: T;
   onValueChange: (value: T) => void;
 }) => {
-  // const vals = Object.values<T>(options);
-
   return (
     <RadioGroup
       value={String(value)}

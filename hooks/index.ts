@@ -1,4 +1,5 @@
 export * from './useActiveSection';
+export * from './useAlerts';
 export * from './usePlans';
 export * from './useProducts';
 export * from './useReminders';
