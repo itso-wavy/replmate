@@ -43,7 +43,9 @@ const DashboardPlanCard = ({
   return (
     <Item
       variant='muted'
-      onClick={() => router.push(!isIdentifyed ? '/account' : '/subscribe')}
+      onClick={() =>
+        router.push(!isIdentifyed ? '/settings/account' : '/settings/subscribe')
+      }
       className='group relative cursor-pointer p-6 transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>
@@ -144,7 +146,7 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/subscribe')}
+      onClick={() => router.push('/settings/subscribe')}
       className='group relative cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>
@@ -192,7 +194,7 @@ const DashboardStoresCard = ({ stores }: { stores: StoreDomain[] }) => {
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/subscribe')}
+      onClick={() => router.push('/settings/subscribe')}
       className='group relative cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>

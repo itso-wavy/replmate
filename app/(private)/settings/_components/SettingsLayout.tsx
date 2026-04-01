@@ -22,10 +22,10 @@ export const InnerPageSection = ({
   children,
 }: PropsWithChildren<SettingsLayoutProps>) => {
   return (
-    <section className='border-b-0.5 mb-8 flex flex-col pb-8 last:!border-b-0'>
-      <h3 className='typo-heading-18 mb-6'>{heading}</h3>
+    <section className='mb-8 border-b-[1px] pb-8 last:!border-b-0'>
+      <h3 className='bg-brand-50 typo-heading-18 mb-6'>{heading}</h3>
 
-      <div className='space-y-4'>{children}</div>
+      <div className='bg-brand-50 space-y-4'>{children}</div>
     </section>
   );
 };
