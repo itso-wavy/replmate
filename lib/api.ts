@@ -12,20 +12,6 @@ export const api = axios.create({
   withCredentials: true, // session_id 쿠키 자동 전송
 });
 
-// 디자인 모드: 모든 API 요청 차단, 빈 성공 응답 반환
-if (process.env.NEXT_PUBLIC_DESIGN_MODE === 'true') {
-  api.interceptors.request.use((config) => {
-    config.adapter = async () => ({
-      data: null,
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      config,
-    });
-    return config;
-  });
-}
-
 let isRedirecting = false;
 
 api.interceptors.response.use(
