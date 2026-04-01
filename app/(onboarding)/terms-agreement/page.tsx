@@ -4,44 +4,21 @@ import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 
-import { CaretDownIcon } from '@phosphor-icons/react/dist/ssr';
 import { signIn } from 'next-auth/react';
 
 import { PublicHeader } from '@/app/(public)/_components';
+import { TermsAccordionItem } from '@/components/global/TermsAccordionItem';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
+import { AUTH_PROVIDER_ID } from '@/constants/auth';
+import { TERMS_CONFIG } from '@/constants/terms';
 import { useTermsList } from '@/hooks/useTerms';
 import { useAgreeTerms } from '@/hooks/useUser';
-import { AUTH_PROVIDER_ID } from '@/constants/auth';
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
-import { cn } from '@/lib/utils';
 import type { UserDto } from '@/types/api/user';
 import { TermsType } from '@/types/enums';
-
-const TERMS_CONFIG = [
-  {
-    type: TermsType.TERMS_OF_SERVICE,
-    label: '서비스 이용약관',
-    required: true,
-  },
-  {
-    type: TermsType.PRIVACY_POLICY,
-    label: '개인정보 처리방침',
-    required: true,
-  },
-  {
-    type: TermsType.PERSONAL_INFO_COLLECTION,
-    label: '개인정보 수집 및 이용',
-    required: true,
-  },
-  {
-    type: TermsType.MARKETING_CONSENT,
-    label: '마케팅 정보 수신 동의',
-    required: false,
-  },
-] as const;
 
 const REQUIRED_TYPES = TERMS_CONFIG.filter((t) => t.required).map(
   (t) => t.type
@@ -109,7 +86,7 @@ export default function TermsAgreementPage() {
     <>
       <PublicHeader />
 
-      <main className='wrapper flex min-h-svh flex-1 items-center justify-center'>
+      <main className='wrapper flex min-h-svh flex-1 flex-col overflow-y-auto py-16'>
         {isLoading && (
           <div className='grid place-content-center'>
             <Spinner />
@@ -117,7 +94,7 @@ export default function TermsAgreementPage() {
         )}
 
         {!isLoading && (
-          <div className='relative flex w-[520px] flex-col'>
+          <div className='relative mx-auto flex w-[520px] flex-col'>
             <div>
               <h1 className='text-foreground typo-display-32'>약관동의</h1>
               <p className='typo-body-16 text-muted-foreground pt-2'>
@@ -141,66 +118,17 @@ export default function TermsAgreementPage() {
               {/* Terms List */}
               <div className='mx-6 mt-2 divide-y'>
                 {TERMS_CONFIG.map(({ type, label, required }) => (
-                  <div key={type}>
-                    {/* Term Row: 행 전체 클릭 → expand 토글 */}
-                    <div
-                      className='flex cursor-pointer items-center gap-3'
-                      onClick={() => toggleExpand(type)}
-                    >
-                      <div
-                        className='flex items-center gap-3 py-4 pr-4'
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleCheck(type);
-                        }}
-                      >
-                        <Checkbox
-                          checked={checked.has(type)}
-                          onCheckedChange={() => toggleCheck(type)}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                        <div className='typo-body-15 flex items-center gap-2'>
-                          <span>{label}</span>
-                          <span
-                            className={cn(
-                              'typo-caption-12 rounded-full px-2 py-0.5',
-                              required
-                                ? 'bg-brand-50 text-brand-500'
-                                : 'text-muted-foreground bg-muted'
-                            )}
-                          >
-                            {required ? '필수' : '선택'}
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        type='button'
-                        aria-label={
-                          expanded.has(type) ? '약관 접기' : '약관 펼치기'
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleExpand(type);
-                        }}
-                        className='text-muted-foreground hover:text-foreground flex-1 p-1 transition-colors'
-                      >
-                        <CaretDownIcon
-                          size={16}
-                          className={cn(
-                            'ml-auto transition-transform duration-200',
-                            expanded.has(type) && 'rotate-180'
-                          )}
-                        />
-                      </button>
-                    </div>
-
-                    {/* Expanded Content */}
-                    {expanded.has(type) && (
-                      <div className='bg-muted/50 typo-body-14 text-muted-foreground mb-4 max-h-[240px] overflow-y-auto rounded-lg px-4 py-3 leading-relaxed whitespace-pre-wrap'>
-                        {termsList?.find((t) => t.type === type)?.content}
-                      </div>
-                    )}
-                  </div>
+                  <TermsAccordionItem
+                    key={type}
+                    label={label}
+                    required={required}
+                    showRequiredBadge
+                    content={termsList?.find((t) => t.type === type)?.content}
+                    isExpanded={expanded.has(type)}
+                    onToggleExpand={() => toggleExpand(type)}
+                    isChecked={checked.has(type)}
+                    onToggleCheck={() => toggleCheck(type)}
+                  />
                 ))}
               </div>
 
