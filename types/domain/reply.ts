@@ -1,7 +1,7 @@
 import type { Pagination } from '@/types/api/common';
 import type { ReplyDto, ReviewDto, SentimentType } from '@/types/api/reply';
 
-import { toProductDomain, type ProductDomain } from './product';
+import { type ProductDomain, toProductDomain } from './product';
 
 export interface ReviewDomain {
   id: number;

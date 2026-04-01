@@ -1,10 +1,10 @@
 import { Star } from 'lucide-react';
 
+import { SentimentBadge } from '@/components/global';
 import { formatDate } from '@/lib/utils';
 import { ReplyDomain } from '@/types';
 
 import ReplyTextBox from './ReplyTextBox';
-import SentimentBadge from './SentimentBadge';
 
 const getItemsMetadata = (reply: ReplyDomain) => [
   { label: '상품 번호', value: reply.product.externalId },
@@ -44,17 +44,14 @@ const ReplyCard = ({ reply }: { reply: ReplyDomain }) => {
           </p>
         </div>
 
-        <SentimentBadge score={reply.sentimentScore} />
+        <SentimentBadge score={reply.sentimentLevel} />
       </div>
 
       <div className='typo-body-14 mt-2.5 mb-3 px-2 whitespace-pre-line select-all'>
         {reply.review.content}
       </div>
 
-      <ReplyTextBox
-        text={reply.editedText ?? reply.aiText}
-        createdAt={reply.createdAt}
-      />
+      <ReplyTextBox text={reply.aiText} createdAt={reply.createdAt} />
     </div>
   );
 };
