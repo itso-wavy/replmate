@@ -93,7 +93,9 @@ const AccountPage = () => {
                 <CircleX size={16} />
                 미인증
               </p>
-              <Button onClick={handleUserVerify}>본인인증</Button>
+              <Button onClick={handleUserVerify} className='min-w-[80px]'>
+                본인인증
+              </Button>
             </>
           )}
         </div>
@@ -101,19 +103,29 @@ const AccountPage = () => {
 
       {/* 마케팅 및 알림 설정 */}
       <InnerPageSection heading='마케팅 및 알림 설정'>
-        <form className='flex flex-col space-y-4'>
-          <InnerPageRow label='이메일 수신' className='justify-between'>
+        <form className='flex flex-col space-y-4 rounded-xl border px-4 py-4'>
+          <InnerPageRow
+            label='이메일 수신'
+            className='justify-between *:first:font-medium'
+          >
             <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
           </InnerPageRow>
-          <InnerPageRow label='SMS 문자 수신' className='justify-between'>
+          <InnerPageRow
+            label='SMS 문자 수신'
+            className='justify-between *:first:font-medium'
+          >
             <Switch checked={smsEnabled} onCheckedChange={setSmsEnabled} />
           </InnerPageRow>
 
-          <div className='flex items-center justify-end gap-2'>
+          <div className='mt-1 flex items-center justify-end gap-2'>
             <p className='typo-body-14 text-foreground-description'>
               필수 고지 사항 및 중요 알림은 수신 동의와 관계 없이 발송됩니다.
             </p>
-            <Button onClick={handleAlarmSettingSave} className='w-fit'>
+            <Button
+              onClick={handleAlarmSettingSave}
+              variant='outline'
+              className='min-w-[80px] border-0'
+            >
               저장하기
             </Button>
           </div>
@@ -145,7 +157,7 @@ const AccountPage = () => {
           <Button
             onClick={handleUserWithdraw}
             variant='ghost'
-            className='bg-input/30 text-destructive hover:text-destructive/80 shrink-0'
+            className='bg-input/30 text-destructive hover:text-destructive/80 min-w-[80px] shrink-0'
           >
             탈퇴하기
           </Button>
