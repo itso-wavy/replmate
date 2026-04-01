@@ -1,4 +1,4 @@
-import TextAreaWithCount from '@/components/global/TextAreaWithCount';
+import { TextAreaWithCount } from '@/components/global';
 import {
   ReplyLength,
   ReplyTone,
@@ -79,21 +79,6 @@ const OptionSettings = ({
           />
           <SliderWithLabels value={length} onChange={setLength} />
         </div>
-
-        {/* <div className='flex flex-col'>
-          <SubtitleWithTooltip
-            title='이모지 사용'
-            tooltip={`포함 선택 시, 문맥에 어울리는 이모지를\n최대 2개까지 문장에 자동으로 추가합니다.`}
-          />
-          <RadioButtonGroup
-            options={replyEmojiOptions.map((o) => String(o.value))}
-            optionsMap={Object.fromEntries(
-              replyEmojiOptions.map((o) => [String(o.value), o.label])
-            )}
-            value={String(includeEmoji)}
-            onValueChange={(v) => setIncludeEmoji(v === 'true')}
-          />
-        </div> */}
 
         <div className='flex flex-col gap-3'>
           <SubtitleWithTooltip

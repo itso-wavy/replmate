@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { ListIcon } from '@phosphor-icons/react/dist/ssr';
 
-import Logo from '@/components/global/Logo';
+import { Logo } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import { SECTION_ID } from '@/constants/nav-menu';
 import { useActiveSection } from '@/hooks/useActiveSection';

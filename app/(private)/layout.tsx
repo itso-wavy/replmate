@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from '@/components/global/Logo';
+import { Logo } from '@/components/global';
 import { DASHBOARD_MENU } from '@/constants/nav-menu';
 
 import { PrivateHeader, SessionSync } from './_components';

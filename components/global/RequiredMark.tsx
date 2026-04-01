@@ -6,7 +6,7 @@ type RequiredMarkProps = ComponentProps<'span'> & {
   label?: string;
 };
 
-export const RequiredMark = ({
+const RequiredMark = ({
   className,
   label = 'Required',
   ...props
@@ -24,3 +24,5 @@ export const RequiredMark = ({
     </span>
   );
 };
+
+export default RequiredMark;

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 
-import Logo from '@/components/global/Logo';
+import { Logo } from '@/components/global';
 import { TermModal } from '@/components/modal';
 import { COMPANY_META_INFO } from '@/constants/company';
 import { openReplmateSupportEmail } from '@/lib/utils';

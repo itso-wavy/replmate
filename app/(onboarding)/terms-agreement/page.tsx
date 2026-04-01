@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 
 import { PublicHeader } from '@/app/(public)/_components';
-import { TermsAccordionItem } from '@/components/global/TermsAccordionItem';
+import { TermsAccordionItem } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';

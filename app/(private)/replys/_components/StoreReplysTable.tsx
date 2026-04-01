@@ -1,6 +1,6 @@
 'use client';
 
-import TablePagination from '@/components/global/TablePagination';
+import { TablePagination } from '@/components/global';
 import { Spinner } from '@/components/ui/spinner';
 import type { ReplyDomain } from '@/types';
 

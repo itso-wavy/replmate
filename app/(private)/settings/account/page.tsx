@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { CheckCircle2, CircleX } from 'lucide-react';
 
-import { TermsAccordionItem } from '@/components/global/TermsAccordionItem';
+import { TermsAccordionItem } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { TERMS_CONFIG } from '@/constants/terms';

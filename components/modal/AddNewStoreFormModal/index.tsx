@@ -2,7 +2,7 @@
 
 import { Controller } from 'react-hook-form';
 
-import { RequiredMark } from '@/components/global/RequiredMark';
+import { RequiredMark } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

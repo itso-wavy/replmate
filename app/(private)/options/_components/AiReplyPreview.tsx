@@ -2,7 +2,7 @@
 
 import { Save } from 'lucide-react';
 
-import TextAreaWithCount from '@/components/global/TextAreaWithCount';
+import { TextAreaWithCount } from '@/components/global';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 

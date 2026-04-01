@@ -21,7 +21,7 @@ interface TermsAccordionItemProps {
   isLoadingContent?: boolean;
 }
 
-export const TermsAccordionItem = ({
+const TermsAccordionItem = ({
   size = 'default',
   label,
   content,
@@ -106,3 +106,5 @@ export const TermsAccordionItem = ({
     </div>
   );
 };
+
+export default TermsAccordionItem;

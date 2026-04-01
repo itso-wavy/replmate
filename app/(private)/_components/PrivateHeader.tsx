@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { LogOut, Settings } from 'lucide-react';
 
 import { ProfileSvg } from '@/assets/svg';
-import Logo from '@/components/global/Logo';
+import { Logo } from '@/components/global';
 import { LogoutModal } from '@/components/modal';
 import {
   DropdownMenu,
@@ -86,7 +86,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
             <DropdownMenuGroup>
               <DropdownMenuLabel className='pb-1.5'>Email</DropdownMenuLabel>
               <div className='typo-link-14 text-primary px-3 pb-2 wrap-break-word'>
-                {user?.email ?? ''}
+                {user?.email ?? '-'}
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem

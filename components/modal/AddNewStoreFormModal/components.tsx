@@ -2,7 +2,7 @@ import { ControllerRenderProps, FieldError } from 'react-hook-form';
 
 import { CloudUpload, X } from 'lucide-react';
 
-import { RequiredMark } from '@/components/global/RequiredMark';
+import { RequiredMark } from '@/components/global';
 import {
   Field,
   FieldDescription,
