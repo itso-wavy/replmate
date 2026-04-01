@@ -59,7 +59,7 @@ export const TermsAccordionItem = ({
 
         <div
           className={cn(
-            'typo-body-15 flex flex-1 items-center gap-2',
+            'typo-body-16 flex flex-1 items-center gap-2',
             size === 'sm' && 'typo-body-14',
             !hasCheckbox && 'py-4'
           )}
