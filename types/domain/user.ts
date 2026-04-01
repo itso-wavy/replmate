@@ -4,6 +4,8 @@ import type {
   UserDto,
 } from '@/types/api/user';
 
+import { AuthProvider } from '@/types/enums';
+
 import type { PlanDomain } from './plan';
 
 // Re-export PlanDomain for convenience
@@ -16,8 +18,6 @@ export type { PlanDomain };
 /**
  * 사용자 도메인 모델
  */
-export type AuthProvider = 'kakao' | 'naver' | 'google';
-
 export interface UserDomain {
   id: number;
   email: string | null;
@@ -73,6 +73,7 @@ export interface NotificationSettingsDomain {
 export function toUserDomain(dto: UserDto): UserDomain {
   return {
     ...dto,
+    authProvider: dto.authProvider as AuthProvider | null,
     verifiedAt: dto.verifiedAt ? new Date(dto.verifiedAt) : null,
     createdAt: new Date(dto.createdAt),
     updatedAt: new Date(dto.updatedAt),
