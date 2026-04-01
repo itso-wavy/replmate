@@ -20,7 +20,7 @@ export type ProductModalType =
   | 'unsavedChanges'
   | null;
 
-function setsEqual(a: Set<string>, b: Set<string>) {
+function setsEqual(a: Set<number>, b: Set<number>) {
   if (a.size !== b.size) return false;
   for (const id of a) {
     if (!b.has(id)) return false;
@@ -41,8 +41,8 @@ export function useProductsPage() {
   const maxAllowed = planData?.plan.maxProductPerStore ?? 0;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [initialIds, setInitialIds] = useState<Set<string>>(new Set());
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [initialIds, setInitialIds] = useState<Set<number>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [activeModal, setActiveModal] = useState<ProductModalType>(null);
 
@@ -69,7 +69,7 @@ export function useProductsPage() {
   useEffect(() => {
     if (!productData?.items) return;
     const targetIds = new Set(
-      productData.items.filter((p) => p.isTarget).map((p) => p.id.toString())
+      productData.items.filter((p) => p.isTarget).map((p) => p.id)
     );
     setInitialIds(targetIds);
     setSelectedIds(new Set(targetIds));
@@ -85,9 +85,7 @@ export function useProductsPage() {
   const { setGuard, clearGuard, clearPending } =
     NavigationGuardStore.useActions();
 
-  const { mutateAsync: updateProduct } = useUpdateProduct(
-    selectedStoreId ?? 0
-  );
+  const { mutateAsync: updateProduct } = useUpdateProduct(selectedStoreId ?? 0);
 
   const performSave = useCallback(async () => {
     const added = [...selectedIds].filter((id) => !initialIds.has(id));
@@ -95,10 +93,10 @@ export function useProductsPage() {
 
     await Promise.all([
       ...added.map((id) =>
-        updateProduct({ productId: Number(id), data: { isTarget: true } })
+        updateProduct({ productId: id, data: { isTarget: true } })
       ),
       ...removed.map((id) =>
-        updateProduct({ productId: Number(id), data: { isTarget: false } })
+        updateProduct({ productId: id, data: { isTarget: false } })
       ),
     ]);
 
@@ -123,7 +121,7 @@ export function useProductsPage() {
     }
   }, [pendingUrl, isDirty]);
 
-  const handleToggle = (id: string) => {
+  const handleToggle = (id: number) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -140,6 +138,11 @@ export function useProductsPage() {
   };
 
   const handleSave = () => {
+    if (!selectedStoreId) {
+      toast.error('쇼핑몰을 먼저 선택해 주세요.');
+      return;
+    }
+
     if (selectedIds.size > maxAllowed) {
       setActiveModal('limitExceeded');
       return;
@@ -180,6 +183,11 @@ export function useProductsPage() {
   };
 
   const handleSaveAndLeave = async () => {
+    if (!selectedStoreId) {
+      toast.error('쇼핑몰을 먼저 선택해 주세요.');
+      return;
+    }
+
     try {
       await performSave();
       toast.success('저장이 완료되었습니다.');

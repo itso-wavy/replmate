@@ -57,7 +57,7 @@ const ProductsPage = () => {
 
         <div className='relative'>
           <StoreProductsTable
-            products={dummyProductsByStore[1]} // FIXME: 더미데이터 실데이터로 교체
+            products={products}
             selectedIds={selectedIds}
             onToggle={handleToggle}
             isLoading={isLoading}

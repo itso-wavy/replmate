@@ -9,6 +9,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import { Star } from 'lucide-react';
+
 import { TablePagination } from '@/components/global';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
@@ -25,8 +27,8 @@ import { ProductDomain } from '@/types';
 
 interface StoreProductsTableProps {
   products: ProductDomain[];
-  selectedIds: Set<string>;
-  onToggle: (id: string) => void;
+  selectedIds: Set<number>;
+  onToggle: (id: number) => void;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -48,10 +50,12 @@ const StoreProductsTable = ({
         id: 'select',
         header: () => null,
         cell: ({ row }) => (
-          <Checkbox
-            checked={selectedIds.has(row.original.id.toString())}
-            onCheckedChange={() => onToggle(row.original.id.toString())}
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              checked={selectedIds.has(row.original.id)}
+              onCheckedChange={() => onToggle(row.original.id)}
+            />
+          </div>
         ),
         size: 1,
       },
@@ -67,10 +71,14 @@ const StoreProductsTable = ({
         header: '상품명',
         accessorFn: (row) => row.name,
         cell: ({ getValue }) => (
-          <div className='truncate' title={getValue() as string}>
+          <div
+            className='truncate font-medium hover:overflow-visible hover:break-words hover:whitespace-normal'
+            title={getValue() as string}
+          >
             {getValue() as string}
           </div>
         ),
+
         size: 8,
       },
       {
@@ -97,9 +105,14 @@ const StoreProductsTable = ({
           };
           if (avgRating === null) return <div>-</div>;
           return (
-            <div>
-              ★ {avgRating.toFixed(1)}
-              {reviewCount !== null && `(${reviewCount.toLocaleString()})`}
+            <div className='flex items-center gap-1'>
+              <Star className='fill-foreground mb-px' size={14} />
+              <span className='font-medium'>{avgRating.toFixed(1)}</span>
+              {reviewCount !== null && (
+                <span className='text-muted-foreground text-xs'>
+                  ({reviewCount.toLocaleString()})
+                </span>
+              )}
             </div>
           );
         },
@@ -166,7 +179,11 @@ const StoreProductsTable = ({
             </TableRow>
           ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                className='cursor-pointer'
+                onClick={() => onToggle(row.original.id)}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
