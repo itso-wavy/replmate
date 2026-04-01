@@ -86,7 +86,7 @@ export default function TermsAgreementPage() {
     <>
       <PublicHeader />
 
-      <main className='wrapper flex min-h-svh flex-1 flex-col overflow-y-auto py-16'>
+      <main className='wrapper mt-10 flex min-h-svh flex-1 flex-col overflow-y-auto py-16'>
         {isLoading && (
           <div className='grid place-content-center'>
             <Spinner />
@@ -94,7 +94,7 @@ export default function TermsAgreementPage() {
         )}
 
         {!isLoading && (
-          <div className='relative mx-auto flex w-[520px] flex-col'>
+          <div className='relative mx-auto my-auto flex w-[520px] flex-col'>
             <div>
               <h1 className='text-foreground typo-display-32'>약관동의</h1>
               <p className='typo-body-16 text-muted-foreground pt-2'>
