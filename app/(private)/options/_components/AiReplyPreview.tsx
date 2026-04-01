@@ -6,59 +6,50 @@ import TextAreaWithCount from '@/components/global/TextAreaWithCount';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-import { DashboardContentsTitle } from '../../_components';
+import { SubtitleWithTooltip } from '../../_components';
 
 const TEST_REVIEW_MAX = 100;
 
 interface AiReplyPreviewProps {
-  optionData: {
-    lastSaved: Date;
-    previewUsed: number;
-    previewLimit: number;
-  };
+  previewRemaining: number;
   testReview: string;
   setTestReview: (value: string) => void;
   testReviewPlaceholder: string;
   generatedReply: string;
   isGenerating: boolean;
   onGenerate: () => void;
+  isSaving: boolean;
   handleSave: () => void;
 }
 
 const AiReplyPreview = ({
-  optionData,
+  previewRemaining,
   testReview,
   setTestReview,
   testReviewPlaceholder,
   generatedReply,
   isGenerating,
   onGenerate,
+  isSaving,
   handleSave,
 }: AiReplyPreviewProps) => {
-  const isLimitReached = optionData.previewUsed >= optionData.previewLimit;
+  const isLimitReached = previewRemaining <= 0;
 
   return (
     <div>
-      <DashboardContentsTitle level='tertiary'>
-        리플 미리보기
-      </DashboardContentsTitle>
+      <h3 className='typo-heading-18 mb-5'>리플 미리보기</h3>
+
       <div className='flex flex-col'>
         <div className='flex flex-col gap-3'>
           <div className='flex items-center space-x-2'>
-            <DashboardContentsTitle level='quaternary'>
-              테스트 리뷰
-            </DashboardContentsTitle>
+            <SubtitleWithTooltip title='테스트 리뷰' />
 
             <p className='typo-caption-14 text-foreground-description'>
-              일일{' '}
+              잔여{' '}
               <span className='text-primary font-medium'>
-                {optionData.previewUsed}
+                {previewRemaining}
               </span>
-              <span className='mx-0.5'>/</span>
-              <span className='text-primary font-medium'>
-                {optionData.previewLimit}
-              </span>
-              회 사용
+              회
             </p>
           </div>
           <TextAreaWithCount
@@ -80,9 +71,7 @@ const AiReplyPreview = ({
         </div>
 
         <div className='mt-1 flex flex-col gap-3'>
-          <DashboardContentsTitle level='quaternary'>
-            AI 생성 리플
-          </DashboardContentsTitle>
+          <SubtitleWithTooltip title='AI 생성 리플' />
 
           <div className='border-primary/20 bg-primary/5 flex field-sizing-content min-h-[120px] resize-none rounded-xl border-2 p-5 px-4 py-3 transition-colors'>
             {isGenerating ? (
@@ -101,7 +90,7 @@ const AiReplyPreview = ({
           </div>
 
           <div className='mt-2 flex items-center justify-end'>
-            <Button onClick={handleSave}>
+            <Button onClick={handleSave} isPending={isSaving}>
               <Save />
               옵션 저장
             </Button>

@@ -7,7 +7,7 @@ import {
 } from '@/types';
 
 import { RadioButtonGroup, SliderWithLabels } from '.';
-import { DashboardContentsTitle, SubtitleWithTooltip } from '../../_components';
+import { SubtitleWithTooltip } from '../../_components';
 
 const BRAND_GUIDELINE_MAX = 500;
 
@@ -34,25 +34,39 @@ const OptionSettings = ({
 }: OptionSettingsProps) => {
   return (
     <div>
-      <DashboardContentsTitle level='tertiary'>
-        리플 스타일 옵션 설정
-      </DashboardContentsTitle>
+      <h3 className='typo-heading-18 mb-5'>리플 스타일 옵션 설정</h3>
 
       <div className='flex flex-col gap-8'>
-        <div className='flex flex-col'>
-          <SubtitleWithTooltip
-            title='톤앤매너'
-            tooltip={`생성될 리플의 말투를 결정합니다.
-                ㆍ친근하게: 부드러운 구어체 위주
-                ㆍ정중하게: 격식 있고 객관적인 사실 위주
-                ㆍ자동(맞춤): 리뷰 분위기에 맞춰 AI가 적절한 톤을 판단`}
-          />
-          <RadioButtonGroup
-            options={Object.values(ReplyTone)}
-            optionsMap={replyToneLabelMap}
-            value={replyTone}
-            onValueChange={setReplyTone}
-          />
+        <div className='flex gap-8'>
+          <div>
+            <SubtitleWithTooltip
+              title='톤앤매너'
+              tooltip={`생성될 리플의 말투를 결정합니다.
+                    ㆍ친근하게: 부드러운 구어체 위주
+                    ㆍ정중하게: 격식 있고 객관적인 사실 위주
+                    ㆍ자동(맞춤): 리뷰 분위기에 맞춰 AI가 적절한 톤을 판단`}
+            />
+            <RadioButtonGroup
+              options={Object.values(ReplyTone)}
+              optionsMap={replyToneLabelMap}
+              value={replyTone}
+              onValueChange={setReplyTone}
+            />
+          </div>
+          <div>
+            <SubtitleWithTooltip
+              title='이모지 사용'
+              tooltip={`포함 선택 시, 문맥에 어울리는 이모지를\n최대 2개까지 문장에 자동으로 추가합니다.`}
+            />
+            <RadioButtonGroup
+              options={replyEmojiOptions.map((o) => String(o.value))}
+              optionsMap={Object.fromEntries(
+                replyEmojiOptions.map((o) => [String(o.value), o.label])
+              )}
+              value={String(includeEmoji)}
+              onValueChange={(v) => setIncludeEmoji(v === 'true')}
+            />
+          </div>
         </div>
 
         <div className='flex flex-col'>
@@ -66,7 +80,7 @@ const OptionSettings = ({
           <SliderWithLabels value={length} onChange={setLength} />
         </div>
 
-        <div className='flex flex-col'>
+        {/* <div className='flex flex-col'>
           <SubtitleWithTooltip
             title='이모지 사용'
             tooltip={`포함 선택 시, 문맥에 어울리는 이모지를\n최대 2개까지 문장에 자동으로 추가합니다.`}
@@ -79,7 +93,7 @@ const OptionSettings = ({
             value={String(includeEmoji)}
             onValueChange={(v) => setIncludeEmoji(v === 'true')}
           />
-        </div>
+        </div> */}
 
         <div className='flex flex-col gap-3'>
           <SubtitleWithTooltip
