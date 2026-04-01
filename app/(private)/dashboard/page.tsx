@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { dummyRecentReplies } from '@/dummy/replies';
+import { useAlerts } from '@/hooks/useAlerts';
 import { UserStore } from '@/store/userStore';
 import { AlertType } from '@/types';
 import type { Alert } from '@/types';
@@ -32,14 +34,10 @@ const DashboardPage = () => {
   const router = useRouter();
   const user = UserStore.useUser();
 
-  const {
-    stores,
-    alerts,
-    subscription,
-    todayReplyCount,
-    recentReplies,
-    isLoading,
-  } = useDashboardPage();
+  const alerts = useAlerts();
+
+  const { stores, subscription, todayReplyCount, recentReplies, isLoading } =
+    useDashboardPage();
 
   if (isLoading || !subscription) {
     return (
@@ -79,7 +77,10 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          <RecentRepliesTable replies={recentReplies} />
+          <RecentRepliesTable
+            replies={dummyRecentReplies}
+            // FIXME: 더미데이터 실데이터로 교체
+          />
         </Card>
       </>
     </DashboardLayout>

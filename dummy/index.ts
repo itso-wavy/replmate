@@ -1,5 +1,5 @@
-export { dummyStores } from './stores';
-export { dummyProducts } from './products';
-export { dummyUsers } from './users';
-export { dummyPlans } from './plans';
-export { dummyRepliesByStore, getRepliesByStoreId } from './replies';
+export * from './stores';
+export * from './products';
+export * from './users';
+export * from './plans';
+export * from './replies';

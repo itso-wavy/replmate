@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import SentimentBadge from '@/components/global/SentimentBadge';
+import { SentimentBadge } from '@/components/global';
 import {
   Table,
   TableBody,
@@ -15,48 +15,36 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { formatDate } from '@/lib/utils';
-import { SentimentType } from '@/types';
-
-// Define your row shape
-export interface DashboardReply {
-  id: number;
-  productName: string;
-  sentiment: {
-    type: SentimentType;
-    score: number;
-  };
-  content: string;
-  createdAt: string;
-}
+import { ReplyDomain } from '@/types';
 
 // Make some columns!
-const columns: ColumnDef<DashboardReply>[] = [
+const columns: ColumnDef<ReplyDomain>[] = [
   {
     id: 'productName',
     header: '상품명',
-    accessorFn: (row) => row.productName,
+    accessorFn: (row) => row.product.name,
     cell: ({ getValue }) => (
       <div className='font-medium'>{getValue() as string}</div>
     ),
+    size: 3,
   },
   {
-    id: 'sentiment',
+    id: 'sentimentLevel',
     header: () => <div className='text-center'>감정 분석</div>,
-    accessorFn: (row) => row.sentiment,
+    accessorFn: (row) => row.sentimentLevel,
     cell: ({ getValue }) => {
-      const sentiment = getValue() as { type: SentimentType; score: number };
       return (
         <div className='text-center'>
-          <SentimentBadge sentiment={sentiment.type} />
+          <SentimentBadge size='sm' score={getValue() as number} />
         </div>
       );
     },
+    size: 2,
   },
   {
     id: 'content',
     header: '리플 내용',
-    accessorFn: (row) => row.content,
-    size: 300,
+    accessorFn: (row) => row.aiText,
     cell: ({ getValue }) => {
       const content = getValue() as string;
       return (
@@ -68,17 +56,19 @@ const columns: ColumnDef<DashboardReply>[] = [
         </div>
       );
     },
+    size: 8,
   },
   {
     id: 'createdAt',
     header: '작성일',
     accessorFn: (row) => row.createdAt,
     cell: ({ getValue }) => <div>{formatDate(getValue() as string)}</div>,
+    size: 2,
   },
 ];
 
 interface RecentRepliesTableProps {
-  replies: DashboardReply[];
+  replies: ReplyDomain[];
   maxRows?: number;
 }
 
@@ -96,8 +86,13 @@ const RecentRepliesTable = ({
   const table = useReactTable({
     data: sortedReplies.slice(0, maxRows),
     columns,
+    defaultColumn: { minSize: 0 },
     getCoreRowModel: getCoreRowModel(), // 데이터를 행으로 변환
   });
+
+  const totalSize = table
+    .getAllColumns()
+    .reduce((sum, col) => sum + col.getSize(), 0);
 
   return (
     <Table className='table-fixed'>
@@ -108,7 +103,7 @@ const RecentRepliesTable = ({
               <TableHead
                 key={header.id}
                 className='typo-button-14 bg-muted/50'
-                style={{ width: `${header.getSize()}px` }}
+                style={{ width: `${(header.getSize() / totalSize) * 100}%` }}
               >
                 {header.isPlaceholder
                   ? null
@@ -122,7 +117,7 @@ const RecentRepliesTable = ({
         ))}
       </TableHeader>
 
-      <TableBody>
+      <TableBody className='typo-body-14'>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
             <TableRow key={row.id}>
@@ -137,7 +132,7 @@ const RecentRepliesTable = ({
           <TableRow className='hover:bg-inherit'>
             <TableCell
               colSpan={columns.length}
-              className='typo-body-14 text-muted-foreground h-[200px] text-center'
+              className='h-[200px] text-center'
             >
               7일 이내에 생성된 리플이 없습니다.
             </TableCell>
