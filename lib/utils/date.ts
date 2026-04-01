@@ -6,9 +6,11 @@
 import { format, isValid, parse, parseISO } from 'date-fns';
 
 export const formatDate = (
-  dateString: Date | string,
+  dateString: Date | string | null,
   formatStr: string | undefined = 'yyyy.MM.dd'
 ) => {
+  if (!dateString) return null;
+
   const date =
     typeof dateString === 'string'
       ? dateString.includes('.')
