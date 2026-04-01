@@ -2,12 +2,12 @@
 
 import { useMemo } from 'react';
 
+import { toAlert } from '@/constants/alerts';
 import { useReminders } from '@/hooks/useReminders';
 import { useReplies } from '@/hooks/useReplies';
 import { useMyStores } from '@/hooks/useStores';
 import { useUsageQuota } from '@/hooks/useUsage';
 import { useUserPlan } from '@/hooks/useUser';
-import { toAlert } from '@/constants/alerts';
 import { getActiveStoreList } from '@/lib/utils';
 import type { Alert, UsageQuotaSubscriptionDomain } from '@/types';
 
@@ -70,7 +70,7 @@ export function useDashboardPage() {
       id: reply.id,
       productName: reply.product.name,
       sentiment: {
-        type: 'neutral' as const, // API 미제공, 추후 연동 예정
+        type: 'neutral' as const, // TODO: API 미제공, 추후 연동 예정
         score: 0,
       },
       content: reply.editedText ?? reply.aiText,
