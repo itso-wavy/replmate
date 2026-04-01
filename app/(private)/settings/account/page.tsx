@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import { CheckCircle2, CircleX } from 'lucide-react';
 
+import { TermsAccordionItem } from '@/components/global/TermsAccordionItem';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { TermsAccordionItem } from '@/components/global/TermsAccordionItem';
 import { TERMS_CONFIG } from '@/constants/terms';
 import { dummyNotificationSettings } from '@/dummy/account';
 import { useTermsList } from '@/hooks/useTerms';
@@ -20,9 +20,9 @@ import {
 } from '../_components';
 
 const authProviderLabelMap: Record<string, string> = {
-  google: '구글 로그인',
-  kakao: '카카오 로그인',
-  naver: '네이버 로그인',
+  google: 'Google 로그인',
+  kakao: 'Kakao 로그인',
+  naver: 'Naver 로그인',
 };
 
 const AccountPage = () => {
@@ -126,6 +126,7 @@ const AccountPage = () => {
           {TERMS_CONFIG.map(({ type, label }) => (
             <TermsAccordionItem
               key={type}
+              size='sm'
               label={label}
               content={termsList?.find((t) => t.type === type)?.content}
               isExpanded={expandedTerms.has(type)}
@@ -144,7 +145,7 @@ const AccountPage = () => {
           <Button
             onClick={handleUserWithdraw}
             variant='ghost'
-            className='bg-input/30 text-destructive hover:text-destructive shrink-0'
+            className='bg-input/30 text-destructive hover:text-destructive/80 shrink-0'
           >
             탈퇴하기
           </Button>

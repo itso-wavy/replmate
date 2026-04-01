@@ -7,6 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
 
 interface TermsAccordionItemProps {
+  size?: 'default' | 'sm';
   label: string;
   content?: string | null;
   isExpanded: boolean;
@@ -21,6 +22,7 @@ interface TermsAccordionItemProps {
 }
 
 export const TermsAccordionItem = ({
+  size = 'default',
   label,
   content,
   isExpanded,
@@ -58,6 +60,7 @@ export const TermsAccordionItem = ({
         <div
           className={cn(
             'typo-body-15 flex flex-1 items-center gap-2',
+            size === 'sm' && 'typo-body-14',
             !hasCheckbox && 'py-4'
           )}
         >
