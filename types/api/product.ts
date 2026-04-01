@@ -35,7 +35,7 @@ export interface ProductDetailDto {
   updatedAt: string;
 }
 
-// ?곹뭹 ?낅뜲?댄듃 ?묐떟
+// PATCH /api/v1/products/{product_id} 상품 업데이트 응답
 export interface ProductInfoDto {
   product: ProductDetailDto;
   job: JobTicketDto | null;
