@@ -39,9 +39,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
                 id='dashboard'
                 className='relative mx-auto flex w-full flex-1 flex-col rounded-2xl'
               >
-                {/* ring-1 ring-foreground/15 bg-white */}
                 <div className='bg-background-muted/30 absolute inset-0 overflow-y-auto rounded-2xl shadow-[inset_0_3px_10px_-11px_var(--color-brand-900)]'>
-                  {/* <div className='absolute inset-0 overflow-y-auto rounded-2xl '> */}
                   {children}
                 </div>
               </div>

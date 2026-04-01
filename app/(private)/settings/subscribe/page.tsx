@@ -102,7 +102,7 @@ const SubscribePage = () => {
       {/* 리플 사용 이력 */}
       <InnerPageSection heading='리플 사용 이력'>
         <UsageLedgerTable
-          items={dummyUsageLedger} // FIXME: 더미데이터 실데이터로 교체
+          items={pagedLedger} // FIXME: 더미데이터 실데이터로 교체
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}

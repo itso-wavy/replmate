@@ -1,7 +1,7 @@
 'use client';
 
 import { TablePagination } from '@/components/global';
-import { Spinner } from '@/components/ui/spinner';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { ReplyDomain } from '@/types';
 
 import ReplyCard from './ReplyCard';
@@ -27,9 +27,11 @@ const StoreReplysTable = ({
     <div className='flex flex-col gap-4 py-4'>
       <div className='flex flex-col gap-4'>
         {isLoading ? (
-          <div className='flex h-[400px] items-center justify-center'>
-            <Spinner className='size-6' />
-          </div>
+          <>
+            <Skeleton className='h-[200px]' />
+            <Skeleton className='h-[200px]' />
+            <Skeleton className='h-[200px]' />
+          </>
         ) : isEmpty ? (
           <div className='typo-body-14 text-muted-foreground flex h-[400px] items-center justify-center text-center'>
             조회할 수 있는 리플이 없습니다.

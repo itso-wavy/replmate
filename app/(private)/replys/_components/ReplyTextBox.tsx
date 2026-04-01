@@ -67,7 +67,7 @@ const ReplyTextBox = ({
       {/* 펼치기/접기 버튼 */}
       <button
         onClick={() => setExpanded((expanded) => !expanded)}
-        className='group text-muted-foreground *:group-hover:text-primary typo-caption-12 relative grid w-28 bg-gray-900/5 p-1.5 transition-all *:absolute *:mx-auto *:flex *:flex-col *:items-center *:justify-center *:place-self-center *:transition-all *:duration-200 hover:bg-gray-900/10 active:scale-85 disabled:scale-100 disabled:bg-gray-100 disabled:*:group-hover:text-inherit'
+        className='group text-muted-foreground *:group-hover:text-primary typo-caption-12 relative grid w-28 bg-gray-900/5 p-1.5 transition-all select-none *:absolute *:mx-auto *:flex *:flex-col *:items-center *:justify-center *:place-self-center *:transition-all *:duration-200 hover:bg-gray-900/10 active:scale-85 disabled:scale-100 disabled:bg-gray-100 disabled:*:group-hover:text-inherit'
         aria-label={expanded ? '축소' : '확장'}
         disabled={!isOverflow}
       >

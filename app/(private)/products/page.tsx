@@ -6,7 +6,7 @@ import {
   UnsavedProductChangesModal,
 } from '@/components/modal';
 import { Card } from '@/components/ui/card';
-import { dummyProductsByStore } from '@/dummy/products';
+import { dummyProducts } from '@/dummy/products';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import {

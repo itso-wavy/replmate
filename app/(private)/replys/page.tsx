@@ -1,6 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
+import { dummyReplies } from '@/dummy';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
 import { StoreReplysTable } from './_components';

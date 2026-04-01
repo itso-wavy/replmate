@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 import { UserStore } from '@/store/userStore';
-import { toUserDomain } from '@/types/domain/user';
+import { toUserDomain } from '@/types';
 
 function SessionSync() {
   const { data: session, status } = useSession();
@@ -17,7 +17,10 @@ function SessionSync() {
     if (session?.user && !isAuthenticated) {
       setUser(toUserDomain(session.user));
     } else if (status === 'unauthenticated' && isAuthenticated) {
-      console.warn('[auth] NextAuth 세션 없음 → clearUser', { status, session });
+      console.warn('[auth] NextAuth 세션 없음 → clearUser', {
+        status,
+        session,
+      });
       clearUser();
     }
   }, [session, status]);

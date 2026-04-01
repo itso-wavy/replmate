@@ -77,10 +77,7 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          <RecentRepliesTable
-            replies={dummyRecentReplies}
-            // FIXME: 더미데이터 실데이터로 교체
-          />
+          <RecentRepliesTable replies={recentReplies} />
         </Card>
       </>
     </DashboardLayout>
