@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import TablePagination from '@/components/global/TablePagination';
+import { TablePagination } from '@/components/global';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
 import {
@@ -53,16 +53,14 @@ const StoreProductsTable = ({
             onCheckedChange={() => onToggle(row.original.id.toString())}
           />
         ),
-        size: 40,
+        size: 1,
       },
       {
         id: 'productNumber',
         header: '상품 번호',
         accessorFn: (row) => row.externalId,
-        size: 200,
-        cell: ({ getValue }) => (
-          <div className='font-medium'>{getValue() as string}</div>
-        ),
+        cell: ({ getValue }) => <div>{getValue() as string}</div>,
+        size: 3,
       },
       {
         id: 'name',
@@ -73,6 +71,7 @@ const StoreProductsTable = ({
             {getValue() as string}
           </div>
         ),
+        size: 8,
       },
       {
         id: 'price',
@@ -82,6 +81,7 @@ const StoreProductsTable = ({
           const price = getValue() as number | null;
           return <div>{price !== null ? `${formatPrice(price)}` : '-'}</div>;
         },
+        size: 3,
       },
       {
         id: 'rating',
@@ -103,6 +103,7 @@ const StoreProductsTable = ({
             </div>
           );
         },
+        size: 3,
       },
       {
         id: 'registeredAt',
@@ -112,6 +113,7 @@ const StoreProductsTable = ({
           const date = getValue() as Date | null;
           return <div>{date ? formatDate(date) : '-'}</div>;
         },
+        size: 3,
       },
     ],
     [selectedIds, onToggle]
@@ -120,8 +122,13 @@ const StoreProductsTable = ({
   const table = useReactTable({
     data: products,
     columns,
+    defaultColumn: { minSize: 0 },
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const totalSize = table
+    .getAllColumns()
+    .reduce((sum, col) => sum + col.getSize(), 0);
 
   return (
     <>
@@ -133,7 +140,7 @@ const StoreProductsTable = ({
                 <TableHead
                   key={header.id}
                   className='typo-button-14 bg-muted/50'
-                  style={{ width: `${header.getSize()}px` }}
+                  style={{ width: `${(header.getSize() / totalSize) * 100}%` }}
                 >
                   {header.isPlaceholder
                     ? null

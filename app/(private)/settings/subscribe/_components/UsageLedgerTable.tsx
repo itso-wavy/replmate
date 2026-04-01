@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import TablePagination from '@/components/global/TablePagination';
+import { TablePagination } from '@/components/global';
 import { Spinner } from '@/components/ui/spinner';
 import {
   Table,
@@ -19,10 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { formatDate } from '@/lib/utils';
-import { cn } from '@/lib/utils';
-import type { UsageLedgerDomain } from '@/types/domain/usage';
-import { UsageEventType } from '@/types/enums';
+import { cn, formatDate } from '@/lib/utils';
+import { UsageEventType, UsageLedgerDomain } from '@/types';
 
 const usageEventLabelMap: Record<UsageEventType, string> = {
   [UsageEventType.USE]: '이동',
@@ -69,10 +67,9 @@ const UsageLedgerTable = ({
         header: '일시',
         accessorFn: (row) => row.occurredAt,
         cell: ({ getValue }) => (
-          <div className='text-muted-foreground'>
-            {formatDate(getValue() as Date, 'yyyy.MM.dd HH:mm')}
-          </div>
+          <div>{formatDate(getValue() as Date, 'yyyy.MM.dd HH:mm')}</div>
         ),
+        size: 5,
       },
       {
         id: 'eventType',
@@ -90,6 +87,7 @@ const UsageLedgerTable = ({
             {usageEventLabelMap[row.original.eventType]}
           </span>
         ),
+        size: 3,
       },
       {
         id: 'deltaQuantity',
@@ -109,15 +107,15 @@ const UsageLedgerTable = ({
             </div>
           );
         },
+        size: 5,
       },
       {
         id: 'detail',
         header: '상세',
         cell: ({ row }) => (
-          <div className='text-muted-foreground'>
-            {getUsageDetail(row.original.eventType, row.original.meta)}
-          </div>
+          <div>{getUsageDetail(row.original.eventType, row.original.meta)}</div>
         ),
+        size: 8,
       },
     ],
     []
@@ -126,12 +124,17 @@ const UsageLedgerTable = ({
   const table = useReactTable({
     data: items,
     columns,
+    defaultColumn: { minSize: 0 },
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const totalSize = table
+    .getAllColumns()
+    .reduce((sum, col) => sum + col.getSize(), 0);
+
   return (
     <>
-      <Table>
+      <Table className='table-fixed'>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -139,6 +142,7 @@ const UsageLedgerTable = ({
                 <TableHead
                   key={header.id}
                   className='typo-button-14 bg-muted/50'
+                  style={{ width: `${(header.getSize() / totalSize) * 100}%` }}
                 >
                   {header.isPlaceholder
                     ? null
@@ -152,12 +156,12 @@ const UsageLedgerTable = ({
           ))}
         </TableHeader>
 
-        <TableBody>
+        <TableBody className='typo-body-14'>
           {isLoading ? (
             <TableRow className='hover:bg-inherit'>
               <TableCell
                 colSpan={columns.length}
-                className='typo-body-14 text-muted-foreground h-[200px] text-center'
+                className='h-[200px] text-center'
               >
                 <Spinner className='mx-auto size-6' />
               </TableCell>

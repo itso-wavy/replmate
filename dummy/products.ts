@@ -42,7 +42,7 @@ export const dummyProductsByStore: Record<number, ProductDomain[]> = {
     },
     {
       id: 4,
-      name: '로얄캐닌 키튼 고양이 사료',
+      name: '로얄캐닌 키튼 고양이 사료인데 되게 이름이 길고길고길고 긴 사료라네',
       externalId: 'PROD-004',
       price: 45000,
       currency: 'KRW',
