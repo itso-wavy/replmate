@@ -43,6 +43,11 @@ export const DASHBOARD_MENU = [
   },
   {
     label: '구독 관리',
-    href: '/subscribe',
+    href: '/settings/subscribe',
   },
+];
+
+export const SETTINGS_MENU = [
+  { label: '구독 관리', href: '/settings/subscribe' },
+  { label: '계정 관리', href: '/settings/account' },
 ];
