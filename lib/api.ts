@@ -32,6 +32,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined' && !isRedirecting) {
         isRedirecting = true;
+        console.warn('[auth] 401 수신 → 강제 로그아웃', {
+          url: error.config?.url,
+          method: error.config?.method,
+        });
         useUserStore.getState().actions.clearUser(); // Zustand + localStorage 초기화
         signOut({ callbackUrl: '/login' }); // NextAuth 쿠키 제거 + 리다이렉트
       }

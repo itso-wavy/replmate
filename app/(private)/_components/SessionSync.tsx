@@ -17,6 +17,7 @@ function SessionSync() {
     if (session?.user && !isAuthenticated) {
       setUser(toUserDomain(session.user));
     } else if (status === 'unauthenticated' && isAuthenticated) {
+      console.warn('[auth] NextAuth 세션 없음 → clearUser', { status, session });
       clearUser();
     }
   }, [session, status]);
