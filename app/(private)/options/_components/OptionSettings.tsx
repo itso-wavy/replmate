@@ -1,10 +1,7 @@
 import { TextAreaWithCount } from '@/components/global';
-import {
-  ReplyLength,
-  ReplyTone,
-  replyEmojiOptions,
-  replyToneLabelMap,
-} from '@/types';
+import { ReplyTone, replyEmojiOptions, replyToneLabelMap } from '@/types';
+
+import type { OptionsState } from '../_hooks/useOptionsPage';
 
 import { RadioButtonGroup, SliderWithLabels } from '.';
 import { SubtitleWithTooltip } from '../../_components';
@@ -12,26 +9,12 @@ import { SubtitleWithTooltip } from '../../_components';
 const BRAND_GUIDELINE_MAX = 500;
 
 interface OptionSettingsProps {
-  replyTone: ReplyTone;
-  setReplyTone: (value: ReplyTone) => void;
-  length: ReplyLength;
-  setLength: (value: ReplyLength) => void;
-  includeEmoji: boolean;
-  setIncludeEmoji: (value: boolean) => void;
-  brandGuideline: string;
-  setBrandGuideline: (value: string) => void;
+  options: OptionsState;
+  onOptionsChange: (patch: Partial<OptionsState>) => void;
 }
 
-const OptionSettings = ({
-  replyTone,
-  setReplyTone,
-  length,
-  setLength,
-  includeEmoji,
-  setIncludeEmoji,
-  brandGuideline,
-  setBrandGuideline,
-}: OptionSettingsProps) => {
+const OptionSettings = ({ options, onOptionsChange }: OptionSettingsProps) => {
+  const { replyTone, length, includeEmoji, brandGuideline } = options;
   return (
     <div>
       <h3 className='typo-heading-18 mb-5'>리플 스타일 옵션 설정</h3>
@@ -50,7 +33,7 @@ const OptionSettings = ({
               options={Object.values(ReplyTone)}
               optionsMap={replyToneLabelMap}
               value={replyTone}
-              onValueChange={setReplyTone}
+              onValueChange={(v) => onOptionsChange({ replyTone: v as ReplyTone })}
             />
           </div>
           <div>
@@ -64,7 +47,7 @@ const OptionSettings = ({
                 replyEmojiOptions.map((o) => [String(o.value), o.label])
               )}
               value={String(includeEmoji)}
-              onValueChange={(v) => setIncludeEmoji(v === 'true')}
+              onValueChange={(v) => onOptionsChange({ includeEmoji: v === 'true' })}
             />
           </div>
         </div>
@@ -77,7 +60,7 @@ const OptionSettings = ({
                  ㆍ길게: 풍성하고 자세하게 (3~5줄)
                  ㆍ자동(맞춤): 리뷰 내용에 맞춰 적절한 길이로 생성`}
           />
-          <SliderWithLabels value={length} onChange={setLength} />
+          <SliderWithLabels value={length} onChange={(v) => onOptionsChange({ length: v })} />
         </div>
 
         <div className='flex flex-col gap-3'>
@@ -88,7 +71,7 @@ const OptionSettings = ({
           />
           <TextAreaWithCount
             value={brandGuideline}
-            onChange={setBrandGuideline}
+            onChange={(v) => onOptionsChange({ brandGuideline: v })}
             maxLength={BRAND_GUIDELINE_MAX}
             placeholder='예: 응답 시, 우리 브랜드가 강조하는 포인트를 고려하면서 응답해줘. 그리고, 마지막엔 꼭 "구매해주셔서 감사합니다. 다음에 또 이용해주세요 :)"를 붙여줘.'
             className='min-h-[140px]'

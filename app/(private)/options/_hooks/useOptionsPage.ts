@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -22,13 +22,21 @@ import { ReplyLength, ReplyTone } from '@/types';
 
 export type OptionsModalType = 'unsavedChanges' | null;
 
-const DEFAULT_OPTIONS = {
+export interface OptionsState {
+  replyTone: ReplyTone;
+  length: ReplyLength;
+  includeEmoji: boolean;
+  brandGuideline: string;
+}
+
+const DEFAULT_OPTIONS: OptionsState = {
   replyTone: ReplyTone.AUTO,
   length: ReplyLength.AUTO,
   includeEmoji: false,
   brandGuideline: '',
-  testReviewPlaceholder: '배송 너무 느려서 불편했어요.',
 };
+
+const TEST_REVIEW_PLACEHOLDER = '배송 너무 느려서 불편했어요.';
 
 export function useOptionsPage() {
   const router = useRouter();
@@ -37,43 +45,34 @@ export function useOptionsPage() {
   const { setSelectedStore } = StoreStore.useActions();
 
   // --- 데이터 조회 ---
-  const { data: replyOptions, isLoading: isOptionsLoading } = useReplyOptions(
-    selectedStoreId ?? 0
-  );
+  const {
+    data: replyOptions,
+    isLoading: isOptionsLoading,
+    isError: isOptionsError,
+  } = useReplyOptions(selectedStoreId ?? 0);
   const { data: testQuota, isLoading: isQuotaLoading } = useTestQuota(
     selectedStoreId ?? 0
   );
 
   // --- 옵션 상태 ---
-  const [replyTone, setReplyTone] = useState<ReplyTone>(
-    DEFAULT_OPTIONS.replyTone
-  );
-  const [length, setLength] = useState<ReplyLength>(DEFAULT_OPTIONS.length);
-  const [includeEmoji, setIncludeEmoji] = useState(
-    DEFAULT_OPTIONS.includeEmoji
-  );
-  const [brandGuideline, setBrandGuideline] = useState(
-    DEFAULT_OPTIONS.brandGuideline
-  );
+  const [options, setOptions] = useState<OptionsState>(DEFAULT_OPTIONS);
 
   // 서버 데이터 → 로컬 상태 동기화
   const [initialSnapshot, setInitialSnapshot] = useState<string>('');
 
   useEffect(() => {
     if (!replyOptions) return;
-    const tone = (replyOptions.tone as ReplyTone) || DEFAULT_OPTIONS.replyTone;
-    const len =
-      (replyOptions.lengthType as ReplyLength) || DEFAULT_OPTIONS.length;
-    const emoji = replyOptions.includeEmoji ?? DEFAULT_OPTIONS.includeEmoji;
-    const guideline =
-      replyOptions.brandGuideline ?? DEFAULT_OPTIONS.brandGuideline;
-
-    setReplyTone(tone);
-    setLength(len);
-    setIncludeEmoji(emoji);
-    setBrandGuideline(guideline);
+    const next: OptionsState = {
+      replyTone: (replyOptions.tone as ReplyTone) || DEFAULT_OPTIONS.replyTone,
+      length:
+        (replyOptions.lengthType as ReplyLength) || DEFAULT_OPTIONS.length,
+      includeEmoji: replyOptions.includeEmoji ?? DEFAULT_OPTIONS.includeEmoji,
+      brandGuideline:
+        replyOptions.brandGuideline ?? DEFAULT_OPTIONS.brandGuideline,
+    };
+    setOptions(next);
     setLastSaved(replyOptions.updatedAt);
-    setInitialSnapshot(JSON.stringify({ tone, len, emoji, guideline }));
+    setInitialSnapshot(JSON.stringify(next));
   }, [replyOptions]);
 
   // --- AI 미리보기 상태 ---
@@ -83,17 +82,8 @@ export function useOptionsPage() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // --- dirty 체크 ---
-  const currentSnapshot = useMemo(
-    () =>
-      JSON.stringify({
-        tone: replyTone,
-        len: length,
-        emoji: includeEmoji,
-        guideline: brandGuideline,
-      }),
-    [replyTone, length, includeEmoji, brandGuideline]
-  );
-  const isDirty = initialSnapshot !== '' && currentSnapshot !== initialSnapshot;
+  const isDirty =
+    initialSnapshot !== '' && JSON.stringify(options) !== initialSnapshot;
 
   // --- 모달 ---
   const [activeModal, setActiveModal] = useState<OptionsModalType>(null);
@@ -107,23 +97,20 @@ export function useOptionsPage() {
   // --- 저장 ---
   const performSave = useCallback(async () => {
     const result = await updateOptions({
-      tone: replyTone,
-      lengthType: length,
-      includeEmoji,
-      brandGuideline: brandGuideline || null,
+      tone: options.replyTone,
+      lengthType: options.length,
+      includeEmoji: options.includeEmoji,
+      brandGuideline: options.brandGuideline || null,
     });
     setLastSaved(result.updatedAt);
-    setInitialSnapshot(currentSnapshot);
-  }, [
-    replyTone,
-    length,
-    includeEmoji,
-    brandGuideline,
-    currentSnapshot,
-    updateOptions,
-  ]);
+    setInitialSnapshot(JSON.stringify(options));
+  }, [options, updateOptions]);
 
   const handleSave = async () => {
+    if (!selectedStoreId) {
+      toast.error('쇼핑몰을 먼저 선택해 주세요.');
+      return;
+    }
     try {
       await performSave();
       toast.success('저장이 완료되었습니다.');
@@ -145,16 +132,16 @@ export function useOptionsPage() {
     setIsGenerating(true);
     setGeneratedReply('');
 
-    const review = testReview.trim() || DEFAULT_OPTIONS.testReviewPlaceholder;
+    const review = testReview.trim() || TEST_REVIEW_PLACEHOLDER;
 
     try {
       const jobTicket = await createTestReply({
         storeId: selectedStoreId!,
         review,
-        tone: replyTone,
-        lengthType: length,
-        includeEmoji,
-        guideline: brandGuideline || undefined,
+        tone: options.replyTone,
+        lengthType: options.length,
+        includeEmoji: options.includeEmoji,
+        guideline: options.brandGuideline || undefined,
       });
 
       // SSE로 Job 결과 수신
@@ -261,6 +248,11 @@ export function useOptionsPage() {
   };
 
   const handleSaveAndLeave = async () => {
+    if (!selectedStoreId) {
+      toast.error('쇼핑몰을 먼저 선택해 주세요.');
+      return;
+    }
+
     try {
       await performSave();
       toast.success('저장이 완료되었습니다.');
@@ -286,19 +278,13 @@ export function useOptionsPage() {
     handleStoreChange,
 
     // 옵션 상태
-    replyTone,
-    setReplyTone,
-    length,
-    setLength,
-    includeEmoji,
-    setIncludeEmoji,
-    brandGuideline,
-    setBrandGuideline,
+    options,
+    setOptions,
 
     // 미리보기
     testReview,
     setTestReview,
-    testReviewPlaceholder: DEFAULT_OPTIONS.testReviewPlaceholder,
+    testReviewPlaceholder: TEST_REVIEW_PLACEHOLDER,
     generatedReply,
     isGenerating,
     previewRemaining,
@@ -311,12 +297,12 @@ export function useOptionsPage() {
 
     // 모달 & 가드
     activeModal,
-    setActiveModal,
-    isDirty,
+    closeModal: () => setActiveModal(null),
     handleLeaveWithoutSaving,
     handleSaveAndLeave,
 
-    // 로딩
+    // 상태
     isLoading: isOptionsLoading || isQuotaLoading,
+    isError: isOptionsError,
   };
 }

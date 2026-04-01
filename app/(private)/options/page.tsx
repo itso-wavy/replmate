@@ -2,6 +2,8 @@
 
 import { UnsavedProductChangesModal } from '@/components/modal';
 import { Card } from '@/components/ui/card';
+import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate } from '@/lib/utils';
 
 import { DashboardLayout, StoreCombobox } from '../_components';
@@ -11,14 +13,8 @@ import { useOptionsPage } from './_hooks/useOptionsPage';
 const OptionsPage = () => {
   const {
     handleStoreChange,
-    replyTone,
-    setReplyTone,
-    length,
-    setLength,
-    includeEmoji,
-    setIncludeEmoji,
-    brandGuideline,
-    setBrandGuideline,
+    options,
+    setOptions,
     testReview,
     setTestReview,
     testReviewPlaceholder,
@@ -30,9 +26,11 @@ const OptionsPage = () => {
     isSaving,
     handleSave,
     activeModal,
-    setActiveModal,
+    closeModal,
     handleLeaveWithoutSaving,
     handleSaveAndLeave,
+    isLoading,
+    isError,
   } = useOptionsPage();
 
   return (
@@ -56,35 +54,35 @@ const OptionsPage = () => {
         </div>
 
         {/* 2컬럼: 좌(옵션 설정) / 우(AI 미리보기) */}
-        <div className='grid grid-cols-1 py-4 *:my-2 *:px-4 *:py-2 *:first:border-b *:first:pb-8 lg:grid-cols-[2fr_3fr] lg:py-0 lg:*:my-6 lg:*:first:border-r lg:*:first:border-b-0 lg:*:first:pb-0'>
-          <OptionSettings
-            replyTone={replyTone}
-            setReplyTone={setReplyTone}
-            length={length}
-            setLength={setLength}
-            includeEmoji={includeEmoji}
-            setIncludeEmoji={setIncludeEmoji}
-            brandGuideline={brandGuideline}
-            setBrandGuideline={setBrandGuideline}
-          />
+        {isLoading ? (
+          <LoadingFallback />
+        ) : (
+          <div className='grid grid-cols-1 py-4 *:my-2 *:px-4 *:py-2 *:first:border-b *:first:pb-8 lg:grid-cols-[2fr_3fr] lg:py-0 lg:*:my-6 lg:*:first:border-r lg:*:first:border-b-0 lg:*:first:pb-0'>
+            <OptionSettings
+              options={options}
+              onOptionsChange={(patch) =>
+                setOptions((prev) => ({ ...prev, ...patch }))
+              }
+            />
 
-          <AiReplyPreview
-            previewRemaining={previewRemaining}
-            testReview={testReview}
-            setTestReview={setTestReview}
-            testReviewPlaceholder={testReviewPlaceholder}
-            generatedReply={generatedReply}
-            isGenerating={isGenerating}
-            onGenerate={handleGenerate}
-            isSaving={isSaving}
-            handleSave={handleSave}
-          />
-        </div>
+            <AiReplyPreview
+              previewRemaining={previewRemaining}
+              testReview={testReview}
+              setTestReview={setTestReview}
+              testReviewPlaceholder={testReviewPlaceholder}
+              generatedReply={generatedReply}
+              isGenerating={isGenerating}
+              onGenerate={handleGenerate}
+              isSaving={isSaving}
+              handleSave={handleSave}
+            />
+          </div>
+        )}
       </Card>
 
       <UnsavedProductChangesModal
         open={activeModal === 'unsavedChanges'}
-        onOpenChange={(open) => !open && setActiveModal(null)}
+        onOpenChange={(open) => !open && closeModal()}
         title='옵션 설정 저장'
         description={`저장하지 않은 변경 사항이 있습니다.\n저장하지 않고 이동하시겠습니까?`}
         onLeaveWithoutSaving={handleLeaveWithoutSaving}
@@ -95,3 +93,30 @@ const OptionsPage = () => {
 };
 
 export default OptionsPage;
+
+const LoadingFallback = () => (
+  <>
+    <div className='space-y-4'>
+      <Skeleton className='h-8 w-40' />
+      <div className='space-y-3'>
+        <Skeleton className='h-8 w-24' />
+        <Skeleton className='h-32' />
+
+        <Skeleton className='h-8 w-24' />
+        <Skeleton className='h-32' />
+      </div>
+    </div>
+
+    <div className='space-y-4'>
+      <Skeleton className='h-8 w-40' />
+      <div className='space-y-3'>
+        <Skeleton className='h-40' />
+
+        <Skeleton className='h-8 w-24' />
+        <Skeleton className='h-40' />
+
+        <Skeleton className='ml-auto h-10 w-30' />
+      </div>
+    </div>
+  </>
+);
