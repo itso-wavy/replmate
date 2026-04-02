@@ -3,7 +3,9 @@
 import { CheckCircle2, CircleX } from 'lucide-react';
 
 import { TermsAccordionItem } from '@/components/global';
+import { WithdrawModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { Switch } from '@/components/ui/switch';
 import { TERMS_CONFIG } from '@/constants/terms';
 import { formatDate } from '@/lib/utils';
@@ -29,11 +31,16 @@ const AccountPage = () => {
     toggleExpand,
     emailEnabled,
     smsEnabled,
+    isLoadingNotification,
     isUpdatingNotification,
     handleEmailToggle,
     handleSmsToggle,
     isVerifying,
     handleUserVerify,
+    isLoadingTerms,
+    subscriptionStatus,
+    isWithdrawModalOpen,
+    setIsWithdrawModalOpen,
     isDeleting,
     handleUserWithdraw,
   } = useAccountPage();
@@ -101,14 +108,14 @@ const AccountPage = () => {
           <Switch
             checked={emailEnabled}
             onCheckedChange={handleEmailToggle}
-            disabled={isUpdatingNotification}
+            disabled={isLoadingNotification || isUpdatingNotification}
           />
         </InnerPageRow>
         <InnerPageRow label='SMS 문자 수신' className='justify-between'>
           <Switch
             checked={smsEnabled}
             onCheckedChange={handleSmsToggle}
-            disabled={isUpdatingNotification}
+            disabled={isLoadingNotification || isUpdatingNotification}
           />
         </InnerPageRow>
         <p className='typo-body-14 text-foreground-description-muted'>
@@ -118,18 +125,24 @@ const AccountPage = () => {
 
       {/* 약관 */}
       <InnerPageSection heading='약관'>
-        <div className='divide-y'>
-          {TERMS_CONFIG.map(({ type, label }) => (
-            <TermsAccordionItem
-              key={type}
-              size='sm'
-              label={label}
-              content={termsList?.find((t) => t.type === type)?.content}
-              isExpanded={expandedTerms.has(type)}
-              onToggleExpand={() => toggleExpand(type)}
-            />
-          ))}
-        </div>
+        {isLoadingTerms ? (
+          <div className='grid place-content-center py-6'>
+            <Spinner />
+          </div>
+        ) : (
+          <div className='divide-y'>
+            {TERMS_CONFIG.map(({ type, label }) => (
+              <TermsAccordionItem
+                key={type}
+                size='sm'
+                label={label}
+                content={termsList?.find((t) => t.type === type)?.content}
+                isExpanded={expandedTerms.has(type)}
+                onToggleExpand={() => toggleExpand(type)}
+              />
+            ))}
+          </div>
+        )}
       </InnerPageSection>
 
       {/* 회원탈퇴 */}
@@ -139,8 +152,7 @@ const AccountPage = () => {
             회원 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.
           </p>
           <Button
-            onClick={handleUserWithdraw}
-            disabled={isDeleting}
+            onClick={() => setIsWithdrawModalOpen(true)}
             variant='ghost'
             className='bg-input/30 text-destructive hover:text-destructive/80 min-w-[80px] shrink-0'
           >
@@ -148,6 +160,14 @@ const AccountPage = () => {
           </Button>
         </div>
       </InnerPageSection>
+
+      <WithdrawModal
+        open={isWithdrawModalOpen}
+        onOpenChange={setIsWithdrawModalOpen}
+        status={subscriptionStatus}
+        onWithdraw={handleUserWithdraw}
+        isDeleting={isDeleting}
+      />
     </InnerPageLayout>
   );
 };

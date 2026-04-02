@@ -1,5 +1,6 @@
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
+import type { AgreeTermsResponseData } from '@/types/api/term';
 import type {
   CancelSubscriptionResponse,
   DeleteUserRequest,
@@ -7,7 +8,6 @@ import type {
   ReactivateSubscriptionResponse,
   UserPlanInfo,
 } from '@/types/api/user';
-import type { AgreeTermsResponseData } from '@/types/api/term';
 import { PlanDomain, toPlanDomain } from '@/types/domain/plan';
 import {
   NotificationSettingsDomain,
@@ -168,8 +168,10 @@ export async function updateNotificationSettings(
  * is_verified를 true로 설정하고 pending 구독을 trial로 변경합니다.
  */
 export async function verifyIdentity(): Promise<UserDomain> {
+  // TODO: 연동 후 실제 impUid, provider로 교체
   const response = await api.post<import('@/types/api/user').UserDto>(
-    USER_ENDPOINTS.VERIFY_IDENTITY
+    USER_ENDPOINTS.VERIFY_IDENTITY,
+    { impUid: 'temp', provider: 'pass' }
   );
   return toUserDomain(response.data);
 }

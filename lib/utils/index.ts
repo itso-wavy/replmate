@@ -3,3 +3,4 @@ export * from './date';
 export * from './email';
 export * from './store';
 export * from './product';
+export * from './subscription';

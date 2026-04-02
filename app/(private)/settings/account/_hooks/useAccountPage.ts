@@ -1,22 +1,41 @@
+import { useRouter } from 'next/navigation';
+
 import { useEffect, useState } from 'react';
 
+import { signOut } from 'next-auth/react';
 import { toast } from 'sonner';
 
+import { ROUTES } from '@/constants/nav-menu';
 import { dummyNotificationSettings } from '@/dummy/account';
+import { useTermsList } from '@/hooks/useTerms';
 import {
   useDeleteUser,
   useNotificationSettings,
   useUpdateNotificationSettings,
+  useUserPlan,
   useVerifyIdentity,
 } from '@/hooks/useUser';
-import { useTermsList } from '@/hooks/useTerms';
+import { formatDate, getSubscriptionStatus } from '@/lib/utils';
 import { UserStore } from '@/store/userStore';
 
 export function useAccountPage() {
+  const router = useRouter();
   const user = UserStore.useUser();
-  const { data: termsList } = useTermsList();
+  const { clearUser } = UserStore.useActions();
 
-  // 약관 펼치기
+  // 구독 상태
+  const { data: userPlan } = useUserPlan();
+  const subscriptionStatus = getSubscriptionStatus(
+    userPlan?.plan,
+    userPlan?.subscription
+  );
+
+  // 회원탈퇴 모달
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  // 약관
+  const { data: termsList, isLoading: isLoadingTerms } = useTermsList();
+
   const [expandedTerms, setExpandedTerms] = useState<Set<string>>(new Set());
   const toggleExpand = (type: string) =>
     setExpandedTerms((prev) => {
@@ -26,7 +45,8 @@ export function useAccountPage() {
     });
 
   // 알림 설정
-  const { data: notificationSettings } = useNotificationSettings();
+  const { data: notificationSettings, isLoading: isLoadingNotification } =
+    useNotificationSettings();
   const {
     mutate: updateNotificationSettings,
     isPending: isUpdatingNotification,
@@ -45,11 +65,21 @@ export function useAccountPage() {
     setSmsEnabled(notificationSettings.smsEnabled);
   }, [notificationSettings]);
 
+  const today = formatDate(new Date());
+
   const handleEmailToggle = (checked: boolean) => {
     setEmailEnabled(checked);
     updateNotificationSettings(
       { emailEnabled: checked, smsEnabled },
-      { onError: () => setEmailEnabled(!checked) }
+      {
+        onSuccess: () =>
+          toast.success(
+            checked
+              ? `이메일 수신 동의가 처리되었습니다.(${today})`
+              : `이메일 수신 거부가 처리되었습니다.(${today})`
+          ),
+        onError: () => setEmailEnabled(!checked),
+      }
     );
   };
 
@@ -57,12 +87,22 @@ export function useAccountPage() {
     setSmsEnabled(checked);
     updateNotificationSettings(
       { emailEnabled, smsEnabled: checked },
-      { onError: () => setSmsEnabled(!checked) }
+      {
+        onSuccess: () =>
+          toast.success(
+            checked
+              ? `문자 수신 동의가 처리되었습니다.(${today})`
+              : `문자 수신 거부가 처리되었습니다.(${today})`
+          ),
+        onError: () => setSmsEnabled(!checked),
+      }
     );
   };
 
   // 본인인증
-  const { mutate: verifyIdentity, isPending: isVerifying } = useVerifyIdentity();
+  // TODO:
+  const { mutate: verifyIdentity, isPending: isVerifying } =
+    useVerifyIdentity();
 
   const handleUserVerify = () => {
     verifyIdentity(undefined, {
@@ -78,8 +118,15 @@ export function useAccountPage() {
     deleteUser(
       { forfeitSubscriptionAgreed: true },
       {
-        onSuccess: () => toast.success('탈퇴가 완료되었습니다.'),
-        onError: () => toast.error('탈퇴 처리에 실패했습니다.'),
+        onSuccess: async () => {
+          toast.success('회원탈퇴가 완료되었습니다.');
+          setIsWithdrawModalOpen(false);
+          clearUser();
+          await signOut({ callbackUrl: ROUTES.ROOT, redirect: false });
+          router.push(ROUTES.ROOT);
+        },
+        onError: () =>
+          toast.error('요청에 실패했습니다. 잠시 후 다시 시도해주세요.'),
       }
     );
   };
@@ -87,15 +134,20 @@ export function useAccountPage() {
   return {
     user,
     termsList,
+    isLoadingTerms,
     expandedTerms,
     toggleExpand,
     emailEnabled,
     smsEnabled,
+    isLoadingNotification,
     isUpdatingNotification,
     handleEmailToggle,
     handleSmsToggle,
     isVerifying,
     handleUserVerify,
+    subscriptionStatus,
+    isWithdrawModalOpen,
+    setIsWithdrawModalOpen,
     isDeleting,
     handleUserWithdraw,
   };

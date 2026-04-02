@@ -11,6 +11,9 @@ export { default as RecommandPlanUpgradeModal } from './RecommandPlanUpgradeModa
 export { default as UnlinkStoreConfirmModal } from './UnlinkStoreConfirmModal';
 export { default as VerificationRequiredModal } from './VerificationRequiredModal';
 
+// Account
+export { default as WithdrawModal } from './WithdrawModal';
+
 // Products
 export { default as ProductSaveConfirmModal } from './ProductSaveConfirmModal';
 export { default as UnsavedProductChangesModal } from './UnsavedProductChangesModal';
