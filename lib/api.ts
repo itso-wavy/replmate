@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { signOut } from 'next-auth/react';
 
+import { ROUTES } from '@/constants/nav-menu';
 import { useUserStore } from '@/store/userStore';
 
 export const api = axios.create({
@@ -37,7 +38,7 @@ api.interceptors.response.use(
           method: error.config?.method,
         });
         useUserStore.getState().actions.clearUser(); // Zustand + localStorage 초기화
-        signOut({ callbackUrl: '/login' }); // NextAuth 쿠키 제거 + 리다이렉트
+        signOut({ callbackUrl: ROUTES.LOGIN }); // NextAuth 쿠키 제거 + 리다이렉트
       }
     }
     return Promise.reject(error);

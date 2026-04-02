@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ROUTES } from '@/constants/nav-menu';
 import { cn } from '@/lib/utils';
 
 const plans = [
@@ -79,7 +80,7 @@ const PriceSection = ({ id }: { id: string }) => {
         <p className='typo-caption-14 text-muted-foreground mt-8 text-center'>
           아직 확신이 안 서시나요? 카드 등록 없이{' '}
           <button
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.LOGIN)}
             className='text-brand-500 font-medium'
           >
             [평생 무료 플랜]
@@ -144,7 +145,7 @@ const PriceCard = ({ plan }: any) => {
         <Button
           size='default'
           variant='outline'
-          onClick={() => router.push('/login')}
+          onClick={() => router.push(ROUTES.LOGIN)}
           className={cn(
             'hover:bg-foreground hover:text-primary-foreground mt-6 w-full',
             plan.popular && 'bg-brand-violet text-primary-foreground',

@@ -10,6 +10,7 @@ import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { ROUTES } from '@/constants/nav-menu';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { UserStore } from '@/store/userStore';
 import { AuthProvider } from '@/types';
@@ -24,7 +25,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      router.push(ROUTES.DASHBOARD);
     } else setIsLoading(false);
   }, [isAuthenticated]);
 

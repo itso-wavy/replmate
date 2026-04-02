@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { ROUTES } from '@/constants/nav-menu';
 import { cn } from '@/lib/utils';
 import { StoreStore } from '@/store/storeStore';
 import { StoreDomain } from '@/types';
@@ -229,21 +230,21 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
 
       <CardFooter className='mt-auto flex gap-2'>
         <ActionLinkButton
-          href='/products'
+          href={ROUTES.PRODUCTS}
           storeId={store.id}
           disabled={!connection.isActive}
         >
           상품 관리
         </ActionLinkButton>
         <ActionLinkButton
-          href='/options'
+          href={ROUTES.OPTIONS}
           storeId={store.id}
           disabled={!connection.isActive}
         >
           리플 옵션
         </ActionLinkButton>
         <ActionLinkButton
-          href='/replys'
+          href={ROUTES.REPLYS}
           storeId={store.id}
           disabled={!connection.isActive}
         >

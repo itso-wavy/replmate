@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ROUTES } from '@/constants/nav-menu';
 import { cn } from '@/lib/utils';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { UserStore } from '@/store/userStore';
@@ -56,7 +57,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
       )}
     >
       <div className='wrapper flex h-full items-center justify-between'>
-        <Logo href='/dashboard' />
+        <Logo href={ROUTES.DASHBOARD} />
         {/* Navigation */}
         <nav className='hidden items-center space-x-4 md:flex'>
           {navMenu.map((menu) => (
@@ -89,9 +90,7 @@ const PrivateHeader = ({ navMenu, className }: HeaderProps) => {
                 {user?.email ?? '-'}
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => router.push('/settings/account')}
-              >
+              <DropdownMenuItem onClick={() => router.push(ROUTES.ACCOUNT)}>
                 <Settings className='text-muted-foreground size-4' />
                 <span>계정 관리</span>
               </DropdownMenuItem>

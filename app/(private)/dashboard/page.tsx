@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ROUTES } from '@/constants/nav-menu';
 import { dummyRecentReplies } from '@/dummy/replies';
 import { useAlerts } from '@/hooks/useAlerts';
 import { UserStore } from '@/store/userStore';
@@ -70,7 +71,7 @@ const DashboardPage = () => {
             <div className='typo-heading-18 px-2'>최근 생성된 리플</div>
             <Button
               variant='outline'
-              onClick={() => router.push('/replys')}
+              onClick={() => router.push(ROUTES.REPLYS)}
               className='h-[36px]! rounded-[12px] bg-transparent'
             >
               전체 보기

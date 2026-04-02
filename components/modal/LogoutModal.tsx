@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 
 import { signOut } from 'next-auth/react';
 
+import { ROUTES } from '@/constants/nav-menu';
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { UserStore } from '@/store/userStore';
@@ -27,9 +28,10 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
 
     clearUser();
 
-    await signOut({ callbackUrl: '/', redirect: false });
-    router.push('/');
+    await signOut({ callbackUrl: ROUTES.ROOT, redirect: false });
+    router.push(ROUTES.ROOT);
   };
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>

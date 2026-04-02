@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 
+import { ROUTES } from '@/constants/nav-menu';
+
 const SettingsPage = () => {
-  redirect('/settings/subscribe');
+  redirect(ROUTES.SUBSCRIBE);
 };
 
 export default SettingsPage;

@@ -2,6 +2,8 @@ import type { Alert } from '@/types/domain/alert';
 import type { ReminderDomain } from '@/types/domain/reminder';
 import { AlertType } from '@/types/enums';
 
+import { ROUTES } from './nav-menu';
+
 export const alertsConfig: Record<AlertType, Alert> = {
   [AlertType.PAYMENT_FAILED]: {
     id: 'alert-payment-failed',
@@ -10,7 +12,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     variant: 'error',
     // TODO: meta.daysLeft로 D-N 동적 치환 필요
     title: `정기 결제에 실패했습니다. D-? 후 무료 플랜으로 전환됩니다.\n원활한 서비스 이용을 위해 결제 정보를 확인해주세요.`,
-    href: '/settings/subscribe',
+    href: ROUTES.SUBSCRIBE,
   },
   [AlertType.STORE_AUTH_REJECTED]: {
     id: 'alert-store-auth-rejected',
@@ -18,7 +20,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     type: AlertType.STORE_AUTH_REJECTED,
     variant: 'warning',
     title: `쇼핑몰 관리자 인증이 반려되었습니다.`,
-    href: '/stores',
+    href: ROUTES.STORES,
   },
   [AlertType.STORE_ADJUSTMENT_REQUIRED]: {
     id: 'alert-store-adjustment-required',
@@ -26,7 +28,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     type: AlertType.STORE_ADJUSTMENT_REQUIRED,
     variant: 'warning',
     title: `구독 플랜 변경으로 쇼핑몰 수 조정이 필요합니다.`,
-    href: '/stores',
+    href: ROUTES.STORES,
   },
   [AlertType.PRODUCT_ADJUSTMENT_REQUIRED]: {
     id: 'alert-product-adjustment-required',
@@ -34,7 +36,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     type: AlertType.PRODUCT_ADJUSTMENT_REQUIRED,
     variant: 'warning',
     title: '구독 플랜 변경으로 상품 수 조정이 필요합니다.',
-    href: '/products',
+    href: ROUTES.PRODUCTS,
   },
   [AlertType.STORE_CONNECTION_REQUIRED]: {
     id: 'alert-store-connection-required',
@@ -44,7 +46,7 @@ export const alertsConfig: Record<AlertType, Alert> = {
     title: '쇼핑몰 연동이 필요합니다.',
     description:
       '현재 사용 가능한 쇼핑몰이 없어 서비스 이용이 제한됩니다. 쇼핑몰 상태를 확인해 주세요.',
-    href: '/stores',
+    href: ROUTES.STORES,
   },
   [AlertType.STORE_ADJUSTMENT_REQUIRED_DETAIL]: {
     id: 'alert-store-adjustment-required-detail',

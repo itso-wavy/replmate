@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { ROUTES } from '@/constants/nav-menu';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +21,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
 
   const handleAction = () => {
-    router.push('/settings/account');
+    router.push(ROUTES.ACCOUNT);
   };
 
   return (

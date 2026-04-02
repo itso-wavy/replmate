@@ -18,6 +18,7 @@ import {
   ItemTitle,
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
+import { ROUTES } from '@/constants/nav-menu';
 import { getActiveStoreList } from '@/lib/utils';
 import type { StoreDomain, UsageQuotaSubscriptionDomain } from '@/types';
 
@@ -44,7 +45,7 @@ const DashboardPlanCard = ({
     <Item
       variant='muted'
       onClick={() =>
-        router.push(!isIdentifyed ? '/settings/account' : '/settings/subscribe')
+        router.push(!isIdentifyed ? ROUTES.ACCOUNT : ROUTES.SUBSCRIBE)
       }
       className='group relative cursor-pointer p-6 transition-all duration-300 hover:scale-[102%]'
     >
@@ -101,7 +102,7 @@ const DashboardTodayCard = ({
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/replys')}
+      onClick={() => router.push(ROUTES.REPLYS)}
       className='group relative flex cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>
@@ -146,7 +147,7 @@ const DashboardReplyCard = ({ subscription }: DashboardCardProps) => {
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/settings/subscribe')}
+      onClick={() => router.push(ROUTES.SUBSCRIBE)}
       className='group relative cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>
@@ -194,7 +195,7 @@ const DashboardStoresCard = ({ stores }: { stores: StoreDomain[] }) => {
   return (
     <Item
       variant='muted'
-      onClick={() => router.push('/stores')}
+      onClick={() => router.push(ROUTES.STORES)}
       className='group relative cursor-pointer transition-all duration-300 hover:scale-[102%]'
     >
       <div className='flex w-full flex-col justify-between'>

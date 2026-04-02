@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { ROUTES } from '@/constants/nav-menu';
 import { openReplmateSupportEmail } from '@/lib/utils';
 
 const MOCK_REPLY_TEXT =
@@ -116,14 +117,14 @@ const HeroSection = ({ id }: { id: string }) => {
           {/* <Button
             size='lg'
             // variant='primary'
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.LOGIN)}
             className='bg-primary/50 hover:bg-primary/30 from-primary to-primary/50 hover:from-brand-400 7/50 transition-color h-12 bg-gradient-to-r duration-500 md:h-14'
           >
             무료로 시작하기
           </Button> */}
           <Button
             size='lg'
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.LOGIN)}
             className='group from-brand-600 to-brand-300 relative bg-gradient-to-r hover:bg-transparent'
           >
             <div

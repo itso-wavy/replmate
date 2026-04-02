@@ -2,6 +2,7 @@ import NextAuth, { type NextAuthOptions, type User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { AUTH_PROVIDER_ID } from '@/constants/auth';
+import { ROUTES } from '@/constants/nav-menu';
 import { UserDto } from '@/types/api/user';
 
 export const authOptions: NextAuthOptions = {
@@ -27,7 +28,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: '/login',
+    signIn: ROUTES.LOGIN,
   },
 
   callbacks: {

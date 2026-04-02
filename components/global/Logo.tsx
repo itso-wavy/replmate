@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import LogoIcon from '@/assets/png/logo-icon.png';
 import LogoText from '@/assets/png/logo-text.png';
+import { ROUTES } from '@/constants/nav-menu';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -17,7 +18,7 @@ interface LogoProps {
 }
 
 const Logo = ({
-  href = '/',
+  href = ROUTES.ROOT,
   showIcon = false,
   showText = true,
   className,

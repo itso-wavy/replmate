@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 
 import { AUTH_PROVIDER_ID } from '@/constants/auth';
+import { ROUTES } from '@/constants/nav-menu';
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { UserDto } from '@/types';
@@ -22,8 +23,8 @@ export default function AuthCallbackPage() {
         });
 
         const destination = user.needsTermsAgreement
-          ? '/terms-agreement'
-          : '/dashboard';
+          ? ROUTES.TERMS_AGREEMENT
+          : ROUTES.DASHBOARD;
 
         if (window.opener) {
           window.opener.location.replace(destination);
@@ -33,10 +34,10 @@ export default function AuthCallbackPage() {
         }
       } catch {
         if (window.opener) {
-          window.opener.location.replace('/login');
+          window.opener.location.replace(ROUTES.LOGIN);
           window.close();
         } else {
-          window.location.replace('/login');
+          window.location.replace(ROUTES.LOGIN);
         }
       }
     };

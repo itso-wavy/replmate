@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { ROUTES } from '@/constants/nav-menu';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +26,7 @@ const Modal = ({ title, description, open, onOpenChange }: ModalProps) => {
   const router = useRouter();
 
   const handleAction = () => {
-    router.push('/settings/subscribe');
+    router.push(ROUTES.SUBSCRIBE);
   };
 
   return (

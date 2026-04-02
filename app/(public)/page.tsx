@@ -1,4 +1,4 @@
-import { GNB_MENU, SECTION_ID } from '@/constants/nav-menu';
+import { LANDING_GNB_MENU, LANDING_SECTIONS } from '@/constants/nav-menu';
 
 import {
   FeaturesSection,
@@ -12,13 +12,13 @@ import {
 const LandingPage = () => {
   return (
     <>
-      <PublicHeader navMenu={GNB_MENU} />
+      <PublicHeader navMenu={LANDING_GNB_MENU} />
 
       <main className='flex flex-1 flex-col'>
-        <HeroSection id={SECTION_ID.HERO} />
-        <FeaturesSection id={SECTION_ID.FEATURES} />
-        <PriceSection id={SECTION_ID.PRICE} />
-        <SupportSection id={SECTION_ID.SUPPORT} />
+        <HeroSection id={LANDING_SECTIONS.HERO} />
+        <FeaturesSection id={LANDING_SECTIONS.FEATURES} />
+        <PriceSection id={LANDING_SECTIONS.PRICE} />
+        <SupportSection id={LANDING_SECTIONS.SUPPORT} />
       </main>
       <Footer />
     </>

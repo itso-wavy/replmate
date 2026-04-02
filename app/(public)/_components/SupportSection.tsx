@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/constants/nav-menu';
 import { openReplmateSupportEmail } from '@/lib/utils';
 
 const SupportSection = ({ id }: { id: string }) => {
@@ -24,7 +25,7 @@ const SupportSection = ({ id }: { id: string }) => {
         <div className='mx-auto mt-12 flex w-full flex-col items-center justify-center gap-x-4 gap-y-3 *:w-full sm:max-w-[280px] sm:flex-row'>
           {/* <Button
             size='lg'
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.LOGIN)}
             className='from-primary to-primary/50 bg-gradient-to-r transition-colors hover:bg-white'
           >
             무료로 시작하기
