@@ -7,9 +7,10 @@ import { useState } from 'react';
 
 import { ListIcon } from '@phosphor-icons/react/dist/ssr';
 
-import { Logo } from '@/components/global';
+import Logo from '@/components/global/Logo';
 import { Button } from '@/components/ui/button';
-import { SECTION_ID } from '@/constants/nav-menu';
+import { LANDING_SECTIONS } from '@/constants/nav-menu';
+import { ROUTES } from '@/constants/nav-menu';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { cn } from '@/lib/utils';
 
@@ -18,15 +19,16 @@ interface PublicHeaderProps {
     label: string;
     href: string;
   }[];
+  action?: React.ReactNode;
 }
 
-const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
+const PublicHeader = ({ navMenu, action }: PublicHeaderProps) => {
   const [openSideNav, setOpenSideNav] = useState(false);
 
   const router = useRouter();
-  const toLogin = () => router.push('/login');
+  const toLogin = () => router.push(ROUTES.LOGIN);
 
-  const sectionIds = Object.values(SECTION_ID);
+  const sectionIds = Object.values(LANDING_SECTIONS);
   const activeId = useActiveSection({
     sectionIds,
     headerHeight: 64,
@@ -189,6 +191,8 @@ const PublicHeader = ({ navMenu }: PublicHeaderProps) => {
             </div>
           </>
         )}
+
+        {action && <div className='ml-auto'>{action}</div>}
       </div>
     </header>
   );

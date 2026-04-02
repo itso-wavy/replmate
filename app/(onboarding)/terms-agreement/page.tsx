@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 
 import { PublicHeader } from '@/app/(public)/_components';
 import { TermsAccordionItem } from '@/components/global';
@@ -12,11 +12,13 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
 import { AUTH_PROVIDER_ID } from '@/constants/auth';
+import { ROUTES } from '@/constants/nav-menu';
 import { TERMS_CONFIG } from '@/constants/terms';
 import { useTermsList } from '@/hooks/useTerms';
 import { useAgreeTerms } from '@/hooks/useUser';
 import { api } from '@/lib/api';
-import { USER_ENDPOINTS } from '@/lib/endpoints';
+import { ENDPOINTS, USER_ENDPOINTS } from '@/lib/endpoints';
+import { UserStore } from '@/store/userStore';
 import type { UserDto } from '@/types/api/user';
 import { TermsType } from '@/types/enums';
 
@@ -26,6 +28,7 @@ const REQUIRED_TYPES = TERMS_CONFIG.filter((t) => t.required).map(
 
 export default function TermsAgreementPage() {
   const router = useRouter();
+  const { clearUser } = UserStore.useActions();
   const { data: termsList, isLoading } = useTermsList();
   const { mutate: agreeTerms, isPending } = useAgreeTerms();
   const [checked, setChecked] = useState<Set<TermsType>>(new Set());
@@ -61,6 +64,17 @@ export default function TermsAgreementPage() {
     });
   };
 
+  const handleLogout = async () => {
+    try {
+      await api.post(ENDPOINTS.SESSION.LOGOUT);
+    } catch (_) {}
+
+    clearUser();
+
+    await signOut({ callbackUrl: ROUTES.ROOT, redirect: false });
+    router.push(ROUTES.ROOT);
+  };
+
   const handleSubmit = () => {
     if (!allRequiredChecked) return;
 
@@ -77,18 +91,28 @@ export default function TermsAgreementPage() {
           user: JSON.stringify(res.data),
           redirect: false,
         });
-        router.replace('/dashboard');
+        router.replace(ROUTES.DASHBOARD);
       },
     });
   };
 
   return (
     <>
-      <PublicHeader />
+      <PublicHeader
+        action={
+          <Button
+            variant='outline'
+            onClick={handleLogout}
+            className='h-[36px]! rounded-[12px] bg-transparent'
+          >
+            로그아웃
+          </Button>
+        }
+      />
 
-      <main className='wrapper mt-10 flex min-h-svh flex-1 flex-col overflow-y-auto py-16'>
+      <main className='wrapper flex min-h-svh flex-1 flex-col overflow-y-auto py-16 pt-30'>
         {isLoading && (
-          <div className='grid place-content-center'>
+          <div className='grid flex-1 place-content-center'>
             <Spinner />
           </div>
         )}
