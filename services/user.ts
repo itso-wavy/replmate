@@ -1,11 +1,13 @@
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
+import { VerifyIdentityProvider } from '@/types/enums';
 import type { AgreeTermsResponseData } from '@/types/api/term';
 import type {
   CancelSubscriptionResponse,
   DeleteUserRequest,
   NotificationSettingsDto,
   ReactivateSubscriptionResponse,
+  UserDto,
   UserPlanInfo,
 } from '@/types/api/user';
 import { PlanDomain, toPlanDomain } from '@/types/domain/plan';
@@ -18,9 +20,9 @@ import {
   toUserDomain,
 } from '@/types/domain/user';
 
-// ============================================================================
+// ==========================================================
 // 사용자 정보
-// ============================================================================
+// ==========================================================
 
 /**
  * 현재 로그인한 사용자 정보 조회
@@ -39,14 +41,15 @@ export async function deleteUser(data: DeleteUserRequest): Promise<void> {
   await api.delete(USER_ENDPOINTS.DELETE_USER, { data });
 }
 
-// ============================================================================
+// ==========================================================
 // 사용자 플랜
-// ============================================================================
+// ==========================================================
 
 /**
  * 사용자 플랜 정보 (플랜 + 구독 정보)
  */
 export interface UserPlanDomain {
+  planStatus: 'unverified' | '';
   plan: PlanDomain;
   subscription: SubscriptionDomain;
 }
@@ -55,11 +58,12 @@ export interface UserPlanDomain {
  * 사용자의 플랜 정보 조회 (플랜 + 구독 정보)
  */
 export async function getUserPlan(): Promise<UserPlanDomain> {
-  const response = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
+  const { data } = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
 
   return {
-    plan: toPlanDomain(response.data.plan),
-    subscription: toSubscriptionDomain(response.data.subscription),
+    planStatus: data.planStatus, // "unverified"
+    plan: toPlanDomain(data.plan),
+    subscription: toSubscriptionDomain(data.subscription),
   };
 }
 
@@ -96,9 +100,9 @@ export async function reactivatePlan(): Promise<ReactivateSubscriptionResponse> 
   return response.data;
 }
 
-// ============================================================================
+// ==========================================================
 // 영수증
-// ============================================================================
+// ==========================================================
 
 /**
  * 영수증 발급 요청
@@ -109,9 +113,9 @@ export async function requestReceipt(): Promise<void> {
   await api.post(USER_ENDPOINTS.REQUEST_RECEIPT);
 }
 
-// ============================================================================
+// ==========================================================
 // 약관 동의
-// ============================================================================
+// ==========================================================
 
 /**
  * 약관 동의
@@ -127,9 +131,9 @@ export async function agreeTerms(
   return response.data;
 }
 
-// ============================================================================
+// ==========================================================
 // 알림 설정
-// ============================================================================
+// ==========================================================
 
 /**
  * 알림 설정 조회
@@ -158,20 +162,18 @@ export async function updateNotificationSettings(
   return toNotificationSettingsDomain(response.data);
 }
 
-// ============================================================================
+// ==========================================================
 // 본인인증
-// ============================================================================
+// ==========================================================
 
 /**
  * 본인인증 완료 처리
- * 요청 바디 없음 (본인인증 서비스 연동 후 세션 기반으로 호출)
  * is_verified를 true로 설정하고 pending 구독을 trial로 변경합니다.
  */
 export async function verifyIdentity(): Promise<UserDomain> {
-  // TODO: 연동 후 실제 impUid, provider로 교체
-  const response = await api.post<import('@/types/api/user').UserDto>(
+  const response = await api.post<UserDto>(
     USER_ENDPOINTS.VERIFY_IDENTITY,
-    { impUid: 'temp', provider: 'pass' }
+    { provider: VerifyIdentityProvider.TEST } // TODO: PASS 연동 시 provider/impUid 파라미터화
   );
   return toUserDomain(response.data);
 }

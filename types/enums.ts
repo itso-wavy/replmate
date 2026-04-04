@@ -6,6 +6,12 @@ export enum AuthProvider {
   NAVER = 'naver',
 }
 
+// 본인인증 제공자
+export enum VerifyIdentityProvider {
+  TEST = 'test', // 개발/테스트용 (항상 성공)
+  PASS = 'pass', // PASS 본인인증 (추후 연동)
+}
+
 // 약관 타입
 export enum TermsType {
   TERMS_OF_SERVICE = 'terms_of_service', // 서비스 이용약관
