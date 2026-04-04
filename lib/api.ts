@@ -3,6 +3,7 @@ import { signOut } from 'next-auth/react';
 
 import { ROUTES } from '@/constants/nav-menu';
 import { useUserStore } from '@/store/userStore';
+import { ApiResponse } from '@/types';
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -17,15 +18,10 @@ let isRedirecting = false;
 
 api.interceptors.response.use(
   (response) => {
-    // BaseResponse<T> 래퍼에서 data 필드 추출
-    // 백엔드 응답 구조: { data: T | null, httpStatus, messageKo, error, errorCode, devNote }
-    // → response.data를 T로 변환하여 서비스 레이어에서 직접 사용 가능
-    if (
-      response.data !== null &&
-      typeof response.data === 'object' &&
-      'data' in response.data
-    ) {
-      response.data = response.data.data;
+    const data = response.data as ApiResponse<unknown>;
+
+    if (data !== null && typeof data === 'object' && 'data' in data) {
+      response.data = data.data;
     }
     return response;
   },
