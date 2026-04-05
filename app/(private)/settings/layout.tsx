@@ -18,7 +18,7 @@ const SettingsLayout = ({ children }: PropsWithChildren) => {
   return (
     <DashboardLayout heading='설정'>
       <div className='mx-auto flex w-full max-w-6xl gap-8'>
-        <nav className='m-1 flex w-[180px] flex-col gap-1 pt-1'>
+        <nav className='sticky top-6 m-1 flex w-[180px] flex-col gap-1 self-start pt-1'>
           {SETTINGS_MENU.map((item) => (
             <Link
               key={item.href}
