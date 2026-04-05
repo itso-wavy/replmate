@@ -1,7 +1,4 @@
-import { useRouter } from 'next/navigation';
-
-import { ROUTES } from '@/constants/nav-menu';
-import type { SubscriptionStatusType } from '@/lib/utils';
+import { SubscriptionStatus } from '@/types';
 
 import {
   AlertDialog,
@@ -16,48 +13,55 @@ import {
 import { CommonModalProps } from './types';
 
 interface WithdrawModalProps extends CommonModalProps {
-  status: SubscriptionStatusType;
-  onWithdraw: () => void;
+  subscriptionStatus: SubscriptionStatus;
+  onWithdraw?: () => void;
+  onGoToSubscribe?: () => void; // 추가
   isDeleting?: boolean;
 }
 
-const MODAL_CONFIG: Record<
-  SubscriptionStatusType,
-  { description: string; actionLabel: string }
-> = {
-  free: {
+type WithdrawConfig = { description: string; canWithdraw: boolean };
+
+const WITHDRAW_CONFIG = {
+  default: {
     description:
       '회원탈퇴시 계정 정보와 이용 데이터가 모두 삭제되며 복구할 수 없습니다.\n정말 탈퇴하시겠습니까?',
-    actionLabel: '탈퇴하기',
+    canWithdraw: true,
   },
-  canceling: {
-    description:
-      '회원탈퇴시 남아있는 이용 기간과 데이터는 모두 즉시 소멸되며 복구할 수 없습니다.\n정말 탈퇴하시겠습니까?',
-    actionLabel: '탈퇴하기',
-  },
-  active: {
+  blocked: {
     description:
       '현재 유료 구독이 활성화되어 있어 회원탈퇴가 불가능합니다.\n탈퇴를 원하시면 먼저 구독을 해지해 주세요.',
-    actionLabel: '구독 해지하기',
+    canWithdraw: false,
   },
+  cancelScheduled: {
+    description:
+      '회원탈퇴시 남아 있는 이용 기간과 데이터는\n모두 즉시 소멸되며 복구할 수 없습니다.\n정말 탈퇴하시겠습니까?',
+    canWithdraw: true,
+  },
+} satisfies Record<string, WithdrawConfig>;
+
+const MODAL_CONFIG: Record<SubscriptionStatus, WithdrawConfig> = {
+  [SubscriptionStatus.FREE]: WITHDRAW_CONFIG.default,
+  [SubscriptionStatus.UNVERIFIED]: WITHDRAW_CONFIG.default,
+  [SubscriptionStatus.PAID_ACTIVE]: WITHDRAW_CONFIG.blocked,
+  [SubscriptionStatus.PAID_PLAN_DOWNGRADE_SCHEDULED]: WITHDRAW_CONFIG.blocked,
+  [SubscriptionStatus.PAID_CANCEL_SCHEDULED]: WITHDRAW_CONFIG.cancelScheduled,
 };
 
 const WithdrawModal = ({
   open,
   onOpenChange,
-  status,
+  subscriptionStatus,
   onWithdraw,
+  onGoToSubscribe,
   isDeleting,
 }: WithdrawModalProps) => {
-  const router = useRouter();
-  const { description, actionLabel } = MODAL_CONFIG[status];
+  const { description, canWithdraw } = MODAL_CONFIG[subscriptionStatus];
 
   const handleAction = () => {
-    if (status === 'active') {
-      router.push(ROUTES.SUBSCRIBE);
-      onOpenChange(false);
+    if (!canWithdraw) {
+      onGoToSubscribe?.();
     } else {
-      onWithdraw();
+      onWithdraw?.();
     }
   };
 
@@ -65,16 +69,16 @@ const WithdrawModal = ({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
         <AlertDialogHeader>
-          <AlertDialogTitle className='text-center'>회원탈퇴</AlertDialogTitle>
-          <AlertDialogDescription className='text-center whitespace-pre-line'>
+          <AlertDialogTitle>회원탈퇴</AlertDialogTitle>
+          <AlertDialogDescription className='mx-auto text-center'>
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>
           <AlertDialogCancel>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={handleAction} disabled={isDeleting}>
-            {actionLabel}
+          <AlertDialogAction onClick={handleAction} isPending={isDeleting}>
+            {canWithdraw ? '탈퇴하기' : '구독 해지하기'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

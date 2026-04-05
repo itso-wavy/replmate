@@ -48,12 +48,8 @@ export function useAccountPage() {
     isPending: isUpdatingNotification,
   } = useUpdateNotificationSettings();
 
-  const [emailEnabled, setEmailEnabled] = useState(
-    dummyNotificationSettings.emailEnabled
-  );
-  const [smsEnabled, setSmsEnabled] = useState(
-    dummyNotificationSettings.smsEnabled
-  );
+  const [emailEnabled, setEmailEnabled] = useState(false);
+  const [smsEnabled, setSmsEnabled] = useState(false);
 
   useEffect(() => {
     if (!notificationSettings) return;
@@ -96,7 +92,6 @@ export function useAccountPage() {
   };
 
   // 본인인증
-  // TODO:
   const { mutate: verifyIdentity, isPending: isVerifying } =
     useVerifyIdentity();
 
@@ -122,7 +117,7 @@ export function useAccountPage() {
           router.push(ROUTES.ROOT);
         },
         onError: () =>
-          toast.error('요청에 실패했습니다. 잠시 후 다시 시도해주세요.'),
+          toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.'),
       }
     );
   };
@@ -141,7 +136,7 @@ export function useAccountPage() {
     handleSmsToggle,
     isVerifying,
     handleUserVerify,
-    userPlan,
+    subscriptionStatus: userPlan?.planStatus,
     isWithdrawModalOpen,
     setIsWithdrawModalOpen,
     isDeleting,

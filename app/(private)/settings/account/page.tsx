@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { CheckCircle2, CircleX } from 'lucide-react';
 
 import { TermsAccordionItem } from '@/components/global';
@@ -7,6 +9,7 @@ import { WithdrawModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Switch } from '@/components/ui/switch';
+import { ROUTES } from '@/constants/nav-menu';
 import { TERMS_CONFIG } from '@/constants/terms';
 import { formatDate } from '@/lib/utils';
 
@@ -24,6 +27,8 @@ const authProviderLabelMap: Record<string, string> = {
 };
 
 const AccountPage = () => {
+  const router = useRouter();
+
   const {
     user,
     termsList,
@@ -38,7 +43,7 @@ const AccountPage = () => {
     isVerifying,
     handleUserVerify,
     isLoadingTerms,
-    userPlan,
+    subscriptionStatus,
     isWithdrawModalOpen,
     setIsWithdrawModalOpen,
     isDeleting,
@@ -92,7 +97,7 @@ const AccountPage = () => {
               </p>
               <Button
                 onClick={handleUserVerify}
-                disabled={isVerifying}
+                isPending={isVerifying}
                 className='min-w-[80px]'
               >
                 본인인증
@@ -153,6 +158,8 @@ const AccountPage = () => {
           </p>
           <Button
             onClick={() => setIsWithdrawModalOpen(true)}
+            isPending={isDeleting}
+            disabled={!subscriptionStatus}
             variant='ghost'
             className='bg-input/30 text-destructive hover:text-destructive/80 min-w-[80px] shrink-0'
           >
@@ -161,13 +168,16 @@ const AccountPage = () => {
         </div>
       </InnerPageSection>
 
-      <WithdrawModal
-        open={isWithdrawModalOpen}
-        onOpenChange={setIsWithdrawModalOpen}
-        subscriptionStatus={userPlan?.planStatus}
-        // onWithdraw={handleUserWithdraw}
-        // isDeleting={isDeleting}
-      />
+      {subscriptionStatus && (
+        <WithdrawModal
+          open={isWithdrawModalOpen}
+          onOpenChange={setIsWithdrawModalOpen}
+          subscriptionStatus={subscriptionStatus}
+          onWithdraw={handleUserWithdraw}
+          onGoToSubscribe={() => router.push(ROUTES.SUBSCRIBE)}
+          isDeleting={isDeleting}
+        />
+      )}
     </InnerPageLayout>
   );
 };
