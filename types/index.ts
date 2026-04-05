@@ -21,7 +21,6 @@ export * from './api/payment';
 export * from './domain/alert';
 export * from './domain/common';
 export * from './domain/contact';
-export * from './domain/job';
 export * from './domain/plan';
 export * from './domain/product';
 export * from './domain/reminder';
@@ -30,6 +29,7 @@ export * from './domain/store';
 // export * from './domain/term';
 export * from './domain/usage';
 export * from './domain/user';
+export * from './domain/job';
 
 // Page types
 export * from './domain/pages';

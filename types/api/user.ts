@@ -1,8 +1,8 @@
 import type { PlanDto } from './plan';
 
-// ============================================================================
+// ==========================================================
 // 사용자 (Users)
-// ============================================================================
+// ==========================================================
 
 // GET /api/v1/users/me 유저 프로필 조회
 export interface UserDto {
@@ -21,6 +21,7 @@ export interface UserDto {
 
 // GET /api/v1/users/me/plan 유저 플랜 조회
 export interface UserPlanInfo {
+  planStatus: 'free' | string;
   subscription: SubscriptionDto;
   plan: PlanDto;
 }

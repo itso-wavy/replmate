@@ -5,14 +5,14 @@ import { CheckCircle2, Clock } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/constants/nav-menu';
-import { formatDate, getSubscriptionStatus } from '@/lib/utils';
-import type { UserPlanInfo } from '@/types';
+import { formatDate } from '@/lib/utils';
+import { SubscriptionStatus, type UserPlanDomain } from '@/types';
 
 // 결제 수단 더미 (실제 API 미제공)
 const DUMMY_PAYMENT = { last4: '1234', brand: 'KB 국민카드' };
 
 interface SubscriptionInfoProps {
-  userPlan: UserPlanInfo;
+  userPlan: UserPlanDomain;
   isVerified: boolean;
   onPlanChange: () => void;
   onPaymentChange: () => void;
@@ -26,11 +26,7 @@ const UnverifiedInfo = () => {
       <p className='typo-body-14 text-muted-foreground mb-3'>
         본인인증 후 평생 무료 플랜을 이용해 보세요!
       </p>
-      <Button
-        onClick={() => router.push(ROUTES.ACCOUNT)}
-        variant='outline'
-        size='sm'
-      >
+      <Button onClick={() => router.push(ROUTES.ACCOUNT)} variant='outline'>
         본인인증하러 가기
       </Button>
     </div>
@@ -144,7 +140,7 @@ const SubscriptionInfo = ({
   onPaymentChange,
   onReactivate,
 }: SubscriptionInfoProps) => {
-  const isFree = getSubscriptionStatus(userPlan.plan) === 'free';
+  const isFree = userPlan.planStatus === SubscriptionStatus.FREE;
   const isPendingCancel = userPlan.subscription.cancelAtPeriodEnd;
 
   if (!isVerified) return <UnverifiedInfo />;

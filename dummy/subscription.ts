@@ -1,7 +1,10 @@
-import { UsageQuotaSubscriptionDomain } from '@/types';
-import type { UserPlanInfo } from '@/types/api/user';
-import type { UsageLedgerDomain } from '@/types/domain/usage';
-import { UsageEventType } from '@/types/enums';
+import {
+  SubscriptionStatus,
+  UsageEventType,
+  UsageLedgerDomain,
+  UsageQuotaSubscriptionDomain,
+  UserPlanDomain,
+} from '@/types';
 
 export const dummySubscription: UsageQuotaSubscriptionDomain = {
   planName: '무료 플랜',
@@ -14,7 +17,8 @@ export const dummySubscription: UsageQuotaSubscriptionDomain = {
 
 // 구독 관리 페이지용 더미 데이터
 
-export const dummyUserPlanInfo: UserPlanInfo = {
+export const dummyUserPlanInfo: UserPlanDomain = {
+  planStatus: SubscriptionStatus.PAID_ACTIVE,
   plan: {
     id: 2,
     name: 'STARTER',
@@ -30,9 +34,9 @@ export const dummyUserPlanInfo: UserPlanInfo = {
   subscription: {
     id: 1,
     status: 'active',
-    startedAt: '2026-01-04T00:00:00Z',
-    currentPeriodStart: '2026-01-04T00:00:00Z',
-    currentPeriodEnd: '2026-02-04T00:00:00Z',
+    startedAt: new Date('2026-01-04T00:00:00Z'),
+    currentPeriodStart: new Date('2026-01-04T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-02-04T00:00:00Z'),
     cancelAtPeriodEnd: false,
     canceledAt: null,
   },

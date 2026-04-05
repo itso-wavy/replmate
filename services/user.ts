@@ -1,6 +1,5 @@
 import { api } from '@/lib/api';
 import { USER_ENDPOINTS } from '@/lib/endpoints';
-import { VerifyIdentityProvider } from '@/types/enums';
 import type { AgreeTermsResponseData } from '@/types/api/term';
 import type {
   CancelSubscriptionResponse,
@@ -10,15 +9,16 @@ import type {
   UserDto,
   UserPlanInfo,
 } from '@/types/api/user';
-import { PlanDomain, toPlanDomain } from '@/types/domain/plan';
+import { toPlanDomain } from '@/types/domain/plan';
 import {
   NotificationSettingsDomain,
-  SubscriptionDomain,
   UserDomain,
+  UserPlanDomain,
   toNotificationSettingsDomain,
   toSubscriptionDomain,
   toUserDomain,
 } from '@/types/domain/user';
+import { SubscriptionStatus, VerifyIdentityProvider } from '@/types/enums';
 
 // ==========================================================
 // 사용자 정보
@@ -44,16 +44,6 @@ export async function deleteUser(data: DeleteUserRequest): Promise<void> {
 // ==========================================================
 // 사용자 플랜
 // ==========================================================
-
-/**
- * 사용자 플랜 정보 (플랜 + 구독 정보)
- */
-export interface UserPlanDomain {
-  planStatus: 'unverified' | '';
-  plan: PlanDomain;
-  subscription: SubscriptionDomain;
-}
-
 /**
  * 사용자의 플랜 정보 조회 (플랜 + 구독 정보)
  */
@@ -61,7 +51,7 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
   const { data } = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
 
   return {
-    planStatus: data.planStatus, // "unverified"
+    planStatus: data.planStatus as SubscriptionStatus, // TODO: 정확히 확인
     plan: toPlanDomain(data.plan),
     subscription: toSubscriptionDomain(data.subscription),
   };
@@ -180,7 +170,7 @@ export async function getVerifyIdentityProviders(): Promise<string[]> {
 /**
  * 본인인증 완료 처리
  * - test: impUid 검증 없이 항상 성공 (개발/테스트용)
- * - pass: PASS 본인인증 (추후 연동, impUid 필요)
+ * - pass: PASS 본인인증 (추후 연동, impUid 필요) // TODO:
  */
 export async function verifyIdentity(
   provider: VerifyIdentityProvider = VerifyIdentityProvider.TEST,

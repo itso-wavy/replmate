@@ -3,17 +3,16 @@ import type {
   SubscriptionDto,
   UserDto,
 } from '@/types/api/user';
-
-import { AuthProvider } from '@/types/enums';
+import { AuthProvider, SubscriptionStatus } from '@/types/enums';
 
 import type { PlanDomain } from './plan';
 
 // Re-export PlanDomain for convenience
 export type { PlanDomain };
 
-// ============================================================================
+// ==========================================================
 // 사용자 도메인
-// ============================================================================
+// ==========================================================
 
 /**
  * 사용자 도메인 모델
@@ -46,6 +45,15 @@ export interface SubscriptionDomain {
 }
 
 /**
+ * 사용자 플랜 정보 (플랜 + 구독 정보)
+ */
+export interface UserPlanDomain {
+  planStatus: SubscriptionStatus;
+  plan: PlanDomain;
+  subscription: SubscriptionDomain;
+}
+
+/**
  * 사용자 + 플랜 + 구독 통합 정보
  */
 export interface UserWithPlanDomain {
@@ -63,9 +71,9 @@ export interface NotificationSettingsDomain {
   updatedAt: Date;
 }
 
-// ============================================================================
+// ==========================================================
 // 변환 함수
-// ============================================================================
+// ==========================================================
 
 /**
  * UserDto → UserDomain 변환

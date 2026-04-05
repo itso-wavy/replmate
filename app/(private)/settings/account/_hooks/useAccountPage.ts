@@ -15,7 +15,7 @@ import {
   useUserPlan,
   useVerifyIdentity,
 } from '@/hooks/useUser';
-import { formatDate, getSubscriptionStatus } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { UserStore } from '@/store/userStore';
 
 export function useAccountPage() {
@@ -25,10 +25,6 @@ export function useAccountPage() {
 
   // 구독 상태
   const { data: userPlan } = useUserPlan();
-  const subscriptionStatus = getSubscriptionStatus(
-    userPlan?.plan,
-    userPlan?.subscription
-  );
 
   // 회원탈퇴 모달
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -145,7 +141,7 @@ export function useAccountPage() {
     handleSmsToggle,
     isVerifying,
     handleUserVerify,
-    subscriptionStatus,
+    userPlan,
     isWithdrawModalOpen,
     setIsWithdrawModalOpen,
     isDeleting,

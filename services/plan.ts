@@ -2,9 +2,9 @@ import { api } from '@/lib/api';
 import { PLAN_ENDPOINTS } from '@/lib/endpoints';
 import { PlanDomain, PlanDto, toPlanDomain, toPlanDomainList } from '@/types';
 
-// ============================================================================
+// ==========================================================
 // 플랜 조회
-// ============================================================================
+// ==========================================================
 
 /**
  * 플랜 목록 조회
@@ -16,4 +16,3 @@ export async function getPlans(includeFree?: boolean): Promise<PlanDomain[]> {
   });
   return toPlanDomainList(response.data);
 }
-

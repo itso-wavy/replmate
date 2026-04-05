@@ -38,7 +38,7 @@ const AccountPage = () => {
     isVerifying,
     handleUserVerify,
     isLoadingTerms,
-    subscriptionStatus,
+    userPlan,
     isWithdrawModalOpen,
     setIsWithdrawModalOpen,
     isDeleting,
@@ -164,9 +164,9 @@ const AccountPage = () => {
       <WithdrawModal
         open={isWithdrawModalOpen}
         onOpenChange={setIsWithdrawModalOpen}
-        status={subscriptionStatus}
-        onWithdraw={handleUserWithdraw}
-        isDeleting={isDeleting}
+        subscriptionStatus={userPlan?.planStatus}
+        // onWithdraw={handleUserWithdraw}
+        // isDeleting={isDeleting}
       />
     </InnerPageLayout>
   );

@@ -30,10 +30,10 @@ export enum SubscriptionModel {
 
 // 구독 상태 구분(PlanStatus)
 export enum SubscriptionStatus {
-  UNVERIFIED = 'pending', // 미인증
+  UNVERIFIED = 'unverified', // 미인증
   FREE = 'free', // 무료(인증 + 미결제)
   PAID_ACTIVE = 'active', // 유료(해지 없음)
-  PAID_CANCEL_SCHEDULED = 'CANCEL_PENDING', // 유료(해지 대기)
+  PAID_CANCEL_SCHEDULED = 'cancel_pending', // 유료(해지 대기)
   PAID_PLAN_DOWNGRADE_SCHEDULED = 'downgrade_scheduled', // 유료(하위 플랜으로 변경 예정, 상위 플랜 변경은 즉시 이뤄짐)
 }
 
@@ -56,8 +56,12 @@ export enum VerificationStatus {
 
 // 스토어 플랫폼 타입
 export enum PlatformType {
-  // FIXME: API가 'naver'를 반환 중 — 백엔드에서 값 통일 후 제거 필요
-  NAVER_SMART_STORE = 'naver',
+  NAVER = 'naver',
+  COUPANG = 'coupang',
+}
+
+export enum PlatformType {
+  NAVER_SMART_STORE = 'naver_smart_store',
   NAVER_BRAND_STORE = 'naver_brand_store',
 }
 
@@ -173,6 +177,7 @@ export type AlertsMeta =
   | Record<string, never>;
 
 /** --------------------- 기타 타입 --------------------- */
+// Job 상태 타입 정의
 export enum JobStatus {
   WAITING = 'waiting',
   PROCESSING = 'processing',
@@ -180,6 +185,7 @@ export enum JobStatus {
   FAILED = 'failed',
 }
 
+// Job 타입 정의
 export enum JobType {
   STORE_SCRAPING = 'store_scraping',
   PRODUCT_REPLY = 'product_reply',
