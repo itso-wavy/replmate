@@ -5,8 +5,6 @@ import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
-import { useUpdateStoresBulk } from '@/hooks/useStores';
-
 import {
   Dialog,
   DialogContent,
@@ -15,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useUpdateStoresBulk } from '@/hooks/useStores';
 import { cn } from '@/lib/utils';
 import { StoreLimitedFormData, storeLimitedSchema } from '@/lib/validation';
 import { StoreDomain } from '@/types';
@@ -80,23 +79,15 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
     }
   };
 
-  // X 버튼 클릭만 허용, 백드롭 클릭, ESC 키(escape-key) 등은 차단
-  const handleOpenChange = (
-    newOpen: boolean,
-    eventDetails: DialogPrimitive.Root.ChangeEventDetails
-  ) => {
-    // 모달을 닫으려고 할 때만 체크
-    if (!newOpen) {
-      if (eventDetails.reason === 'close-press') {
-        onOpenChange(newOpen);
-      }
-      return;
-    }
-    onOpenChange(newOpen);
-  };
-
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen, eventDetails) => {
+        // isOpen: 열릴 때, !isOpen: 닫힐 때
+        if (eventDetails.reason !== 'close-press') return;
+        onOpenChange(isOpen);
+      }}
+    >
       <DialogContent className='p-0'>
         <form
           onSubmit={form.handleSubmit(handleSaveSelection)}

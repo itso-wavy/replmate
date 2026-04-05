@@ -71,7 +71,14 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen, eventDetails) => {
+        // isOpen: 열릴 때, !isOpen: 닫힐 때
+        if (eventDetails.reason !== 'close-press') return;
+        onOpenChange(isOpen);
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle className='typo-heading-20!'>쇼핑몰 등록</DialogTitle>

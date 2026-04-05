@@ -57,10 +57,12 @@ const AddNewCard = ({ storeLimitExceeded }: AddNewCardProps) => {
         open={activeModal === 'limitExceeded'}
         onOpenChange={(open) => !open && setActiveModal(null)}
       />
-      <AddNewStoreFormModal
-        open={activeModal === 'addNewStore'}
-        onOpenChange={(open) => !open && setActiveModal(null)}
-      />
+      {activeModal === 'addNewStore' && (
+        <AddNewStoreFormModal
+          open={activeModal === 'addNewStore'}
+          onOpenChange={(open) => !open && setActiveModal(null)}
+        />
+      )}
     </Card>
   );
 };
