@@ -16,6 +16,7 @@ import {
 } from '@/services/user';
 import { UserStore } from '@/store/userStore';
 import type { DeleteUserRequest } from '@/types/api/user';
+import { VerifyIdentityProvider } from '@/types/enums';
 
 export const useUser = () =>
   useQuery({
@@ -91,7 +92,7 @@ export const useVerifyIdentity = () => {
   const qc = useQueryClient();
   const { setUser } = UserStore.useActions();
   return useMutation({
-    mutationFn: verifyIdentity,
+    mutationFn: (provider?: VerifyIdentityProvider) => verifyIdentity(provider),
     onSuccess: async () => {
       const updatedUser = await getUser();
       setUser(updatedUser);

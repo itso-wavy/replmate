@@ -167,13 +167,28 @@ export async function updateNotificationSettings(
 // ==========================================================
 
 /**
- * 본인인증 완료 처리
- * is_verified를 true로 설정하고 pending 구독을 trial로 변경합니다.
+ * 본인인증 제공자 목록 조회
+ * 응답: ["test", "pass"]
  */
-export async function verifyIdentity(): Promise<UserDomain> {
-  const response = await api.post<UserDto>(
-    USER_ENDPOINTS.VERIFY_IDENTITY,
-    { provider: VerifyIdentityProvider.TEST } // TODO: PASS 연동 시 provider/impUid 파라미터화
+export async function getVerifyIdentityProviders(): Promise<string[]> {
+  const response = await api.get<string[]>(
+    USER_ENDPOINTS.VERIFY_IDENTITY_PROVIDERS
   );
+  return response.data;
+}
+
+/**
+ * 본인인증 완료 처리
+ * - test: impUid 검증 없이 항상 성공 (개발/테스트용)
+ * - pass: PASS 본인인증 (추후 연동, impUid 필요)
+ */
+export async function verifyIdentity(
+  provider: VerifyIdentityProvider = VerifyIdentityProvider.TEST,
+  impUid?: string
+): Promise<UserDomain> {
+  const response = await api.post<UserDto>(USER_ENDPOINTS.VERIFY_IDENTITY, {
+    provider,
+    ...(impUid && { impUid }),
+  });
   return toUserDomain(response.data);
 }
