@@ -10,7 +10,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 
-import { AlertType, AlertVariant } from '@/types';
+import { AlertVariant, ReminderEvent } from '@/types';
 
 import { Alert, AlertAction, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -18,7 +18,7 @@ import { Button } from '../ui/button';
 export interface CustomAlertProps {
   id: string;
   variant: AlertVariant;
-  type: AlertType;
+  type: ReminderEvent;
   title: string;
   description?: string;
   href?: string;

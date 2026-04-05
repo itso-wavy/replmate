@@ -9,7 +9,7 @@ import { ROUTES } from '@/constants/nav-menu';
 import { dummyRecentReplies } from '@/dummy/replies';
 import { useAlerts } from '@/hooks/useAlerts';
 import { UserStore } from '@/store/userStore';
-import { AlertType } from '@/types';
+import { ReminderEvent } from '@/types';
 import type { Alert } from '@/types';
 
 import { DashboardLayout } from '../_components';
@@ -26,8 +26,8 @@ const sortDashboardAlerts = (alerts: Alert[]) => {
   const sorted = [...alerts].sort(
     (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
   );
-  const payment = sorted.filter((a) => a.type === AlertType.PAYMENT_FAILED);
-  const others = sorted.filter((a) => a.type !== AlertType.PAYMENT_FAILED);
+  const payment = sorted.filter((a) => a.type === ReminderEvent.PAYMENT_FAILED);
+  const others = sorted.filter((a) => a.type !== ReminderEvent.PAYMENT_FAILED);
   return payment.concat(others).slice(0, 3);
 };
 

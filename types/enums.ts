@@ -113,15 +113,15 @@ export enum ReplyStatus {
   RESET = 'reset', // 리셋됨 - 다시 생성하거나 초기화한 상태
 }
 
-/** --------------------- 알림 타입 --------------------- */
-// 요청 카테고리
-export type AlertCategory = 'plan' | 'store' | 'product';
+/** --------------------- 알림(Reminder) 타입 --------------------- */
+// 리마인더 카테고리 (백엔드 ReminderCategory)
+export type ReminderCategory = 'plan' | 'store' | 'product';
 
-// 요청 레벨
-export type AlertLevel = 'INFO' | 'WARNING' | 'ERROR';
+// 리마인더 레벨 (백엔드 ReminderLevel)
+export type ReminderLevel = 'INFO' | 'WARNING' | 'ERROR';
 
-// 알림 타입
-export enum AlertType {
+// 리마인더 이벤트 (백엔드 ReminderEvent)
+export enum ReminderEvent {
   // ERROR
   PAYMENT_FAILED = 'PAYMENT_FAILED',
 
@@ -134,13 +134,6 @@ export enum AlertType {
   // INFO
   STORE_ADJUSTMENT_SCHEDULED = 'STORE_ADJUSTMENT_SCHEDULED',
   PRODUCT_ADJUSTMENT_SCHEDULED = 'PRODUCT_ADJUSTMENT_SCHEDULED',
-}
-
-// 알람 클라이언트 선언 타입 // TODO: toAlert 변경하면서 삭제 대상
-export enum CAlertType {
-  STORE_AUTH_REJECTED = 'STORE_AUTH_REJECTED ',
-  STORE_ADJUSTMENT_REQUIRED_DETAIL = 'STORE_ADJUSTMENT_REQUIRED_DETAIL',
-  PRODUCT_ADJUSTMENT_REQUIRED_DETAIL = 'PRODUCT_ADJUSTMENT_REQUIRED_DETAIL',
 }
 
 // 이벤트별 meta 타입
@@ -169,7 +162,7 @@ export interface AdjustmentScheduledMeta {
   maxProductCount: number;
 }
 
-export type AlertsMeta =
+export type ReminderMeta =
   | PaymentFailedMeta
   | StoreVerificationRejectedMeta
   | AdjustmentRequiredMeta
