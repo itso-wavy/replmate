@@ -51,7 +51,6 @@ const TermsAccordionItem = ({
           >
             <Checkbox
               checked={isChecked}
-              onCheckedChange={onToggleCheck}
               onClick={(e) => e.stopPropagation()}
             />
           </div>
