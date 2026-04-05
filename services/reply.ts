@@ -1,13 +1,17 @@
 import { api } from '@/lib/api';
 import { REPLY_ENDPOINTS } from '@/lib/endpoints';
-import type { JobTicketDto } from '@/types/api/job';
-import type { CreateTestReplyRequest, ReplyList } from '@/types/api/reply';
-import type { ReplyStatus } from '@/types/enums';
-import { ReplyListDomain, toReplyDomainList } from '@/types/domain/reply';
+import {
+  CreateTestReplyRequest,
+  JobTicketDto,
+  ReplyList,
+  ReplyListDomain,
+  ReplyStatus,
+  toReplyDomainList,
+} from '@/types';
 
-// ============================================================================
+// ==========================================================
 // 리플 조회
-// ============================================================================
+// ==========================================================
 
 /**
  * 리플 목록 조회 (페이지네이션)
@@ -38,9 +42,9 @@ export async function getReplies(params: {
   };
 }
 
-// ============================================================================
+// ==========================================================
 // 리플 테스트
-// ============================================================================
+// ==========================================================
 
 /**
  * 테스트 AI 리플 생성

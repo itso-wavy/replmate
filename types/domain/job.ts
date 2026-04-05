@@ -20,21 +20,6 @@ export interface JobDomain {
 }
 
 /**
- * Job 상태 타입 정의
- */
-export type JobStatus = 'pending' | 'running' | 'completed' | 'failed';
-
-/**
- * Job 타입 정의
- */
-export type JobType =
-  | 'product_sync'
-  | 'review_sync'
-  | 'reply_generation'
-  | 'store_verification'
-  | 'export_replies';
-
-/**
  * Job 실행 정보를 포함한 확장 타입
  * 프론트엔드에서 Job 진행 상황 표시 시 사용
  */

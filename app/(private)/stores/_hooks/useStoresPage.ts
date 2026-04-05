@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { dummyStores } from '@/dummy';
 import { useMyStores } from '@/hooks/useStores';
 import { useUserPlan } from '@/hooks/useUser';
 import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
