@@ -2,13 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 
-import { CheckCircle2, CircleX } from 'lucide-react';
+import { EnvelopeSimpleIcon } from '@phosphor-icons/react';
+import { CheckCircle2, CircleX, PhoneIcon } from 'lucide-react';
 
-import { TermsAccordionItem } from '@/components/global';
+import { Logo, TermsAccordionItem } from '@/components/global';
 import { WithdrawModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Switch } from '@/components/ui/switch';
+import { COMPANY_META_INFO } from '@/constants/company';
 import { ROUTES } from '@/constants/nav-menu';
 import { TERMS_CONFIG } from '@/constants/terms';
 import { formatDate } from '@/lib/utils';
@@ -167,6 +169,61 @@ const AccountPage = () => {
           </Button>
         </div>
       </InnerPageSection>
+
+      {/* 회사 정보 */}
+      <div className='typo-caption-14 text-foreground-description bg-gray-50 py-8 md:py-16'>
+        <div className='wrapper'>
+          <div className='flex items-start'>
+            <Logo
+              // href={ROUTES.ACCOUNT}
+              showIcon
+              showText={false}
+              iconClassName='-mt-2 size-[40px] mr-2 '
+              className='pointer-events-none'
+            />
+
+            <div className='space-y-2 select-text'>
+              <p className='typo-heading-16 text-brand-500 mt-2.5 font-semibold'>
+                {COMPANY_META_INFO.COMPANY_NAME}
+              </p>
+              <div className='mt-1 space-y-0.5'>
+                <p>
+                  대표: {COMPANY_META_INFO.REPRESENTATIVE} | 사업자등록번호:{' '}
+                  {COMPANY_META_INFO.BUSINESS_REGISTRATION_NUMBER} |
+                  통신판매업신고:
+                  {COMPANY_META_INFO.MAIL_ORDER_BUSINESS_REPORT_NUMBER}
+                </p>
+                <p>주소: {COMPANY_META_INFO.ADDRESS}</p>
+              </div>
+
+              <div className='typo-caption-14 *:group *:hover:text-foreground mt-3.5 *:flex *:w-fit *:cursor-pointer *:items-center *:transition-colors'>
+                <a
+                  href={`tel:${COMPANY_META_INFO.CUSTOMER_CENTER}`}
+                  className='mt-6 md:mt-2'
+                >
+                  <PhoneIcon size={12} className='text-brand-500 mr-1.5' />
+                  <span>고객센터: {COMPANY_META_INFO.CUSTOMER_CENTER}</span>
+                </a>
+
+                <div className='mt-1 flex w-fit cursor-pointer items-center transition-colors'>
+                  <EnvelopeSimpleIcon
+                    size={12}
+                    className='text-brand-500 mr-1.5'
+                  />
+                  <p
+                    // onClick={openReplmateSupportEmail}
+                    className='flex items-start'
+                  >
+                    이메일 문의: {COMPANY_META_INFO.EMAIL}
+                  </p>
+                </div>
+              </div>
+
+              {/* <p className='pt-2'>© 2026 Replmate. All rights reserved.</p> */}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {subscriptionStatus && (
         <WithdrawModal
