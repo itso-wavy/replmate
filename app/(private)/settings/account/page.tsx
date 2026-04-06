@@ -13,7 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { COMPANY_META_INFO } from '@/constants/company';
 import { ROUTES } from '@/constants/nav-menu';
 import { TERMS_CONFIG } from '@/constants/terms';
-import { formatDate } from '@/lib/utils';
+import { formatDate, openReplmateSupportEmail } from '@/lib/utils';
 
 import {
   InnerPageLayout,
@@ -162,8 +162,8 @@ const AccountPage = () => {
             onClick={() => setIsWithdrawModalOpen(true)}
             isPending={isDeleting}
             disabled={!subscriptionStatus}
-            variant='ghost'
-            className='bg-input/30 text-destructive hover:text-destructive/80 min-w-[80px] shrink-0'
+            variant='link'
+            className='text-foreground-description-muted hover:text-foreground-description -ml-0.5 underline underline-offset-[6px]'
           >
             탈퇴하기
           </Button>
@@ -171,7 +171,7 @@ const AccountPage = () => {
       </InnerPageSection>
 
       {/* 회사 정보 */}
-      <div className='typo-caption-14 text-foreground-description bg-gray-50 py-8 md:py-16'>
+      <div className='typo-caption-14 text-foreground-description mt-16 bg-gray-50 py-8 md:py-16'>
         <div className='wrapper'>
           <div className='flex items-start'>
             <Logo
@@ -211,7 +211,7 @@ const AccountPage = () => {
                     className='text-brand-500 mr-1.5'
                   />
                   <p
-                    // onClick={openReplmateSupportEmail}
+                    onClick={openReplmateSupportEmail}
                     className='flex items-start'
                   >
                     이메일 문의: {COMPANY_META_INFO.EMAIL}
