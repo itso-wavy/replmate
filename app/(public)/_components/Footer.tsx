@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import { EnvelopeSimpleIcon } from '@phosphor-icons/react/dist/ssr';
+import { PhoneIcon } from 'lucide-react';
 
-import { Logo } from '@/components/global';
+import Logo from '@/components/global/Logo';
 import { TermModal } from '@/components/modal';
 import { COMPANY_META_INFO } from '@/constants/company';
 import { openReplmateSupportEmail } from '@/lib/utils';
@@ -40,18 +41,34 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className='typo-caption-14 mb-6 border-t border-gray-100 md:border-t-0 md:*:ml-auto'>
-          <div className='hover:text-secondary/90 group mt-6 flex w-fit cursor-pointer items-center transition-colors md:mt-0'>
-            <EnvelopeSimpleIcon
-              size={16}
-              className='mr-2 group-hover:text-gray-400/90'
-            />
-            <p onClick={openReplmateSupportEmail} className='flex items-start'>
-              이메일 문의: {COMPANY_META_INFO.EMAIL}
-            </p>
+        <div className='mb-6 border-t border-gray-100 md:border-t-0 md:*:ml-auto'>
+          <div className='*:typo-caption-14 *:group *:hover:text-secondary/90 *:flex *:w-fit *:cursor-pointer *:items-center *:transition-colors'>
+            <a
+              href={`tel:${COMPANY_META_INFO.CUSTOMER_CENTER}`}
+              className='mt-6 md:mt-2'
+            >
+              <PhoneIcon
+                size={12}
+                className='mr-1.5 group-hover:text-gray-400/90'
+              />
+              <span>고객센터: {COMPANY_META_INFO.CUSTOMER_CENTER}</span>
+            </a>
+
+            <div className='mt-1 flex w-fit cursor-pointer items-center transition-colors'>
+              <EnvelopeSimpleIcon
+                size={12}
+                className='mr-1.5 group-hover:text-gray-400/90'
+              />
+              <p
+                onClick={openReplmateSupportEmail}
+                className='flex items-start'
+              >
+                이메일 문의: {COMPANY_META_INFO.EMAIL}
+              </p>
+            </div>
           </div>
 
-          <div className='typo-caption-12 mt-2 w-fit space-x-4 md:text-end'>
+          <div className='typo-caption-12 mt-4 space-x-4 md:text-end'>
             <button
               type='button'
               onClick={() => setShowTermOfUseModal(true)}
