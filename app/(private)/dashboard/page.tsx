@@ -42,7 +42,7 @@ const DashboardPage = () => {
 
   if (isLoading || !subscription) {
     return (
-      <DashboardLayout heading='대시보드' alerts={[]}>
+      <DashboardLayout heading='대시보드'>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className='h-[160px] rounded-2xl' />

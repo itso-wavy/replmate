@@ -114,11 +114,16 @@ export enum ReplyStatus {
 }
 
 /** --------------------- 알림(Reminder) 타입 --------------------- */
-// 리마인더 카테고리 (백엔드 ReminderCategory)
+// 리마인더 카테고리
 export type ReminderCategory = 'plan' | 'store' | 'product';
 
-// 리마인더 레벨 (백엔드 ReminderLevel)
-export type ReminderLevel = 'INFO' | 'WARNING' | 'ERROR';
+// 리마인더 레벨
+export enum ReminderLevel {
+  SUCCESS = 'SUCCESS',
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR',
+}
 
 // 리마인더 이벤트 (백엔드 ReminderEvent)
 export enum ReminderEvent {

@@ -1,11 +1,14 @@
-import { ReminderEvent } from '../enums';
-
-export type AlertVariant = 'success' | 'info' | 'warning' | 'error';
+import type {
+  ReminderCategory,
+  ReminderEvent,
+  ReminderLevel,
+} from '@/types/enums';
 
 export interface Alert {
   id: string;
   createdAt: Date;
-  variant: AlertVariant;
+  variant: ReminderLevel;
+  category: ReminderCategory;
   type: ReminderEvent;
   title: string;
   description?: string;

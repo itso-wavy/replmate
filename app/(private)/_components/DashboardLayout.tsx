@@ -10,7 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useAlerts } from '@/hooks/useAlerts';
+import { useAlerts } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { Alert } from '@/types';
 
@@ -28,6 +28,8 @@ export const DashboardLayout = ({
   className,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
+  // useAlerts 내부에서 usePathname()으로 페이지별 문구를 자동 분기함
+  // dashboard/page.tsx는 정렬이 필요해 alerts prop으로 override
   const internalAlerts = useAlerts();
   const alerts = propAlerts ?? internalAlerts;
 
