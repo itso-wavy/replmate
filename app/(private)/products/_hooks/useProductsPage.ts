@@ -55,7 +55,6 @@ export function useProductsPage() {
   );
 
   const products = productData?.items ?? [];
-  const totalPages = productData?.totalPages ?? 1;
 
   // 스토어 변경 시 초기화
   useEffect(() => {
@@ -242,7 +241,7 @@ export function useProductsPage() {
     isDirty,
     isLoading: isProductsLoading,
     currentPage,
-    totalPages,
+    totalPages: productData?.totalPages ?? 1,
     storeName: selectedStore?.name ?? '',
     handlePageChange: setCurrentPage,
     handleToggle,
