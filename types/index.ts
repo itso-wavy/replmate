@@ -31,9 +31,6 @@ export * from './domain/usage';
 export * from './domain/user';
 export * from './domain/job';
 
-// Page types
-export * from './domain/pages';
-
 /* 
 매퍼 예시
 // 

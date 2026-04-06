@@ -175,7 +175,6 @@ const AccountPage = () => {
         <div className='wrapper'>
           <div className='flex items-start'>
             <Logo
-              // href={ROUTES.ACCOUNT}
               showIcon
               showText={false}
               iconClassName='-mt-2 size-[40px] mr-2 '
@@ -218,8 +217,6 @@ const AccountPage = () => {
                   </p>
                 </div>
               </div>
-
-              {/* <p className='pt-2'>© 2026 Replmate. All rights reserved.</p> */}
             </div>
           </div>
         </div>
