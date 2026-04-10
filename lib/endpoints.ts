@@ -1,6 +1,7 @@
 import { TermsType } from '@/types/enums';
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+const V1 = `${API_BASE}/v1`;
 
 // ============================================================================
 // 인증 & 세션 (OAuth, Session)
@@ -8,14 +9,14 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 export const OAUTH_ENDPOINTS = {
   // OAuth 로그인 시작 (백엔드가 소셜 OAuth 처리)
-  OAUTHS_SAMPLE: `${API_BASE}/oauths/sample/callback`,
-  KAKAO_LOGIN: `${API_BASE}/oauths/kakao/login`,
-  GOOGLE_LOGIN: `${API_BASE}/oauths/google/login`,
-  NAVER_LOGIN: `${API_BASE}/oauths/naver/login`,
+  OAUTHS_SAMPLE: `${V1}/oauths/sample/callback`,
+  KAKAO_LOGIN: `${V1}/oauths/kakao/login`,
+  GOOGLE_LOGIN: `${V1}/oauths/google/login`,
+  NAVER_LOGIN: `${V1}/oauths/naver/login`,
 };
 
 export const SESSION_ENDPOINTS = {
-  LOGOUT: `${API_BASE}/session/logout`,
+  LOGOUT: `${V1}/session/logout`,
 } as const;
 
 // ============================================================================
@@ -24,29 +25,29 @@ export const SESSION_ENDPOINTS = {
 
 export const USER_ENDPOINTS = {
   // 사용자 정보
-  GET_USER: `${API_BASE}/users/me`,
+  GET_USER: `${V1}/users/me`,
 
   // 사용자 탈퇴
-  DELETE_USER: `${API_BASE}/users/me`,
+  DELETE_USER: `${V1}/users/me`,
 
   // 사용자 플랜
-  GET_USER_PLAN: `${API_BASE}/users/me/plan`,
-  CHANGE_PLAN: `${API_BASE}/users/me/plan`,
-  CANCEL_PLAN: `${API_BASE}/users/me/plan`,
-  REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
+  GET_USER_PLAN: `${V1}/users/me/plan`,
+  CHANGE_PLAN: `${V1}/users/me/plan`,
+  CANCEL_PLAN: `${V1}/users/me/plan`,
+  REACTIVATE_PLAN: `${V1}/users/me/plan/reactivate`,
 
   // 영수증 요청
-  REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
+  REQUEST_RECEIPT: `${V1}/users/me/receipt`,
 
   // 약관 동의
-  AGREE_TERMS: `${API_BASE}/users/me/terms-agreements`,
+  AGREE_TERMS: `${V1}/users/me/terms-agreements`,
 
   // 알림 설정
-  GET_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
-  UPDATE_NOTIFICATION_SETTINGS: `${API_BASE}/users/me/notification-settings`,
+  GET_NOTIFICATION_SETTINGS: `${V1}/users/me/notification-settings`,
+  UPDATE_NOTIFICATION_SETTINGS: `${V1}/users/me/notification-settings`,
 
   // 본인인증
-  VERIFY_IDENTITY: `${API_BASE}/users/me/verify-identity`,
+  VERIFY_IDENTITY: `${V1}/users/me/verify-identity`,
 } as const;
 
 // ============================================================================
@@ -55,9 +56,9 @@ export const USER_ENDPOINTS = {
 
 export const TERMS_ENDPOINTS = {
   // 약관 조회
-  GET_TERMS_LIST: `${API_BASE}/terms`,
-  GET_TERMS_TYPES: `${API_BASE}/terms/types`,
-  GET_TERMS_BY_TYPE: (type: TermsType) => `${API_BASE}/terms/type/${type}`,
+  GET_TERMS_LIST: `${V1}/terms`,
+  GET_TERMS_TYPES: `${V1}/terms/types`,
+  GET_TERMS_BY_TYPE: (type: TermsType) => `${V1}/terms/type/${type}`,
 } as const;
 
 // ============================================================================
@@ -66,7 +67,7 @@ export const TERMS_ENDPOINTS = {
 
 export const PLAN_ENDPOINTS = {
   // 전체 플랜 목록
-  GET_PLANS: `${API_BASE}/plans`,
+  GET_PLANS: `${V1}/plans`,
 } as const;
 
 // ============================================================================
@@ -75,11 +76,11 @@ export const PLAN_ENDPOINTS = {
 
 export const PAYMENT_ENDPOINTS = {
   // 결제 콜백 응답 샘플
-  SAMPLE_CALLBACK: `${API_BASE}/payments/sample/callback`,
+  SAMPLE_CALLBACK: `${V1}/payments/sample/callback`,
   // Mock 결제 처리
-  MOCK_PAYMENT: (orderId: string) => `${API_BASE}/payments/mock/${orderId}`,
+  MOCK_PAYMENT: (orderId: string) => `${V1}/payments/mock/${orderId}`,
   // 토스 결제 콜백
-  TOSS_CALLBACK: `${API_BASE}/payments/toss/callback`,
+  TOSS_CALLBACK: `${V1}/payments/toss/callback`,
 } as const;
 
 // ============================================================================
@@ -87,39 +88,39 @@ export const PAYMENT_ENDPOINTS = {
 // ============================================================================
 export const STORE_ENDPOINTS = {
   // 유저 스토어 목록 조회 (경로 변경: /stores/me -> /users/me/stores)
-  GET_MY_STORES: `${API_BASE}/users/me/stores`,
+  GET_MY_STORES: `${V1}/users/me/stores`,
   // 플랫폼 목록 조회
-  GET_PLATFORMS: `${API_BASE}/stores/platforms`,
+  GET_PLATFORMS: `${V1}/stores/platforms`,
   // 스토어 URL 중복 확인 (GET으로 변경, query param 사용)
-  CHECK_STORE_URL: `${API_BASE}/stores/url-check`,
+  CHECK_STORE_URL: `${V1}/stores/url-check`,
   // 스토어 리플 옵션 조회
   GET_REPLY_OPTIONS: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}/reply-options`,
+    `${V1}/stores/${storeId}/reply-options`,
   // 스토어 리플 옵션 수정
   UPDATE_REPLY_OPTIONS: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}/reply-options`,
+    `${V1}/stores/${storeId}/reply-options`,
   // 스토어 상세 조회
   GET_STORE_DETAIL: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}`,
+    `${V1}/stores/${storeId}`,
   // 스토어 활성화 상태 변경
   UPDATE_STORE_STATUS: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}`,
+    `${V1}/stores/${storeId}`,
   // 스토어 삭제
-  DELETE_STORE: (storeId: string | number) => `${API_BASE}/stores/${storeId}`,
+  DELETE_STORE: (storeId: string | number) => `${V1}/stores/${storeId}`,
   // 스토어 생성
-  CREATE_STORE: `${API_BASE}/stores`,
+  CREATE_STORE: `${V1}/stores`,
   // 스토어별 상품 목록 조회
   GET_STORE_PRODUCTS: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}/products`,
+    `${V1}/stores/${storeId}/products`,
   // Presigned URL 발급
-  GET_PRESIGNED_URL: `${API_BASE}/stores/presigned-url`,
+  GET_PRESIGNED_URL: `${V1}/stores/presigned-url`,
   // Presigned URL 테스트 업로드
-  TEST_UPLOAD: `${API_BASE}/stores/test-upload`,
+  TEST_UPLOAD: `${V1}/stores/test-upload`,
   // 인증 이미지 업데이트 (imageKey 기반)
   UPDATE_VERIFICATION_IMAGE: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}/verification-image`,
+    `${V1}/stores/${storeId}/verification-image`,
   // 스토어 벌크 업데이트
-  UPDATE_STORES_BULK: `${API_BASE}/users/me/stores`,
+  UPDATE_STORES_BULK: `${V1}/users/me/stores`,
 } as const;
 
 // ============================================================================
@@ -128,15 +129,15 @@ export const STORE_ENDPOINTS = {
 export const PRODUCT_ENDPOINTS = {
   // 상품 조회 (스토어별)
   GET_PRODUCTS: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}/products`,
+    `${V1}/stores/${storeId}/products`,
 
   // 개별 상품 조회
   GET_PRODUCT_DETAIL: (productId: string | number) =>
-    `${API_BASE}/products/${productId}`,
+    `${V1}/products/${productId}`,
 
   // 상품 정보 업데이트
   UPDATE_PRODUCT: (productId: string | number) =>
-    `${API_BASE}/products/${productId}`,
+    `${V1}/products/${productId}`,
 } as const;
 
 // ============================================================================
@@ -145,10 +146,10 @@ export const PRODUCT_ENDPOINTS = {
 
 export const REPLY_ENDPOINTS = {
   // 리플 목록 조회
-  GET_REPLIES: `${API_BASE}/replies`,
+  GET_REPLIES: `${V1}/replies`,
 
   // 리플 테스트 (미리보기)
-  TEST_REPLY: `${API_BASE}/replies/test`,
+  TEST_REPLY: `${V1}/replies/test`,
 } as const;
 
 // ============================================================================
@@ -157,9 +158,9 @@ export const REPLY_ENDPOINTS = {
 
 export const USAGE_ENDPOINTS = {
   // 사용량 조회
-  GET_QUOTA: `${API_BASE}/usage/quota`, // 구독 사용량
-  GET_TEST_QUOTA: `${API_BASE}/usage/test-quota`, // 테스트 사용량
-  GET_USAGE_HISTORY: `${API_BASE}/usage/history`, // 사용 내역
+  GET_QUOTA: `${V1}/usage/quota`, // 구독 사용량
+  GET_TEST_QUOTA: `${V1}/usage/test-quota`, // 테스트 사용량
+  GET_USAGE_HISTORY: `${V1}/usage/history`, // 사용 내역
 } as const;
 
 // ============================================================================
@@ -168,7 +169,7 @@ export const USAGE_ENDPOINTS = {
 
 export const REMINDER_ENDPOINTS = {
   // 알림 조회
-  GET_REMINDERS: `${API_BASE}/reminders`,
+  GET_REMINDERS: `${V1}/reminders`,
 } as const;
 
 // ============================================================================
@@ -177,7 +178,7 @@ export const REMINDER_ENDPOINTS = {
 
 export const CONTACT_ENDPOINTS = {
   // 문의 생성
-  CREATE_CONTACT: `${API_BASE}/contacts`,
+  CREATE_CONTACT: `${V1}/contacts`,
 } as const;
 
 // ============================================================================
@@ -186,9 +187,9 @@ export const CONTACT_ENDPOINTS = {
 
 export const JOB_ENDPOINTS = {
   // Job 상태 조회
-  GET_JOB: (jobId: string) => `${API_BASE}/jobs/${jobId}`,
+  GET_JOB: (jobId: string) => `${V1}/jobs/${jobId}`,
   // Job 진행도 SSE 스트림
-  STREAM_JOB: (jobId: string) => `${API_BASE}/jobs/${jobId}/stream`,
+  STREAM_JOB: (jobId: string) => `${V1}/jobs/${jobId}/stream`,
 } as const;
 
 // ============================================================================
@@ -196,7 +197,7 @@ export const JOB_ENDPOINTS = {
 // ============================================================================
 export const SERVICE_INFO_ENDPOINTS = {
   // 서비스 정보 조회
-  GET_SERVICE_INFO: `${API_BASE}/service-info`,
+  GET_SERVICE_INFO: `${V1}/service-info`,
 } as const;
 
 // ============================================================================
