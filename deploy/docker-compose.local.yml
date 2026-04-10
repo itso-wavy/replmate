@@ -1,0 +1,22 @@
+# 로컬 개발용 - hot reload 지원
+# 코드 변경 시 자동 리로드 (volumes + next dev)
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      target: deps
+    container_name: rm-front-local
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+    volumes:
+      - ../:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "${PORT:-3000}:3000"
+    command: pnpm dev
+    restart: unless-stopped
