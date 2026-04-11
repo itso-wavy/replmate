@@ -21,6 +21,7 @@ export interface UsageQuotaDomain {
 export interface TestUsageQuotaDomain {
   storeId: number;
   remaining: number;
+  limit: number;
   updatedAt: Date;
 }
 
@@ -93,6 +94,7 @@ export function toTestUsageQuotaDomain(
   return {
     storeId: dto.storeId,
     remaining: dto.remaining,
+    limit: dto.limit,
     updatedAt: new Date(dto.updatedAt),
   };
 }

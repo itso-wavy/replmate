@@ -36,7 +36,7 @@ export const USER_ENDPOINTS = {
   REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
 
   // 영수증 요청
-  REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
+  REQUEST_RECEIPT: `${API_BASE}/users/me/plan/receipt`,
 
   // 약관 동의
   AGREE_TERMS: `${API_BASE}/users/me/terms-agreements`,
@@ -150,6 +150,9 @@ export const REPLY_ENDPOINTS = {
 
   // 리플 테스트 (미리보기)
   TEST_REPLY: `${API_BASE}/replies/test`,
+
+  // 테스트 리플 결과 조회
+  TEST_REPLY_RESULT: (jobId: string) => `${API_BASE}/replies/test/${jobId}`,
 } as const;
 
 // ==========================================================

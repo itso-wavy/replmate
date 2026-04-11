@@ -16,6 +16,7 @@ export interface UsageQuotaDto {
 export interface TestUsageQuotaDto {
   storeId: number;
   remaining: number;
+  limit: number;
   updatedAt: string;
 }
 

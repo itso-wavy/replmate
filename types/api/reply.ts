@@ -17,6 +17,12 @@ export interface ReplyDto {
   createdAt: string;
 }
 
+// GET /api/v1/replies/test/{job_id} 테스트 리플 결과 조회
+export interface TestReplyDto {
+  aiText: string;
+  sentimentLevel: number; // 0~5.0
+}
+
 export interface CreateTestReplyRequest {
   storeId: number;
   review: string;

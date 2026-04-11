@@ -150,7 +150,7 @@ export function useOptionsPage() {
       es.addEventListener('complete', (e: MessageEvent) => {
         try {
           const data = JSON.parse(e.data);
-          setGeneratedReply(data.result?.aiText ?? data.result?.text ?? '');
+          setGeneratedReply(data.result?.aiText ?? '');
         } catch {
           setGeneratedReply('');
         }
