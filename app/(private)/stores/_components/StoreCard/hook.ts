@@ -6,15 +6,14 @@ import { ProgressSvgProps } from '@/assets/svg';
 import { useUpdateStore } from '@/hooks/useStores';
 import { PlatformType, type StoreDomain } from '@/types';
 
-// FIXME: 배포 테스트를 위해 platform: PlatformType을 string으로 수정함
-const getPlatformConfig = (platform: string) => {
-  switch (platform) {
-    case PlatformType.NAVER_SMART_STORE:
+const getPlatformConfig = (platformType: PlatformType | null) => {
+  switch (platformType) {
+    case PlatformType.SMARTSTORE:
       return {
         name: '네이버 스마트스토어',
         platformStyle: 'text-smart-store-theme/90',
       };
-    case PlatformType.NAVER_BRAND_STORE:
+    case PlatformType.BRANDSTORE:
       return {
         name: '네이버 브랜드스토어',
         platformStyle: 'text-brand-store-theme/90',
@@ -89,7 +88,7 @@ export const useStoreCard = (store: StoreDomain) => {
 
   const { mutateAsync: updateStore, isPending: isLoading } = useUpdateStore();
 
-  const config = getPlatformConfig(store.platform);
+  const config = getPlatformConfig(store.platformType);
   const connection = getConnectionStatus(store);
 
   // 입력 가능한 문자 검증: 한글, 영문, 숫자, 하이픈, 언더스코어, 괄호, 공백

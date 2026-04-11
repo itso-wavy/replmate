@@ -54,15 +54,10 @@ export enum VerificationStatus {
   FAILED = 'failed', // 검증 실패
 }
 
-// 스토어 플랫폼 타입
+// 스토어 플랫폼 타입 (platform 하위 타입)
 export enum PlatformType {
-  NAVER = 'naver',
-  COUPANG = 'coupang',
-}
-
-export enum PlatformType {
-  NAVER_SMART_STORE = 'naver_smart_store',
-  NAVER_BRAND_STORE = 'naver_brand_store',
+  SMARTSTORE = 'smartstore',
+  BRANDSTORE = 'brandstore',
 }
 
 /** --------------------- 리플 옵션 타입 --------------------- */

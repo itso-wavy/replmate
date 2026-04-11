@@ -4,7 +4,7 @@ import type {
   StoreDto,
   StoreReplyOptionsDto,
 } from '@/types/api/store';
-import type { StoreStatus } from '@/types/enums';
+import type { PlatformType, StoreStatus } from '@/types/enums';
 
 /**
  * 스토어 Domain 타입 (간소화)
@@ -14,6 +14,7 @@ export interface StoreDomain {
   id: number;
   name: string;
   platform: string;
+  platformType: PlatformType | null;
   url: string;
   status: StoreStatus;
 }
@@ -26,6 +27,7 @@ export interface StoreDetailDomain {
   id: number;
   name: string;
   platform: string;
+  platformType: PlatformType | null;
   url: string;
   status: StoreStatus;
   verifiedAt: Date | null;
@@ -66,6 +68,7 @@ export function toStoreDomain(dto: StoreDto): StoreDomain {
     id: dto.id,
     name: dto.name,
     platform: dto.platform,
+    platformType: dto.platformType,
     url: dto.url,
     status: dto.status,
   };
@@ -81,6 +84,7 @@ export function toStoreDetailDomain(dto: StoreDetailDto): StoreDetailDomain {
     id: dto.id,
     name: dto.name,
     platform: dto.platform,
+    platformType: dto.platformType,
     url: dto.url,
     status: dto.status,
     verifiedAt: dto.verifiedAt ? new Date(dto.verifiedAt) : null,

@@ -1,86 +1,22 @@
-import { StoreStatus } from '../enums';
+import { PlatformType, StoreStatus } from '../enums';
 import type { JobTicketDto } from './job';
 
-// ============================================================================
+// ==========================================================
 // 스토어 (Stores)
-// ============================================================================
-
-// GET /api/v1/users/me/stores 내 스토어 목록 응답
-export interface MyStoresResponseDto {
-  storeQuota: StoreQuotaDto;
-  stores: StoreDto[];
-}
-
-export interface StoreQuotaDto {
-  maxStoreCount: number;
-  currentStoreCount: number;
-  remaining: number;
-}
-
-// PATCH /api/v1/stores/{store_id} 스토어 업데이트 응답
-export interface StoreDto {
-  id: number;
-  name: string;
-  url: string;
-  platform: string;
-  status: StoreStatus;
-}
-
-// GET /api/v1/stores/{store_id} 스토어 상세 조회
-export interface StoreDetailDto {
-  id: number;
-  name: string;
-  platform: string;
-  url: string;
-  status: StoreStatus;
-  verifiedAt: string | null;
-  lastProductSyncedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// POST /api/v1/stores 스토어 생성 응답 (Job + Store)
-export interface StoreInfoDto {
-  job: JobTicketDto;
-  store: StoreDetailDto;
-}
-
+// ==========================================================
 // GET /api/v1/stores/url-check URL 중복 확인 응답
 export interface StoreUrlCheckInfoDto {
   exists: boolean;
   url: string | null;
 }
 
-// POST /api/v1/stores/presigned-url Presigned URL 요청
+// POST /api/v1/stores/presigned-url Presigned URL
 export interface PresignedUrlRequest {
-  filename: string;
   contentType: string;
+  filename: string;
 }
-
-// POST /api/v1/stores/presigned-url Presigned URL 응답
 export interface PresignedUrlDto {
   uploadUrl: string;
-  imageKey: string;
-}
-
-// PATCH /api/v1/stores/{store_id} 스토어 단건 업데이트 요청
-export interface UpdateStoreRequest {
-  name?: string;
-  url?: string;
-  isActive?: boolean;
-  isDeactivationScheduled?: boolean;
-  deactivationScheduledAt?: string;
-}
-
-// PATCH /api/v1/users/me/stores 스토어 벌크 업데이트 요청
-export interface UpdateStoresRequest {
-  storeIds: number[];
-  isDeactivationScheduled?: boolean;
-  deactivationScheduledAt?: string;
-}
-
-// PUT /api/v1/stores/{store_id}/verification-image 인증 이미지 업데이트 요청
-export interface UpdateVerificationImageRequest {
   imageKey: string;
 }
 
@@ -93,4 +29,76 @@ export interface StoreReplyOptionsDto {
   includeEmoji: boolean;
   brandGuideline: string | null;
   updatedAt: string;
+}
+
+// GET /api/v1/stores/{store_id} 스토어 상세 조회
+export interface StoreDetailDto {
+  id: number;
+  name: string;
+  platform: string;
+  platformType: PlatformType | null;
+  url: string;
+  status: StoreStatus;
+  verifiedAt: string | null;
+  lastProductSyncedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// PATCH /api/v1/stores/{store_id} 스토어 업데이트
+export interface UpdateStoreRequest {
+  name?: string;
+  url?: string;
+  isActive?: boolean;
+  isDeactivationScheduled?: boolean;
+  deactivationScheduledAt?: string;
+}
+export interface StoreDto {
+  id: number;
+  name: string;
+  url: string;
+  platform: string;
+  platformType: PlatformType | null;
+  status: StoreStatus;
+}
+
+// POST /api/v1/stores 스토어 생성 (Job + Store)
+export interface CreateStoreRequest {
+  name: string;
+  platform: string; // 'naver' | 'coupang'
+  platformType?: string; // 'smartstore' | 'brandstore'
+  url: string;
+  verificationImageKey: string;
+}
+
+export interface StoreInfoDto {
+  job: JobTicketDto;
+  store: StoreDetailDto;
+}
+
+// PUT /api/v1/stores/{store_id}/verification-image 인증 이미지 업데이트 요청
+export interface UpdateVerificationImageRequest {
+  imageKey: string;
+}
+
+// ==========================================================
+// 내 스토어 (Users/me)
+// ==========================================================
+// GET /api/v1/users/me/stores 내 스토어 목록 응답
+export interface StoreQuotaDto {
+  maxStoreCount: number;
+  currentStoreCount: number;
+  remaining: number;
+}
+
+export interface MyStoresResponseDto {
+  storeQuota: StoreQuotaDto;
+  stores: StoreDto[];
+}
+
+// PATCH /api/v1/users/me/stores 스토어 벌크 업데이트 요청
+export interface UpdateStoresRequest {
+  storeIds: number[];
+  isDeactivationScheduled?: boolean;
+  deactivationScheduledAt?: string;
 }

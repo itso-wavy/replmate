@@ -91,6 +91,8 @@ export const STORE_ENDPOINTS = {
   GET_MY_STORES: `${API_BASE}/users/me/stores`,
   // 플랫폼 목록 조회
   GET_PLATFORMS: `${API_BASE}/stores/platforms`,
+  // 플랫폼 타입 목록 조회
+  GET_PLATFORM_TYPES: `${API_BASE}/stores/platform-types`,
   // 스토어 URL 중복 확인 (GET으로 변경, query param 사용)
   CHECK_STORE_URL: `${API_BASE}/stores/url-check`,
   // 스토어 리플 옵션 조회

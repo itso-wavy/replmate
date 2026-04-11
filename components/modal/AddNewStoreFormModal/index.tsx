@@ -34,13 +34,13 @@ import { useAddNewStoreForm } from './hook';
 
 const getPlatformUiConfig = (value: string) => {
   switch (value) {
-    case PlatformType.NAVER_SMART_STORE:
+    case PlatformType.SMARTSTORE:
       return {
         label: '네이버 스마트스토어',
         itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
         triggerStyle: 'bg-smart-store-theme/8',
       };
-    case PlatformType.NAVER_BRAND_STORE:
+    case PlatformType.BRANDSTORE:
       return {
         label: '네이버 브랜드스토어',
         itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',

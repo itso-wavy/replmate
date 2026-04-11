@@ -73,9 +73,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    */
   const getStoreBaseUrl = (platform: string) => {
     switch (platform) {
-      case PlatformType.NAVER_SMART_STORE:
+      case PlatformType.SMARTSTORE:
         return 'https://smartstore.naver.com/';
-      case PlatformType.NAVER_BRAND_STORE:
+      case PlatformType.BRANDSTORE:
         return 'https://brand.naver.com/';
       default:
         '';
@@ -254,7 +254,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       setUploadedFiles([]);
     } catch {
       toast.error(
-        '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해주세요.'
+        '일시적인 오류로 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.'
       );
     }
   };

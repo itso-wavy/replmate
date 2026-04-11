@@ -1,6 +1,7 @@
 import { api } from '@/lib/api';
 import { STORE_ENDPOINTS } from '@/lib/endpoints';
 import type {
+  CreateStoreRequest,
   MyStoresResponseDto,
   PresignedUrlDto,
   PresignedUrlRequest,
@@ -14,19 +15,19 @@ import type {
 } from '@/types/api/store';
 import {
   type MyStoresResult,
-  StoreDomain,
   StoreDetailDomain,
+  StoreDomain,
   StoreReplyOptionsDomain,
   toMyStoresResult,
+  toStoreDetailDomain,
   toStoreDomain,
   toStoreDomainList,
-  toStoreDetailDomain,
   toStoreReplyOptionsDomain,
 } from '@/types/domain/store';
 
-// ============================================================================
+// ==========================================================
 // 스토어 조회
-// ============================================================================
+// ==========================================================
 
 /**
  * 내 스토어 목록 조회
@@ -59,21 +60,27 @@ export async function getPlatforms(): Promise<string[]> {
   return response.data;
 }
 
-// ============================================================================
+/**
+ * 플랫폼 타입 목록 조회
+ * GET /api/v1/stores/platform-types → string[]
+ */
+export async function getPlatformTypes(): Promise<string[]> {
+  const response = await api.get<string[]>(STORE_ENDPOINTS.GET_PLATFORM_TYPES);
+  return response.data;
+}
+
+// ==========================================================
 // 스토어 생성/수정/삭제
-// ============================================================================
+// ==========================================================
 
 /**
  * 스토어 생성
  * verificationImageKey: presigned URL로 업로드 후 받은 imageKey
  * 응답: StoreInfoDto (job + store)
  */
-export async function createStore(data: {
-  name: string;
-  url: string;
-  platform: string; // GET /stores/platforms에서 반환된 값 사용
-  verificationImageKey: string;
-}): Promise<StoreInfoDto> {
+export async function createStore(
+  data: CreateStoreRequest
+): Promise<StoreInfoDto> {
   const response = await api.post<StoreInfoDto>(
     STORE_ENDPOINTS.CREATE_STORE,
     data
@@ -84,7 +91,9 @@ export async function createStore(data: {
 /**
  * 스토어 URL 중복 확인 (GET 방식, query param 사용)
  */
-export async function checkStoreUrl(url: string): Promise<StoreUrlCheckInfoDto> {
+export async function checkStoreUrl(
+  url: string
+): Promise<StoreUrlCheckInfoDto> {
   const response = await api.get<StoreUrlCheckInfoDto>(
     STORE_ENDPOINTS.CHECK_STORE_URL,
     { params: { url } }
@@ -114,9 +123,9 @@ export async function deleteStore(storeId: string | number): Promise<void> {
   await api.delete(STORE_ENDPOINTS.DELETE_STORE(storeId));
 }
 
-// ============================================================================
+// ==========================================================
 // 스토어 리플 옵션
-// ============================================================================
+// ==========================================================
 
 /**
  * 스토어 리플 옵션 조회
@@ -149,9 +158,9 @@ export async function updateReplyOptions(
   return toStoreReplyOptionsDomain(response.data);
 }
 
-// ============================================================================
+// ==========================================================
 // 스토어 인증 (Presigned URL 방식)
-// ============================================================================
+// ==========================================================
 
 /**
  * Presigned URL 발급
