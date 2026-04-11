@@ -32,7 +32,7 @@ const Modal = ({
       toast.success('쇼핑몰 연동이 해제되었습니다.');
       onOpenChange(false);
     } catch {
-      toast.error('연동 해제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('연동 해제에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 

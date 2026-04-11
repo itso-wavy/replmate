@@ -159,7 +159,7 @@ export function useProductsPage() {
       setActiveModal(null);
       toast.success('저장이 완료되었습니다.');
     } catch {
-      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -205,7 +205,7 @@ export function useProductsPage() {
         router.push(url);
       }
     } catch {
-      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 

@@ -75,7 +75,7 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
       toast.success('선택한 쇼핑몰이 유지됩니다.');
       onOpenChange(false);
     } catch {
-      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
