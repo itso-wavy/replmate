@@ -1,6 +1,7 @@
 // common
 export { default as PublicHeader } from './PublicHeader';
 export { default as Footer } from './Footer';
+export { default as HeroReplyCard } from './HeroReplyCard';
 // export { default as SideNav } from './SideNav';
 
 // landing-page

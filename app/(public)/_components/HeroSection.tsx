@@ -2,90 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 
-import React, { useEffect, useRef, useState } from 'react';
-
-import {
-  RobotIcon,
-  SparkleIcon,
-  UserSoundIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import { toast } from 'sonner';
-
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { ROUTES } from '@/constants/nav-menu';
 import { openReplmateSupportEmail } from '@/lib/utils';
 
-const MOCK_REPLY_TEXT =
-  '안녕하세요 고객님! 상품과 배송에 만족해 주셔서 감사합니다. 😊 포장에 대한 소중한 의견 감사드리며, 다음에는 더 꼼꼼하게 신경 써서 보내드리겠습니다! 믿고 구매해 주셔서 감사드려요.';
-
-interface TypewriterTextProps {
-  text: string;
-  startDelay?: number;
-  textRef: React.RefObject<HTMLSpanElement | null>;
-}
-
-const TypewriterText = React.memo(
-  ({ text, startDelay = 0, textRef }: TypewriterTextProps) => {
-    const [displayedText, setDisplayedText] = useState('');
-    const [started, setStarted] = useState(false);
-
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setStarted(true);
-      }, startDelay);
-      return () => clearTimeout(timer);
-    }, [startDelay]);
-
-    useEffect(() => {
-      if (!started) return;
-
-      let currentIndex = 0;
-      const intervalId = setInterval(() => {
-        if (currentIndex < text.length) {
-          setDisplayedText(text.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(intervalId);
-        }
-      }, 35); // Typing speed
-
-      return () => clearInterval(intervalId);
-    }, [started, text]);
-
-    return (
-      <span
-        ref={textRef}
-        contentEditable
-        suppressContentEditableWarning={true}
-        spellCheck={false}
-        className='focus-visible:caret-brand-400 block focus-visible:outline-none'
-      >
-        {displayedText}
-        {displayedText.length < text.length && (
-          <span className='bg-brand-400 ml-1 inline-block h-4 w-0.5 animate-pulse align-middle'></span>
-        )}
-      </span>
-    );
-  }
-);
+import { HeroReplyCard } from '.';
 
 const HeroSection = ({ id }: { id: string }) => {
   const router = useRouter();
-  const textRef = useRef<HTMLSpanElement>(null);
-
-  const handleCopy = async () => {
-    try {
-      // Use text content from the ref if available (handles user edits), otherwise fallback to mock text
-      const textToCopy = textRef.current?.innerText || MOCK_REPLY_TEXT;
-      await navigator.clipboard.writeText(textToCopy);
-
-      toast('클립 보드에 복사되었습니다.');
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
-  };
 
   return (
     <section
@@ -145,62 +70,11 @@ const HeroSection = ({ id }: { id: string }) => {
           </Button>
         </div>
 
-        {/* Abstract UI Representation */}
-        {/* FIXME: 실제 내부 UI와 맞추기 작업 */}
-        <div className='relative mx-auto mt-20 w-full max-w-4xl'>
+        {/* Hero Demo UI */}
+        <div className='relative mx-auto mt-16 w-full max-w-4xl'>
           <div className='bg-brand-yellow/10 absolute top-1/2 left-1/2 -z-10 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]'></div>
           <div className='animate-float-slow'>
-            <Card className='border-0 bg-white/80 shadow-2xl backdrop-blur-xl'>
-              <CardContent className='flex flex-col gap-6'>
-                {/* Mock Chat UI */}
-                <div className='animate-scale-in flex items-start gap-4 opacity-0 delay-75'>
-                  <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100'>
-                    <UserSoundIcon size={24} className='text-brand-400' />
-                  </div>
-                  <div className='w-full rounded-2xl rounded-tl-none bg-gray-50 p-4 text-left'>
-                    <div className='mb-1 flex items-center gap-2'>
-                      <span className='typo-button-14'>구매자</span>
-                      <div className='text-brand-yellow'>★★★★☆</div>
-                    </div>
-                    <p className='text-muted-foreground'>
-                      배송도 빠르고 상품도 마음에 들어요! 다만 포장이 조금 더
-                      꼼꼼했으면 좋겠어요.
-                    </p>
-                  </div>
-                </div>
-
-                <div className='animate-scale-in flex flex-row-reverse items-start gap-4 opacity-0 delay-[2200ms]'>
-                  <div className='bg-brand-lilac flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-white text-xl shadow-sm'>
-                    <RobotIcon size={24} className='text-brand-400' />
-                  </div>
-                  <div className='group relative w-full overflow-hidden rounded-xl rounded-tr-none border border-blue-100 bg-blue-50/50 p-4 text-left'>
-                    <div className='mb-2 flex items-center justify-between'>
-                      <span className='text-brand-500 flex items-center gap-1'>
-                        <SparkleIcon size={14} />
-                        <span>AI 추천 답글</span>
-                      </span>
-                      <Badge className='text-brand-400 border-blue-100'>
-                        수정 / 복사 지원
-                      </Badge>
-                    </div>
-                    <div className='text-foreground mb-1 min-h-[60px]'>
-                      <TypewriterText
-                        textRef={textRef}
-                        text={MOCK_REPLY_TEXT}
-                        startDelay={2800}
-                      />
-                    </div>
-                    <Button
-                      size='sm'
-                      className='text-foreground h-8 w-full rounded-[10px] border border-gray-200 bg-white hover:bg-gray-50'
-                      onClick={handleCopy}
-                    >
-                      복사하기
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <HeroReplyCard replyStartDelay={2800} />
           </div>
         </div>
       </div>
