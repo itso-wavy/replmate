@@ -12,6 +12,25 @@ import { UserDto } from '@/types';
 
 export default function AuthCallbackPage() {
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const error = searchParams.get('error');
+
+    if (error) {
+      // access_denied = 사용자가 직접 취소. 에러 파라미터 없이 로그인 페이지로 이동
+      const loginUrl =
+        error === 'access_denied'
+          ? ROUTES.LOGIN
+          : `${ROUTES.LOGIN}?error=${encodeURIComponent(error)}`;
+
+      if (window.opener) {
+        window.opener.location.replace(loginUrl);
+        window.close();
+      } else {
+        window.location.replace(loginUrl);
+      }
+      return;
+    }
+
     const handleCallback = async () => {
       try {
         const res = await api.get<UserDto>(ENDPOINTS.USER.GET_USER);

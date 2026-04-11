@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 
 import { useEffect, useState } from 'react';
 
+import { toast } from 'sonner';
+
 import googleIcon from '@/assets/png/google.png';
 import kakaoIcon from '@/assets/png/kakao.png';
 import { NaverSvg } from '@/assets/svg';
@@ -28,6 +30,22 @@ export const LoginPage = () => {
       router.push(ROUTES.DASHBOARD);
     } else setIsLoading(false);
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const error = searchParams.get('error');
+    if (!error) return;
+
+    const message =
+      error === 'access_denied'
+        ? '소셜 로그인이 취소되었습니다.'
+        : '로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+    toast.error(message);
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('error');
+    window.history.replaceState({}, '', url.toString());
+  }, []);
 
   const loginUrls: Record<AuthProvider, string> = {
     [AuthProvider.GOOGLE]: ENDPOINTS.OAUTH.GOOGLE_LOGIN,
