@@ -19,6 +19,11 @@ import { streamJob } from '@/services';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { StoreStore } from '@/store/storeStore';
 import { ReplyLength, ReplyTone } from '@/types';
+import type { TestReplyDto } from '@/types/api/reply';
+
+interface TestReplyJobResult {
+  result: TestReplyDto | null;
+}
 
 export type OptionsModalType = 'unsavedChanges' | null;
 
@@ -149,7 +154,7 @@ export function useOptionsPage() {
 
       es.addEventListener('complete', (e: MessageEvent) => {
         try {
-          const data = JSON.parse(e.data);
+          const data = JSON.parse(e.data) as TestReplyJobResult;
           setGeneratedReply(data.result?.aiText ?? '');
         } catch {
           setGeneratedReply('');
