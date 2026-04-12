@@ -52,12 +52,10 @@ export interface NotificationSettingsDto {
 // POST /api/v1/users/me/receipt 영수증 요청 응답
 export interface ReceiptRequestDto {
   id: number;
-  userId: number;
-  subscriptionId: number;
-  status: string;
+  status: 'pending' | 'completed' | 'rejected';
   requestedAt: string;
   processedAt: string | null;
-  note: string | null;
+  note: string | null; // 반려 사유
 }
 
 // DELETE /api/v1/users/me 사용자 탈퇴 요청

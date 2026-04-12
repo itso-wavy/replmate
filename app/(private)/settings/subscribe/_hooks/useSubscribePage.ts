@@ -59,7 +59,7 @@ export function useSubscribePage() {
       await reactivatePlan();
       toast.success('구독이 재활성화되었습니다.');
     } catch {
-      toast.error('구독 재활성화에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      // 전역 MutationCache.onError에서 처리
     }
   };
 
@@ -75,7 +75,7 @@ export function useSubscribePage() {
         '구독 해지 예약이 완료되었습니다.\n현재 이용 중인 플랜 종료일까지는 혜택을 계속 사용할 수 있습니다.'
       );
     } catch {
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      // 전역 MutationCache.onError에서 처리
     }
   };
 
@@ -90,9 +90,8 @@ export function useSubscribePage() {
       toast.success(
         '영수증 요청이 완료되었습니다.\n등록된 이메일로 영업일 기준 2~3일 이내 발송됩니다.'
       );
-    } catch (err) {
-      console.log(err);
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    } catch {
+      setIsReceiptModalOpen(false);
     }
   };
 

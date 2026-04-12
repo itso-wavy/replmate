@@ -6,15 +6,18 @@ import type {
   DeleteUserRequest,
   NotificationSettingsDto,
   ReactivateSubscriptionResponse,
+  ReceiptRequestDto,
   UserDto,
   UserPlanInfo,
 } from '@/types/api/user';
 import { toPlanDomain } from '@/types/domain/plan';
 import {
   NotificationSettingsDomain,
+  ReceiptRequestDomain,
   UserDomain,
   UserPlanDomain,
   toNotificationSettingsDomain,
+  toReceiptRequestDomain,
   toSubscriptionDomain,
   toUserDomain,
 } from '@/types/domain/user';
@@ -105,8 +108,11 @@ export async function reactivatePlan(): Promise<ReactivateSubscriptionResponse> 
  * 요청 바디 없음 (세션 쿠키로 사용자 식별)
  * 24시간 내 재요청 불가 / 대기 중인 요청이 있으면 추가 요청 불가
  */
-export async function requestReceipt(): Promise<void> {
-  await api.post(USER_ENDPOINTS.REQUEST_RECEIPT);
+export async function requestReceipt(): Promise<ReceiptRequestDomain> {
+  const response = await api.post<ReceiptRequestDto>(
+    USER_ENDPOINTS.REQUEST_RECEIPT
+  );
+  return toReceiptRequestDomain(response.data);
 }
 
 // ==========================================================

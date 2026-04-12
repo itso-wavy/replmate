@@ -34,7 +34,10 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
           onError: (error) => toast.error(getErrorMessage(error)),
         }),
         mutationCache: new MutationCache({
-          onError: (error) => toast.error(getErrorMessage(error)),
+          onError: (error, _variables, _context, mutation) => {
+            if (mutation.options.onError) return;
+            toast.error(getErrorMessage(error));
+          },
         }),
         defaultOptions: {
           queries: {

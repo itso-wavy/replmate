@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+
 import { queryKeys } from '@/lib/queryKeys';
 import {
   agreeTerms,
@@ -39,8 +42,9 @@ export const useNotificationSettings = () =>
 export const useUpdateNotificationSettings = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (settings: Partial<{ emailEnabled: boolean; smsEnabled: boolean }>) =>
-      updateNotificationSettings(settings),
+    mutationFn: (
+      settings: Partial<{ emailEnabled: boolean; smsEnabled: boolean }>
+    ) => updateNotificationSettings(settings),
     onSuccess: () =>
       qc.invalidateQueries({ queryKey: queryKeys.user.notifications() }),
   });
@@ -78,6 +82,13 @@ export const useReactivatePlan = () => {
 export const useRequestReceipt = () =>
   useMutation({
     mutationFn: requestReceipt,
+    onError: (err) => {
+      const message =
+        err instanceof AxiosError && err?.response?.data.errorCode === 5004
+          ? '영수증 요청은 24시간에 한 번만 가능합니다.'
+          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      toast.error(message);
+    },
   });
 
 export const useAgreeTerms = () => {

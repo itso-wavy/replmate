@@ -36,7 +36,7 @@ export const USER_ENDPOINTS = {
   REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
 
   // 영수증 요청
-  REQUEST_RECEIPT: `${API_BASE}/users/me/plan/receipt`,
+  REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
 
   // 약관 동의
   AGREE_TERMS: `${API_BASE}/users/me/terms-agreements`,
@@ -105,8 +105,7 @@ export const STORE_ENDPOINTS = {
   GET_STORE_DETAIL: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}`,
   // 스토어 수정
-  UPDATE_STORE: (storeId: string | number) =>
-    `${API_BASE}/stores/${storeId}`,
+  UPDATE_STORE: (storeId: string | number) => `${API_BASE}/stores/${storeId}`,
   // 스토어 삭제
   DELETE_STORE: (storeId: string | number) => `${API_BASE}/stores/${storeId}`,
   // 스토어 생성

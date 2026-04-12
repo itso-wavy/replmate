@@ -1,6 +1,7 @@
 import type {
   DowngradeInfoDto,
   NotificationSettingsDto,
+  ReceiptRequestDto,
   SubscriptionDto,
   UserDto,
 } from '@/types/api/user';
@@ -73,6 +74,17 @@ export interface UserWithPlanDomain {
 }
 
 /**
+ * 영수증 발급 요청 도메인
+ */
+export interface ReceiptRequestDomain {
+  id: number;
+  status: 'pending' | 'completed' | 'rejected';
+  requestedAt: Date;
+  processedAt: Date | null;
+  note: string | null;
+}
+
+/**
  * 알림 설정 도메인
  */
 export interface NotificationSettingsDomain {
@@ -108,6 +120,19 @@ export function toSubscriptionDomain(dto: SubscriptionDto): SubscriptionDomain {
     currentPeriodStart: new Date(dto.currentPeriodStart),
     currentPeriodEnd: new Date(dto.currentPeriodEnd),
     canceledAt: dto.canceledAt ? new Date(dto.canceledAt) : null,
+  };
+}
+
+/**
+ * ReceiptRequestDto → ReceiptRequestDomain 변환
+ */
+export function toReceiptRequestDomain(
+  dto: ReceiptRequestDto
+): ReceiptRequestDomain {
+  return {
+    ...dto,
+    requestedAt: new Date(dto.requestedAt),
+    processedAt: dto.processedAt ? new Date(dto.processedAt) : null,
   };
 }
 
