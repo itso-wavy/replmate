@@ -23,26 +23,32 @@ import { cn, formatDate } from '@/lib/utils';
 import { UsageEventType, UsageLedgerDomain } from '@/types';
 
 const usageEventLabelMap: Record<UsageEventType, string> = {
-  [UsageEventType.USE]: '이동',
-  [UsageEventType.FREE_GRANT]: '충전',
-  [UsageEventType.SUBSCRIPTION_GRANT]: '충전',
-  [UsageEventType.MANUAL_ADJUST]: '조정',
+  [UsageEventType.GRANT]: '충전',
+  [UsageEventType.USE]: '사용',
+  [UsageEventType.TEST_USE]: '사용',
+  [UsageEventType.TEST_GRANT]: '충전',
 };
 
 const getUsageDetail = (
   eventType: UsageEventType,
+  reason: string | null | undefined,
   meta: Record<string, unknown> | null
 ) => {
   if (eventType === UsageEventType.USE) {
     return meta?.storeName ? `리플 생성 (${meta.storeName})` : '리플 생성';
   }
-  if (eventType === UsageEventType.SUBSCRIPTION_GRANT) {
-    return meta?.planName ? `월간 충전 (${meta.planName})` : '월간 충전';
+  if (eventType === UsageEventType.TEST_USE) {
+    return meta?.storeName ? `테스트 리플 (${meta.storeName})` : '테스트 리플';
   }
-  if (eventType === UsageEventType.FREE_GRANT) {
-    return '무료 충전';
+  if (eventType === UsageEventType.TEST_GRANT) {
+    return '테스트 사용량 충전';
   }
-  return '수동 조정';
+  if (eventType === UsageEventType.GRANT) {
+    if (meta?.planName) return `월간 충전 (${meta.planName})`;
+    if (reason) return reason;
+    return '충전';
+  }
+  return '-';
 };
 
 interface UsageLedgerTableProps {
@@ -113,7 +119,7 @@ const UsageLedgerTable = ({
         id: 'detail',
         header: '상세',
         cell: ({ row }) => (
-          <div>{getUsageDetail(row.original.eventType, row.original.meta)}</div>
+          <div>{getUsageDetail(row.original.eventType, row.original.reason, row.original.meta)}</div>
         ),
         size: 8,
       },

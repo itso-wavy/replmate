@@ -24,6 +24,7 @@ export interface TestUsageQuotaDto {
 export interface UsageLedgerDto {
   id: number;
   eventType: UsageEventType;
+  reason: string | null;
   deltaQuantity: number;
   storeId: number | null;
   planId: number | null;

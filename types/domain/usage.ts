@@ -31,6 +31,7 @@ export interface TestUsageQuotaDomain {
 export interface UsageLedgerDomain {
   id: number;
   eventType: UsageEventType;
+  reason: string | null;
   deltaQuantity: number;
   storeId: number | null;
   planId: number | null;
@@ -108,6 +109,7 @@ export function toUsageLedgerDomain(dto: UsageLedgerDto): UsageLedgerDomain {
   return {
     id: dto.id,
     eventType: dto.eventType,
+    reason: dto.reason,
     deltaQuantity: dto.deltaQuantity,
     storeId: dto.storeId,
     planId: dto.planId,

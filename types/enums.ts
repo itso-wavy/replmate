@@ -190,12 +190,10 @@ export enum JobType {
 
 // 사용량 이벤트 타입
 export enum UsageEventType {
-  FREE_GRANT = 'free_grant', // 무료 지급 사용량
-  SUBSCRIPTION_GRANT = 'subscription_grant', // 구독 지급 사용량
+  GRANT = 'grant', // 사용량 지급
   USE = 'use', // 구독 사용량 소비
   TEST_USE = 'test_use', // 테스트 사용량 소비
   TEST_GRANT = 'test_grant', // 테스트 사용량 부여
-  MANUAL_ADJUST = 'manual_adjust', // 수동 조정
 }
 
 // 연락처 문의 상태
