@@ -48,10 +48,8 @@ export interface StoreDetailDto {
 // PATCH /api/v1/stores/{store_id} 스토어 업데이트
 export interface UpdateStoreRequest {
   name?: string;
-  url?: string;
-  isActive?: boolean;
+  status?: StoreStatus;
   isDeactivationScheduled?: boolean;
-  deactivationScheduledAt?: string;
 }
 export interface StoreDto {
   id: number;
@@ -100,5 +98,4 @@ export interface MyStoresResponseDto {
 export interface UpdateStoresRequest {
   storeIds: number[];
   isDeactivationScheduled?: boolean;
-  deactivationScheduledAt?: string;
 }

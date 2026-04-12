@@ -110,7 +110,7 @@ export async function updateStore(
   data: UpdateStoreRequest
 ): Promise<StoreDomain> {
   const response = await api.patch<StoreDto>(
-    STORE_ENDPOINTS.UPDATE_STORE_STATUS(storeId),
+    STORE_ENDPOINTS.UPDATE_STORE(storeId),
     data
   );
   return toStoreDomain(response.data);

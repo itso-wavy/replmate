@@ -104,8 +104,8 @@ export const STORE_ENDPOINTS = {
   // 스토어 상세 조회
   GET_STORE_DETAIL: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}`,
-  // 스토어 활성화 상태 변경
-  UPDATE_STORE_STATUS: (storeId: string | number) =>
+  // 스토어 수정
+  UPDATE_STORE: (storeId: string | number) =>
     `${API_BASE}/stores/${storeId}`,
   // 스토어 삭제
   DELETE_STORE: (storeId: string | number) => `${API_BASE}/stores/${storeId}`,
