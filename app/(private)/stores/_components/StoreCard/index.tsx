@@ -154,7 +154,7 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
           {/* Store URL */}
           <div>
             <a
-              href={store.url}
+              href={`https://${store.url}`}
               target='_blank'
               rel='noreferrer'
               className='typo-link-14 text-foreground-description-muted flex items-center gap-1 underline-offset-4 hover:underline'
