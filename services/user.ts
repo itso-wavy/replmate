@@ -51,9 +51,15 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
   const { data } = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
 
   return {
-    planStatus: data.planStatus as SubscriptionStatus, // TODO: 정확히 확인
+    planStatus: data.planStatus as SubscriptionStatus,
     plan: toPlanDomain(data.plan),
     subscription: toSubscriptionDomain(data.subscription),
+    downgrade: data.downgrade
+      ? {
+          plan: toPlanDomain(data.downgrade.plan),
+          effectiveDate: new Date(data.downgrade.effectiveDate),
+        }
+      : null,
   };
 }
 

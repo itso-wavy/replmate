@@ -20,10 +20,16 @@ export interface UserDto {
 }
 
 // GET /api/v1/users/me/plan 유저 플랜 조회
+export interface DowngradeInfoDto {
+  plan: PlanDto;
+  effectiveDate: string;
+}
+
 export interface UserPlanInfo {
   planStatus: 'free' | string;
   subscription: SubscriptionDto;
   plan: PlanDto;
+  downgrade: DowngradeInfoDto | null;
 }
 
 export interface SubscriptionDto {

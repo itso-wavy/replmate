@@ -40,6 +40,7 @@ export const dummyUserPlanInfo: UserPlanDomain = {
     cancelAtPeriodEnd: false,
     canceledAt: null,
   },
+  downgrade: null,
 };
 
 export const dummyUsageRemaining = 270;

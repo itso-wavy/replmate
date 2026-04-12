@@ -4,11 +4,6 @@ import { useState } from 'react';
 
 import { toast } from 'sonner';
 
-import {
-  dummyUsageLedger,
-  dummyUsageRemaining,
-  dummyUserPlanInfo,
-} from '@/dummy';
 import { useUsageHistory, useUsageQuota } from '@/hooks/useUsage';
 import {
   useCancelPlan,
@@ -17,12 +12,15 @@ import {
   useUserPlan,
 } from '@/hooks/useUser';
 import { UserStore } from '@/store/userStore';
+import { SubscriptionStatus } from '@/types';
 
 const PAGE_SIZE = 50;
 
 export function useSubscribePage() {
   const user = UserStore.useUser();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
 
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: quota, isLoading: isQuotaLoading } = useUsageQuota();
@@ -31,12 +29,14 @@ export function useSubscribePage() {
     size: PAGE_SIZE,
   });
 
-  const { mutateAsync: cancelPlan } = useCancelPlan();
+  const { mutateAsync: cancelPlan, isPending: isCancelPending } =
+    useCancelPlan();
   const { mutateAsync: reactivatePlan } = useReactivatePlan();
-  const { mutateAsync: requestReceipt } = useRequestReceipt();
+  const { mutateAsync: requestReceipt, isPending: isReceiptPending } =
+    useRequestReceipt();
 
   const isVerified = user?.isVerified ?? false;
-  const isFree = (userPlan?.plan.monthlyPrice ?? 0) === 0;
+  const isFree = userPlan?.planStatus === SubscriptionStatus.FREE;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -45,8 +45,6 @@ export function useSubscribePage() {
     quotaTotal > 0
       ? Math.min(Math.round((quotaUsed / quotaTotal) * 100), 100)
       : 0;
-
-  const ledgerItems = historyData?.items ?? [];
 
   const handlePlanChange = () => {
     // TODO: 플랜 변경 페이지로 이동
@@ -61,25 +59,40 @@ export function useSubscribePage() {
       await reactivatePlan();
       toast.success('구독이 재활성화되었습니다.');
     } catch {
-      toast.error('구독 재활성화에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('구독 재활성화에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
-  const handleCancelPlan = async () => {
+  const handleCancelPlan = () => {
+    setIsCancelModalOpen(true);
+  };
+
+  const handleCancelConfirm = async () => {
     try {
       await cancelPlan();
-      toast.success('구독이 해지 신청되었습니다.');
+      setIsCancelModalOpen(false);
+      toast.success(
+        '구독 해지 예약이 완료되었습니다.\n현재 이용 중인 플랜 종료일까지는 혜택을 계속 사용할 수 있습니다.'
+      );
     } catch {
-      toast.error('구독 해지에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
-  const handleRequestReceipt = async () => {
+  const handleRequestReceipt = () => {
+    setIsReceiptModalOpen(true);
+  };
+
+  const handleReceiptConfirm = async () => {
     try {
       await requestReceipt();
-      toast.success('영수증 요청이 완료되었습니다.');
-    } catch {
-      toast.error('영수증 요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setIsReceiptModalOpen(false);
+      toast.success(
+        '영수증 요청이 완료되었습니다.\n등록된 이메일로 영업일 기준 2~3일 이내 발송됩니다.'
+      );
+    } catch (err) {
+      console.log(err);
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -92,7 +105,7 @@ export function useSubscribePage() {
     quotaUsed,
     quotaPercent,
     isQuotaLoading,
-    ledgerItems,
+    usageLedger: historyData?.items ?? [],
     totalPages: historyData?.totalPages || 1,
     currentPage,
     isHistoryLoading,
@@ -102,5 +115,13 @@ export function useSubscribePage() {
     handleReactivate,
     handleCancelPlan,
     handleRequestReceipt,
+    isCancelModalOpen,
+    setIsCancelModalOpen,
+    isCancelPending,
+    handleCancelConfirm,
+    isReceiptModalOpen,
+    setIsReceiptModalOpen,
+    isReceiptPending,
+    handleReceiptConfirm,
   };
 }

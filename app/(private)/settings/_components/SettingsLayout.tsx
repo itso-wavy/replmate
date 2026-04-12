@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -44,7 +44,7 @@ export const InnerPageRow = ({
   className,
   children,
 }: PropsWithChildren<{
-  label: string;
+  label: string | React.JSX.Element;
   className?: string;
 }>) => (
   <div className={cn('typo-body-14 flex gap-1.5', className)}>

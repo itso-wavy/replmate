@@ -1,65 +1,61 @@
 'use client';
 
-import { useState } from 'react';
-
 import { ReceiptText } from 'lucide-react';
 
+import {
+  CancelSubscriptionModal,
+  ReceiptRequestModal,
+} from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import {
-  dummyUsageLedger,
-  dummyUsageRemaining,
-  dummyUserPlanInfo,
-} from '@/dummy/subscription';
-import { formatDate } from '@/lib/utils';
-import { UserStore } from '@/store/userStore';
 
 import { InnerPageLayout, InnerPageSection } from '../_components';
 import { SubscriptionInfo, UsageLedgerTable } from './_components';
-
-const ITEMS_PER_PAGE = 5;
+import { useSubscribePage } from './_hooks/useSubscribePage';
 
 const SubscribePage = () => {
-  const user = UserStore.useUser();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const userPlan = dummyUserPlanInfo;
-  const ledger = dummyUsageLedger;
-  const remaining = dummyUsageRemaining;
-
-  const isVerified = user?.isVerified ?? false;
-  const isFree = userPlan.plan.monthlyPrice === 0;
-
-  const quotaTotal = userPlan.plan.monthlyReplyQuota;
-  const quotaUsed = quotaTotal - remaining;
-  const quotaPercent = Math.min(
-    Math.round((quotaUsed / quotaTotal) * 100),
-    100
-  );
-
-  const totalPages = Math.ceil(ledger.length / ITEMS_PER_PAGE);
-  const pagedLedger = ledger.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  const handlePlanChange = () => {};
-  const handlePaymentChange = () => {};
-  const handleReactivate = () => {};
-  const handleRequestReceipt = () => {};
+  const {
+    isVerified,
+    isFree,
+    userPlan,
+    quotaTotal,
+    quotaUsed,
+    quotaPercent,
+    usageLedger,
+    totalPages,
+    currentPage,
+    isHistoryLoading,
+    onPageChange,
+    handlePlanChange,
+    handlePaymentChange,
+    handleReactivate,
+    handleCancelPlan,
+    handleRequestReceipt,
+    isCancelModalOpen,
+    setIsCancelModalOpen,
+    isCancelPending,
+    handleCancelConfirm,
+    isReceiptModalOpen,
+    setIsReceiptModalOpen,
+    isReceiptPending,
+    handleReceiptConfirm,
+  } = useSubscribePage();
 
   return (
     <InnerPageLayout heading='구독 관리'>
       {/* 구독 정보 */}
-      <InnerPageSection heading='구독 정보'>
-        <SubscriptionInfo
-          userPlan={userPlan}
-          isVerified={isVerified}
-          onPlanChange={handlePlanChange}
-          onPaymentChange={handlePaymentChange}
-          onReactivate={handleReactivate}
-        />
-      </InnerPageSection>
+      {userPlan && (
+        <InnerPageSection heading='구독 정보'>
+          <SubscriptionInfo
+            userPlan={userPlan}
+            isVerified={isVerified}
+            onPlanChange={handlePlanChange}
+            onPaymentChange={handlePaymentChange}
+            onReactivate={handleReactivate}
+            onCancelPlan={handleCancelPlan}
+          />
+        </InnerPageSection>
+      )}
 
       {/* 이용량 모니터링 */}
       <InnerPageSection heading='이용량 모니터링'>
@@ -83,18 +79,22 @@ const SubscribePage = () => {
       {!isFree && (
         <InnerPageSection heading='결제 내역 요청'>
           <div className='flex items-center justify-between gap-2'>
-            <p className='typo-body-16 text-foreground-description flex flex-col lg:flex-row'>
-              <span>결제 영수증은 담당자에게 요청하실 수 있습니다. </span>
+            <p className='typo-body-14 text-foreground-description'>
+              <span>결제 영수증은 담당자에게 요청하실 수 있습니다.</span>{' '}
               <span>요청시 모든 결제 내역을 이메일로 보내 드립니다.</span>
             </p>
-            <Button
-              onClick={handleRequestReceipt}
-              variant='outline'
-              className='shrink-0'
-            >
-              <ReceiptText size={14} />
-              영수증 요청
-            </Button>
+
+            <div className='flex items-center justify-center gap-4'>
+              <Button
+                onClick={handleRequestReceipt}
+                isPending={isReceiptPending}
+                variant='outline'
+                className='bg-input/30 text-brand-500 hover:text-brand-500/80 min-w-[80px] shrink-0'
+              >
+                <ReceiptText size={12} className='text-primary' />
+                영수증 요청
+              </Button>
+            </div>
           </div>
         </InnerPageSection>
       )}
@@ -102,12 +102,31 @@ const SubscribePage = () => {
       {/* 리플 사용 이력 */}
       <InnerPageSection heading='리플 사용 이력'>
         <UsageLedgerTable
-          items={pagedLedger} // FIXME: 더미데이터 실데이터로 교체
+          items={usageLedger}
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          onPageChange={onPageChange}
+          isLoading={isHistoryLoading}
         />
       </InnerPageSection>
+
+      {/* 모달 */}
+      {userPlan && (
+        <CancelSubscriptionModal
+          open={isCancelModalOpen}
+          onOpenChange={setIsCancelModalOpen}
+          onConfirm={handleCancelConfirm}
+          isPending={isCancelPending}
+          planName={userPlan.plan.title ?? userPlan.plan.name}
+          periodEnd={userPlan.subscription.currentPeriodEnd}
+        />
+      )}
+      <ReceiptRequestModal
+        open={isReceiptModalOpen}
+        onOpenChange={setIsReceiptModalOpen}
+        onConfirm={handleReceiptConfirm}
+        isPending={isReceiptPending}
+      />
     </InnerPageLayout>
   );
 };

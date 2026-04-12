@@ -1,4 +1,5 @@
 import type {
+  DowngradeInfoDto,
   NotificationSettingsDto,
   SubscriptionDto,
   UserDto,
@@ -45,12 +46,21 @@ export interface SubscriptionDomain {
 }
 
 /**
+ * 다운그레이드 예약 정보
+ */
+export interface DowngradeDomain {
+  plan: PlanDomain;
+  effectiveDate: Date;
+}
+
+/**
  * 사용자 플랜 정보 (플랜 + 구독 정보)
  */
 export interface UserPlanDomain {
   planStatus: SubscriptionStatus;
   plan: PlanDomain;
   subscription: SubscriptionDomain;
+  downgrade: DowngradeDomain | null;
 }
 
 /**
