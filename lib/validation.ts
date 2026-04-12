@@ -14,7 +14,9 @@ export const addNewStoreSchema = z.object({
       '한글, 영문, 숫자, -, _, 괄호, 공백만 입력 가능합니다'
     ),
 
-  platformType: z.nativeEnum(PlatformType, { message: '플랫폼을 선택해 주세요' }),
+  platformType: z.nativeEnum(PlatformType, {
+    message: '플랫폼을 선택해 주세요',
+  }),
 
   // 영문, 숫자, 하이픈(-), 언더스코어(_)만 입력 가능
   url: z
@@ -26,7 +28,7 @@ export const addNewStoreSchema = z.object({
   // URL 중복 확인 여부
   // undefined: 미확인, false: 중복됨, true: 사용 가능
   isUrlAvailable: z
-    .boolean({ message: 'URL 중복 확인이 필요합니다' })
+    .boolean()
     .refine((val) => val === true, { message: '이미 등록된 URL입니다' })
     .optional(),
 

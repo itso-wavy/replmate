@@ -185,10 +185,11 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                     </Button>
                   </div>
                   <FieldMessage variant='error' messages={[fieldState.error]} />
-                  {form.watch('isUrlAvailable') !== undefined && (
+                  {(form.watch('isUrlAvailable') !== undefined ||
+                    !!form.formState.errors.isUrlAvailable) && (
                     <FieldMessage
                       variant={
-                        form.watch('isUrlAvailable') ? 'success' : 'error'
+                        form.watch('isUrlAvailable') === true ? 'success' : 'error'
                       }
                       messages={[
                         form.formState.errors.isUrlAvailable || {

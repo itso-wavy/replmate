@@ -48,7 +48,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     const value = e.target.value;
     const filtered = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\-_() ]/g, '');
 
-    form.setValue('name', filtered);
+    form.setValue('name', filtered, { shouldValidate: true });
   };
 
   /**
@@ -60,9 +60,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^a-zA-Z0-9\-_]/g, '');
 
-    form.setValue('url', value);
+    form.setValue('url', value, { shouldValidate: true });
     form.setValue('isUrlAvailable', undefined);
-    form.setError('isUrlAvailable', { message: '' });
+    form.clearErrors('isUrlAvailable');
   };
 
   /**
@@ -87,6 +87,8 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       getPlatformConfig(form.getValues('platformType') as PlatformType)
         ?.baseUrl ?? '';
     const url = baseUrl + form.getValues('url');
+
+    form.clearErrors('isUrlAvailable');
 
     try {
       const result = await checkUrlMutation.mutateAsync(url);
@@ -215,6 +217,13 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    * 4. 실패 시: 토스트
    */
   const onSubmit = async (data: AddNewStoreFormData) => {
+    if (data.isUrlAvailable !== true) {
+      form.setError('isUrlAvailable', {
+        message: 'URL 중복 확인이 필요합니다',
+      });
+      return;
+    }
+
     try {
       // 1. presigned URL 발급 + S3 직접 업로드
       const file = uploadedFiles[0];
