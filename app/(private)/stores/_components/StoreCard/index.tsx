@@ -190,7 +190,7 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
               Platform
             </span>
             <p className={cn('typo-button-14', config.platformStyle)}>
-              {config.name}
+              {config.label}
             </p>
             {/* <div className='typo-caption-12 text-muted-foreground mt-0.5 flex items-center gap-1'>
               <Clock className='size-3' />

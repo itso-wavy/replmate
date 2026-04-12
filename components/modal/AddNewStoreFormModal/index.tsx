@@ -25,34 +25,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { usePlatforms } from '@/hooks/useStores';
+import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
+import { usePlatformTypes } from '@/hooks/useStores';
 import { PlatformType } from '@/types';
 
 import { CommonModalProps } from '../types';
 import { FileUploadField } from './components';
 import { useAddNewStoreForm } from './hook';
 
-const getPlatformUiConfig = (value: string) => {
-  switch (value) {
-    case PlatformType.SMARTSTORE:
-      return {
-        label: '네이버 스마트스토어',
-        itemStyle: 'text-smart-store-theme focus:*:text-smart-store-theme!',
-        triggerStyle: 'bg-smart-store-theme/8',
-      };
-    case PlatformType.BRANDSTORE:
-      return {
-        label: '네이버 브랜드스토어',
-        itemStyle: 'text-brand-store-theme focus:*:text-brand-store-theme!',
-        triggerStyle: 'bg-brand-store-theme/8',
-      };
-    default:
-      return { label: value, itemStyle: '', triggerStyle: '' };
-  }
-};
+const getPlatformUiConfig = (value: string) =>
+  PLATFORM_TYPE_CONFIG[value as PlatformType] ?? {
+    label: value,
+    itemStyle: '',
+    triggerStyle: '',
+  };
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
-  const { data: platforms = [] } = usePlatforms();
+  const { data: platformTypes = [] } = usePlatformTypes();
   const {
     form,
     uploadedFiles,
@@ -109,9 +98,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
               )}
             />
 
-            {/* 플랫폼 선택 필드 */}
+            {/* 플랫폼타입 선택 필드 */}
             <Controller
-              name='platform'
+              name='platformType'
               control={form.control}
               render={({ field, fieldState }) => {
                 const selectedConfig = field.value
@@ -128,7 +117,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                     <Select
                       {...field}
                       name={field.name}
-                      value={field.value}
+                      value={field.value ?? ''}
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger
@@ -143,7 +132,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {platforms.map((platformValue) => {
+                        {platformTypes.map((platformValue) => {
                           const config = getPlatformUiConfig(platformValue);
                           return (
                             <SelectItem

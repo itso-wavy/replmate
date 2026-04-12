@@ -14,6 +14,7 @@ export const queryKeys = {
     replyOptions: (storeId: number) =>
       ['stores', storeId, 'replyOptions'] as const,
     platforms: () => ['stores', 'platforms'] as const,
+    platformTypes: () => ['stores', 'platformTypes'] as const,
   },
   products: {
     all: () => ['products'] as const,

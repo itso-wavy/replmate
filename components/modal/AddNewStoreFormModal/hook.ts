@@ -5,6 +5,7 @@ import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
+import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
 import {
   useCheckStoreUrl,
   useCreateStore,
@@ -31,7 +32,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     reValidateMode: 'onChange',
     defaultValues: {
       name: '',
-      platform: '',
+      platformType: undefined,
       url: '',
       isUrlAvailable: undefined,
       certification: [],
@@ -71,16 +72,8 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    * - 사용 가능한 URL입니다(초록 글씨)
    * - 이미 등록된 URL입니다(빨간 글씨)
    */
-  const getStoreBaseUrl = (platform: string) => {
-    switch (platform) {
-      case PlatformType.SMARTSTORE:
-        return 'https://smartstore.naver.com/';
-      case PlatformType.BRANDSTORE:
-        return 'https://brand.naver.com/';
-      default:
-        '';
-    }
-  };
+  const getPlatformConfig = (platformType: PlatformType) =>
+    PLATFORM_TYPE_CONFIG[platformType] ?? null;
 
   const handleDuplicateCheck = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -90,7 +83,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     // URL 필드가 유효하지 않다면 리턴
     if (form.getFieldState('url').invalid) return;
 
-    const baseUrl = getStoreBaseUrl(form.getValues('platform'));
+    const baseUrl =
+      getPlatformConfig(form.getValues('platformType') as PlatformType)
+        ?.baseUrl ?? '';
     const url = baseUrl + form.getValues('url');
 
     try {
@@ -237,13 +232,14 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
         headers: { 'Content-Type': file.type },
       });
 
-      const baseUrl = getStoreBaseUrl(data.platform);
+      const config = getPlatformConfig(data.platformType as PlatformType);
 
       // 2. 스토어 생성
       await createStoreMutation.mutateAsync({
         name: data.name,
-        url: baseUrl + data.url,
-        platform: data.platform,
+        url: (config?.baseUrl ?? '') + data.url,
+        platform: config?.platform ?? '',
+        platformType: data.platformType,
         verificationImageKey: imageKey,
       });
 

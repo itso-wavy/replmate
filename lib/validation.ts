@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { PlatformType } from '@/types/enums';
+
 export const addNewStoreSchema = z.object({
   // 한글, 영문, 숫자, 하이픈(-), 언더스코어(_), 괄호, 공백만 입력 가능
   name: z
@@ -12,7 +14,7 @@ export const addNewStoreSchema = z.object({
       '한글, 영문, 숫자, -, _, 괄호, 공백만 입력 가능합니다'
     ),
 
-  platform: z.string().min(1, '플랫폼을 선택해 주세요'),
+  platformType: z.nativeEnum(PlatformType, { message: '플랫폼을 선택해 주세요' }),
 
   // 영문, 숫자, 하이픈(-), 언더스코어(_)만 입력 가능
   url: z

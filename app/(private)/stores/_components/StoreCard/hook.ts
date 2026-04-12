@@ -4,40 +4,14 @@ import { toast } from 'sonner';
 
 import { ProgressSvgProps } from '@/assets/svg';
 import { useUpdateStore } from '@/hooks/useStores';
+import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
 import { PlatformType, type StoreDomain } from '@/types';
 
-const getPlatformConfig = (platformType: PlatformType | null) => {
-  switch (platformType) {
-    case PlatformType.SMARTSTORE:
-      return {
-        name: '네이버 스마트스토어',
-        platformStyle: 'text-smart-store-theme/90',
-      };
-    case PlatformType.BRANDSTORE:
-      return {
-        name: '네이버 브랜드스토어',
-        platformStyle: 'text-brand-store-theme/90',
-      };
-    /*  case 'naver_smart_store':
-      return {
-        name: '네이버 스마트스토어',
-        platformStyle:
-          'bg-smart-store-theme/10 rounded-[4px] px-2 py-0.5 w-fit',
-      };
-    case 'naver_brand_store':
-      return {
-        name: '네이버 브랜드스토어',
-        platformStyle:
-          'bg-brand-store-theme/10 rounded-[4px] px-2 py-0.5 w-fit',
-      }; */
-    default:
-      return {
-        name: '',
-        platformStyle: '',
-        cardStyle: '',
-      };
-  }
-};
+const getPlatformConfig = (platformType: PlatformType | null) =>
+  (platformType && PLATFORM_TYPE_CONFIG[platformType]) || {
+    label: '',
+    platformStyle: '',
+  };
 
 const getConnectionStatus = (store: StoreDomain) => {
   let iconStatus: ProgressSvgProps['status'] | null = null;

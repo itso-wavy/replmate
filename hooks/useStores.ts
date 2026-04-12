@@ -7,6 +7,7 @@ import {
   deleteStore,
   getMyStores,
   getPlatforms,
+  getPlatformTypes,
   getPresignedUrl,
   getReplyOptions,
   getStoreDetail,
@@ -38,7 +39,14 @@ export const usePlatforms = () =>
   useQuery({
     queryKey: queryKeys.stores.platforms(),
     queryFn: getPlatforms,
-    staleTime: Infinity, // 플랫폼 목록은 자주 변경되지 않음
+    staleTime: Infinity,
+  });
+
+export const usePlatformTypes = () =>
+  useQuery({
+    queryKey: queryKeys.stores.platformTypes(),
+    queryFn: getPlatformTypes,
+    staleTime: Infinity,
   });
 
 export const useReplyOptions = (storeId: number) =>
