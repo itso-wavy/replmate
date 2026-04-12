@@ -19,7 +19,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
           </p>
           <p>PC 또는 태블릿(가로 모드)에서 이용해 주세요.</p>
           <p className='text-muted-foreground typo-caption-12 mt-2'>
-            (권장 해상도: 1280×720 이상)
+            (권장 해상도: 1280x720 이상)
           </p>
         </div>
       </div>
@@ -27,7 +27,7 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
       {/* md 사이즈 이상 정상 화면 */}
       <div className='relative hidden min-h-svh flex-col md:flex'>
         <PrivateHeader
-          navMenu={DASHBOARD_MENU}
+          navMenu={[...DASHBOARD_MENU]}
           className='from-brand-500/15 to-brand-400/10 bg-radial'
         />
 

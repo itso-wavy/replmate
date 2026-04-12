@@ -12,7 +12,7 @@ import {
 const LandingPage = () => {
   return (
     <>
-      <PublicHeader navMenu={LANDING_GNB_MENU} />
+      <PublicHeader navMenu={[...LANDING_GNB_MENU]} />
 
       <main className='flex flex-1 flex-col'>
         <HeroSection id={LANDING_SECTIONS.HERO} />

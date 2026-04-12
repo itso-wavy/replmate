@@ -3,7 +3,6 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
 import { ROUTES } from '@/constants/nav-menu';
-import { dummyAlertsByPage } from '@/dummy/alerts';
 import { formatDate } from '@/lib/utils';
 import {
   AdjustmentRequiredMeta,
@@ -110,31 +109,52 @@ function toAlert(reminder: ReminderDomain, pathname: string): Alert | null {
   }
 }
 
-/* function getDummyReminders(pathname: string) {
-  if (pathname.startsWith(ROUTES.DASHBOARD))
-    return dummyAlertsByPage.dashboard.alerts;
-  if (pathname.startsWith(ROUTES.STORES))
-    return dummyAlertsByPage.stores.alerts;
-  if (pathname.startsWith(ROUTES.PRODUCTS))
-    return dummyAlertsByPage.products.alerts;
-  if (pathname.startsWith(ROUTES.OPTIONS))
-    return dummyAlertsByPage.options.alerts;
-  if (pathname.startsWith(ROUTES.REPLYS))
-    return dummyAlertsByPage.replies.alerts;
-  return [];
-} */
+const PAGE_EVENTS: Partial<Record<string, ReminderEvent[]>> = {
+  [ROUTES.DASHBOARD]: [
+    ReminderEvent.PAYMENT_FAILED,
+    ReminderEvent.STORE_VERIFICATION_REJECTED,
+    ReminderEvent.STORE_ADJUSTMENT_REQUIRED,
+    ReminderEvent.PRODUCT_ADJUSTMENT_REQUIRED,
+  ],
+  [ROUTES.STORES]: [
+    ReminderEvent.STORE_ADJUSTMENT_REQUIRED,
+    ReminderEvent.STORE_ADJUSTMENT_SCHEDULED,
+  ],
+  [ROUTES.PRODUCTS]: [
+    ReminderEvent.STORE_CONNECTION_REQUIRED,
+    ReminderEvent.PRODUCT_ADJUSTMENT_REQUIRED,
+    ReminderEvent.PRODUCT_ADJUSTMENT_SCHEDULED,
+  ],
+  [ROUTES.OPTIONS]: [ReminderEvent.STORE_CONNECTION_REQUIRED],
+  [ROUTES.REPLYS]: [ReminderEvent.STORE_CONNECTION_REQUIRED],
+};
 
 export function useAlerts(): Alert[] {
   const pathname = usePathname();
   const { data: reminders = [] } = useReminders();
-  // const reminders = getDummyReminders(pathname);
 
-  return useMemo<Alert[]>(
-    () =>
-      reminders.flatMap((reminder) => {
-        const alert = toAlert(reminder, pathname);
+  return useMemo<Alert[]>(() => {
+    const allowedEvents =
+      Object.entries(PAGE_EVENTS).find(([route]) =>
+        pathname.startsWith(route)
+      )?.[1] ?? [];
+
+    const alerts = reminders
+      .filter((r) => allowedEvents.includes(r.event))
+      .flatMap((r) => {
+        const alert = toAlert(r, pathname);
         return alert ? [alert] : [];
-      }),
-    [reminders, pathname]
-  );
+      });
+
+    if (pathname.startsWith(ROUTES.DASHBOARD)) {
+      const sorted = [...alerts].sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      const payment = sorted.filter((a) => a.type === ReminderEvent.PAYMENT_FAILED);
+      const others = sorted.filter((a) => a.type !== ReminderEvent.PAYMENT_FAILED);
+      return [...payment, ...others].slice(0, 3);
+    }
+
+    return alerts;
+  }, [reminders, pathname]);
 }
