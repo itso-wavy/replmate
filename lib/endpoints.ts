@@ -147,7 +147,7 @@ export const PRODUCT_ENDPOINTS = {
 
 export const REPLY_ENDPOINTS = {
   // 리플 목록 조회
-  GET_REPLIES: `${API_BASE}/replies`,
+  GET_REPLIES: `${API_BASE}/users/me/replies`,
 
   // 리플 테스트 (미리보기)
   TEST_REPLY: `${API_BASE}/replies/test`,
