@@ -188,9 +188,11 @@ const AccountPage = () => {
               <div className='mt-1 space-y-0.5'>
                 <p>
                   대표: {COMPANY_META_INFO.REPRESENTATIVE} | 사업자등록번호:{' '}
-                  {COMPANY_META_INFO.BUSINESS_REGISTRATION_NUMBER} |
+                  {COMPANY_META_INFO.BUSINESS_REGISTRATION_NUMBER}{' '}
+                  {COMPANY_META_INFO.MAIL_ORDER_BUSINESS_REPORT_NUMBER &&
+                    `|
                   통신판매업신고:
-                  {COMPANY_META_INFO.MAIL_ORDER_BUSINESS_REPORT_NUMBER}
+                  ${COMPANY_META_INFO.MAIL_ORDER_BUSINESS_REPORT_NUMBER}`}
                 </p>
                 <p>주소: {COMPANY_META_INFO.ADDRESS}</p>
               </div>
