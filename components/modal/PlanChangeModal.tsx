@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { formatDate } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
 
 import { CommonModalProps } from './types';
@@ -205,6 +206,9 @@ const PlanConfirmModal = ({
           <div className='bg-muted/40 space-y-2 rounded-xl p-4'>
             <p className='typo-caption-12 font-medium'>다음 결제 안내</p>
             {/* TODO: 결제일은 API 연동 후 표시 */}
+            <InfoRow label='결제일'>
+              {formatDate(new Date(), 'yyyy년 M월 d일')}
+            </InfoRow>
             <InfoRow label='결제 금액'>
               {selectedPlan.monthlyPrice.toLocaleString()}원
             </InfoRow>

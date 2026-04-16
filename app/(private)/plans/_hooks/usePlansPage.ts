@@ -8,7 +8,12 @@ import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import { toast } from 'sonner';
 
 import { ROUTES } from '@/constants/nav-menu';
-import { useChangePlan, usePlans, useReactivatePlan, useUserPlan } from '@/hooks';
+import {
+  useChangePlan,
+  usePlans,
+  useReactivatePlan,
+  useUserPlan,
+} from '@/hooks';
 import { UserStore } from '@/store/userStore';
 import type { PlanDomain } from '@/types';
 import { SubscriptionStatus } from '@/types/enums';
@@ -65,7 +70,7 @@ export const usePlansPage = () => {
         await changePlan(selectedPlan.id);
         setModalStep('downgrade-complete');
       } catch {
-        toast.error('요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
       }
       return;
     }
@@ -84,7 +89,7 @@ export const usePlansPage = () => {
         customerName: user.name ?? undefined,
       });
     } catch {
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -97,7 +102,7 @@ export const usePlansPage = () => {
         '해지 요청이 취소되었습니다.\n현재 이용 중인 플랜 구독이 정상적으로 유지됩니다.'
       );
     } catch {
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 

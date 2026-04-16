@@ -53,7 +53,9 @@ interface UsePaymentChangeFormProps {
   onClose: () => void;
 }
 
-export const usePaymentChangeForm = ({ onClose }: UsePaymentChangeFormProps) => {
+export const usePaymentChangeForm = ({
+  onClose,
+}: UsePaymentChangeFormProps) => {
   const form = useForm<PaymentChangeFormData>({
     resolver: zodResolver(paymentChangeSchema),
     mode: 'onBlur',
@@ -127,7 +129,7 @@ export const usePaymentChangeForm = ({ onClose }: UsePaymentChangeFormProps) => 
       );
     } catch {
       toast.error(
-        '일시적인 오류로 변경에 실패했습니다. 잠시 후 다시 시도해주세요.'
+        '일시적인 오류로 변경에 실패했습니다. 잠시 후 다시 시도해 주세요.'
       );
     }
   };

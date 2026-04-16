@@ -1,5 +1,5 @@
 import { formatDate } from '@/lib/utils';
-import { DowngradeDomain, SubscriptionDomain } from '@/types';
+import { SubscriptionDomain } from '@/types';
 
 import {
   AlertDialog,
