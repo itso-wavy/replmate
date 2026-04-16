@@ -23,6 +23,9 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@tosspayments/tosspayments-sdk':
+        specifier: ^2.6.0
+        version: 2.6.0
       axios:
         specifier: ^1.13.2
         version: 1.13.2
@@ -829,6 +832,9 @@ packages:
   '@tanstack/table-core@8.21.3':
     resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
     engines: {node: '>=12'}
+
+  '@tosspayments/tosspayments-sdk@2.6.0':
+    resolution: {integrity: sha512-d/9tCj5d+Jbj312bWYXo9dtGNzQaWRxTKWmw6rTwuDgw5g4mrJWV9dP9qiN6/x9PYaphbYDjxGenguHoVQXTGA==}
 
   '@trivago/prettier-plugin-sort-imports@6.0.2':
     resolution: {integrity: sha512-3DgfkukFyC/sE/VuYjaUUWoFfuVjPK55vOFDsxD56XXynFMCZDYFogH2l/hDfOsQAm1myoU/1xByJ3tWqtulXA==}
@@ -4118,6 +4124,8 @@ snapshots:
       react-dom: 19.2.3(react@19.2.3)
 
   '@tanstack/table-core@8.21.3': {}
+
+  '@tosspayments/tosspayments-sdk@2.6.0': {}
 
   '@trivago/prettier-plugin-sort-imports@6.0.2(prettier@3.8.0)':
     dependencies:
