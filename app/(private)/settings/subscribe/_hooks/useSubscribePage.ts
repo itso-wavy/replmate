@@ -13,7 +13,6 @@ import {
   useRequestReceipt,
   useUserPlan,
 } from '@/hooks/useUser';
-import { SubscriptionStatus } from '@/types';
 
 const PAGE_SIZE = 50;
 
@@ -24,12 +23,6 @@ type SubscribeModal =
   | 'paymentChange'
   | 'receipt'
   | null;
-
-const PAID_STATUSES: SubscriptionStatus[] = [
-  SubscriptionStatus.PAID_ACTIVE,
-  SubscriptionStatus.PAID_CANCEL_SCHEDULED,
-  SubscriptionStatus.PAID_PLAN_DOWNGRADE_SCHEDULED,
-];
 
 export function useSubscribePage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,7 +49,7 @@ export function useSubscribePage() {
     useRequestReceipt();
 
   // ── 파생 상태 ──────────────────────────────────────────
-  const isPaid = userPlan ? PAID_STATUSES.includes(userPlan.planStatus) : false;
+  const isFree = userPlan?.plan.monthlyPrice === 0;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -126,7 +119,7 @@ export function useSubscribePage() {
 
   return {
     // 사용자 / 플랜
-    isPaid,
+    isFree,
     userPlan,
 
     // 이용량

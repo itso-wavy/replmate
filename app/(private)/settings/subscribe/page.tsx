@@ -25,7 +25,7 @@ import { useSubscribePage } from './_hooks/useSubscribePage';
 
 const SubscribePage = () => {
   const {
-    isPaid,
+    isFree,
     userPlan,
     quotaTotal,
     quotaUsed,
@@ -81,8 +81,8 @@ const SubscribePage = () => {
         </div>
       </InnerPageSection>
 
-      {/* 결제 내역 요청 (유료 플랜 구독 중) */}
-      {isPaid && (
+      {/* 결제 내역 요청 */}
+      {isFree && (
         <InnerPageSection heading='결제 내역 요청'>
           <div className='flex items-center justify-between gap-2'>
             <p className='typo-body-14 text-foreground-description'>
