@@ -6,22 +6,30 @@ import { toast } from 'sonner';
 
 import { useUsageHistory, useUsageQuota } from '@/hooks/useUsage';
 import {
+  useCancelDowngrade,
   useCancelPlan,
   useReactivatePlan,
   useRequestReceipt,
   useUserPlan,
 } from '@/hooks/useUser';
-import { UserStore } from '@/store/userStore';
-import { SubscriptionStatus } from '@/types';
 
 const PAGE_SIZE = 50;
 
 export function useSubscribePage() {
-  const user = UserStore.useUser();
   const [currentPage, setCurrentPage] = useState(1);
-  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+  // ── 모달 상태 ──────────────────────────────────────────
+  const [isCancelSubscriptionModalOpen, setIsCancelSubscriptionModalOpen] =
+    useState(false);
+  const [isCancelUnsubscribeModalOpen, setIsCancelUnsubscribeModalOpen] =
+    useState(false);
+  const [isCancelDowngradeModalOpen, setIsCancelDowngradeModalOpen] =
+    useState(false);
+  const [isPaymentChangeModalOpen, setIsPaymentChangeModalOpen] =
+    useState(false);
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
 
+  // ── 데이터 ─────────────────────────────────────────────
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: quota, isLoading: isQuotaLoading } = useUsageQuota();
   const { data: historyData, isLoading: isHistoryLoading } = useUsageHistory({
@@ -29,14 +37,18 @@ export function useSubscribePage() {
     size: PAGE_SIZE,
   });
 
-  const { mutateAsync: cancelPlan, isPending: isCancelPending } =
+  // ── 뮤테이션 ───────────────────────────────────────────
+  const { mutateAsync: cancelPlan, isPending: isCancelSubscriptionPending } =
     useCancelPlan();
-  const { mutateAsync: reactivatePlan } = useReactivatePlan();
+  const { mutateAsync: reactivatePlan, isPending: isCancelUnsubscribePending } =
+    useReactivatePlan();
+  const { mutateAsync: cancelDowngrade, isPending: isCancelDowngradePending } =
+    useCancelDowngrade();
   const { mutateAsync: requestReceipt, isPending: isReceiptPending } =
     useRequestReceipt();
 
-  const isVerified = user?.isVerified ?? false;
-  const isFree = userPlan?.planStatus === SubscriptionStatus.FREE;
+  // ── 파생 상태 ──────────────────────────────────────────
+  const isPaid = (userPlan?.plan.monthlyPrice ?? 0) > 0;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -46,41 +58,41 @@ export function useSubscribePage() {
       ? Math.min(Math.round((quotaUsed / quotaTotal) * 100), 100)
       : 0;
 
-  const handlePlanChange = () => {
-    // TODO: 플랜 변경 페이지로 이동
-  };
-
-  const handlePaymentChange = () => {
-    // TODO: 결제 정보 변경 모달
-  };
-
-  const handleReactivate = async () => {
-    try {
-      await reactivatePlan();
-      toast.success('구독이 재활성화되었습니다.');
-    } catch {
-      // 전역 MutationCache.onError에서 처리
-    }
-  };
-
-  const handleCancelPlan = () => {
-    setIsCancelModalOpen(true);
-  };
-
-  const handleCancelConfirm = async () => {
+  // ── 확인 핸들러 ────────────────────────────────────────
+  const handleCancelSubscription = async () => {
     try {
       await cancelPlan();
-      setIsCancelModalOpen(false);
+      setIsCancelSubscriptionModalOpen(false);
       toast.success(
         '구독 해지 예약이 완료되었습니다.\n현재 이용 중인 플랜 종료일까지는 혜택을 계속 사용할 수 있습니다.'
       );
     } catch {
-      // 전역 MutationCache.onError에서 처리
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
-  const handleRequestReceipt = () => {
-    setIsReceiptModalOpen(true);
+  const handleCancelDowngrade = async () => {
+    try {
+      await cancelDowngrade();
+      setIsCancelDowngradeModalOpen(false);
+      toast.success(
+        '변경 예약이 취소되었습니다.\n현재 이용 중인 플랜 구독이 정상적으로 유지됩니다.'
+      );
+    } catch {
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
+  };
+
+  const handleCancelUnsubscribe = async () => {
+    try {
+      await reactivatePlan();
+      setIsCancelUnsubscribeModalOpen(false);
+      toast.success(
+        '해지 요청이 취소되었습니다.\n현재 이용 중인 플랜 구독이 정상적으로 유지됩니다.'
+      );
+    } catch {
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
   };
 
   const handleReceiptConfirm = async () => {
@@ -96,31 +108,44 @@ export function useSubscribePage() {
   };
 
   return {
-    isVerified,
-    isFree,
+    // 사용자 / 플랜
+    isPaid,
     userPlan,
-    isPlanLoading,
+
+    // 이용량
     quotaTotal,
     quotaUsed,
     quotaPercent,
-    isQuotaLoading,
+
+    // 사용 이력
     usageLedger: historyData?.items ?? [],
     totalPages: historyData?.totalPages || 1,
     currentPage,
     isHistoryLoading,
     onPageChange: setCurrentPage,
-    handlePlanChange,
-    handlePaymentChange,
-    handleReactivate,
-    handleCancelPlan,
-    handleRequestReceipt,
-    isCancelModalOpen,
-    setIsCancelModalOpen,
-    isCancelPending,
-    handleCancelConfirm,
+
+    // 모달 상태 & setter
+    isCancelSubscriptionModalOpen,
+    setIsCancelSubscriptionModalOpen,
+    isCancelUnsubscribeModalOpen,
+    setIsCancelUnsubscribeModalOpen,
+    isCancelDowngradeModalOpen,
+    setIsCancelDowngradeModalOpen,
+    isPaymentChangeModalOpen,
+    setIsPaymentChangeModalOpen,
     isReceiptModalOpen,
     setIsReceiptModalOpen,
+
+    // pending
+    isCancelSubscriptionPending,
+    isCancelDowngradePending,
+    isCancelUnsubscribePending,
     isReceiptPending,
+
+    // 확인 핸들러
+    handleCancelSubscription,
+    handleCancelDowngrade,
+    handleCancelUnsubscribe,
     handleReceiptConfirm,
   };
 }

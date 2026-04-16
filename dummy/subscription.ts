@@ -15,32 +15,153 @@ export const dummySubscription: UsageQuotaSubscriptionDomain = {
   storeQuotaTotal: 5,
 };
 
-// 구독 관리 페이지용 더미 데이터
-
-export const dummyUserPlanInfo: UserPlanDomain = {
-  planStatus: SubscriptionStatus.PAID_ACTIVE,
+// UNVERIFIED (미인증)
+export const dummyUserPlanUnverified: UserPlanDomain = {
+  planStatus: SubscriptionStatus.UNVERIFIED,
   plan: {
-    id: 2,
-    name: 'STARTER',
-    title: '스타터 플랜',
-    description: '소규모 쇼핑몰을 운영하는 분들을 위한 플랜',
+    id: 0,
+    name: 'FREE',
+    title: null,
+    description: null,
     monthlyPrice: 0,
     currency: 'KRW',
-    monthlyReplyQuota: 300,
-    maxStoreCount: 2,
-    maxProductPerStore: 50,
-    maxTestPerDay: 20,
+    monthlyReplyQuota: 0,
+    maxStoreCount: 0,
+    maxProductPerStore: 0,
+    maxTestPerDay: 0,
   },
   subscription: {
-    id: 1,
-    status: 'active',
-    startedAt: new Date('2026-01-04T00:00:00Z'),
-    currentPeriodStart: new Date('2026-01-04T00:00:00Z'),
-    currentPeriodEnd: new Date('2026-02-04T00:00:00Z'),
+    id: 0,
+    status: 'unverified',
+    startedAt: new Date('2026-04-15T00:00:00Z'),
+    currentPeriodStart: new Date('2026-04-15T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-04-15T00:00:00Z'),
     cancelAtPeriodEnd: false,
     canceledAt: null,
   },
   downgrade: null,
+};
+
+// FREE 플랜
+export const dummyUserPlanFree: UserPlanDomain = {
+  planStatus: SubscriptionStatus.FREE,
+  plan: {
+    id: 1,
+    name: 'FREE',
+    title: '리플메이트를 경험해보고 싶은 셀러',
+    description: '평생 무료로 리플메이트의 서비스를 경험해 보세요.',
+    monthlyPrice: 0,
+    currency: 'KRW',
+    monthlyReplyQuota: 30,
+    maxStoreCount: 1,
+    maxProductPerStore: 1,
+    maxTestPerDay: 5,
+  },
+  subscription: {
+    id: 0,
+    status: 'free',
+    startedAt: new Date('2026-01-01T00:00:00Z'),
+    currentPeriodStart: new Date('2026-04-01T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-05-01T00:00:00Z'),
+    cancelAtPeriodEnd: false,
+    canceledAt: null,
+  },
+  downgrade: null,
+};
+
+// Active 플랜
+export const dummyUserPlanActive: UserPlanDomain = {
+  planStatus: SubscriptionStatus.PAID_ACTIVE,
+  plan: {
+    id: 1,
+    name: 'Basic',
+    title: '혼자서도 완벽한 1인 셀러',
+    description: '하루 커피 한잔 값으로 리뷰 관리의 부담을 없애세요.',
+    monthlyPrice: 39000,
+    currency: 'KRW',
+    monthlyReplyQuota: 180,
+    maxStoreCount: 1,
+    maxProductPerStore: 20,
+    maxTestPerDay: 5,
+  },
+  subscription: {
+    id: 0,
+    status: 'free',
+    startedAt: new Date('2026-01-01T00:00:00Z'),
+    currentPeriodStart: new Date('2026-04-01T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-05-01T00:00:00Z'),
+    cancelAtPeriodEnd: false,
+    canceledAt: null,
+  },
+  downgrade: null,
+};
+
+// PAID_CANCEL_SCHEDULED (해지 예정)
+export const dummyUserPlanCancelScheduled: UserPlanDomain = {
+  planStatus: SubscriptionStatus.PAID_CANCEL_SCHEDULED,
+  plan: {
+    id: 2,
+    name: 'Basic',
+    title: '혼자서도 완벽한 1인 셀러',
+    description: '하루 커피 한잔 값으로 리뷰 관리의 부담을 없애세요.',
+    monthlyPrice: 39000,
+    currency: 'KRW',
+    monthlyReplyQuota: 180,
+    maxStoreCount: 1,
+    maxProductPerStore: 20,
+    maxTestPerDay: 5,
+  },
+  subscription: {
+    id: 2,
+    status: 'active',
+    startedAt: new Date('2026-01-04T00:00:00Z'),
+    currentPeriodStart: new Date('2026-04-04T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-05-04T00:00:00Z'),
+    cancelAtPeriodEnd: true,
+    canceledAt: new Date('2026-04-10T00:00:00Z'),
+  },
+  downgrade: null,
+};
+
+// PAID_PLAN_DOWNGRADE_SCHEDULED (다운그레이드 예정)
+export const dummyUserPlanDowngradeScheduled: UserPlanDomain = {
+  planStatus: SubscriptionStatus.PAID_PLAN_DOWNGRADE_SCHEDULED,
+  plan: {
+    id: 3,
+    name: 'Premium',
+    title: '급성장하는 파워 셀러',
+    description: 'CS 직원 고용 비용 대비 95% 이상 절감되는 효과',
+    monthlyPrice: 99000,
+    currency: 'KRW',
+    monthlyReplyQuota: 800,
+    maxStoreCount: 2,
+    maxProductPerStore: 50,
+    maxTestPerDay: 5,
+  },
+  subscription: {
+    id: 3,
+    status: 'active',
+    startedAt: new Date('2026-01-04T00:00:00Z'),
+    currentPeriodStart: new Date('2026-04-04T00:00:00Z'),
+    currentPeriodEnd: new Date('2026-05-04T00:00:00Z'),
+    cancelAtPeriodEnd: false,
+    canceledAt: null,
+  },
+  downgrade: {
+    plan: {
+      id: 2,
+      name: 'Basic',
+      title: '혼자서도 완벽한 1인 셀러',
+      description: '하루 커피 한잔 값으로 리뷰 관리의 부담을 없애세요.',
+      monthlyPrice: 39000,
+      currency: 'KRW',
+      monthlyReplyQuota: 180,
+      maxStoreCount: 1,
+      maxProductPerStore: 20,
+      maxTestPerDay: 5,
+    },
+    effectiveDate: new Date('2026-05-04T00:00:00Z'),
+  },
 };
 
 export const dummyUsageRemaining = 270;

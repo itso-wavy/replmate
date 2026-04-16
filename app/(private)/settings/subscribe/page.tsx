@@ -3,11 +3,21 @@
 import { ReceiptText } from 'lucide-react';
 
 import {
+  CancelDowngradeModal,
   CancelSubscriptionModal,
+  CancelUnsubscribeModal,
+  PaymentChangeModal,
   ReceiptRequestModal,
 } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import {
+  dummyUserPlanActive,
+  dummyUserPlanCancelScheduled,
+  dummyUserPlanDowngradeScheduled,
+  dummyUserPlanFree,
+  dummyUserPlanUnverified,
+} from '@/dummy';
 
 import { InnerPageLayout, InnerPageSection } from '../_components';
 import { SubscriptionInfo, UsageLedgerTable } from './_components';
@@ -15,8 +25,7 @@ import { useSubscribePage } from './_hooks/useSubscribePage';
 
 const SubscribePage = () => {
   const {
-    isVerified,
-    isFree,
+    isPaid,
     userPlan,
     quotaTotal,
     quotaUsed,
@@ -26,19 +35,26 @@ const SubscribePage = () => {
     currentPage,
     isHistoryLoading,
     onPageChange,
-    handlePlanChange,
-    handlePaymentChange,
-    handleReactivate,
-    handleCancelPlan,
-    handleRequestReceipt,
-    isCancelModalOpen,
-    setIsCancelModalOpen,
-    isCancelPending,
-    handleCancelConfirm,
+    isCancelSubscriptionModalOpen,
+    setIsCancelSubscriptionModalOpen,
+    handleCancelSubscription,
+    isCancelSubscriptionPending,
+    isCancelDowngradeModalOpen,
+    setIsCancelDowngradeModalOpen,
+    handleCancelDowngrade,
+    isCancelDowngradePending,
+    isCancelUnsubscribeModalOpen,
+    setIsCancelUnsubscribeModalOpen,
+    handleCancelUnsubscribe,
+    isCancelUnsubscribePending,
+    // ===================================
+    isPaymentChangeModalOpen,
+    setIsPaymentChangeModalOpen,
+    // ===================================
     isReceiptModalOpen,
     setIsReceiptModalOpen,
-    isReceiptPending,
     handleReceiptConfirm,
+    isReceiptPending,
   } = useSubscribePage();
 
   return (
@@ -47,12 +63,11 @@ const SubscribePage = () => {
       {userPlan && (
         <InnerPageSection heading='구독 정보'>
           <SubscriptionInfo
-            userPlan={userPlan}
-            isVerified={isVerified}
-            onPlanChange={handlePlanChange}
-            onPaymentChange={handlePaymentChange}
-            onReactivate={handleReactivate}
-            onCancelPlan={handleCancelPlan}
+            userPlan={dummyUserPlanCancelScheduled}
+            onPaymentChange={() => setIsPaymentChangeModalOpen(true)}
+            onReactivate={() => setIsCancelUnsubscribeModalOpen(true)}
+            onCancelPlan={() => setIsCancelSubscriptionModalOpen(true)}
+            onCancelDowngrade={() => setIsCancelDowngradeModalOpen(true)}
           />
         </InnerPageSection>
       )}
@@ -75,18 +90,17 @@ const SubscribePage = () => {
         </div>
       </InnerPageSection>
 
-      {/* 결제 내역 요청 (유료 플랜) */}
-      {!isFree && (
+      {/* 결제 내역 요청 (유료 플랜 구독 중) */}
+      {isPaid && (
         <InnerPageSection heading='결제 내역 요청'>
           <div className='flex items-center justify-between gap-2'>
             <p className='typo-body-14 text-foreground-description'>
               <span>결제 영수증은 담당자에게 요청하실 수 있습니다.</span>{' '}
               <span>요청시 모든 결제 내역을 이메일로 보내 드립니다.</span>
             </p>
-
             <div className='flex items-center justify-center gap-4'>
               <Button
-                onClick={handleRequestReceipt}
+                onClick={() => setIsReceiptModalOpen(true)}
                 isPending={isReceiptPending}
                 variant='outline'
                 className='bg-input/30 text-brand-500 hover:text-brand-500/80 min-w-[80px] shrink-0'
@@ -112,21 +126,49 @@ const SubscribePage = () => {
 
       {/* 모달 */}
       {userPlan && (
-        <CancelSubscriptionModal
-          open={isCancelModalOpen}
-          onOpenChange={setIsCancelModalOpen}
-          onConfirm={handleCancelConfirm}
-          isPending={isCancelPending}
-          planName={userPlan.plan.title ?? userPlan.plan.name}
-          periodEnd={userPlan.subscription.currentPeriodEnd}
-        />
+        <>
+          <CancelSubscriptionModal
+            open={isCancelSubscriptionModalOpen}
+            onOpenChange={setIsCancelSubscriptionModalOpen}
+            currentPlan={userPlan.plan}
+            nextPlanName={userPlan.downgrade?.plan.name.toUpperCase()}
+            onConfirm={handleCancelSubscription}
+            periodEnd={userPlan.subscription.currentPeriodEnd}
+            isPending={isCancelSubscriptionPending}
+          />
+
+          {userPlan.downgrade && (
+            <CancelDowngradeModal
+              open={isCancelDowngradeModalOpen}
+              onOpenChange={setIsCancelDowngradeModalOpen}
+              nextPlanName={userPlan.downgrade.plan.name.toUpperCase()}
+              nextRenewalDate={userPlan.downgrade.effectiveDate}
+              onConfirm={handleCancelDowngrade}
+              isPending={isCancelDowngradePending}
+            />
+          )}
+
+          <CancelUnsubscribeModal
+            open={isCancelUnsubscribeModalOpen}
+            onOpenChange={setIsCancelUnsubscribeModalOpen}
+            periodEnd={userPlan.subscription.currentPeriodEnd}
+            onConfirm={handleCancelUnsubscribe}
+            isPending={isCancelUnsubscribePending}
+          />
+
+          <PaymentChangeModal
+            open={isPaymentChangeModalOpen}
+            onOpenChange={setIsPaymentChangeModalOpen}
+          />
+
+          <ReceiptRequestModal
+            open={isReceiptModalOpen}
+            onOpenChange={setIsReceiptModalOpen}
+            onConfirm={handleReceiptConfirm}
+            isPending={isReceiptPending}
+          />
+        </>
       )}
-      <ReceiptRequestModal
-        open={isReceiptModalOpen}
-        onOpenChange={setIsReceiptModalOpen}
-        onConfirm={handleReceiptConfirm}
-        isPending={isReceiptPending}
-      />
     </InnerPageLayout>
   );
 };
