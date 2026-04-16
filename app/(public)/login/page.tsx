@@ -85,7 +85,7 @@ export const LoginPage = () => {
         {!isLoading && (
           <div className='relative flex w-[320px] max-w-[350px] flex-col text-center'>
             <div>
-              <h1 className='text-foreground typo-display-32'>로그인</h1>
+              <h1 className='text-foreground typo-display-36'>로그인</h1>
               <p className='typo-body-16 text-muted-foreground pt-2'>
                 로그인 후 평생 무료 플랜을 이용해보세요!
               </p>

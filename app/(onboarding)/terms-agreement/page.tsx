@@ -120,7 +120,7 @@ export default function TermsAgreementPage() {
         {!isLoading && (
           <div className='relative mx-auto my-auto flex w-[520px] flex-col'>
             <div>
-              <h1 className='text-foreground typo-display-32'>약관동의</h1>
+              <h1 className='text-foreground typo-display-36'>약관동의</h1>
               <p className='typo-body-16 text-muted-foreground pt-2'>
                 서비스를 이용하려면 먼저 약관에 동의해 주세요.
               </p>
