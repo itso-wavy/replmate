@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { AxiosError } from 'axios';
-import { toast } from 'sonner';
 
 import { queryKeys } from '@/lib/queryKeys';
 import {
@@ -91,13 +89,7 @@ export const useCancelDowngrade = () => {
 export const useRequestReceipt = () =>
   useMutation({
     mutationFn: requestReceipt,
-    onError: (err) => {
-      const message =
-        err instanceof AxiosError && err?.response?.data.errorCode === 5004
-          ? '영수증 요청은 24시간에 한 번만 가능합니다.'
-          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-      toast.error(message);
-    },
+    onError: () => {}, // 에러 처리는 호출 측 catch에서 담당
   });
 
 export const useAgreeTerms = () => {

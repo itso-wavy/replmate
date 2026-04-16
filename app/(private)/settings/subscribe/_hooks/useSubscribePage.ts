@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
 import { useUsageHistory, useUsageQuota } from '@/hooks/useUsage';
@@ -55,9 +56,7 @@ export function useSubscribePage() {
     useRequestReceipt();
 
   // ── 파생 상태 ──────────────────────────────────────────
-  const isPaid = userPlan
-    ? PAID_STATUSES.includes(userPlan.planStatus)
-    : false;
+  const isPaid = userPlan ? PAID_STATUSES.includes(userPlan.planStatus) : false;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -111,8 +110,14 @@ export function useSubscribePage() {
       toast.success(
         '영수증 요청이 완료되었습니다.\n등록된 이메일로 영업일 기준 2~3일 이내 발송됩니다.'
       );
-    } catch {
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    } catch (err) {
+      closeModal();
+      // FIXME: 에러코드 재확인
+      const message =
+        err instanceof AxiosError && err?.response?.data.errorCode === 5004
+          ? '영수증 요청은 24시간에 한 번만 가능합니다.'
+          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      toast.error(message);
     }
   };
 
