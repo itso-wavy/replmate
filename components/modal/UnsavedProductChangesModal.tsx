@@ -39,10 +39,7 @@ const Modal = ({
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>
-          <AlertDialogCancel
-            disabled={isPending}
-            onClick={onLeaveWithoutSaving}
-          >
+          <AlertDialogCancel onClick={onLeaveWithoutSaving}>
             저장 안 함
           </AlertDialogCancel>
           <AlertDialogAction disabled={isPending} onClick={onSaveAndLeave}>

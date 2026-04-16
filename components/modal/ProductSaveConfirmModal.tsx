@@ -28,7 +28,7 @@ const Modal = ({ open, onOpenChange, onConfirm, isPending }: ModalProps) => {
         </AlertDialogHeader>
 
         <AlertDialogFooter className='*:flex-1'>
-          <AlertDialogCancel disabled={isPending}>취소</AlertDialogCancel>
+          <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isPending}>
             저장하기
           </AlertDialogAction>
