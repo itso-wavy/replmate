@@ -59,13 +59,18 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     closeModal: () => onOpenChange(false), // 모달 닫기
   });
 
+  const handleClose = () => {
+    onOpenChange(false);
+    form.reset();
+  };
+
   return (
     <Dialog
       open={open}
-      onOpenChange={(isOpen, eventDetails) => {
+      onOpenChange={(_, eventDetails) => {
         // isOpen: 열릴 때, !isOpen: 닫힐 때
         if (eventDetails.reason !== 'close-press') return;
-        onOpenChange(isOpen);
+        handleClose();
       }}
     >
       <DialogContent>
@@ -189,7 +194,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                     !!form.formState.errors.isUrlAvailable) && (
                     <FieldMessage
                       variant={
-                        form.watch('isUrlAvailable') === true ? 'success' : 'error'
+                        form.watch('isUrlAvailable') === true
+                          ? 'success'
+                          : 'error'
                       }
                       messages={[
                         form.formState.errors.isUrlAvailable || {
@@ -225,7 +232,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
             />
 
             {/* 안내 메시지 */}
-            <FieldDescription className='text-foreground text-center'>
+            <FieldDescription className='text-foreground border-t pt-3 text-center'>
               제출하신 정보와 인증 파일은 검토 후 최대 24시간 내 승인됩니다.
             </FieldDescription>
 
