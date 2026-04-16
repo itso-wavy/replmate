@@ -34,6 +34,7 @@ export const ROUTES = {
   SETTINGS: '/settings',
   SUBSCRIBE: '/settings/subscribe',
   ACCOUNT: '/settings/account',
+  PLANS: '/plans',
 } as const;
 
 export const DASHBOARD_MENU = [

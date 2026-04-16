@@ -11,6 +11,7 @@ const PROTECTED_PATHS = [
   '/options',
   '/replys',
   '/settings',
+  '/plans',
 ];
 
 export async function proxy(req: NextRequest) {
@@ -59,6 +60,7 @@ export const config = {
     '/options/:path*',
     '/replys/:path*',
     '/settings/:path*',
+    '/plans/:path*',
     '/terms-agreement',
     '/login',
   ],
