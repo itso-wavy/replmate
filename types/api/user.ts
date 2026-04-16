@@ -1,3 +1,4 @@
+import { SubscriptionStatus } from '../enums';
 import type { PlanDto } from './plan';
 
 // ==========================================================
@@ -26,7 +27,7 @@ export interface DowngradeInfoDto {
 }
 
 export interface UserPlanInfo {
-  planStatus: 'free' | string;
+  planStatus: SubscriptionStatus;
   subscription: SubscriptionDto;
   plan: PlanDto;
   downgrade: DowngradeInfoDto | null;

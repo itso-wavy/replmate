@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { queryKeys } from '@/lib/queryKeys';
 import {
   agreeTerms,
+  cancelDowngrade,
   cancelPlan,
   changePlan,
   deleteUser,
@@ -75,6 +76,14 @@ export const useReactivatePlan = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: reactivatePlan,
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+  });
+};
+
+export const useCancelDowngrade = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: cancelDowngrade,
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
   });
 };

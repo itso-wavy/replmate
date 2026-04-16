@@ -54,7 +54,7 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
   const { data } = await api.get<UserPlanInfo>(USER_ENDPOINTS.GET_USER_PLAN);
 
   return {
-    planStatus: data.planStatus as SubscriptionStatus,
+    planStatus: data.planStatus,
     plan: toPlanDomain(data.plan),
     subscription: toSubscriptionDomain(data.subscription),
     downgrade: data.downgrade
@@ -87,6 +87,13 @@ export async function cancelPlan(): Promise<CancelSubscriptionResponse> {
     USER_ENDPOINTS.CANCEL_PLAN
   );
   return response.data;
+}
+
+/**
+ * 다운그레이드 예약 취소
+ */
+export async function cancelDowngrade(): Promise<void> {
+  await api.post(USER_ENDPOINTS.CANCEL_DOWNGRADE);
 }
 
 /**

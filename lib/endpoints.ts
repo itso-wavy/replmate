@@ -34,6 +34,7 @@ export const USER_ENDPOINTS = {
   CHANGE_PLAN: `${API_BASE}/users/me/plan`,
   CANCEL_PLAN: `${API_BASE}/users/me/plan`,
   REACTIVATE_PLAN: `${API_BASE}/users/me/plan/reactivate`,
+  CANCEL_DOWNGRADE: `${API_BASE}/users/me/plan/cancel-downgrade`,
 
   // 영수증 요청
   REQUEST_RECEIPT: `${API_BASE}/users/me/receipt`,
