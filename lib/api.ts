@@ -2,12 +2,12 @@ import axios, { AxiosError } from 'axios';
 import { signOut } from 'next-auth/react';
 
 import { ROUTES } from '@/constants/nav-menu';
-import { API_BASE, VERSION } from '@/lib/endpoints';
+import { API_BASE_V1 } from '@/lib/endpoints';
 import { useUserStore } from '@/store/userStore';
 import { ApiResponse } from '@/types';
 
 export const api = axios.create({
-  baseURL: `${API_BASE}/${VERSION}`,
+  baseURL: `${API_BASE_V1}`,
   headers: {
     'Content-Type': 'application/json',
   },
