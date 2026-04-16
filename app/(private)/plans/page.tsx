@@ -2,8 +2,6 @@
 
 import { notFound } from 'next/navigation';
 
-import { Suspense } from 'react';
-
 import { ChevronLeft } from 'lucide-react';
 
 import { PlanChangeModal, ReactivatePlanModal } from '@/components/modal';
@@ -12,8 +10,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { PlanCard, PlansFooter } from './_components';
 import { usePlansPage } from './_hooks/usePlansPage';
-
-type PlanRelation = 'upgrade' | 'downgrade' | 'reactivate';
 
 const PlansPage = () => {
   const {
@@ -28,10 +24,13 @@ const PlansPage = () => {
     isDowngradeScheduled,
     selectedPlan,
     isModalOpen,
+    modalStep,
     isConfirmPending,
+    isReactivatePending,
     handleSelectPlan,
     handleCloseModal,
     handleConfirm,
+    handleReactivate,
     getPlanRelation,
     goBack,
   } = usePlansPage();
@@ -42,7 +41,7 @@ const PlansPage = () => {
   )
     notFound();
 
-  const getModalRelation = (): PlanRelation => {
+  const getModalRelation = () => {
     if (!selectedPlan) return 'upgrade';
     if (isCancelScheduled && selectedPlan.id === userPlan?.plan?.id)
       return 'reactivate';
@@ -95,16 +94,15 @@ const PlansPage = () => {
             open={isModalOpen && getModalRelation() === 'reactivate'}
             onOpenChange={(open) => !open && handleCloseModal()}
             periodEnd={userPlan.subscription.currentPeriodEnd}
-            onConfirm={handleConfirm}
-            isPending={isConfirmPending}
+            onConfirm={handleReactivate}
+            isPending={isReactivatePending}
           />
           <PlanChangeModal
             open={isModalOpen && getModalRelation() !== 'reactivate'}
             onOpenChange={(open) => !open && handleCloseModal()}
             selectedPlan={selectedPlan}
             currentPlan={userPlan.plan}
-            planStatus={planStatus}
-            relation={getModalRelation() === 'downgrade' ? 'downgrade' : 'upgrade'}
+            step={modalStep}
             onConfirm={handleConfirm}
             isPending={isConfirmPending}
           />
