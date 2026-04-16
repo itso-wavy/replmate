@@ -6,19 +6,19 @@ import { Suspense } from 'react';
 
 import { ChevronLeft } from 'lucide-react';
 
-import { PlanChangeModal } from '@/components/modal';
+import { PlanChangeModal, ReactivatePlanModal } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { PlanCard, PlansFooter } from './_components';
 import { usePlansPage } from './_hooks/usePlansPage';
 
-// TODO: 서치파라미터로 selected={} 플랜명 또는 id 받기 => 선택 모달 띄우기
-const PlansPageContent = () => {
+type PlanRelation = 'upgrade' | 'downgrade' | 'reactivate';
+
+const PlansPage = () => {
   const {
     userPlan,
     isPlanLoading,
-    allPlans,
     isPlansLoading,
     plans,
     planStatus,
@@ -28,9 +28,11 @@ const PlansPageContent = () => {
     isDowngradeScheduled,
     selectedPlan,
     isModalOpen,
+    isConfirmPending,
     handleSelectPlan,
     handleCloseModal,
-    // getPlanRelation,
+    handleConfirm,
+    getPlanRelation,
     goBack,
   } = usePlansPage();
 
@@ -40,15 +42,13 @@ const PlansPageContent = () => {
   )
     notFound();
 
-  // TODO: 해지 예정 상태에서 현재 플랜 선택 시 "구독 유지" 모달
-  const getModalRelation = () => {
-    // if (!selectedPlan) return 'upgrade' as const;
-    // if (isCancelScheduled && selectedPlan.id === currentPlan.id) {
-    //   return 'reactivate' as const;
-    // }
-    // return getPlanRelation(selectedPlan) === 'downgrade'
-    //   ? 'downgrade'
-    //   : 'upgrade';
+  const getModalRelation = (): PlanRelation => {
+    if (!selectedPlan) return 'upgrade';
+    if (isCancelScheduled && selectedPlan.id === userPlan?.plan?.id)
+      return 'reactivate';
+    return getPlanRelation(selectedPlan) === 'downgrade'
+      ? 'downgrade'
+      : 'upgrade';
   };
 
   return (
@@ -89,29 +89,29 @@ const PlansPageContent = () => {
         <PlansFooter />
       </div>
 
-      {/* 플랜 변경 모달 */}
-      {selectedPlan && (
-        <PlanChangeModal
-          open={isModalOpen}
-          onOpenChange={(open) => !open && handleCloseModal()}
-          selectedPlan={selectedPlan}
-          currentPlan={userPlan?.plan}
-          planStatus={planStatus}
-          relation={getModalRelation()}
-          onConfirm={() => {
-            // TODO: API 연결
-            handleCloseModal();
-          }}
-        />
+      {selectedPlan && userPlan?.plan && (
+        <>
+          <ReactivatePlanModal
+            open={isModalOpen && getModalRelation() === 'reactivate'}
+            onOpenChange={(open) => !open && handleCloseModal()}
+            periodEnd={userPlan.subscription.currentPeriodEnd}
+            onConfirm={handleConfirm}
+            isPending={isConfirmPending}
+          />
+          <PlanChangeModal
+            open={isModalOpen && getModalRelation() !== 'reactivate'}
+            onOpenChange={(open) => !open && handleCloseModal()}
+            selectedPlan={selectedPlan}
+            currentPlan={userPlan.plan}
+            planStatus={planStatus}
+            relation={getModalRelation() === 'downgrade' ? 'downgrade' : 'upgrade'}
+            onConfirm={handleConfirm}
+            isPending={isConfirmPending}
+          />
+        </>
       )}
     </div>
   );
 };
-
-const PlansPage = () => (
-  <Suspense>
-    <PlansPageContent />
-  </Suspense>
-);
 
 export default PlansPage;

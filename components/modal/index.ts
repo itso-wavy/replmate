@@ -27,4 +27,5 @@ export { default as CancelUnsubscribeModal } from './CancelUnsubscribeModal';
 export { default as PaymentChangeModal } from './PaymentChangeModal';
 
 // Plan
+export { default as ReactivatePlanModal } from './ReactivatePlanModal';
 export { default as PlanChangeModal } from './PlanChangeModal';
