@@ -112,11 +112,14 @@ export function useSubscribePage() {
       );
     } catch (err) {
       closeModal();
-      // FIXME: 에러코드 재확인
+      const errorCode =
+        err instanceof AxiosError ? err?.response?.data.errorCode : null;
       const message =
-        err instanceof AxiosError && err?.response?.data.errorCode === 5004
-          ? '영수증 요청은 24시간에 한 번만 가능합니다.'
-          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+        errorCode === 7001
+          ? '이미 대기 중인 영수증 요청이 있습니다.'
+          : errorCode === 7002
+            ? '영수증 요청은 24시간 내에 한번만 가능합니다.'
+            : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.';
       toast.error(message);
     }
   };
