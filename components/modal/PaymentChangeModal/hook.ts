@@ -4,18 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-export const formatCardNumber = (digits: string): string =>
-  digits
-    .replace(/\D/g, '')
-    .slice(0, 16)
-    .replace(/(.{4})/g, '$1 ')
-    .trim();
-
-export const formatExpiry = (digits: string): string => {
-  if (digits.length <= 2) return digits;
-  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-};
-
 const now = new Date();
 const currentYear = now.getFullYear() % 100; // 2자리 연도
 const currentMonth = now.getMonth() + 1;
@@ -62,12 +50,10 @@ export const paymentChangeSchema = z.object({
 export type PaymentChangeFormData = z.infer<typeof paymentChangeSchema>;
 
 interface UsePaymentChangeFormProps {
-  closeModal: () => void;
+  onClose: () => void;
 }
 
-export const usePaymentChangeForm = ({
-  closeModal,
-}: UsePaymentChangeFormProps) => {
+export const usePaymentChangeForm = ({ onClose }: UsePaymentChangeFormProps) => {
   const form = useForm<PaymentChangeFormData>({
     resolver: zodResolver(paymentChangeSchema),
     mode: 'onBlur',
@@ -79,6 +65,11 @@ export const usePaymentChangeForm = ({
       cardHolder: '',
     },
   });
+
+  const handleClose = () => {
+    onClose();
+    form.reset();
+  };
 
   /**
    * 카드 번호 입력 핸들러
@@ -124,15 +115,13 @@ export const usePaymentChangeForm = ({
    * TODO: 결제 정보 변경 API 연동 (API 개발 후 구현)
    * 1. 카드 정보를 PG사로 전송 → 빌링키 발급 → 서버 저장
    * 2. 결제 정보 변경 안내 토스트 노출
-   * 3. 결제 완료 안내 토스트 노출
    */
   const onSubmit = async (_data: PaymentChangeFormData) => {
     try {
       // TODO: API 연동
       // await changePaymentMethod({ cardNumber, expiry, cvc, cardHolder });
 
-      closeModal();
-      form.reset();
+      handleClose();
       toast.success(
         '결제 정보 변경이 완료되었습니다.\n다음 결제일부터 적용됩니다.'
       );
@@ -145,6 +134,7 @@ export const usePaymentChangeForm = ({
 
   return {
     form,
+    handleClose,
     handleCardNumberChange,
     handleExpiryChange,
     handleCvcChange,

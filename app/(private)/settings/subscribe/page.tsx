@@ -35,26 +35,17 @@ const SubscribePage = () => {
     currentPage,
     isHistoryLoading,
     onPageChange,
-    isCancelSubscriptionModalOpen,
-    setIsCancelSubscriptionModalOpen,
-    handleCancelSubscription,
+    activeModal,
+    setActiveModal,
+    closeModal,
     isCancelSubscriptionPending,
-    isCancelDowngradeModalOpen,
-    setIsCancelDowngradeModalOpen,
-    handleCancelDowngrade,
     isCancelDowngradePending,
-    isCancelUnsubscribeModalOpen,
-    setIsCancelUnsubscribeModalOpen,
-    handleCancelUnsubscribe,
     isCancelUnsubscribePending,
-    // ===================================
-    isPaymentChangeModalOpen,
-    setIsPaymentChangeModalOpen,
-    // ===================================
-    isReceiptModalOpen,
-    setIsReceiptModalOpen,
-    handleReceiptConfirm,
     isReceiptPending,
+    handleCancelSubscription,
+    handleCancelDowngrade,
+    handleCancelUnsubscribe,
+    handleReceiptConfirm,
   } = useSubscribePage();
 
   return (
@@ -63,11 +54,11 @@ const SubscribePage = () => {
       {userPlan && (
         <InnerPageSection heading='구독 정보'>
           <SubscriptionInfo
-            userPlan={dummyUserPlanCancelScheduled}
-            onPaymentChange={() => setIsPaymentChangeModalOpen(true)}
-            onReactivate={() => setIsCancelUnsubscribeModalOpen(true)}
-            onCancelPlan={() => setIsCancelSubscriptionModalOpen(true)}
-            onCancelDowngrade={() => setIsCancelDowngradeModalOpen(true)}
+            userPlan={userPlan}
+            onPaymentChange={() => setActiveModal('paymentChange')}
+            onReactivate={() => setActiveModal('cancelUnsubscribe')}
+            onCancelPlan={() => setActiveModal('cancelSubscription')}
+            onCancelDowngrade={() => setActiveModal('cancelDowngrade')}
           />
         </InnerPageSection>
       )}
@@ -100,7 +91,7 @@ const SubscribePage = () => {
             </p>
             <div className='flex items-center justify-center gap-4'>
               <Button
-                onClick={() => setIsReceiptModalOpen(true)}
+                onClick={() => setActiveModal('receipt')}
                 isPending={isReceiptPending}
                 variant='outline'
                 className='bg-input/30 text-brand-500 hover:text-brand-500/80 min-w-[80px] shrink-0'
@@ -128,8 +119,8 @@ const SubscribePage = () => {
       {userPlan && (
         <>
           <CancelSubscriptionModal
-            open={isCancelSubscriptionModalOpen}
-            onOpenChange={setIsCancelSubscriptionModalOpen}
+            open={activeModal === 'cancelSubscription'}
+            onOpenChange={(open) => !open && closeModal()}
             currentPlan={userPlan.plan}
             nextPlanName={userPlan.downgrade?.plan.name.toUpperCase()}
             onConfirm={handleCancelSubscription}
@@ -139,8 +130,8 @@ const SubscribePage = () => {
 
           {userPlan.downgrade && (
             <CancelDowngradeModal
-              open={isCancelDowngradeModalOpen}
-              onOpenChange={setIsCancelDowngradeModalOpen}
+              open={activeModal === 'cancelDowngrade'}
+              onOpenChange={(open) => !open && closeModal()}
               nextPlanName={userPlan.downgrade.plan.name.toUpperCase()}
               nextRenewalDate={userPlan.downgrade.effectiveDate}
               onConfirm={handleCancelDowngrade}
@@ -149,21 +140,21 @@ const SubscribePage = () => {
           )}
 
           <CancelUnsubscribeModal
-            open={isCancelUnsubscribeModalOpen}
-            onOpenChange={setIsCancelUnsubscribeModalOpen}
+            open={activeModal === 'cancelUnsubscribe'}
+            onOpenChange={(open) => !open && closeModal()}
             periodEnd={userPlan.subscription.currentPeriodEnd}
             onConfirm={handleCancelUnsubscribe}
             isPending={isCancelUnsubscribePending}
           />
 
           <PaymentChangeModal
-            open={isPaymentChangeModalOpen}
-            onOpenChange={setIsPaymentChangeModalOpen}
+            open={activeModal === 'paymentChange'}
+            onOpenChange={(open) => !open && closeModal()}
           />
 
           <ReceiptRequestModal
-            open={isReceiptModalOpen}
-            onOpenChange={setIsReceiptModalOpen}
+            open={activeModal === 'receipt'}
+            onOpenChange={(open) => !open && closeModal()}
             onConfirm={handleReceiptConfirm}
             isPending={isReceiptPending}
           />

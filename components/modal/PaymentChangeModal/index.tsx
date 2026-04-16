@@ -22,31 +22,28 @@ import {
   FieldMessage,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { formatCardNumber, formatExpiry } from '@/lib/utils';
 
 import { CommonModalProps } from '../types';
-import { formatCardNumber, formatExpiry, usePaymentChangeForm } from './hook';
+import { usePaymentChangeForm } from './hook';
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const {
     form,
+    handleClose,
     handleCardNumberChange,
     handleExpiryChange,
     handleCvcChange,
     handleCardHolderChange,
     onSubmit,
   } = usePaymentChangeForm({
-    closeModal: () => onOpenChange(false),
+    onClose: () => onOpenChange(false),
   });
-
-  const handleClose = () => {
-    onOpenChange(false);
-    form.reset();
-  };
 
   return (
     <Dialog
       open={open}
-      onOpenChange={(isOpen, eventDetails) => {
+      onOpenChange={(_, eventDetails) => {
         if (eventDetails.reason !== 'close-press') return;
         handleClose();
       }}

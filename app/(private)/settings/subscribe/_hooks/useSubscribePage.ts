@@ -12,26 +12,33 @@ import {
   useRequestReceipt,
   useUserPlan,
 } from '@/hooks/useUser';
+import { SubscriptionStatus } from '@/types';
 
 const PAGE_SIZE = 50;
 
+type SubscribeModal =
+  | 'cancelSubscription'
+  | 'cancelDowngrade'
+  | 'cancelUnsubscribe'
+  | 'paymentChange'
+  | 'receipt'
+  | null;
+
+const PAID_STATUSES: SubscriptionStatus[] = [
+  SubscriptionStatus.PAID_ACTIVE,
+  SubscriptionStatus.PAID_CANCEL_SCHEDULED,
+  SubscriptionStatus.PAID_PLAN_DOWNGRADE_SCHEDULED,
+];
+
 export function useSubscribePage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeModal, setActiveModal] = useState<SubscribeModal>(null);
 
-  // ── 모달 상태 ──────────────────────────────────────────
-  const [isCancelSubscriptionModalOpen, setIsCancelSubscriptionModalOpen] =
-    useState(false);
-  const [isCancelUnsubscribeModalOpen, setIsCancelUnsubscribeModalOpen] =
-    useState(false);
-  const [isCancelDowngradeModalOpen, setIsCancelDowngradeModalOpen] =
-    useState(false);
-  const [isPaymentChangeModalOpen, setIsPaymentChangeModalOpen] =
-    useState(false);
-  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const closeModal = () => setActiveModal(null);
 
   // ── 데이터 ─────────────────────────────────────────────
-  const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
-  const { data: quota, isLoading: isQuotaLoading } = useUsageQuota();
+  const { data: userPlan } = useUserPlan();
+  const { data: quota } = useUsageQuota();
   const { data: historyData, isLoading: isHistoryLoading } = useUsageHistory({
     page: currentPage,
     size: PAGE_SIZE,
@@ -48,7 +55,9 @@ export function useSubscribePage() {
     useRequestReceipt();
 
   // ── 파생 상태 ──────────────────────────────────────────
-  const isPaid = (userPlan?.plan.monthlyPrice ?? 0) > 0;
+  const isPaid = userPlan
+    ? PAID_STATUSES.includes(userPlan.planStatus)
+    : false;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -62,7 +71,7 @@ export function useSubscribePage() {
   const handleCancelSubscription = async () => {
     try {
       await cancelPlan();
-      setIsCancelSubscriptionModalOpen(false);
+      closeModal();
       toast.success(
         '구독 해지 예약이 완료되었습니다.\n현재 이용 중인 플랜 종료일까지는 혜택을 계속 사용할 수 있습니다.'
       );
@@ -74,7 +83,7 @@ export function useSubscribePage() {
   const handleCancelDowngrade = async () => {
     try {
       await cancelDowngrade();
-      setIsCancelDowngradeModalOpen(false);
+      closeModal();
       toast.success(
         '변경 예약이 취소되었습니다.\n현재 이용 중인 플랜 구독이 정상적으로 유지됩니다.'
       );
@@ -86,7 +95,7 @@ export function useSubscribePage() {
   const handleCancelUnsubscribe = async () => {
     try {
       await reactivatePlan();
-      setIsCancelUnsubscribeModalOpen(false);
+      closeModal();
       toast.success(
         '해지 요청이 취소되었습니다.\n현재 이용 중인 플랜 구독이 정상적으로 유지됩니다.'
       );
@@ -98,12 +107,12 @@ export function useSubscribePage() {
   const handleReceiptConfirm = async () => {
     try {
       await requestReceipt();
-      setIsReceiptModalOpen(false);
+      closeModal();
       toast.success(
         '영수증 요청이 완료되었습니다.\n등록된 이메일로 영업일 기준 2~3일 이내 발송됩니다.'
       );
     } catch {
-      setIsReceiptModalOpen(false);
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -124,17 +133,10 @@ export function useSubscribePage() {
     isHistoryLoading,
     onPageChange: setCurrentPage,
 
-    // 모달 상태 & setter
-    isCancelSubscriptionModalOpen,
-    setIsCancelSubscriptionModalOpen,
-    isCancelUnsubscribeModalOpen,
-    setIsCancelUnsubscribeModalOpen,
-    isCancelDowngradeModalOpen,
-    setIsCancelDowngradeModalOpen,
-    isPaymentChangeModalOpen,
-    setIsPaymentChangeModalOpen,
-    isReceiptModalOpen,
-    setIsReceiptModalOpen,
+    // 모달
+    activeModal,
+    setActiveModal,
+    closeModal,
 
     // pending
     isCancelSubscriptionPending,
