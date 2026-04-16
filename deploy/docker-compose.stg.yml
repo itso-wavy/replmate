@@ -1,0 +1,25 @@
+# 스테이징 환경용 - 인스턴스에서 직접 빌드
+# 민감정보는 Infisical로 주입
+
+x-healthcheck: &default-healthcheck
+  test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    container_name: rm-front-stg
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+    ports:
+      - "3001:3000"
+    healthcheck: *default-healthcheck
+    restart: always
