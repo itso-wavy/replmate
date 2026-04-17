@@ -23,3 +23,8 @@ services:
       - "3001:3000"
     healthcheck: *default-healthcheck
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
