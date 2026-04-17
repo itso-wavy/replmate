@@ -33,7 +33,7 @@ deploy.dev:
 		--env=dev \
 		-- docker compose -f ./deploy/docker-compose.dev.yml up -d
 	@infisical run --projectId=$(INFISICAL_PROJECT_ID) --env=dev -- \
-		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_DEPLOY_WEBHOOK -H "Content-Type: application/json" -d "{\"text\":\":rocket: [DEV] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
+		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_WEBHOOK_URL -H "Content-Type: application/json" -d "{\"text\":\":rocket: [DEV] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
 
 deploy.stg:
 	@echo "Deploying frontend (staging)..."
@@ -46,7 +46,7 @@ deploy.stg:
 		--env=staging \
 		-- docker compose -f ./deploy/docker-compose.stg.yml up -d
 	@infisical run --projectId=$(INFISICAL_PROJECT_ID) --env=staging -- \
-		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_DEPLOY_WEBHOOK -H "Content-Type: application/json" -d "{\"text\":\":rocket: [STG] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
+		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_WEBHOOK_URL -H "Content-Type: application/json" -d "{\"text\":\":rocket: [STG] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
 
 deploy.prod:
 	@echo "Deploying frontend (prod)..."
@@ -59,7 +59,7 @@ deploy.prod:
 		--env=prod \
 		-- docker compose -f ./deploy/docker-compose.prod.yml up -d
 	@infisical run --projectId=$(INFISICAL_PROJECT_ID) --env=prod -- \
-		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_DEPLOY_WEBHOOK -H "Content-Type: application/json" -d "{\"text\":\":rocket: [PROD] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
+		bash -c 'VERSION=$$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown"); curl -s -X POST $$SLACK_WEBHOOK_URL -H "Content-Type: application/json" -d "{\"text\":\":rocket: [PROD] replmate-frontend $$VERSION 배포 완료\"}"' > /dev/null || true
 
 # Down
 down.local:
