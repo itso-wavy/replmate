@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { ChevronLeft } from 'lucide-react';
 
-import { PlanChangeModal, ReactivatePlanModal } from '@/components/modal';
+import { PlanChangeModals } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -13,25 +13,25 @@ import { usePlansPage } from './_hooks/usePlansPage';
 
 const PlansPage = () => {
   const {
+    // 데이터
     userPlan,
     isPlanLoading,
     isPlansLoading,
     plans,
     planStatus,
-    isCancelScheduled,
     isFree,
     isUnverified,
     isDowngradeScheduled,
+    // 모달
+    modalState,
     selectedPlan,
-    isModalOpen,
-    modalStep,
     isConfirmPending,
     isReactivatePending,
-    handleSelectPlan,
-    handleCloseModal,
+    // 액션
+    openPlanSelection,
+    closeModal,
     handleConfirm,
     handleReactivate,
-    getPlanRelation,
     goBack,
   } = usePlansPage();
 
@@ -40,15 +40,6 @@ const PlansPage = () => {
     (!userPlan?.plan || isUnverified || isDowngradeScheduled)
   )
     notFound();
-
-  const getModalRelation = () => {
-    if (!selectedPlan) return 'upgrade';
-    if (isCancelScheduled && selectedPlan.id === userPlan?.plan?.id)
-      return 'reactivate';
-    return getPlanRelation(selectedPlan) === 'downgrade'
-      ? 'downgrade'
-      : 'upgrade';
-  };
 
   return (
     <div className='text-foreground relative mx-auto pt-5'>
@@ -80,7 +71,7 @@ const PlansPage = () => {
                   currentPlanId={userPlan.plan.id}
                   currentPlanPrice={userPlan.plan.monthlyPrice}
                   currentPlanStatus={planStatus}
-                  onSelect={handleSelectPlan}
+                  onSelect={openPlanSelection}
                 />
               ))}
         </div>
@@ -88,25 +79,18 @@ const PlansPage = () => {
         <PlansFooter />
       </div>
 
-      {selectedPlan && userPlan?.plan && (
-        <>
-          <ReactivatePlanModal
-            open={isModalOpen && getModalRelation() === 'reactivate'}
-            onOpenChange={(open) => !open && handleCloseModal()}
-            periodEnd={userPlan.subscription.currentPeriodEnd}
-            onConfirm={handleReactivate}
-            isPending={isReactivatePending}
-          />
-          <PlanChangeModal
-            open={isModalOpen && getModalRelation() !== 'reactivate'}
-            onOpenChange={(open) => !open && handleCloseModal()}
-            selectedPlan={selectedPlan}
-            currentPlan={userPlan.plan}
-            step={modalStep}
-            onConfirm={handleConfirm}
-            isPending={isConfirmPending}
-          />
-        </>
+      {userPlan?.plan && modalState && selectedPlan && (
+        <PlanChangeModals
+          state={modalState}
+          selectedPlan={selectedPlan}
+          currentPlan={userPlan?.plan}
+          periodEnd={userPlan?.subscription.currentPeriodEnd}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+          onReactivate={handleReactivate}
+          isConfirmPending={isConfirmPending}
+          isReactivatePending={isReactivatePending}
+        />
       )}
     </div>
   );
