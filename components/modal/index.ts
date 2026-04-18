@@ -20,7 +20,6 @@ export { default as UnsavedProductChangesModal } from './UnsavedProductChangesMo
 
 // Subscribe
 export { default as ReceiptRequestModal } from './ReceiptRequestModal';
-// 결제 정보 변경 모달
 export { default as CancelSubscriptionModal } from './CancelSubscriptionModal';
 export { default as CancelDowngradeModal } from './CancelDowngradeModal';
 export { default as CancelUnsubscribeModal } from './CancelUnsubscribeModal';
@@ -28,3 +27,4 @@ export { default as PaymentChangeModal } from './PaymentChangeModal';
 
 // Plan
 export { default as PlanChangeModals } from './PlanChangeModals';
+export { default as KeepSubscriptionModal } from './KeepSubscriptionModal';

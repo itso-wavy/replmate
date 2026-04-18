@@ -12,19 +12,19 @@ import {
 } from '../ui/alert-dialog';
 import { CommonModalProps } from './types';
 
-interface ReactivatePlanModalProps extends CommonModalProps {
+interface KeepSubscriptionModalProps extends CommonModalProps {
   periodEnd: Date;
   onConfirm: () => void | Promise<void>;
   isPending?: boolean;
 }
 
-const ReactivatePlanModal = ({
+const KeepSubscriptionModal = ({
   open,
   onOpenChange,
   periodEnd,
   onConfirm,
   isPending,
-}: ReactivatePlanModalProps) => {
+}: KeepSubscriptionModalProps) => {
   const nextRenewalDate = new Date(periodEnd.getTime() + 86400 * 1000);
 
   return (
@@ -48,4 +48,4 @@ const ReactivatePlanModal = ({
   );
 };
 
-export default ReactivatePlanModal;
+export default KeepSubscriptionModal;

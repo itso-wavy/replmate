@@ -53,7 +53,7 @@ export const usePlansPage = () => {
     setSelectedPlan(plan);
 
     if (isCancelScheduled && plan.id === userPlan?.plan?.id) {
-      setModalState('reactivate');
+      setModalState('keepSubscription');
       return;
     }
 

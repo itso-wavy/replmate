@@ -13,11 +13,11 @@ import {
 import { formatDate } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
 
-import ReactivatePlanModal from './ReactivatePlanModal';
+import { KeepSubscriptionModal } from '.';
 
 // ─── 모달 상태 타입 ───────────────────────────────────────
 export type PlanModalState =
-  | 'reactivate'
+  | 'keepSubscription'
   | 'subscribe'
   | 'upgrade'
   | 'downgrade'
@@ -251,7 +251,7 @@ interface PlanChangeModalsProps {
   state: PlanModalState;
   selectedPlan: PlanDomain;
   currentPlan: PlanDomain;
-  periodEnd: Date | undefined;
+  periodEnd: Date;
   onClose: () => void;
   onConfirm: () => void | Promise<void>;
   onReactivate: () => void | Promise<void>;
@@ -272,10 +272,9 @@ const PlanChangeModals = ({
 }: PlanChangeModalsProps) => {
   const onDialogOpenChange = (open: boolean) => !open && onClose();
 
-  if (state === 'reactivate') {
-    if (!periodEnd) return null;
+  if (state === 'keepSubscription') {
     return (
-      <ReactivatePlanModal
+      <KeepSubscriptionModal
         open
         onOpenChange={(open) => !open && onClose()}
         periodEnd={periodEnd}
@@ -285,42 +284,36 @@ const PlanChangeModals = ({
     );
   }
 
-  const renderBody = () => {
-    switch (state) {
-      case 'subscribe':
-        return (
+  return (
+    <Dialog open onOpenChange={onDialogOpenChange}>
+      <DialogContent className='sm:max-w-[425px]'>
+        {state === 'subscribe' && (
           <SubscribeConfirm
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
           />
-        );
-      case 'upgrade':
-        return (
+        )}
+        {state === 'upgrade' && (
           <UpgradeConfirm
             currentPlan={currentPlan}
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
           />
-        );
-      case 'downgrade':
-        return (
+        )}
+        {state === 'downgrade' && (
           <DowngradeConfirm
             currentPlan={currentPlan}
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
           />
-        );
-      case 'downgradeSuccess':
-        return <DowngradeSuccess plan={selectedPlan} onClose={onClose} />;
-    }
-  };
-
-  return (
-    <Dialog open onOpenChange={onDialogOpenChange}>
-      <DialogContent className='sm:max-w-[425px]'>{renderBody()}</DialogContent>
+        )}
+        {state === 'downgradeSuccess' && (
+          <DowngradeSuccess plan={selectedPlan} onClose={onClose} />
+        )}
+      </DialogContent>
     </Dialog>
   );
 };

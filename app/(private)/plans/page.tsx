@@ -79,12 +79,12 @@ const PlansPage = () => {
         <PlansFooter />
       </div>
 
-      {userPlan?.plan && modalState && selectedPlan && (
+      {userPlan && selectedPlan && modalState && (
         <PlanChangeModals
           state={modalState}
           selectedPlan={selectedPlan}
-          currentPlan={userPlan?.plan}
-          periodEnd={userPlan?.subscription.currentPeriodEnd}
+          currentPlan={userPlan.plan}
+          periodEnd={userPlan.subscription.currentPeriodEnd}
           onClose={closeModal}
           onConfirm={handleConfirm}
           onReactivate={handleReactivate}
