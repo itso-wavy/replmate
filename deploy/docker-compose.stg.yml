@@ -8,6 +8,8 @@ x-healthcheck: &default-healthcheck
   retries: 3
   start_period: 40s
 
+name: rm-front-stg
+
 services:
   frontend:
     build:

@@ -1,6 +1,8 @@
 # 로컬 개발용 - hot reload 지원
 # 코드 변경 시 자동 리로드 (volumes + next dev)
 
+name: rm-front-local
+
 services:
   frontend:
     build:
