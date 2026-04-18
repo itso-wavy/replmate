@@ -8,7 +8,8 @@ export INFISICAL_PROJECT_ID
 
 .PHONY: deploy.local deploy.dev deploy.stg deploy.prod \
 	down.local down.dev down.stg down.prod \
-	install logs status
+	logs logs.local logs.dev logs.stg logs.prod \
+	install status
 
 # Deploy
 deploy.local:
@@ -78,9 +79,16 @@ down.prod:
 install:
 	pnpm install
 
-# Logs
-logs:
+# Logs (환경별)
+logs: logs.local
+logs.local:
 	docker compose -f ./deploy/docker-compose.local.yml logs -f
+logs.dev:
+	docker compose -f ./deploy/docker-compose.dev.yml logs -f
+logs.stg:
+	docker compose -f ./deploy/docker-compose.stg.yml logs -f
+logs.prod:
+	docker compose -f ./deploy/docker-compose.prod.yml logs -f
 
 # Status
 status:
