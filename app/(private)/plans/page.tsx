@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { ChevronLeft } from 'lucide-react';
 
-import { PlanChangeModals } from '@/components/modal';
+import { KeepSubscriptionModal, PlanChangeModals } from '@/components/modal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -26,12 +26,12 @@ const PlansPage = () => {
     modalState,
     selectedPlan,
     isConfirmPending,
-    isReactivatePending,
+    isKeepSubscriptionPending,
     // 액션
     openPlanSelection,
     closeModal,
     handleConfirm,
-    handleReactivate,
+    handleKeepSubscription,
     goBack,
   } = usePlansPage();
 
@@ -79,17 +79,24 @@ const PlansPage = () => {
         <PlansFooter />
       </div>
 
-      {userPlan && selectedPlan && modalState && (
+      {modalState === 'keepSubscription' && (
+        <KeepSubscriptionModal
+          open
+          onOpenChange={(open) => !open && closeModal()}
+          periodEnd={userPlan!.subscription.currentPeriodEnd}
+          onConfirm={handleKeepSubscription}
+          isPending={isKeepSubscriptionPending}
+        />
+      )}
+
+      {selectedPlan && modalState && modalState !== 'keepSubscription' && (
         <PlanChangeModals
           state={modalState}
+          currentPlan={userPlan!.plan}
           selectedPlan={selectedPlan}
-          currentPlan={userPlan.plan}
-          periodEnd={userPlan.subscription.currentPeriodEnd}
           onClose={closeModal}
           onConfirm={handleConfirm}
-          onReactivate={handleReactivate}
           isConfirmPending={isConfirmPending}
-          isReactivatePending={isReactivatePending}
         />
       )}
     </div>

@@ -79,11 +79,13 @@ export const usePlansPage = () => {
       return;
     }
 
-    // subscribe / upgrade: TODO 다날 결제 연동
+    // subscribe / upgrade: TODO 다날 결제 연동 후 성공 시 아래 처리
+    // await pgPayment(selectedPlan.id);
+    // setModalState('upgradeSuccess');
     toast.error('결제 모듈 연동 준비 중입니다.');
   };
 
-  const handleReactivate = async () => {
+  const handleKeepSubscription = async () => {
     try {
       await reactivatePlan();
       closeModal();
@@ -112,12 +114,12 @@ export const usePlansPage = () => {
     modalState,
     selectedPlan,
     isConfirmPending: isChangePlanPending,
-    isReactivatePending,
+    isKeepSubscriptionPending: isReactivatePending,
     // 액션
     openPlanSelection,
     closeModal,
     handleConfirm,
-    handleReactivate,
+    handleKeepSubscription,
     goBack,
   };
 };

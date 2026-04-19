@@ -13,14 +13,13 @@ import {
 import { formatDate } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
 
-import { KeepSubscriptionModal } from '.';
-
 // ─── 모달 상태 타입 ───────────────────────────────────────
 export type PlanModalState =
   | 'keepSubscription'
   | 'subscribe'
   | 'upgrade'
   | 'downgrade'
+  | 'upgradeSuccess'
   | 'downgradeSuccess';
 
 // ─── 공통 서브 컴포넌트 ───────────────────────────────────
@@ -214,6 +213,47 @@ const DowngradeConfirm = ({
   </>
 );
 
+const UpgradeSuccess = ({
+  plan,
+  onClose,
+}: {
+  plan: PlanDomain;
+  onClose: () => void;
+}) => (
+  <>
+    <div className='flex flex-col items-center gap-3 py-4 text-center'>
+      <div className='bg-brand-500/10 flex size-16 items-center justify-center rounded-full'>
+        <CheckCircle size={32} className='text-brand-500' />
+      </div>
+      <div>
+        <p className='typo-heading-20 font-bold'>업그레이드 완료!</p>
+        <p className='typo-body-14 text-muted-foreground mt-1'>
+          지금 바로 {plan.name.toUpperCase()} 플랜의
+          <br />
+          모든 기능을 사용하실 수 있습니다
+        </p>
+      </div>
+    </div>
+    <div className='bg-muted/40 space-y-3 rounded-xl p-4'>
+      <div className='text-center'>
+        <p className='typo-caption-12 text-muted-foreground'>즉시 사용 가능</p>
+        <p className='typo-heading-20 font-bold'>
+          {plan.monthlyReplyQuota.toLocaleString()}건
+        </p>
+      </div>
+      <div className='border-muted border-t' />
+      {/* TODO: 결제일 / 결제 금액은 API 연동 후 표시 */}
+      <InfoRow label='다음 결제일'>—</InfoRow>
+      <InfoRow label='다음 결제 금액'>
+        {plan.monthlyPrice.toLocaleString()}원
+      </InfoRow>
+    </div>
+    <Button className='w-full' onClick={onClose}>
+      확인
+    </Button>
+  </>
+);
+
 const DowngradeSuccess = ({
   plan,
   onClose,
@@ -248,41 +288,23 @@ const DowngradeSuccess = ({
 
 // ─── 라우터 컴포넌트 ──────────────────────────────────────
 interface PlanChangeModalsProps {
-  state: PlanModalState;
+  state: Exclude<PlanModalState, 'keepSubscription'>;
   selectedPlan: PlanDomain;
   currentPlan: PlanDomain;
-  periodEnd: Date;
   onClose: () => void;
   onConfirm: () => void | Promise<void>;
-  onReactivate: () => void | Promise<void>;
   isConfirmPending?: boolean;
-  isReactivatePending?: boolean;
 }
 
 const PlanChangeModals = ({
   state,
   selectedPlan,
   currentPlan,
-  periodEnd,
   onClose,
   onConfirm,
-  onReactivate,
   isConfirmPending,
-  isReactivatePending,
 }: PlanChangeModalsProps) => {
   const onDialogOpenChange = (open: boolean) => !open && onClose();
-
-  if (state === 'keepSubscription') {
-    return (
-      <KeepSubscriptionModal
-        open
-        onOpenChange={(open) => !open && onClose()}
-        periodEnd={periodEnd}
-        onConfirm={onReactivate}
-        isPending={isReactivatePending}
-      />
-    );
-  }
 
   return (
     <Dialog open onOpenChange={onDialogOpenChange}>
@@ -309,6 +331,9 @@ const PlanChangeModals = ({
             onConfirm={onConfirm}
             isPending={isConfirmPending}
           />
+        )}
+        {state === 'upgradeSuccess' && (
+          <UpgradeSuccess plan={selectedPlan} onClose={onClose} />
         )}
         {state === 'downgradeSuccess' && (
           <DowngradeSuccess plan={selectedPlan} onClose={onClose} />
