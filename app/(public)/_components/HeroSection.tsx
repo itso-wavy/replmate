@@ -52,10 +52,10 @@ const HeroSection = ({ id }: { id: string }) => {
             onClick={() => router.push(ROUTES.LOGIN)}
             className='group from-brand-600 to-brand-300 relative bg-gradient-to-r hover:bg-transparent'
           >
-            <div
+            {/* <div
               aria-hidden='true'
-              className='pointer-events-none absolute inset-0 border-r border-b border-l border-solid border-[#f3f7fe]'
-            />
+              className='pointer-events-none absolute inset-0 rounded-[inherit] border-r border-b border-l border-solid border-[#f3f7fe]'
+            /> */}
             <div className='text-white transition-all duration-200 group-hover:text-shadow-[0px_0px_10px_#2effa7]'>
               무료로 시작하기
             </div>
