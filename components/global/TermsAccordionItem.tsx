@@ -58,24 +58,36 @@ const TermsAccordionItem = ({
 
         <div
           className={cn(
-            'flex flex-1 items-center gap-2',
+            'flex-1',
             size === 'sm' ? 'typo-body-14' : 'typo-body-16',
             !hasCheckbox && 'py-4'
           )}
         >
-          <span>{label}</span>
-          {showRequiredBadge && required !== undefined && (
-            <span
-              className={cn(
-                'typo-caption-12 rounded-full px-2 py-0.5',
-                required
-                  ? 'bg-brand-50 text-brand-500'
-                  : 'text-muted-foreground bg-muted'
-              )}
-            >
-              {required ? '필수' : '선택'}
-            </span>
-          )}
+          <div
+            className='flex w-fit items-center gap-2'
+            onClick={
+              hasCheckbox
+                ? (e) => {
+                    e.stopPropagation();
+                    onToggleCheck?.();
+                  }
+                : undefined
+            }
+          >
+            <span>{label}</span>
+            {showRequiredBadge && required !== undefined && (
+              <span
+                className={cn(
+                  'typo-caption-12 rounded-full px-2 py-0.5',
+                  required
+                    ? 'bg-brand-50 text-brand-500'
+                    : 'text-muted-foreground bg-muted'
+                )}
+              >
+                {required ? '필수' : '선택'}
+              </span>
+            )}
+          </div>
         </div>
 
         <button
@@ -98,8 +110,13 @@ const TermsAccordionItem = ({
       </div>
 
       {isExpanded && (
-        <div className='bg-muted/50 typo-body-14 text-muted-foreground mb-4 max-h-[240px] overflow-y-auto rounded-lg px-4 py-3 leading-relaxed whitespace-pre-wrap'>
-          {isLoadingContent ? <Spinner className='size-4' /> : content}
+        <div className='typo-body-14 text-muted-foreground bg-muted/50 mb-4 max-h-[240px] overflow-x-hidden overflow-y-auto rounded-lg px-4 py-3 whitespace-pre-line'>
+          {isLoadingContent ? (
+            <Spinner className='size-4' />
+          ) : (
+            // <div dangerouslySetInnerHTML={{ __html: content ?? '' }} />
+            content
+          )}
         </div>
       )}
     </div>

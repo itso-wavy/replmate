@@ -10,6 +10,7 @@ export interface TermsDto {
   type: TermsType;
   title: string;
   content: string;
+  contentHtml: string;
   isRequired: boolean;
   createdAt: string;
 }

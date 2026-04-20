@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -19,13 +20,14 @@ const Modal = ({ id, open, onOpenChange }: ModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[80vh] overflow-y-auto'>
+      <DialogContent className='typo-body-14 text-foreground flex max-h-[80vh] flex-col'>
         <DialogHeader>
-          <DialogTitle>
+          <DialogClose />
+          {/* <DialogTitle>
             {isLoading ? <Skeleton className='h-5 w-32' /> : data?.title}
-          </DialogTitle>
+          </DialogTitle> */}
         </DialogHeader>
-        <div className='typo-body-14 text-foreground whitespace-pre-wrap'>
+        <div className='flex-1 overflow-y-auto'>
           {isLoading ? (
             <div className='space-y-2'>
               <Skeleton className='h-4 w-full' />
@@ -33,7 +35,10 @@ const Modal = ({ id, open, onOpenChange }: ModalProps) => {
               <Skeleton className='h-4 w-3/4' />
             </div>
           ) : (
-            data?.content
+            // data?.content
+            <div
+              dangerouslySetInnerHTML={{ __html: data?.contentHtml ?? '' }}
+            />
           )}
         </div>
       </DialogContent>
