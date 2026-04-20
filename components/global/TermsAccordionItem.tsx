@@ -1,5 +1,8 @@
 'use client';
 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 import { CaretDownIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -24,7 +27,7 @@ interface TermsAccordionItemProps {
 const TermsAccordionItem = ({
   size = 'default',
   label,
-  content,
+  content: markdownContent,
   isExpanded,
   onToggleExpand,
   isChecked,
@@ -110,12 +113,87 @@ const TermsAccordionItem = ({
       </div>
 
       {isExpanded && (
-        <div className='typo-body-14 text-muted-foreground bg-muted/50 mb-4 max-h-[240px] overflow-x-hidden overflow-y-auto rounded-lg px-4 py-3 whitespace-pre-line'>
+        <div className='typo-body-14 text-muted-foreground bg-muted/50 mb-4 max-h-[240px] overflow-x-hidden overflow-y-auto rounded-lg px-4 py-3'>
           {isLoadingContent ? (
             <Spinner className='size-4' />
           ) : (
-            // <div dangerouslySetInnerHTML={{ __html: content ?? '' }} />
-            content
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => (
+                  <h1 className='typo-body-16 text-foreground mb-2 mt-4 font-semibold first:mt-0'>
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className='typo-body-14 text-foreground mb-1.5 mt-3 font-semibold first:mt-0'>
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className='typo-body-14 text-foreground mb-1 mt-2 font-medium first:mt-0'>
+                    {children}
+                  </h3>
+                ),
+                p: ({ children }) => (
+                  <p className='mb-2 last:mb-0'>{children}</p>
+                ),
+                ul: ({ children }) => (
+                  <ul className='mb-2 list-disc space-y-0.5 pl-4'>
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className='mb-2 list-decimal space-y-0.5 pl-4'>
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => <li>{children}</li>,
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-brand-500 underline underline-offset-2 hover:opacity-80'
+                  >
+                    {children}
+                  </a>
+                ),
+                table: ({ children }) => (
+                  <div className='mb-2 overflow-x-auto'>
+                    <table className='w-full border-collapse text-left'>
+                      {children}
+                    </table>
+                  </div>
+                ),
+                thead: ({ children }) => (
+                  <thead className='bg-muted'>{children}</thead>
+                ),
+                th: ({ children }) => (
+                  <th className='border-border border px-3 py-1.5 font-medium'>
+                    {children}
+                  </th>
+                ),
+                td: ({ children }) => (
+                  <td className='border-border border px-3 py-1.5'>
+                    {children}
+                  </td>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className='border-muted-foreground/30 text-muted-foreground mb-2 border-l-2 pl-3 italic'>
+                    {children}
+                  </blockquote>
+                ),
+                strong: ({ children }) => (
+                  <strong className='text-foreground font-semibold'>
+                    {children}
+                  </strong>
+                ),
+                em: ({ children }) => <em className='italic'>{children}</em>,
+              }}
+            >
+              {markdownContent}
+            </ReactMarkdown>
           )}
         </div>
       )}
