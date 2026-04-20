@@ -6,22 +6,11 @@
 export INFISICAL_TOKEN
 export INFISICAL_PROJECT_ID
 
-.PHONY: deploy.local deploy.dev deploy.stg deploy.prod \
-	logs logs.local logs.dev logs.stg logs.prod \
+.PHONY: deploy.dev deploy.stg deploy.prod \
+	logs.dev logs.stg logs.prod \
 	install status
 
 # Deploy
-deploy.local:
-	@echo "Deploying frontend (local)..."
-	infisical run \
-		--projectId=$(INFISICAL_PROJECT_ID) \
-		--env=dev \
-		-- docker compose -f ./deploy/docker-compose.local.yml build --no-cache && \
-	infisical run \
-		--projectId=$(INFISICAL_PROJECT_ID) \
-		--env=dev \
-		-- docker compose -f ./deploy/docker-compose.local.yml up
-
 deploy.dev:
 	@echo "Deploying frontend (dev)..."
 	infisical run \
@@ -66,9 +55,6 @@ install:
 	pnpm install
 
 # Logs (환경별)
-logs: logs.local
-logs.local:
-	docker compose -f ./deploy/docker-compose.local.yml logs -f
 logs.dev:
 	docker compose -f ./deploy/docker-compose.dev.yml logs -f
 logs.stg:
