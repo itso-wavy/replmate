@@ -54,8 +54,14 @@ export const LoginPage = () => {
   };
 
   const handleSocialLogin = (provider: AuthProvider) => {
+    // TODO: local 개발용 환경 변수 사용
+    const isLocal = process.env.NEXT_PUBLIC_IS_LOCAL === 'true';
+    const url = isLocal
+      ? `${loginUrls[provider]}?redirect_uri=${encodeURIComponent(window.location.origin)}`
+      : loginUrls[provider];
+
     window.open(
-      loginUrls[provider],
+      url,
       'social login', // 팝업 창 이름
       'width=500,height=600,left=400,top=200' // 팝업 옵션(크기/위치)
     );
