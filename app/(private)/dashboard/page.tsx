@@ -7,9 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/constants/nav-menu';
 import { dummyRecentReplies } from '@/dummy/replies';
-import { useAlerts } from '@/hooks/useAlerts';
 import { UserStore } from '@/store/userStore';
-import type { Alert } from '@/types';
 
 import { DashboardLayout } from '../_components';
 import {
@@ -24,8 +22,6 @@ import { useDashboardPage } from './_hooks/useDashboardPage';
 const DashboardPage = () => {
   const router = useRouter();
   const user = UserStore.useUser();
-
-  const alerts = useAlerts();
 
   const { stores, subscription, todayReplyCount, recentReplies, isLoading } =
     useDashboardPage();
@@ -44,7 +40,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <DashboardLayout heading='대시보드' alerts={alerts}>
+    <DashboardLayout heading='대시보드'>
       <>
         <div className='grid grid-cols-2 gap-4 lg:grid-cols-4'>
           <DashboardPlanCard

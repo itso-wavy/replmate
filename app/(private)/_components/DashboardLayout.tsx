@@ -12,26 +12,19 @@ import {
 } from '@/components/ui/tooltip';
 import { useAlerts } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { Alert } from '@/types';
-
 interface DashboardLayoutProps {
   heading?: string;
   description?: string | React.ReactNode;
-  alerts?: Alert[];
   className?: string;
 }
 
 export const DashboardLayout = ({
   heading,
   description,
-  alerts: propAlerts,
   className,
   children,
 }: PropsWithChildren<DashboardLayoutProps>) => {
-  // useAlerts 내부에서 usePathname()으로 페이지별 문구를 자동 분기함
-  // dashboard/page.tsx는 정렬이 필요해 alerts prop으로 override
-  const internalAlerts = useAlerts();
-  const alerts = propAlerts ?? internalAlerts;
+  const alerts = useAlerts();
 
   return (
     <div className={cn('text-foreground relative mx-auto py-5', className)}>
