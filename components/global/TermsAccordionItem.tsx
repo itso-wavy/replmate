@@ -1,9 +1,9 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 import { CaretDownIcon } from '@phosphor-icons/react/dist/ssr';
+import remarkGfm from 'remark-gfm';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
@@ -121,22 +121,22 @@ const TermsAccordionItem = ({
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ children }) => (
-                  <h1 className='typo-body-16 text-foreground mb-2 mt-4 font-semibold first:mt-0'>
+                  <h1 className='typo-body-16 text-foreground mt-4 mb-2 font-semibold first:mt-0'>
                     {children}
                   </h1>
                 ),
                 h2: ({ children }) => (
-                  <h2 className='typo-body-14 text-foreground mb-1.5 mt-3 font-semibold first:mt-0'>
+                  <h2 className='typo-body-14 text-foreground mt-3 mb-1.5 font-semibold first:mt-0'>
                     {children}
                   </h2>
                 ),
                 h3: ({ children }) => (
-                  <h3 className='typo-body-14 text-foreground mb-1 mt-2 font-medium first:mt-0'>
+                  <h3 className='typo-body-14 text-foreground mt-2 mb-1 font-medium first:mt-0'>
                     {children}
                   </h3>
                 ),
                 p: ({ children }) => (
-                  <p className='mb-2 last:mb-0'>{children}</p>
+                  <p className='mb-2 last:mb-4'>{children}</p>
                 ),
                 ul: ({ children }) => (
                   <ul className='mb-2 list-disc space-y-0.5 pl-4'>

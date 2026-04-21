@@ -63,7 +63,7 @@ const Modal = ({ id, open, onOpenChange }: ModalProps) => {
                   </h3>
                 ),
                 p: ({ children }) => (
-                  <p className='mb-2 last:mb-0'>{children}</p>
+                  <p className='mb-2 last:mb-4'>{children}</p>
                 ),
                 ul: ({ children }) => (
                   <ul className='mb-2 list-disc space-y-0.5 pl-4'>
