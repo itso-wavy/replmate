@@ -1,5 +1,7 @@
 'use client';
 
+import '@/sentry.client.config';
+
 import { useState } from 'react';
 
 import {

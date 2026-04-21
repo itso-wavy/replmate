@@ -3,6 +3,7 @@
 CLAUDE.md
 .claude/
 .vscode/
+.playwright-mcp/
 
 # dependencies
 /node_modules
