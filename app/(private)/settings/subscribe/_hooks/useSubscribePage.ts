@@ -5,6 +5,13 @@ import { useState } from 'react';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
+import {
+  dummyUserPlanActive,
+  dummyUserPlanCancelScheduled,
+  dummyUserPlanDowngradeScheduled,
+  dummyUserPlanFree,
+  dummyUserPlanUnverified,
+} from '@/dummy';
 import { useUsageHistory, useUsageQuota } from '@/hooks/useUsage';
 import {
   useCancelDowngrade,
@@ -13,6 +20,7 @@ import {
   useRequestReceipt,
   useUserPlan,
 } from '@/hooks/useUser';
+import { SubscriptionStatus } from '@/types';
 
 const PAGE_SIZE = 50;
 
@@ -49,7 +57,7 @@ export function useSubscribePage() {
     useRequestReceipt();
 
   // ── 파생 상태 ──────────────────────────────────────────
-  const isFree = userPlan?.plan.monthlyPrice === 0;
+  const isVerified = userPlan?.planStatus !== SubscriptionStatus.UNVERIFIED;
 
   const quotaTotal = userPlan?.plan.monthlyReplyQuota ?? 0;
   const quotaRemaining = quota?.remaining ?? 0;
@@ -119,7 +127,7 @@ export function useSubscribePage() {
 
   return {
     // 사용자 / 플랜
-    isFree,
+    isVerified,
     userPlan,
 
     // 이용량
