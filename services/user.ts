@@ -68,11 +68,11 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
 
 export interface ChangePlanResponse {
   amount: number;
-  from_plan_name: string;
-  is_upgrade: boolean;
-  order_id: number;
-  payment_url: string;
-  to_plan_name: string;
+  fromPlanName: string;
+  isUpgrade: boolean;
+  orderId: number;
+  paymentUrl: string;
+  toPlanName: string;
 }
 
 /**

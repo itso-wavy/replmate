@@ -82,10 +82,9 @@ export const usePlansPage = () => {
     // subscribe / upgrade: changePlan API → 결제 URL 리다이렉트
     // toast.error('결제 모듈 연동 준비 중입니다.');
     try {
-      // FIXME: RESPONSE TYPE
-      const { payment_url } = await changePlan(selectedPlan.id);
-      if (payment_url) {
-        window.location.href = payment_url;
+      const { paymentUrl } = await changePlan(selectedPlan.id);
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
       } else {
         setModalState('upgradeSuccess');
         router.push(ROUTES.SUBSCRIBE);
