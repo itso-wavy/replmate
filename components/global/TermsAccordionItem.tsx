@@ -81,7 +81,7 @@ const TermsAccordionItem = ({
             {showRequiredBadge && required !== undefined && (
               <span
                 className={cn(
-                  'typo-caption-12 rounded-full px-2 py-0.5',
+                  'typo-caption-12 rounded-full px-2 py-0.5 whitespace-nowrap',
                   required
                     ? 'bg-brand-50 text-brand-500'
                     : 'text-muted-foreground bg-muted'

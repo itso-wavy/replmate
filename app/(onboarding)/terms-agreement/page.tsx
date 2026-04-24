@@ -118,7 +118,7 @@ export default function TermsAgreementPage() {
         )}
 
         {!isLoading && (
-          <div className='relative mx-auto my-auto flex w-[520px] flex-col'>
+          <div className='relative mx-auto my-auto flex w-full max-w-[520px] flex-col'>
             <div>
               <h1 className='text-foreground typo-display-36'>약관동의</h1>
               <p className='typo-body-16 text-muted-foreground pt-2'>
