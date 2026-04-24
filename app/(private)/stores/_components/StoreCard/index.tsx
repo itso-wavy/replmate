@@ -124,7 +124,7 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
       )}
     >
       <CardHeader className='flex items-center justify-between'>
-        <div className='flex flex-col'>
+        <div className='flex min-w-0 flex-col'>
           {isNameEditMode ? (
             <Input
               ref={inputRef}
@@ -143,7 +143,10 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
               onClick={() => setIsNameEditMode(true)}
               className='relative flex items-end py-1'
             >
-              <div className='typo-heading-24 text-foreground truncate'>
+              <div
+                title={store.name}
+                className='typo-heading-24 text-foreground truncate'
+              >
                 {store.name}
               </div>
 
@@ -159,7 +162,9 @@ const StoreCard = ({ store }: { store: StoreDomain }) => {
               rel='noreferrer'
               className='typo-link-14 text-foreground-description-muted flex items-center gap-1 underline-offset-4 hover:underline'
             >
-              <span className='truncate'>{store.url}</span>
+              <span title={store.url} className='truncate'>
+                {store.url}
+              </span>
               <ExternalLink className='h-3 w-3' />
             </a>
           </div>

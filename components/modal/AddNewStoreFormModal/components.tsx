@@ -79,7 +79,10 @@ export const FileUploadField = ({
               key={index}
               className='flex items-center justify-between rounded-sm border border-gray-200 bg-white p-3'
             >
-              <span className='typo-body-14 flex-1 truncate text-gray-800'>
+              <span
+                title={file.name}
+                className='typo-body-14 flex-1 truncate text-gray-800'
+              >
                 {file.name}
               </span>
               <button
