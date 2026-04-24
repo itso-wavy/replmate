@@ -79,10 +79,20 @@ export const usePlansPage = () => {
       return;
     }
 
-    // subscribe / upgrade: TODO 다날 결제 연동 후 성공 시 아래 처리
-    // await pgPayment(selectedPlan.id);
-    // setModalState('upgradeSuccess');
-    toast.error('결제 모듈 연동 준비 중입니다.');
+    // subscribe / upgrade: changePlan API → 결제 URL 리다이렉트
+    // toast.error('결제 모듈 연동 준비 중입니다.');
+    try {
+      // FIXME: RESPONSE TYPE
+      const { payment_url } = await changePlan(selectedPlan.id);
+      if (payment_url) {
+        window.location.href = payment_url;
+      } else {
+        setModalState('upgradeSuccess');
+        router.push(ROUTES.SUBSCRIBE);
+      }
+    } catch {
+      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
   };
 
   const handleKeepSubscription = async () => {

@@ -66,16 +66,25 @@ export async function getUserPlan(): Promise<UserPlanDomain> {
   };
 }
 
+export interface ChangePlanResponse {
+  amount: number;
+  from_plan_name: string;
+  is_upgrade: boolean;
+  order_id: number;
+  payment_url: string;
+  to_plan_name: string;
+}
+
 /**
  * 플랜 변경
  * 결제 주문을 생성하고 결제 URL을 반환합니다.
  * 실제 플랜 변경은 결제 완료 후 webhook에서 처리됩니다.
- * @returns 결제 URL (string) 또는 무료 플랜 변경 시 null
  */
-export async function changePlan(planId: number): Promise<string | null> {
-  const response = await api.put<string | null>(USER_ENDPOINTS.CHANGE_PLAN, {
-    planId,
-  });
+export async function changePlan(planId: number): Promise<ChangePlanResponse> {
+  const response = await api.put<ChangePlanResponse>(
+    USER_ENDPOINTS.CHANGE_PLAN,
+    { planId }
+  );
   return response.data;
 }
 
