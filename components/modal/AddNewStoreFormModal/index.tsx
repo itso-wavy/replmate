@@ -183,7 +183,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       type='button'
                       variant='secondary'
                       className='h-9!'
-                      disabled={fieldState.invalid}
+                      disabled={
+                        fieldState.invalid || form.watch('isUrlAvailable')
+                      }
                       onClick={handleDuplicateCheck}
                     >
                       {form.watch('isUrlAvailable') ? '확인 완료' : '중복 확인'}

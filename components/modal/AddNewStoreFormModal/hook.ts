@@ -249,7 +249,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
         url: (config?.baseUrl ?? '') + data.url,
         platform: config?.platform ?? '',
         platformType: data.platformType,
-        verificationImageKey: imageKey,
+        verificationImageKeys: [imageKey],
       });
 
       // 3. 성공 처리

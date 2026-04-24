@@ -9,6 +9,7 @@ import {
   getPlatforms,
   getPlatformTypes,
   getPresignedUrl,
+  getPresignedUrls,
   getReplyOptions,
   getStoreDetail,
   updateReplyOptions,
@@ -18,6 +19,7 @@ import {
 } from '@/services/store';
 import type {
   PresignedUrlRequest,
+  PresignedUrlsRequest,
   UpdateStoreRequest,
   UpdateStoresRequest,
 } from '@/types/api/store';
@@ -116,15 +118,20 @@ export const useGetPresignedUrl = () =>
     mutationFn: (data: PresignedUrlRequest) => getPresignedUrl(data),
   });
 
+export const useGetPresignedUrls = () =>
+  useMutation({
+    mutationFn: (data: PresignedUrlsRequest) => getPresignedUrls(data),
+  });
+
 export const useUpdateVerificationImage = () =>
   useMutation({
     mutationFn: ({
       storeId,
-      imageKey,
+      imageKeys,
     }: {
       storeId: number;
-      imageKey: string;
-    }) => updateVerificationImage(storeId, imageKey),
+      imageKeys: string[];
+    }) => updateVerificationImage(storeId, imageKeys),
   });
 
 export const useUpdateStoresBulk = () => {

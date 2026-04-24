@@ -5,6 +5,8 @@ import type {
   MyStoresResponseDto,
   PresignedUrlDto,
   PresignedUrlRequest,
+  PresignedUrlsDto,
+  PresignedUrlsRequest,
   StoreDetailDto,
   StoreDto,
   StoreInfoDto,
@@ -75,7 +77,7 @@ export async function getPlatformTypes(): Promise<string[]> {
 
 /**
  * 스토어 생성
- * verificationImageKey: presigned URL로 업로드 후 받은 imageKey
+ * verificationImageKeys: presigned URL로 업로드 후 받은 imageKey 배열 (1~3개)
  * 응답: StoreInfoDto (job + store)
  */
 export async function createStore(
@@ -163,7 +165,7 @@ export async function updateReplyOptions(
 // ==========================================================
 
 /**
- * Presigned URL 발급
+ * Presigned URL 발급 (단건)
  * POST /api/v1/stores/presigned-url
  * 응답의 uploadUrl로 S3에 직접 업로드 후 imageKey를 사용
  */
@@ -178,15 +180,30 @@ export async function getPresignedUrl(
 }
 
 /**
- * 인증 이미지 업데이트 (imageKey 기반)
+ * Presigned URL 일괄 발급 (최대 3개)
+ * POST /api/v1/stores/presigned-urls
+ * contentTypes 배열로 요청, 각 uploadUrl로 S3 업로드 후 imageKeys 사용
+ */
+export async function getPresignedUrls(
+  data: PresignedUrlsRequest
+): Promise<PresignedUrlsDto> {
+  const response = await api.post<PresignedUrlsDto>(
+    STORE_ENDPOINTS.GET_PRESIGNED_URLS,
+    data
+  );
+  return response.data;
+}
+
+/**
+ * 인증 이미지 업데이트 (imageKeys 배열, 최대 3개)
  * PUT /api/v1/stores/{store_id}/verification-image
  */
 export async function updateVerificationImage(
   storeId: string | number,
-  imageKey: string
+  imageKeys: string[]
 ): Promise<void> {
   await api.put(STORE_ENDPOINTS.UPDATE_VERIFICATION_IMAGE(storeId), {
-    imageKey,
+    imageKeys,
   });
 }
 

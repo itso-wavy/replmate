@@ -117,8 +117,10 @@ export const STORE_ENDPOINTS = {
   // 스토어별 상품 목록 조회
   GET_STORE_PRODUCTS: (storeId: string | number) =>
     `${API_BASE_V1}/stores/${storeId}/products`,
-  // Presigned URL 발급
+  // Presigned URL 발급 (단건)
   GET_PRESIGNED_URL: `${API_BASE_V1}/stores/presigned-url`,
+  // Presigned URL 일괄 발급 (최대 3개)
+  GET_PRESIGNED_URLS: `${API_BASE_V1}/stores/presigned-urls`,
   // Presigned URL 테스트 업로드
   TEST_UPLOAD: `${API_BASE_V1}/stores/test-upload`,
   // 인증 이미지 업데이트 (imageKey 기반)

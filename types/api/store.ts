@@ -10,7 +10,7 @@ export interface StoreUrlCheckInfoDto {
   url: string | null;
 }
 
-// POST /api/v1/stores/presigned-url Presigned URL
+// POST /api/v1/stores/presigned-url Presigned URL (단건)
 export interface PresignedUrlRequest {
   contentType: string;
   filename: string;
@@ -19,6 +19,12 @@ export interface PresignedUrlDto {
   uploadUrl: string;
   imageKey: string;
 }
+
+// POST /api/v1/stores/presigned-urls Presigned URL 일괄 발급 (최대 3개)
+export interface PresignedUrlsRequest {
+  contentTypes: string[];
+}
+export type PresignedUrlsDto = PresignedUrlDto[];
 
 // GET /api/v1/stores/{store_id}/reply-options 리플 옵션 조회
 // PUT /api/v1/stores/{store_id}/reply-options 리플 옵션 수정 응답
@@ -66,7 +72,7 @@ export interface CreateStoreRequest {
   platform: string; // 'naver' | 'coupang'
   platformType?: string; // 'smartstore' | 'brandstore'
   url: string;
-  verificationImageKey: string;
+  verificationImageKeys: string[];
 }
 
 export interface StoreInfoDto {
@@ -74,9 +80,9 @@ export interface StoreInfoDto {
   store: StoreDetailDto;
 }
 
-// PUT /api/v1/stores/{store_id}/verification-image 인증 이미지 업데이트 요청
+// PUT /api/v1/stores/{store_id}/verification-image 인증 이미지 업데이트 요청 (최대 3개)
 export interface UpdateVerificationImageRequest {
-  imageKey: string;
+  imageKeys: string[];
 }
 
 // ==========================================================
