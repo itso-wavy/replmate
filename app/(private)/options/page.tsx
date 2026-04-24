@@ -47,7 +47,7 @@ const OptionsPage = () => {
             <p className='typo-caption-14 text-foreground-description ml-2.5'>
               <span>마지막 저장:</span>{' '}
               <span className='font-medium'>
-                {formatDate(lastSaved, 'yyyy.MM.dd HH:mm')}
+                {lastSaved ? formatDate(lastSaved, 'yyyy.MM.dd HH:mm') : '-'}
               </span>
             </p>
           )}
