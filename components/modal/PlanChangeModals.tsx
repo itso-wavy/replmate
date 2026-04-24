@@ -40,7 +40,7 @@ const PlanChangeRow = ({ from, to }: { from: PlanDomain; to: PlanDomain }) => (
   <div className='flex items-center gap-3'>
     <div className='bg-muted/50 flex-1 rounded-xl p-4 text-center'>
       <p className='typo-caption-12 text-muted-foreground mb-1'>현재 플랜</p>
-      <p className='typo-heading-16'>{from.name.toUpperCase()}</p>
+      <p className='typo-heading-16'>{from.name}</p>
       <p className='typo-body-14 text-muted-foreground'>
         월 {from.monthlyPrice.toLocaleString()}원
       </p>
@@ -48,7 +48,7 @@ const PlanChangeRow = ({ from, to }: { from: PlanDomain; to: PlanDomain }) => (
     <ArrowRight size={18} className='text-muted-foreground shrink-0' />
     <div className='bg-brand-500/8 border-brand-500/20 flex-1 rounded-xl border p-4 text-center'>
       <p className='typo-caption-12 text-muted-foreground mb-1'>변경 플랜</p>
-      <p className='typo-heading-16'>{to.name.toUpperCase()}</p>
+      <p className='typo-heading-16'>{to.name}</p>
       <p className='typo-body-14 text-muted-foreground'>
         월 {to.monthlyPrice.toLocaleString()}원
       </p>
@@ -59,7 +59,7 @@ const PlanChangeRow = ({ from, to }: { from: PlanDomain; to: PlanDomain }) => (
 const SinglePlanCard = ({ plan }: { plan: PlanDomain }) => (
   <div className='bg-brand-500/5 border-brand-500/10 rounded-xl border p-4 text-center'>
     <p className='typo-caption-12 text-muted-foreground mb-1'>변경 플랜</p>
-    <p className='typo-heading-16'>{plan.name.toUpperCase()}</p>
+    <p className='typo-heading-16'>{plan.name}</p>
     <p className='typo-body-14 text-muted-foreground'>
       월 {plan.monthlyPrice.toLocaleString()}원
     </p>
@@ -137,7 +137,7 @@ const SubscribeConfirm = ({ plan, onConfirm, isPending }: ConfirmProps) => (
   <>
     <DialogHeader>
       <DialogTitle className='typo-heading-20!'>
-        {plan.name.toUpperCase()} 플랜 구독
+        {plan.name} 플랜 구독
       </DialogTitle>
     </DialogHeader>
     <div className='space-y-3'>
@@ -167,7 +167,7 @@ const UpgradeConfirm = ({
     <>
       <DialogHeader>
         <DialogTitle className='typo-heading-20!'>
-          {plan.name.toUpperCase()} 플랜으로 업그레이드
+          {plan.name} 플랜으로 업그레이드
         </DialogTitle>
       </DialogHeader>
       <div className='space-y-3'>
@@ -228,7 +228,7 @@ const UpgradeSuccess = ({
       <div>
         <p className='typo-heading-20 font-bold'>업그레이드 완료!</p>
         <p className='typo-body-14 text-muted-foreground mt-1'>
-          지금 바로 {plan.name.toUpperCase()} 플랜의
+          지금 바로 {plan.name} 플랜의
           <br />
           모든 기능을 사용하실 수 있습니다
         </p>

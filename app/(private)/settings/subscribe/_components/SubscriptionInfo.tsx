@@ -102,7 +102,7 @@ const SubscriptionInfo = ({
           className='*:first:text-muted-foreground mx-3 items-center'
         >
           <p className='typo-heading-18 font-medium'>
-            {plan.name.toUpperCase()} 플랜 이용 중
+            {plan.name} 플랜 이용 중
           </p>
         </InnerPageRow>
 

@@ -122,7 +122,7 @@ const SubscribePage = () => {
             open={activeModal === 'cancelSubscription'}
             onOpenChange={(open) => !open && closeModal()}
             currentPlan={userPlan.plan}
-            nextPlanName={userPlan.downgrade?.plan.name.toUpperCase()}
+            nextPlanName={userPlan.downgrade?.plan.name}
             onConfirm={handleCancelSubscription}
             periodEnd={userPlan.subscription.currentPeriodEnd}
             isPending={isCancelSubscriptionPending}
@@ -132,7 +132,7 @@ const SubscribePage = () => {
             <CancelDowngradeModal
               open={activeModal === 'cancelDowngrade'}
               onOpenChange={(open) => !open && closeModal()}
-              nextPlanName={userPlan.downgrade.plan.name.toUpperCase()}
+              nextPlanName={userPlan.downgrade.plan.name}
               nextRenewalDate={userPlan.downgrade.effectiveDate}
               onConfirm={handleCancelDowngrade}
               isPending={isCancelDowngradePending}

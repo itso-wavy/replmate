@@ -107,7 +107,7 @@ export const usePaymentChangeForm = ({
   const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
       .replace(/[^a-zA-Z ]/g, '')
-      .toUpperCase()
+
       .slice(0, 50);
     form.setValue('cardHolder', value, { shouldValidate: true });
   };

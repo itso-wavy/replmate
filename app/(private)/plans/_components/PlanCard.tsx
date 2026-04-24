@@ -91,7 +91,7 @@ const PlanCard = ({
       )}
 
       {/* Row 1: 플랜명 */}
-      <p className='typo-heading-24 self-start'>{plan.name.toUpperCase()}</p>
+      <p className='typo-heading-24 self-start'>{plan.name}</p>
 
       {/* Row 2: 설명 (없을 경우 빈 영역 유지로 정렬 보장) */}
       <p className='typo-body-14 text-muted-foreground -mt-2 self-start'>
