@@ -35,7 +35,7 @@ export const addNewStoreSchema = z.object({
   // 파일 업로드 (optional, 클라이언트에서 검증)
   certification: z
     .array(z.any())
-    .min(1, '파일을 업로드해 주세요')
+    .min(1, '파일을 업로드 해주세요')
     .max(3, '최대 3개까지만 등록 가능합니다'),
 });
 

@@ -109,6 +109,7 @@ export const useVerifyIdentity = () => {
       const updatedUser = await getUser();
       setUser(updatedUser);
       qc.invalidateQueries({ queryKey: queryKeys.user.me() });
+      qc.invalidateQueries({ queryKey: queryKeys.user.plan() });
     },
   });
 };
