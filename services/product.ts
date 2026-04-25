@@ -3,13 +3,13 @@ import { PRODUCT_ENDPOINTS } from '@/lib/endpoints';
 import type {
   ProductDetailDto,
   ProductInfoDto,
-  ProductList,
+  StoreProductsDto,
 } from '@/types/api/product';
 import {
   ProductDetailDomain,
-  ProductListDomain,
+  StoreProductsDomain,
   toProductDetailDomain,
-  toProductDomainList,
+  toStoreProductsDomain,
 } from '@/types/domain/product';
 
 // ==========================================================
@@ -24,16 +24,12 @@ import {
 export async function getProducts(
   storeId: string | number,
   params?: { page?: number; size?: number }
-): Promise<ProductListDomain> {
-  const response = await api.get<ProductList>(
+): Promise<StoreProductsDomain> {
+  const response = await api.get<StoreProductsDto>(
     PRODUCT_ENDPOINTS.GET_PRODUCTS(storeId),
     { params }
   );
-  const { items, ...pagination } = response.data;
-  return {
-    ...pagination,
-    items: toProductDomainList(items),
-  };
+  return toStoreProductsDomain(response.data);
 }
 
 /**

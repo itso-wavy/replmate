@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 
 import { useProducts, useUpdateProduct } from '@/hooks/useProducts';
 import { useMyStores } from '@/hooks/useStores';
-import { useUserPlan } from '@/hooks/useUser';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { StoreStore } from '@/store/storeStore';
 
@@ -32,15 +31,10 @@ export function useProductsPage() {
   const router = useRouter();
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { setSelectedStore } = StoreStore.useActions();
-  const { data: planData } = useUserPlan();
   const { data: myStoresData } = useMyStores();
   const stores = myStoresData?.stores ?? [];
 
   const selectedStore = stores.find((s) => s.id === selectedStoreId);
-
-  const maxAllowed =
-    (planData?.plan.maxStoreCount ?? 0) *
-    (planData?.plan.maxProductPerStore ?? 0);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [initialIds, setInitialIds] = useState<Set<number>>(new Set());
@@ -56,7 +50,10 @@ export function useProductsPage() {
     { page: currentPage, size: PAGE_SIZE }
   );
 
-  const products = productData?.items ?? [];
+  console.log(productData);
+  const maxAllowed = productData?.productQuota.maxProductCount ?? 0;
+
+  const products = productData?.products.items ?? [];
 
   // 스토어 변경 시 초기화
   useEffect(() => {
@@ -68,13 +65,13 @@ export function useProductsPage() {
 
   // 페이지 데이터 로드 시 현재 페이지 isTarget 상태로 초기화
   useEffect(() => {
-    if (!productData?.items) return;
+    if (!productData?.products.items) return;
     const targetIds = new Set(
-      productData.items.filter((p) => p.isTarget).map((p) => p.id)
+      productData.products.items.filter((p) => p.isTarget).map((p) => p.id)
     );
     setInitialIds(targetIds);
     setSelectedIds(new Set(targetIds));
-  }, [productData?.items]);
+  }, [productData?.products.items]);
 
   const isDirty = useMemo(
     () => !setsEqual(selectedIds, initialIds),
@@ -243,7 +240,7 @@ export function useProductsPage() {
     isDirty,
     isLoading: isProductsLoading,
     currentPage,
-    totalPages: productData?.totalPages ?? 1,
+    totalPages: productData?.products.totalPages ?? 1,
     storeName: selectedStore?.name ?? '',
     handlePageChange: setCurrentPage,
     handleToggle,

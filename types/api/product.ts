@@ -29,10 +29,25 @@ export interface ProductDetailDto {
   avgRating: number | null;
   reviewCount: number | null;
   productUrl: string | null;
+  registeredAt: string | null;
   isTarget: boolean;
   isNew: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+// GET /api/v1/stores/{store_id}/products - 상품 quota 정보
+export interface ProductQuotaDto {
+  maxProductCount: number;
+  currentProductCount: number;
+  remaining: number;
+}
+
+// GET /api/v1/stores/{store_id}/products - 전체 응답
+export interface StoreProductsDto {
+  productQuota: ProductQuotaDto;
+  lastTargetChangedAt: string | null;
+  products: ProductList;
 }
 
 // PATCH /api/v1/products/{product_id} 상품 업데이트 응답

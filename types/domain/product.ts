@@ -1,4 +1,4 @@
-import type { ProductDto, ProductDetailDto } from '@/types/api/product';
+import type { ProductDto, ProductDetailDto, StoreProductsDto } from '@/types/api/product';
 import type { Pagination } from '@/types/api/common';
 
 /**
@@ -42,6 +42,25 @@ export interface ProductDetailDomain {
 export type ProductListDomain = Pagination & { items: ProductDomain[] };
 
 /**
+ * 상품 quota Domain 타입
+ */
+export interface ProductQuotaDomain {
+  maxProductCount: number;
+  currentProductCount: number;
+  remaining: number;
+}
+
+/**
+ * 스토어 상품 목록 + quota Domain 타입
+ * GET /api/v1/stores/{store_id}/products 응답
+ */
+export interface StoreProductsDomain {
+  productQuota: ProductQuotaDomain;
+  lastTargetChangedAt: Date | null;
+  products: ProductListDomain;
+}
+
+/**
  * 스토어 정보를 포함한 상품 확장 타입
  * 프론트엔드에서 상품 목록 표시 시 스토어 정보가 필요한 경우 사용
  */
@@ -76,6 +95,23 @@ export function toProductDomain(dto: ProductDto): ProductDomain {
  */
 export function toProductDomainList(dtos: ProductDto[]): ProductDomain[] {
   return dtos.map(toProductDomain);
+}
+
+/**
+ * StoreProductsDto를 StoreProductsDomain으로 변환
+ */
+export function toStoreProductsDomain(dto: StoreProductsDto): StoreProductsDomain {
+  const { items, ...pagination } = dto.products;
+  return {
+    productQuota: dto.productQuota as ProductQuotaDomain,
+    lastTargetChangedAt: dto.lastTargetChangedAt
+      ? new Date(dto.lastTargetChangedAt)
+      : null,
+    products: {
+      ...pagination,
+      items: toProductDomainList(items),
+    },
+  };
 }
 
 /**
