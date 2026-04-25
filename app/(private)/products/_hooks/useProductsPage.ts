@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 import { useProducts, useUpdateProduct } from '@/hooks/useProducts';
 import { useMyStores } from '@/hooks/useStores';
+import { useUserPlan } from '@/hooks/useUser';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
 import { StoreStore } from '@/store/storeStore';
 
@@ -31,10 +32,15 @@ export function useProductsPage() {
   const router = useRouter();
   const selectedStoreId = StoreStore.useSelectedStoreId();
   const { setSelectedStore } = StoreStore.useActions();
+  const { data: planData } = useUserPlan();
   const { data: myStoresData } = useMyStores();
   const stores = myStoresData?.stores ?? [];
 
   const selectedStore = stores.find((s) => s.id === selectedStoreId);
+
+  const maxAllowed =
+    (planData?.plan.maxStoreCount ?? 0) *
+    (planData?.plan.maxProductPerStore ?? 0);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [initialIds, setInitialIds] = useState<Set<number>>(new Set());
@@ -49,9 +55,6 @@ export function useProductsPage() {
     selectedStoreId ?? 0,
     { page: currentPage, size: PAGE_SIZE }
   );
-
-  console.log(productData);
-  const maxAllowed = productData?.productQuota.maxProductCount ?? 0;
 
   const products = productData?.products.items ?? [];
 

@@ -128,6 +128,20 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
 
     // 각 파일 검증
     for (const file of files) {
+      // 파일명 길이 검증 (확장자 포함 100자 이하)
+      if (file.name.length > 100) {
+        toast.error('파일명이 너무 깁니다.\n(확장자 포함 100자 이하만 가능)');
+        return;
+      }
+
+      // 파일명 문자 검증 (한글, 영문, 숫자, 공백, _, -, (), . 허용)
+      if (/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 _\-.()]/.test(file.name)) {
+        toast.error(
+          '사용할 수 없는 문자가 포함되어 있습니다.\n(한글, 영문, 숫자, 공백, _, -, (), .만 가능)'
+        );
+        return;
+      }
+
       // 형식 검증
       const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
