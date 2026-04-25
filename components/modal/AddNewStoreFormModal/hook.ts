@@ -58,6 +58,8 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    * URL 변경 시 중복 확인 상태 초기화
    */
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if ((e.nativeEvent as InputEvent).isComposing) return;
+
     const value = e.target.value.replace(/[^a-zA-Z0-9\-_]/g, '');
 
     form.setValue('url', value, { shouldValidate: true });
