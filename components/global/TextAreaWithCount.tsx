@@ -20,7 +20,8 @@ const TextAreaWithCount = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => {
-          if (e.target.value.length <= maxLength) onChange(e.target.value);
+          const v = e.target.value;
+          onChange(v.length <= maxLength ? v : v.slice(0, maxLength));
         }}
         className={cn('resize-none px-4 py-3', className)}
       />
