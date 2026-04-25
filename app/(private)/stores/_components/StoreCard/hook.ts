@@ -3,8 +3,8 @@ import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { ProgressSvgProps } from '@/assets/svg';
-import { useUpdateStore } from '@/hooks/useStores';
 import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
+import { useUpdateStore } from '@/hooks/useStores';
 import { PlatformType, type StoreDomain } from '@/types';
 
 const getPlatformConfig = (platformType: PlatformType | null) =>
