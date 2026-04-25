@@ -40,7 +40,7 @@ const StoresPage = () => {
         </span>
       }
     >
-      <div className='grid auto-rows-[minmax(315px,auto)] grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-4'>
+      <div className='grid auto-rows-[minmax(315px,auto)] grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-4'>
         {sortedStores.map((store) => (
           <StoreCard key={store.id} store={store} />
         ))}
