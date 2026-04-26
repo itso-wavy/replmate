@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   ColumnDef,
   flexRender,
@@ -76,15 +78,17 @@ const RecentRepliesTable = ({
   replies,
   maxRows = 15,
 }: RecentRepliesTableProps) => {
-  // 4. 작성시간 기준 내림차순 정렬 (최신순)
-  const sortedReplies = [...replies].sort((a, b) => {
-    const dateA = new Date(a.createdAt).getTime();
-    const dateB = new Date(b.createdAt).getTime();
-    return dateB - dateA; // 내림차순: 최신 날짜가 먼저
-  });
+  // 백엔드에서 정렬된 상태로 전달받으므로 프론트 정렬 생략
+  // const sortedReplies = [...replies].sort((a, b) => {
+  //   const dateA = new Date(a.createdAt).getTime();
+  //   const dateB = new Date(b.createdAt).getTime();
+  //   return dateB - dateA;
+  // });
+
+  const data = useMemo(() => replies.slice(0, maxRows), [replies, maxRows]);
 
   const table = useReactTable({
-    data: sortedReplies.slice(0, maxRows),
+    data,
     columns,
     defaultColumn: { minSize: 0 },
     getCoreRowModel: getCoreRowModel(), // 데이터를 행으로 변환
