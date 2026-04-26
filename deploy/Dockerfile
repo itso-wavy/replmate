@@ -21,6 +21,9 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+# Node 힙 한도 명시: dev VM 메모리(8GB) thrashing 방지
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 # Docker 빌드 시에만 standalone output 활성화
 RUN sed -i 's|/\* config options here \*/|output: "standalone",|' next.config.ts
 

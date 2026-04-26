@@ -16,7 +16,7 @@ deploy.dev:
 	infisical run \
 		--projectId=$(INFISICAL_PROJECT_ID) \
 		--env=dev \
-		-- docker compose -f ./deploy/docker-compose.dev.yml build --no-cache && \
+		-- docker compose -f ./deploy/docker-compose.dev.yml build && \
 	infisical run \
 		--projectId=$(INFISICAL_PROJECT_ID) \
 		--env=dev \
