@@ -55,10 +55,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    * 플랫폼 변경 핸들러
    * 플랫폼 변경 시 중복 확인 상태 초기화 (URL 입력값은 유지)
    */
-  const handlePlatformChange = (value: string) => {
-    form.setValue('platformType', value as PlatformType, {
-      shouldValidate: true,
-    });
+  const handlePlatformChange = (value: PlatformType | null) => {
+    if (!value) return;
+    form.setValue('platformType', value, { shouldValidate: true });
     form.setValue('isUrlAvailable', undefined);
     form.clearErrors('isUrlAvailable');
   };

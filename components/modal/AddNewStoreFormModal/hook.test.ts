@@ -2,6 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PlatformType } from '@/types';
+
 import { useAddNewStoreForm } from './hook';
 
 // 외부 의존성 mock
@@ -62,7 +64,7 @@ describe('useAddNewStoreForm', () => {
       expect(result.current.form.getValues('isUrlAvailable')).toBe(true);
 
       // 플랫폼 변경
-      act(() => result.current.handlePlatformChange('smartstore'));
+      act(() => result.current.handlePlatformChange(PlatformType.SMARTSTORE));
       expect(result.current.form.getValues('isUrlAvailable')).toBeUndefined();
     });
 
@@ -71,7 +73,7 @@ describe('useAddNewStoreForm', () => {
 
       act(() => {
         result.current.form.setValue('url', 'my-store');
-        result.current.handlePlatformChange('smartstore');
+        result.current.handlePlatformChange(PlatformType.SMARTSTORE);
       });
       expect(result.current.form.getValues('url')).toBe('my-store');
     });
@@ -126,7 +128,7 @@ describe('useAddNewStoreForm', () => {
 
     it('플랫폼 선택됨 + URL 비어있음 → "URL을 입력해 주세요"', async () => {
       const { result } = setup();
-      act(() => result.current.handlePlatformChange('smartstore'));
+      act(() => result.current.handlePlatformChange(PlatformType.SMARTSTORE));
       await act(async () => result.current.handleUrlBlur());
       expect(result.current.form.getFieldState('url').error?.message).toBe(
         'URL을 입력해 주세요'
@@ -136,7 +138,7 @@ describe('useAddNewStoreForm', () => {
     it('플랫폼 선택됨 + URL 3자 → "5자 이상 입력해 주세요"', async () => {
       const { result } = setup();
       act(() => {
-        result.current.handlePlatformChange('smartstore');
+        result.current.handlePlatformChange(PlatformType.SMARTSTORE);
         result.current.form.setValue('url', 'abc');
       });
       await act(async () => result.current.handleUrlBlur());
@@ -153,7 +155,7 @@ describe('useAddNewStoreForm', () => {
     const setupWithValidUrl = () => {
       const hook = setup();
       act(() => {
-        hook.result.current.handlePlatformChange('smartstore');
+        hook.result.current.handlePlatformChange(PlatformType.SMARTSTORE);
         hook.result.current.form.setValue('url', 'valid-url', {
           shouldValidate: true,
         });
