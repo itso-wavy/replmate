@@ -47,7 +47,9 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
     uploadedFiles,
     fileInputRef,
     handleNameInputChange,
+    handlePlatformChange,
     handleUrlChange,
+    handleUrlBlur,
     handleDuplicateCheck,
     handleUploadCertification,
     handleFileDrop,
@@ -123,7 +125,10 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       {...field}
                       name={field.name}
                       value={field.value ?? ''}
-                      onValueChange={field.onChange}
+                      onValueChange={handlePlatformChange}
+                      onOpenChange={(open) => {
+                        if (!open) field.onBlur();
+                      }}
                     >
                       <SelectTrigger
                         id={field.name}
@@ -178,13 +183,16 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       maxLength={100}
                       placeholder='/ 이후 주소를 입력해 주세요'
                       onChange={handleUrlChange}
+                      onBlur={handleUrlBlur}
                     />
                     <Button
                       type='button'
                       variant='secondary'
                       className='h-9!'
                       disabled={
-                        fieldState.invalid || form.watch('isUrlAvailable')
+                        !form.watch('platformType') ||
+                        form.watch('url').length < 5 ||
+                        form.watch('isUrlAvailable') === true
                       }
                       onClick={handleDuplicateCheck}
                     >

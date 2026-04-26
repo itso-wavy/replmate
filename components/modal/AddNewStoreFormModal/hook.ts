@@ -52,6 +52,18 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   };
 
   /**
+   * 플랫폼 변경 핸들러
+   * 플랫폼 변경 시 중복 확인 상태 초기화 (URL 입력값은 유지)
+   */
+  const handlePlatformChange = (value: string) => {
+    form.setValue('platformType', value as PlatformType, {
+      shouldValidate: true,
+    });
+    form.setValue('isUrlAvailable', undefined);
+    form.clearErrors('isUrlAvailable');
+  };
+
+  /**
    * URL 입력 핸들러
    * 영문, 숫자, 하이픈(-), 언더스코어(_)만 입력 가능
    * 그 외 문자 키 입력 시 화면에 입력되지 않음
@@ -61,10 +73,26 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     if ((e.nativeEvent as InputEvent).isComposing) return;
 
     const value = e.target.value.replace(/[^a-zA-Z0-9\-_]/g, '');
+    const hasPlatform = !!form.getValues('platformType');
 
-    form.setValue('url', value, { shouldValidate: true });
+    form.setValue('url', value, { shouldValidate: hasPlatform });
+    if (!hasPlatform) form.clearErrors('url');
     form.setValue('isUrlAvailable', undefined);
     form.clearErrors('isUrlAvailable');
+  };
+
+  /**
+   * URL 필드 blur 핸들러
+   * 에러 우선순위: 플랫폼 미선택 > 빈값 > 길이 부족
+   * 플랫폼 미선택 시 zod 검증을 건너뛰고 직접 에러 설정
+   */
+  const handleUrlBlur = () => {
+    const platformType = form.getValues('platformType');
+    if (!platformType) {
+      form.setError('url', { message: '플랫폼을 먼저 선택해 주세요' });
+      return;
+    }
+    form.trigger('url');
   };
 
   /**
@@ -223,6 +251,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       toast.error('허용되지 않은 문자가 포함되어 있습니다.');
       return;
     }
+
+    // 필수 항목 누락 (name, platformType, url, certification 등)
+    toast.error('필수 항목을 모두 입력해 주세요.');
   };
 
   /**
@@ -285,7 +316,9 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     uploadedFiles,
     fileInputRef,
     handleNameInputChange,
+    handlePlatformChange,
     handleUrlChange,
+    handleUrlBlur,
     handleDuplicateCheck,
     handleUploadCertification,
     handleFileDrop,
