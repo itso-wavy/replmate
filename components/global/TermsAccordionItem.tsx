@@ -67,7 +67,7 @@ const TermsAccordionItem = ({
           )}
         >
           <div
-            className='flex w-fit items-center gap-2'
+            className='flex w-fit items-center gap-2 py-1'
             onClick={
               hasCheckbox
                 ? (e) => {
