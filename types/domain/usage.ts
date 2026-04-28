@@ -52,7 +52,7 @@ export type UsageHistoryListDomain = Pagination & {
  */
 export interface UsageQuotaSubscriptionDomain {
   planName: string;
-  updatedAt: Date;
+  currentPeriodEnd: Date;
   replyQuotaTotal: number;
   replyQuotaUsed: number;
   storeQuotaTotal: number;
@@ -134,13 +134,12 @@ export function toUsageLedgerDomainList(
  * @param dto - API에서 받은 UsageQuotaSubscription
  * @returns UsageQuotaSubscriptionDomain 객체
  */
-// FIXME:
 export function toUsageQuotaSubscriptionDomain(
   dto: any
 ): UsageQuotaSubscriptionDomain {
   return {
     planName: dto.planName,
-    updatedAt: new Date(dto.updatedAt),
+    currentPeriodEnd: new Date(dto.currentPeriodEnd),
     replyQuotaTotal: dto.replyQuotaTotal,
     replyQuotaUsed: dto.replyQuotaUsed,
     storeQuotaTotal: dto.storeQuotaTotal,

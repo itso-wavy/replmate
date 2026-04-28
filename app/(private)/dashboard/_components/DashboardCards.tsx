@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/item';
 import { Progress } from '@/components/ui/progress';
 import { ROUTES } from '@/constants/nav-menu';
-import { getActiveStoreList } from '@/lib/utils';
+import { formatDate, getActiveStoreList } from '@/lib/utils';
 import type { StoreDomain, UsageQuotaSubscriptionDomain } from '@/types';
 
 interface DashboardCardProps {
@@ -32,9 +32,8 @@ const DashboardPlanCard = ({
   subscription,
 }: DashboardCardProps) => {
   const router = useRouter();
-  const getDday = (updateDateTimestamp: string): number => {
+  const getDday = (updateDate: Date): number => {
     const today = new Date();
-    const updateDate = new Date(updateDateTimestamp);
     const diff = Math.floor(
       (updateDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -77,7 +76,7 @@ const DashboardPlanCard = ({
               <span>다음 갱신일: </span>
               <span>
                 {isIdentifyed
-                  ? `${subscription.updatedAt.toISOString().split('T')[0]} (D-${getDday(subscription.updatedAt.toISOString())})`
+                  ? `${formatDate(subscription.currentPeriodEnd)} (D-${getDday(subscription.currentPeriodEnd)})`
                   : '-'}
               </span>
             </div>

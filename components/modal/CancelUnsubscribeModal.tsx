@@ -27,7 +27,7 @@ const CancelUnsubscribeModal = ({
   onConfirm,
   isPending,
 }: CancelUnsubscribeModalProps) => {
-  const nextRenewalDate = new Date(periodEnd.getTime() + 86400 * 1000);
+  // const nextRenewalDate = new Date(periodEnd.getTime() + 86400 * 1000);
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -35,7 +35,7 @@ const CancelUnsubscribeModal = ({
         <AlertDialogHeader>
           <AlertDialogTitle>해지 취소</AlertDialogTitle>
           <AlertDialogDescription className='mx-auto text-center'>
-            {`해지 요청을 취소하시겠습니까?\n해지를 취소하시면 기존 구독이 유지되며, 다음 결제일(${formatDate(nextRenewalDate)})에 정상적으로 결제가 진행됩니다.`}
+            {`해지 요청을 취소하시겠습니까?\n해지를 취소하시면 기존 구독이 유지되며, 다음 결제일(${formatDate(periodEnd)})에 정상적으로 결제가 진행됩니다.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
 

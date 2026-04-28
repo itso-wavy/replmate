@@ -37,7 +37,7 @@ export function useDashboardPage() {
     const { plan, subscription: sub } = userPlan;
     return {
       planName: plan.name,
-      updatedAt: sub.currentPeriodEnd,
+      currentPeriodEnd: sub.currentPeriodEnd,
       replyQuotaTotal: plan.monthlyReplyQuota,
       replyQuotaUsed: plan.monthlyReplyQuota - usageQuota.remaining,
       storeQuotaTotal: plan.maxStoreCount,

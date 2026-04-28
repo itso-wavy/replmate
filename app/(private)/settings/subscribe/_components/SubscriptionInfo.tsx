@@ -64,9 +64,9 @@ const SubscriptionInfo = ({
   const isDowngradeScheduled =
     planStatus === SubscriptionStatus.PAID_PLAN_DOWNGRADE_SCHEDULED;
 
-  const nextRenewalDate = new Date(
-    subscription.currentPeriodEnd.getTime() + 86400 * 1000
-  );
+  // const nextRenewalDate = new Date(
+  //   subscription.currentPeriodEnd.getTime() + 86400 * 1000
+  // );
 
   const goToAccountPage = () => router.push(ROUTES.ACCOUNT);
   const goToPlansPage = () => router.push(ROUTES.PLANS);
@@ -215,9 +215,10 @@ const SubscriptionInfo = ({
             className='*:first:text-muted-foreground'
           >
             {formatDate(
-              isCancelScheduled
-                ? subscription.currentPeriodEnd
-                : nextRenewalDate,
+              subscription.currentPeriodEnd,
+              // isCancelScheduled
+              //   ? subscription.currentPeriodEnd
+              //   : nextRenewalDate,
               'yyyy년 M월 d일'
             ) ?? '-'}
           </InnerPageRow>

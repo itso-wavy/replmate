@@ -31,8 +31,6 @@ const CancelSubscriptionModal = ({
   onConfirm,
   isPending,
 }: CancelSubscriptionModalProps) => {
-  const nextRenewalDate = new Date(periodEnd.getTime() + 86400 * 1000);
-
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className='sm:max-w-[425px]'>
@@ -40,7 +38,7 @@ const CancelSubscriptionModal = ({
           <AlertDialogTitle>구독 해지</AlertDialogTitle>
           <AlertDialogDescription className='mx-auto text-center whitespace-pre-line'>
             {nextPlanName
-              ? `구독을 해지하시겠습니까?\n현재 ${nextPlanName} 플랜으로의 변경 예약이 즉시 취소되며,\n${formatDate(nextRenewalDate, 'yyyy년 M월 d일')}부터 무료 플랜으로 전환됩니다.`
+              ? `구독을 해지하시겠습니까?\n현재 ${nextPlanName} 플랜으로의 변경 예약이 즉시 취소되며,\n${formatDate(periodEnd, 'yyyy년 M월 d일')}부터 무료 플랜으로 전환됩니다.`
               : `구독을 해지하시겠습니까?\n다음 결제일부터 아래의 혜택이 사라집니다.`}
           </AlertDialogDescription>
 
