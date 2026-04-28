@@ -6,7 +6,6 @@ import {
   createStore,
   deleteStore,
   getMyStores,
-  getPlatforms,
   getPlatformTypes,
   getPresignedUrl,
   getPresignedUrls,
@@ -35,13 +34,6 @@ export const useStoreDetail = (storeId: number) =>
     queryKey: queryKeys.stores.detail(storeId),
     queryFn: () => getStoreDetail(storeId),
     enabled: !!storeId,
-  });
-
-export const usePlatforms = () =>
-  useQuery({
-    queryKey: queryKeys.stores.platforms(),
-    queryFn: getPlatforms,
-    staleTime: Infinity,
   });
 
 export const usePlatformTypes = () =>

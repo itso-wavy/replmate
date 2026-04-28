@@ -49,7 +49,6 @@ export const USER_ENDPOINTS = {
 
   // 본인인증
   VERIFY_IDENTITY: `${API_BASE_V1}/users/me/verify-identity`,
-  VERIFY_IDENTITY_PROVIDERS: `${API_BASE_V1}/users/me/verify-identity/providers`,
 } as const;
 
 // ==========================================================
@@ -59,7 +58,6 @@ export const USER_ENDPOINTS = {
 export const TERMS_ENDPOINTS = {
   // 약관 조회
   GET_TERMS_LIST: `${API_BASE_V1}/terms`,
-  GET_TERMS_TYPES: `${API_BASE_V1}/terms/types`,
   GET_TERMS_BY_TYPE: (type: TermsType) => `${API_BASE_V1}/terms/type/${type}`,
 } as const;
 
@@ -77,12 +75,15 @@ export const PLAN_ENDPOINTS = {
 // ==========================================================
 
 export const PAYMENT_ENDPOINTS = {
-  // 결제 콜백 응답 샘플
-  SAMPLE_CALLBACK: `${API_BASE_V1}/payments/sample/callback`,
-  // Mock 결제 처리
-  MOCK_PAYMENT: (orderId: string) => `${API_BASE_V1}/payments/mock/${orderId}`,
-  // 토스 결제 콜백
-  TOSS_CALLBACK: `${API_BASE_V1}/payments/toss/callback`,
+  // FIXME:
+  // // 결제 콜백 응답 샘플
+  // SAMPLE_CALLBACK: `${API_BASE_V1}/payments/sample/callback`,
+  // // Mock 결제 처리
+  // MOCK_PAYMENT: (orderId: string) => `${API_BASE_V1}/payments/mock/${orderId}`,
+  // // 토스 결제 콜백
+  // TOSS_CALLBACK: `${API_BASE_V1}/payments/toss/callback`,
+  DANAL_BILLING_INIT: `${API_BASE_V1}/users/me/billing/init`,
+  DANAL_BILLING_CALLBACK: `${API_BASE_V1}/users/me/billing/callback`,
 } as const;
 
 // ==========================================================
@@ -91,8 +92,6 @@ export const PAYMENT_ENDPOINTS = {
 export const STORE_ENDPOINTS = {
   // 유저 스토어 목록 조회 (경로 변경: /stores/me -> /users/me/stores)
   GET_MY_STORES: `${API_BASE_V1}/users/me/stores`,
-  // 플랫폼 목록 조회
-  GET_PLATFORMS: `${API_BASE_V1}/stores/platforms`,
   // 플랫폼 타입 목록 조회
   GET_PLATFORM_TYPES: `${API_BASE_V1}/stores/platform-types`,
   // 스토어 URL 중복 확인 (GET으로 변경, query param 사용)

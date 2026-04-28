@@ -13,7 +13,6 @@ export const queryKeys = {
     detail: (storeId: number) => ['stores', storeId] as const,
     replyOptions: (storeId: number) =>
       ['stores', storeId, 'replyOptions'] as const,
-    platforms: () => ['stores', 'platforms'] as const,
     platformTypes: () => ['stores', 'platformTypes'] as const,
   },
   products: {

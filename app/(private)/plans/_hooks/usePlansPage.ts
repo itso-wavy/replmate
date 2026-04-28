@@ -79,16 +79,11 @@ export const usePlansPage = () => {
       return;
     }
 
-    // subscribe / upgrade: changePlan API → 결제 URL 리다이렉트
-    // toast.error('결제 모듈 연동 준비 중입니다.');
+    // subscribe / upgrade: changePlan API 호출 → 성공 시 구독 페이지로 이동
     try {
-      const { paymentUrl } = await changePlan(selectedPlan.id);
-      if (paymentUrl) {
-        window.location.href = paymentUrl;
-      } else {
-        setModalState('upgradeSuccess');
-        router.push(ROUTES.SUBSCRIBE);
-      }
+      await changePlan(selectedPlan.id);
+      setModalState('upgradeSuccess');
+      router.push(ROUTES.SUBSCRIBE);
     } catch {
       toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }

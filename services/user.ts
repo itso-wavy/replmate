@@ -21,7 +21,7 @@ import {
   toSubscriptionDomain,
   toUserDomain,
 } from '@/types/domain/user';
-import { SubscriptionStatus, VerifyIdentityProvider } from '@/types/enums';
+import { VerifyIdentityProvider } from '@/types/enums';
 
 // ==========================================================
 // 사용자 정보
@@ -71,13 +71,12 @@ export interface ChangePlanResponse {
   fromPlanName: string;
   isUpgrade?: boolean;
   orderId: number;
-  paymentUrl: string;
   toPlanName: string;
 }
 
 /**
  * 플랜 변경
- * 결제 주문을 생성하고 결제 URL을 반환합니다.
+ * 결제 주문을 생성합니다.
  * 실제 플랜 변경은 결제 완료 후 webhook에서 처리됩니다.
  */
 export async function changePlan(planId: number): Promise<ChangePlanResponse> {
@@ -185,20 +184,8 @@ export async function updateNotificationSettings(
 // ==========================================================
 
 /**
- * 본인인증 제공자 목록 조회
- * 응답: ["test", "pass"]
- */
-export async function getVerifyIdentityProviders(): Promise<string[]> {
-  const response = await api.get<string[]>(
-    USER_ENDPOINTS.VERIFY_IDENTITY_PROVIDERS
-  );
-  return response.data;
-}
-
-/**
  * 본인인증 완료 처리
  * - test: impUid 검증 없이 항상 성공 (개발/테스트용)
- * - pass: PASS 본인인증 (추후 연동, impUid 필요) // TODO:
  */
 export async function verifyIdentity(
   provider: VerifyIdentityProvider = VerifyIdentityProvider.TEST,
