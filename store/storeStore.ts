@@ -16,6 +16,7 @@ interface StoreState {
 interface StoreActions {
   actions: {
     setSelectedStore: (storeId: StoreIdType) => void;
+    reset: () => void;
   };
 }
 
@@ -23,7 +24,7 @@ const initialState: StoreState = {
   selectedStoreId: null,
 };
 
-const useStoreStore = create<StoreState & StoreActions>()(
+export const useStoreStore = create<StoreState & StoreActions>()(
   devtools(
     persist(
       combine(initialState, (set, _get) => ({
@@ -32,6 +33,9 @@ const useStoreStore = create<StoreState & StoreActions>()(
             set({
               selectedStoreId: storeId,
             });
+          },
+          reset: () => {
+            set(initialState);
           },
         },
       })),

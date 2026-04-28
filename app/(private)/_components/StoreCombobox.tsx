@@ -23,7 +23,7 @@ const StoreCombobox = ({ onStoreChange }: StoreComboboxProps = {}) => {
   /*
    * 초기 선택값은 아래 우선순위에 따라 자동 선택
    * 1순위 (컨텍스트): 이전 페이지(쇼핑몰 연동/대시보드)에서 특정 쇼핑몰의 '바로가기'를 눌러서 들어온 경우, 그 쇼핑몰이 선택됨(storeId prop으로 받기)
-   * 2순위 (마지막 선택): 해당 브라우저 세션에서 사용자가 마지막으로 작업했던 쇼핑몰 유지  *
+   * 2순위 (마지막 선택): storeStore(sessionStorage persist)에 저장된 마지막 작업 쇼핑몰 유지
    * 3순위 (최신 등록): 위 조건이 없으면, 목록의 가장 첫 번째(최신 등록) 쇼핑몰 선택
    * 변경 시 해당 쇼핑몰의 상품 리스트로 갱신 */
   const selectedStoreId = StoreStore.useSelectedStoreId();

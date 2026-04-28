@@ -1,10 +1,13 @@
 import { useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { signOut } from 'next-auth/react';
 
 import { ROUTES } from '@/constants/nav-menu';
 import api from '@/lib/api';
 import { ENDPOINTS } from '@/lib/endpoints';
+import { StoreStore } from '@/store/storeStore';
 import { UserStore } from '@/store/userStore';
 
 import {
@@ -19,14 +22,22 @@ import { CommonModalProps } from './types';
 
 const Modal = ({ open, onOpenChange }: CommonModalProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { clearUser } = UserStore.useActions();
+  const { reset: resetStoreStore } = StoreStore.useActions();
 
   const handleLogout = async () => {
     try {
       await api.post(ENDPOINTS.SESSION.LOGOUT);
     } catch (_) {}
 
+    // 사용자 종속 클라이언트 상태 일괄 정리
     clearUser();
+    resetStoreStore();
+    queryClient.clear();
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('store-store');
+    }
 
     await signOut({ callbackUrl: ROUTES.ROOT, redirect: false });
     router.push(ROUTES.ROOT);
