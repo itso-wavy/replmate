@@ -9,7 +9,7 @@ import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
 import {
   useCheckStoreUrl,
   useCreateStore,
-  useGetPresignedUrl,
+  useGetPresignedUrls,
 } from '@/hooks/useStores';
 import { AddNewStoreFormData, addNewStoreSchema } from '@/lib/validation';
 import { PlatformType } from '@/types';
@@ -23,7 +23,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const checkUrlMutation = useCheckStoreUrl();
-  const getPresignedUrlMutation = useGetPresignedUrl();
+  const getPresignedUrlsMutation = useGetPresignedUrls();
   const createStoreMutation = useCreateStore();
 
   const form = useForm<AddNewStoreFormData>({
@@ -271,21 +271,20 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     }
 
     try {
-      // 1. presigned URL 발급 + S3 직접 업로드
-      const file = uploadedFiles[0];
-      const { uploadUrl, imageKey } = await getPresignedUrlMutation.mutateAsync(
-        {
-          filename: file.name,
-          contentType: file.type,
-        }
-      );
-
-      // S3에 직접 PUT (Axios 인터셉터 제외)
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: { 'Content-Type': file.type },
+      // 1. presigned URL 일괄 발급 + S3 병렬 업로드 (최대 3개)
+      const presignedUrls = await getPresignedUrlsMutation.mutateAsync({
+        contentTypes: uploadedFiles.map((file) => file.type),
       });
+
+      await Promise.all(
+        presignedUrls.map((presigned, index) =>
+          fetch(presigned.uploadUrl, {
+            method: 'PUT',
+            body: uploadedFiles[index],
+            headers: { 'Content-Type': uploadedFiles[index].type },
+          })
+        )
+      );
 
       const config = getPlatformConfig(data.platformType as PlatformType);
 
@@ -295,7 +294,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
         url: (config?.baseUrl ?? '') + data.url,
         platform: config?.platform ?? '',
         platformType: data.platformType,
-        verificationImageKeys: [imageKey],
+        verificationImageKeys: presignedUrls.map((p) => p.imageKey),
       });
 
       // 3. 성공 처리
