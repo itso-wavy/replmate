@@ -4,6 +4,7 @@ import type { AgreeTermsResponseData } from '@/types/api/term';
 import type {
   CancelSubscriptionResponse,
   DeleteUserRequest,
+  KcpTradeRegDto,
   NotificationSettingsDto,
   ReactivateSubscriptionResponse,
   ReceiptRequestDto,
@@ -184,8 +185,9 @@ export async function updateNotificationSettings(
 // ==========================================================
 
 /**
- * 본인인증 완료 처리
- * - test: impUid 검증 없이 항상 성공 (개발/테스트용)
+ * @deprecated swagger v260430부터 deprecated (TEST provider 전용).
+ * 운영 환경 KCP 본인확인은 `verifyIdentityKcpTradeReg()` 흐름 사용.
+ * - 연속 5회 실패 시 30분간 차단 (429)
  */
 export async function verifyIdentity(
   provider: VerifyIdentityProvider = VerifyIdentityProvider.TEST,
@@ -196,4 +198,16 @@ export async function verifyIdentity(
     ...(impUid && { impUid }),
   });
   return toUserDomain(response.data);
+}
+
+/**
+ * KCP 본인확인 거래등록 (1단계)
+ * - 응답의 callUrl에 regCertKey를 form POST하여 KCP 인증창 호출
+ * - 인증 완료 시 백엔드가 환경별 frontend URL로 RedirectResponse 처리
+ */
+export async function verifyIdentityKcpTradeReg(): Promise<KcpTradeRegDto> {
+  const response = await api.post<KcpTradeRegDto>(
+    USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TRADE_REG
+  );
+  return response.data;
 }

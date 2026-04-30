@@ -79,3 +79,11 @@ export interface ReactivateSubscriptionResponse {
   currentPeriodEnd: string;
   cancelAtPeriodEnd: boolean;
 }
+
+// POST /api/v1/users/me/verify-identity/kcp/trade-reg KCP 본인확인 거래등록 응답
+// 프론트는 callUrl로 regCertKey를 form POST해 KCP 인증창을 띄운다.
+export interface KcpTradeRegDto {
+  ordrIdxx: string;
+  callUrl: string;
+  regCertKey: string;
+}

@@ -47,8 +47,12 @@ export const USER_ENDPOINTS = {
   GET_NOTIFICATION_SETTINGS: `${API_BASE_V1}/users/me/notification-settings`,
   UPDATE_NOTIFICATION_SETTINGS: `${API_BASE_V1}/users/me/notification-settings`,
 
-  // 본인인증
+  // 본인인증 (TEST provider 전용, swagger v260430 deprecated)
   VERIFY_IDENTITY: `${API_BASE_V1}/users/me/verify-identity`,
+  // KCP 본인확인 거래등록 (1단계: 인증창 호출 정보 발급)
+  VERIFY_IDENTITY_KCP_TRADE_REG: `${API_BASE_V1}/users/me/verify-identity/kcp/trade-reg`,
+  // [TEST] KCP 본인확인 시작 (개발/테스트 환경 전용, stg/prod 404)
+  VERIFY_IDENTITY_KCP_TEST: `${API_BASE_V1}/users/me/verify-identity/kcp/test`,
 } as const;
 
 // ==========================================================
@@ -75,13 +79,15 @@ export const PLAN_ENDPOINTS = {
 // ==========================================================
 
 export const PAYMENT_ENDPOINTS = {
-  // FIXME:
-  // // 결제 콜백 응답 샘플
-  // SAMPLE_CALLBACK: `${API_BASE_V1}/payments/sample/callback`,
-  // // Mock 결제 처리
-  // MOCK_PAYMENT: (orderId: string) => `${API_BASE_V1}/payments/mock/${orderId}`,
-  // // 토스 결제 콜백
-  // TOSS_CALLBACK: `${API_BASE_V1}/payments/toss/callback`,
+  // 다날 결제창 시작 (server-driven AUTH 흐름)
+  // POST → DanalAuthResponse(startUrl/startParams) 반환 → 프론트가 form POST로 결제창 진입
+  // 결제 완료 후 다날이 서버 `/danal/callback`으로 콜백 → 서버가 frontend로 redirect
+  DANAL_AUTH: (orderId: string | number) =>
+    `${API_BASE_V1}/payments/danal/auth/${orderId}`,
+  // [TEST] 다날 결제 시작 (개발/테스트 환경 전용, stg/prod 404)
+  DANAL_TEST: `${API_BASE_V1}/payments/danal/test`,
+
+  // @deprecated SDK 기반 빌링 흐름 (swagger v260430부터 제거됨, 신규 코드 사용 금지)
   DANAL_BILLING_INIT: `${API_BASE_V1}/users/me/billing/init`,
   DANAL_BILLING_CALLBACK: `${API_BASE_V1}/users/me/billing/callback`,
 } as const;
