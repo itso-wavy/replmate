@@ -38,9 +38,7 @@ export function useProductsPage() {
 
   const selectedStore = stores.find((s) => s.id === selectedStoreId);
 
-  const maxAllowed =
-    (planData?.plan.maxStoreCount ?? 0) *
-    (planData?.plan.maxProductPerStore ?? 0);
+  const maxAllowed = planData?.plan.maxProductPerStore ?? 0;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [initialIds, setInitialIds] = useState<Set<number>>(new Set());
