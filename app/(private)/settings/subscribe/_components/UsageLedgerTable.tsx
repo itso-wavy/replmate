@@ -75,7 +75,7 @@ const UsageLedgerTable = ({
         cell: ({ getValue }) => (
           <div>{formatDate(getValue() as Date, 'yyyy.MM.dd HH:mm')}</div>
         ),
-        size: 5,
+        size: 6,
       },
       {
         id: 'eventType',
@@ -119,7 +119,13 @@ const UsageLedgerTable = ({
         id: 'detail',
         header: '상세',
         cell: ({ row }) => (
-          <div>{getUsageDetail(row.original.eventType, row.original.reason, row.original.meta)}</div>
+          <div>
+            {getUsageDetail(
+              row.original.eventType,
+              row.original.reason,
+              row.original.meta
+            )}
+          </div>
         ),
         size: 8,
       },

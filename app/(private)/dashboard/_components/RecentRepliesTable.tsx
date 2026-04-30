@@ -26,7 +26,9 @@ const columns: ColumnDef<ReplyDomain>[] = [
     header: '상품명',
     accessorFn: (row) => row.product.name,
     cell: ({ getValue }) => (
-      <div className='font-medium'>{getValue() as string}</div>
+      <div className='truncate font-medium hover:overflow-visible hover:break-words hover:whitespace-normal'>
+        {getValue() as string}
+      </div>
     ),
     size: 3,
   },
@@ -78,13 +80,6 @@ const RecentRepliesTable = ({
   replies,
   maxRows = 15,
 }: RecentRepliesTableProps) => {
-  // 백엔드에서 정렬된 상태로 전달받으므로 프론트 정렬 생략
-  // const sortedReplies = [...replies].sort((a, b) => {
-  //   const dateA = new Date(a.createdAt).getTime();
-  //   const dateB = new Date(b.createdAt).getTime();
-  //   return dateB - dateA;
-  // });
-
   const data = useMemo(() => replies.slice(0, maxRows), [replies, maxRows]);
 
   const table = useReactTable({
