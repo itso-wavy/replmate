@@ -66,7 +66,7 @@ function toAlert(reminder: ReminderDomain, pathname: string): Alert | null {
       return {
         ...base,
         title: '구독 플랜 변경으로 쇼핑몰 조정이 필요합니다.',
-        description: `${formatDate(meta.dueDate)}부터 ${meta.planName}(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.\n현재 쇼핑몰 ${meta.currentStoreCount}개, 상품 ${meta.currentProductCount}개가 등록되어 있어 조정이 필요합니다. 기한 내 조정하지 않으실 경우, 최근 등록된 순서대로 자동 비활성화 처리됩니다.`,
+        description: `${formatDate(meta.dueDate)}부터 ${meta.planName} 플랜(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.\n현재 쇼핑몰 ${meta.currentStoreCount}개, 상품 ${meta.currentProductCount}개가 등록되어 있어 조정이 필요합니다. 기한 내 조정하지 않으실 경우, 최근 등록된 순서대로 자동 비활성화 처리됩니다.`,
       };
     }
 
@@ -82,7 +82,7 @@ function toAlert(reminder: ReminderDomain, pathname: string): Alert | null {
       return {
         ...base,
         title: '구독 플랜 변경으로 상품 조정이 필요합니다.',
-        description: `${formatDate(meta.dueDate)}부터 ${meta.planName}(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.\n현재 쇼핑몰 ${meta.currentStoreCount}개, 상품 ${meta.currentProductCount}개가 등록되어 있어 조정이 필요합니다. 기한 내 조정하지 않으실 경우, 최근 등록된 순서대로 자동 비활성화 처리됩니다.`,
+        description: `${formatDate(meta.dueDate)}부터 ${meta.planName} 플랜(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.\n현재 쇼핑몰 ${meta.currentStoreCount}개, 상품 ${meta.currentProductCount}개가 등록되어 있어 조정이 필요합니다. 기한 내 조정하지 않으실 경우, 최근 등록된 순서대로 자동 비활성화 처리됩니다.`,
       };
     }
 
@@ -91,7 +91,7 @@ function toAlert(reminder: ReminderDomain, pathname: string): Alert | null {
       return {
         ...base,
         title: '구독 플랜 변경으로 쇼핑몰이 조정될 예정입니다.',
-        description: `${formatDate(meta.effectiveDate)}부터 ${meta.planName}(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.`,
+        description: `${formatDate(meta.effectiveDate)}부터 ${meta.planName} 플랜(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.`,
       };
     }
 
@@ -100,7 +100,7 @@ function toAlert(reminder: ReminderDomain, pathname: string): Alert | null {
       return {
         ...base,
         title: '구독 플랜 변경으로 상품이 조정될 예정입니다.',
-        description: `${formatDate(meta.effectiveDate)}부터 ${meta.planName}(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.`,
+        description: `${formatDate(meta.effectiveDate)}부터 ${meta.planName} 플랜(쇼핑몰 최대 ${meta.maxStoreCount}개 · 상품 최대 ${meta.maxProductCount}개)이 적용됩니다.`,
       };
     }
 
@@ -150,8 +150,12 @@ export function useAlerts(): Alert[] {
       const sorted = [...alerts].sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       );
-      const payment = sorted.filter((a) => a.type === ReminderEvent.PAYMENT_FAILED);
-      const others = sorted.filter((a) => a.type !== ReminderEvent.PAYMENT_FAILED);
+      const payment = sorted.filter(
+        (a) => a.type === ReminderEvent.PAYMENT_FAILED
+      );
+      const others = sorted.filter(
+        (a) => a.type !== ReminderEvent.PAYMENT_FAILED
+      );
       return [...payment, ...others].slice(0, 3);
     }
 
