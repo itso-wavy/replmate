@@ -18,6 +18,7 @@ import {
   dummyUserPlanFree,
   dummyUserPlanUnverified,
 } from '@/dummy';
+import { redirectToDanalTestPayment } from '@/services/payment';
 
 import { InnerPageLayout, InnerPageSection } from '../_components';
 import { SubscriptionInfo, UsageLedgerTable } from './_components';
@@ -50,6 +51,30 @@ const SubscribePage = () => {
 
   return (
     <InnerPageLayout heading='구독 관리'>
+      {/* [TEST] 다날 결제창 띄우기 (dev/test 전용) */}
+      <InnerPageSection heading='[TEST] 다날 결제창'>
+        <div className='flex flex-wrap items-center gap-2'>
+          <Button
+            variant='outline'
+            onClick={() => redirectToDanalTestPayment()}
+          >
+            테스트 결제창 (100원 임시 주문)
+          </Button>
+          <Button
+            variant='outline'
+            onClick={() => redirectToDanalTestPayment({ planId: 1 })}
+          >
+            테스트 결제창 (plan_id=1)
+          </Button>
+          <Button
+            variant='outline'
+            onClick={() => redirectToDanalTestPayment({ amount: 1000 })}
+          >
+            테스트 결제창 (amount=1000)
+          </Button>
+        </div>
+      </InnerPageSection>
+
       {/* 구독 정보 */}
       {userPlan && (
         <InnerPageSection heading='구독 정보'>
