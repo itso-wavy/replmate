@@ -10,6 +10,7 @@ import type { PlanModalState } from '@/components/modal/PlanChangeModals';
 import { ROUTES } from '@/constants/nav-menu';
 import {
   useChangePlan,
+  useDanalCheckout,
   usePlans,
   useReactivatePlan,
   useUserPlan,
@@ -41,8 +42,12 @@ export const usePlansPage = () => {
   // 뮤테이션
   const { mutateAsync: changePlan, isPending: isChangePlanPending } =
     useChangePlan();
+
   const { mutateAsync: reactivatePlan, isPending: isReactivatePending } =
     useReactivatePlan();
+
+  const { mutateAsync: danalCheckout, isPending: isCheckoutPending } =
+    useDanalCheckout();
 
   const closeModal = () => {
     setModalState(null);
@@ -79,13 +84,27 @@ export const usePlansPage = () => {
       return;
     }
 
-    // subscribe / upgrade: changePlan API 호출 → 성공 시 구독 페이지로 이동
+    // subscribe / upgrade: orderId 발급 → 다날 결제창 (팝업)
     try {
-      await changePlan(selectedPlan.id);
-      setModalState('upgradeSuccess');
-      router.push(ROUTES.SUBSCRIBE);
-    } catch {
-      toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      const { orderId } = await changePlan(selectedPlan.id);
+      const { success } = await danalCheckout({
+        orderId,
+        planId: selectedPlan.id,
+      });
+
+      if (success) {
+        setModalState('upgradeSuccess');
+      } else {
+        closeModal();
+        toast.error('결제가 완료되지 않았습니다.');
+      }
+    } catch (e) {
+      closeModal();
+      toast.error(
+        e instanceof Error && e.message
+          ? e.message
+          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+      );
     }
   };
 
@@ -117,7 +136,7 @@ export const usePlansPage = () => {
     // 모달
     modalState,
     selectedPlan,
-    isConfirmPending: isChangePlanPending,
+    isConfirmPending: isChangePlanPending || isCheckoutPending,
     isKeepSubscriptionPending: isReactivatePending,
     // 액션
     openPlanSelection,

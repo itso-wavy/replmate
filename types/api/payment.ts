@@ -3,24 +3,6 @@
 export interface DanalAuthResponseDto {
   startUrl: string;
   startParams: string;
-  tid: string | null;
+  tid: string | null; // transactionID
   orderId: number;
-}
-
-// @deprecated SDK 기반 빌링 흐름 (swagger v260430부터 제거됨)
-export interface DanalBillingInitDto {
-  clientKey: string;
-  merchantId: string;
-  orderId: string;
-  userId: string;
-  amount: number;
-  orderName: string;
-}
-
-// @deprecated SDK 기반 빌링 콜백 페이로드 (legacy)
-export interface DanalBillingCallbackDto {
-  transactionId: string;
-  orderId: string;
-  code: string;
-  message?: string;
 }

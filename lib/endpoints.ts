@@ -87,10 +87,6 @@ export const PAYMENT_ENDPOINTS = {
     `${API_BASE_V1}/payments/danal/auth/${orderId}`,
   // [TEST] 다날 결제 시작 (개발/테스트 환경 전용, stg/prod 404)
   DANAL_TEST: `${API_BASE_V1}/payments/danal/test`,
-
-  // @deprecated SDK 기반 빌링 흐름 (swagger v260430부터 제거됨, 신규 코드 사용 금지)
-  DANAL_BILLING_INIT: `${API_BASE_V1}/users/me/billing/init`,
-  DANAL_BILLING_CALLBACK: `${API_BASE_V1}/users/me/billing/callback`,
 } as const;
 
 // ==========================================================
