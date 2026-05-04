@@ -12,7 +12,10 @@ export interface PlanDomain {
   currency: string;
   monthlyReplyQuota: number;
   maxStoreCount: number;
-  maxProductPerStore: number;
+  /** 유저 단위 상품 등록 가능 총 개수 (전체 스토어 합산) */
+  maxProductCount: number;
+  /** @deprecated 1.5.0 Drop 예정. `maxProductCount` 사용 */
+  maxProductPerStore?: number;
   maxTestPerDay: number;
 }
 
@@ -31,6 +34,7 @@ export function toPlanDomain(dto: PlanDto): PlanDomain {
     currency: dto.currency,
     monthlyReplyQuota: dto.monthlyReplyQuota,
     maxStoreCount: dto.maxStoreCount,
+    maxProductCount: dto.maxProductCount,
     maxProductPerStore: dto.maxProductPerStore,
     maxTestPerDay: dto.maxTestPerDay,
   };

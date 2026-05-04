@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/queryKeys';
-import { getProductDetail, getProducts, updateProduct } from '@/services/product';
+import {
+  getProductDetail,
+  getProducts,
+  getUserProductQuota,
+  updateProduct,
+} from '@/services/product';
 
 export const useProducts = (
   storeId: number,
@@ -20,6 +25,12 @@ export const useProductDetail = (productId: number) =>
     enabled: !!productId,
   });
 
+export const useUserProductQuota = () =>
+  useQuery({
+    queryKey: queryKeys.products.userQuota(),
+    queryFn: getUserProductQuota,
+  });
+
 export const useUpdateProduct = (storeId: number) => {
   const qc = useQueryClient();
   return useMutation({
@@ -30,7 +41,9 @@ export const useUpdateProduct = (storeId: number) => {
       productId: number;
       data: Partial<{ isTarget: boolean }>;
     }) => updateProduct(productId, data),
-    onSuccess: () =>
-      qc.invalidateQueries({ queryKey: queryKeys.products.all() }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.products.all() });
+      qc.invalidateQueries({ queryKey: queryKeys.products.userQuota() });
+    },
   });
 };

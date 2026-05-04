@@ -30,6 +30,9 @@ export const USER_ENDPOINTS = {
   // 사용자 탈퇴
   DELETE_USER: `${API_BASE_V1}/users/me`,
 
+  // 사용자 상품 quota (스토어별 breakdown 포함)
+  GET_PRODUCT_QUOTA: `${API_BASE_V1}/users/me/product-quota`,
+
   // 사용자 플랜
   GET_USER_PLAN: `${API_BASE_V1}/users/me/plan`,
   CHANGE_PLAN: `${API_BASE_V1}/users/me/plan`,

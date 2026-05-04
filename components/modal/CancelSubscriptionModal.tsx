@@ -48,7 +48,7 @@ const CancelSubscriptionModal = ({
                 쇼핑몰 {currentPlan.maxStoreCount}개 등록
               </li>
               <li className='text-muted-foreground'>
-                상품 {currentPlan.maxProductPerStore}개 등록
+                상품 {currentPlan.maxProductCount}개 등록
               </li>
               <li className='text-muted-foreground'>
                 리플 자동 작성 월{' '}

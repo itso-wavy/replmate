@@ -6,7 +6,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { toast } from 'sonner';
 
-import { useProducts, useUpdateProduct } from '@/hooks/useProducts';
+import {
+  useProducts,
+  useUpdateProduct,
+  useUserProductQuota,
+} from '@/hooks/useProducts';
 import { useMyStores } from '@/hooks/useStores';
 import { useUserPlan } from '@/hooks/useUser';
 import { NavigationGuardStore } from '@/store/navigationGuardStore';
@@ -34,11 +38,17 @@ export function useProductsPage() {
   const { setSelectedStore } = StoreStore.useActions();
   const { data: planData } = useUserPlan();
   const { data: myStoresData } = useMyStores();
+  const { data: productQuota } = useUserProductQuota();
   const stores = myStoresData?.stores ?? [];
 
   const selectedStore = stores.find((s) => s.id === selectedStoreId);
 
-  const maxAllowed = planData?.plan.maxProductPerStore ?? 0;
+  // 유저 단위 maxProductCount에서 현재 스토어 외 다른 스토어들이 점유한 active 카운트를 제외 → 현재 스토어 선택 한도
+  const maxProductCount = planData?.plan.maxProductCount ?? 0;
+  const otherStoresActiveCount = (productQuota?.storeProductCounts ?? [])
+    .filter((s) => s.storeId !== selectedStoreId)
+    .reduce((acc, s) => acc + s.activeCount, 0);
+  const maxAllowed = Math.max(0, maxProductCount - otherStoresActiveCount);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [initialIds, setInitialIds] = useState<Set<number>>(new Set());

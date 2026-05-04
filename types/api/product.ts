@@ -37,6 +37,7 @@ export interface ProductDetailDto {
 }
 
 // GET /api/v1/stores/{store_id}/products - 상품 quota 정보
+/** @deprecated 1.5.0 Drop 예정. 유저 단위 quota는 `GET /users/me/product-quota` 사용 */
 export interface ProductQuotaDto {
   maxProductCount: number;
   currentProductCount: number;
@@ -45,9 +46,25 @@ export interface ProductQuotaDto {
 
 // GET /api/v1/stores/{store_id}/products - 전체 응답
 export interface StoreProductsDto {
-  productQuota: ProductQuotaDto;
+  /** @deprecated 1.5.0 Drop 예정. `GET /users/me/product-quota` 사용 */
+  productQuota?: ProductQuotaDto;
   lastTargetChangedAt: string | null;
   products: ProductList;
+}
+
+// GET /api/v1/users/me/product-quota - 스토어별 상품 카운트
+export interface StoreProductCountDto {
+  storeId: number;
+  activeCount: number;
+  totalCount: number;
+}
+
+// GET /api/v1/users/me/product-quota - 내 상품 quota (스토어별 breakdown 포함)
+export interface UserProductQuotaDto {
+  maxProductCount: number;
+  currentProductCount: number;
+  remaining: number;
+  storeProductCounts: StoreProductCountDto[];
 }
 
 // PATCH /api/v1/products/{product_id} 상품 업데이트 응답

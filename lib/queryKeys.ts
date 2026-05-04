@@ -20,6 +20,7 @@ export const queryKeys = {
     list: (storeId: number, params?: { page?: number; size?: number }) =>
       ['products', storeId, params] as const,
     detail: (productId: number) => ['products', productId] as const,
+    userQuota: () => ['products', 'userQuota'] as const,
   },
   replies: {
     all: () => ['replies'] as const,

@@ -1,4 +1,10 @@
-import type { ProductDto, ProductDetailDto, StoreProductsDto } from '@/types/api/product';
+import type {
+  ProductDto,
+  ProductDetailDto,
+  StoreProductsDto,
+  StoreProductCountDto,
+  UserProductQuotaDto,
+} from '@/types/api/product';
 import type { Pagination } from '@/types/api/common';
 
 /**
@@ -43,6 +49,7 @@ export type ProductListDomain = Pagination & { items: ProductDomain[] };
 
 /**
  * 상품 quota Domain 타입
+ * @deprecated 1.5.0 Drop 예정. `UserProductQuotaDomain` 사용
  */
 export interface ProductQuotaDomain {
   maxProductCount: number;
@@ -55,9 +62,30 @@ export interface ProductQuotaDomain {
  * GET /api/v1/stores/{store_id}/products 응답
  */
 export interface StoreProductsDomain {
-  productQuota: ProductQuotaDomain;
+  /** @deprecated 1.5.0 Drop 예정. `useUserProductQuota()` 사용 */
+  productQuota?: ProductQuotaDomain;
   lastTargetChangedAt: Date | null;
   products: ProductListDomain;
+}
+
+/**
+ * 스토어별 상품 카운트 Domain
+ */
+export interface StoreProductCountDomain {
+  storeId: number;
+  activeCount: number;
+  totalCount: number;
+}
+
+/**
+ * 유저 상품 quota Domain (스토어별 breakdown 포함)
+ * GET /api/v1/users/me/product-quota 응답
+ */
+export interface UserProductQuotaDomain {
+  maxProductCount: number;
+  currentProductCount: number;
+  remaining: number;
+  storeProductCounts: StoreProductCountDomain[];
 }
 
 /**
@@ -103,7 +131,7 @@ export function toProductDomainList(dtos: ProductDto[]): ProductDomain[] {
 export function toStoreProductsDomain(dto: StoreProductsDto): StoreProductsDomain {
   const { items, ...pagination } = dto.products;
   return {
-    productQuota: dto.productQuota as ProductQuotaDomain,
+    productQuota: dto.productQuota as ProductQuotaDomain | undefined,
     lastTargetChangedAt: dto.lastTargetChangedAt
       ? new Date(dto.lastTargetChangedAt)
       : null,
@@ -111,6 +139,33 @@ export function toStoreProductsDomain(dto: StoreProductsDto): StoreProductsDomai
       ...pagination,
       items: toProductDomainList(items),
     },
+  };
+}
+
+/**
+ * StoreProductCountDto를 StoreProductCountDomain으로 변환
+ */
+export function toStoreProductCountDomain(
+  dto: StoreProductCountDto
+): StoreProductCountDomain {
+  return {
+    storeId: dto.storeId,
+    activeCount: dto.activeCount,
+    totalCount: dto.totalCount,
+  };
+}
+
+/**
+ * UserProductQuotaDto를 UserProductQuotaDomain으로 변환
+ */
+export function toUserProductQuotaDomain(
+  dto: UserProductQuotaDto
+): UserProductQuotaDomain {
+  return {
+    maxProductCount: dto.maxProductCount,
+    currentProductCount: dto.currentProductCount,
+    remaining: dto.remaining,
+    storeProductCounts: dto.storeProductCounts.map(toStoreProductCountDomain),
   };
 }
 

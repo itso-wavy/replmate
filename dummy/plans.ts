@@ -10,7 +10,7 @@ export const dummyPlans: PlanDomain[] = [
     currency: 'KRW',
     monthlyReplyQuota: 50,
     maxStoreCount: 1,
-    maxProductPerStore: 10,
+    maxProductCount: 10,
     maxTestPerDay: 5,
   },
   {
@@ -22,7 +22,7 @@ export const dummyPlans: PlanDomain[] = [
     currency: 'KRW',
     monthlyReplyQuota: 300,
     maxStoreCount: 2,
-    maxProductPerStore: 50,
+    maxProductCount: 100,
     maxTestPerDay: 20,
   },
   {
@@ -34,7 +34,7 @@ export const dummyPlans: PlanDomain[] = [
     currency: 'KRW',
     monthlyReplyQuota: 1000,
     maxStoreCount: 5,
-    maxProductPerStore: 200,
+    maxProductCount: 1000,
     maxTestPerDay: 50,
   },
   {
@@ -46,7 +46,7 @@ export const dummyPlans: PlanDomain[] = [
     currency: 'KRW',
     monthlyReplyQuota: 5000,
     maxStoreCount: 20,
-    maxProductPerStore: 1000,
+    maxProductCount: 20000,
     maxTestPerDay: 200,
   },
 ];

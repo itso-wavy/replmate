@@ -27,7 +27,7 @@ export const dummyUserPlanUnverified: UserPlanDomain = {
     currency: 'KRW',
     monthlyReplyQuota: 0,
     maxStoreCount: 0,
-    maxProductPerStore: 0,
+    maxProductCount: 0,
     maxTestPerDay: 0,
   },
   subscription: {
@@ -54,7 +54,7 @@ export const dummyUserPlanFree: UserPlanDomain = {
     currency: 'KRW',
     monthlyReplyQuota: 30,
     maxStoreCount: 1,
-    maxProductPerStore: 1,
+    maxProductCount: 1,
     maxTestPerDay: 5,
   },
   subscription: {
@@ -81,7 +81,7 @@ export const dummyUserPlanActive: UserPlanDomain = {
     currency: 'KRW',
     monthlyReplyQuota: 180,
     maxStoreCount: 1,
-    maxProductPerStore: 20,
+    maxProductCount: 20,
     maxTestPerDay: 5,
   },
   subscription: {
@@ -108,7 +108,7 @@ export const dummyUserPlanCancelScheduled: UserPlanDomain = {
     currency: 'KRW',
     monthlyReplyQuota: 180,
     maxStoreCount: 1,
-    maxProductPerStore: 20,
+    maxProductCount: 20,
     maxTestPerDay: 5,
   },
   subscription: {
@@ -135,7 +135,7 @@ export const dummyUserPlanDowngradeScheduled: UserPlanDomain = {
     currency: 'KRW',
     monthlyReplyQuota: 800,
     maxStoreCount: 2,
-    maxProductPerStore: 50,
+    maxProductCount: 100,
     maxTestPerDay: 5,
   },
   subscription: {
@@ -157,7 +157,7 @@ export const dummyUserPlanDowngradeScheduled: UserPlanDomain = {
       currency: 'KRW',
       monthlyReplyQuota: 180,
       maxStoreCount: 1,
-      maxProductPerStore: 20,
+      maxProductCount: 20,
       maxTestPerDay: 5,
     },
     effectiveDate: new Date('2026-05-04T00:00:00Z'),

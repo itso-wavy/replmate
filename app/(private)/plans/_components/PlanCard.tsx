@@ -11,7 +11,7 @@ import { SubscriptionStatus } from '@/types/enums';
 const getDummyPlanFeatures = (plan: PlanDomain): string[] => {
   const features = [
     `월 ${plan.monthlyReplyQuota.toLocaleString()}건 답글 생성`,
-    `상품 ${plan.maxProductPerStore.toLocaleString()}개 집중 관리`,
+    `상품 ${plan.maxProductCount.toLocaleString()}개 집중 관리`,
     `쇼핑몰 ${plan.maxStoreCount}개 연동`,
     '문맥 파악 AI 엔진',
     '브랜드 톤앤매너 설정',

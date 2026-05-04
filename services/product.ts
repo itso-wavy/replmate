@@ -1,15 +1,18 @@
 import { api } from '@/lib/api';
-import { PRODUCT_ENDPOINTS } from '@/lib/endpoints';
+import { PRODUCT_ENDPOINTS, USER_ENDPOINTS } from '@/lib/endpoints';
 import type {
   ProductDetailDto,
   ProductInfoDto,
   StoreProductsDto,
+  UserProductQuotaDto,
 } from '@/types/api/product';
 import {
   ProductDetailDomain,
   StoreProductsDomain,
+  UserProductQuotaDomain,
   toProductDetailDomain,
   toStoreProductsDomain,
+  toUserProductQuotaDomain,
 } from '@/types/domain/product';
 
 // ==========================================================
@@ -30,6 +33,17 @@ export async function getProducts(
     { params }
   );
   return toStoreProductsDomain(response.data);
+}
+
+/**
+ * 내 상품 quota 조회 (스토어별 breakdown 포함)
+ * GET /api/v1/users/me/product-quota
+ */
+export async function getUserProductQuota(): Promise<UserProductQuotaDomain> {
+  const response = await api.get<UserProductQuotaDto>(
+    USER_ENDPOINTS.GET_PRODUCT_QUOTA
+  );
+  return toUserProductQuotaDomain(response.data);
 }
 
 /**
