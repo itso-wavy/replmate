@@ -54,8 +54,8 @@ export const LoginPage = () => {
   };
 
   const handleSocialLogin = (provider: AuthProvider) => {
-    // TODO: local 개발용 환경 변수 사용
-    const isLocal = process.env.NEXT_PUBLIC_IS_LOCAL === 'true';
+    // const isLocal = process.env.NEXT_PUBLIC_IS_LOCAL === 'true';
+    const isLocal = window.location.hostname === 'localhost';
     const url = isLocal
       ? `${loginUrls[provider]}?redirect_uri=${encodeURIComponent(window.location.origin)}`
       : loginUrls[provider];
