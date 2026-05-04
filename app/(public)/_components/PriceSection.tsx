@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 
 import { CheckIcon, SparkleIcon } from '@phosphor-icons/react/dist/ssr';
 
-// import { Check, Sparkles } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,52 +12,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/constants/nav-menu';
+import { usePlans } from '@/hooks/usePlans';
 import { cn } from '@/lib/utils';
+import type { PlanDomain } from '@/types';
 
-const plans = [
-  {
-    recommand: true,
-    name: 'Free',
-    price: '평생 무료',
-    description: '리플메이트를 경험해보고 싶은 셀러',
-    features: ['월 30건 답글 생성', '상품 1개 집중 관리', '쇼핑몰 1개 연동'],
-    cta: '무료로 시작하기',
-  },
-  {
-    name: 'Basic',
-    price: '39,000',
-    description: '혼자서도 완벽한 1인 셀러',
-    features: ['월 180건 답글 생성', '상품 20개 집중 관리', '쇼핑몰 1개 연동'],
-    cta: '플랜 시작하기',
-  },
-  {
-    popular: true,
-    name: 'Premium',
-    price: '99,000',
-    description: '급성장하는 파워 셀러',
-    features: [
-      '월 800건 답글 생성',
-      '상품 50개 확장 관리',
-      '쇼핑몰 2개 동시 운영',
-    ],
-    cta: '플랜 시작하기',
-  },
-  {
-    name: 'Enterprise',
-    price: '198,000',
-    description: '다점포 운영 브랜드',
-    features: [
-      '월 1,800건 답변 생성',
-      '상품 100개 대량 관리',
-      '쇼핑몰 4개 통합 운영',
-    ],
-    cta: '플랜 시작하기',
-  },
+const POPULAR_PLAN_NAME = 'Premium';
+
+const buildPlanFeatures = (plan: PlanDomain): string[] => [
+  `월 ${plan.monthlyReplyQuota.toLocaleString()}건 답글 생성`,
+  `상품 ${plan.maxProductCount.toLocaleString()}개 집중 관리`,
+  `쇼핑몰 ${plan.maxStoreCount.toLocaleString()}개 연동`,
 ];
 
 const PriceSection = ({ id }: { id: string }) => {
   const router = useRouter();
+  const { data: plans, isLoading } = usePlans(true);
 
   return (
     <section id={id} className='pt-[80px] pb-[150px]'>
@@ -73,9 +42,11 @@ const PriceSection = ({ id }: { id: string }) => {
         </div>
 
         <div className='mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-          {plans.map((plan, index) => (
-            <PriceCard key={index} plan={plan} />
-          ))}
+          {isLoading || !plans
+            ? Array.from({ length: 4 }).map((_, idx) => (
+                <PriceCardSkeleton key={idx} />
+              ))
+            : plans.map((plan) => <PriceCard key={plan.id} plan={plan} />)}
         </div>
         <p className='typo-caption-14 text-muted-foreground mt-8 text-center'>
           아직 확신이 안 서시나요? 카드 등록 없이{' '}
@@ -92,19 +63,22 @@ const PriceSection = ({ id }: { id: string }) => {
   );
 };
 
-const PriceCard = ({ plan }: any) => {
+const PriceCard = ({ plan }: { plan: PlanDomain }) => {
   const router = useRouter();
+  const isFree = plan.monthlyPrice === 0;
+  const isPopular = plan.name.toLowerCase() === POPULAR_PLAN_NAME.toLowerCase();
+  const features = buildPlanFeatures(plan);
 
   return (
     <Card
       className={cn(
         'bg-accent/20 relative flex h-full flex-col overflow-visible transition-all lg:py-8',
-        plan.popular
+        isPopular
           ? 'border-brand-violet shadow-primary/10 ring-brand-violet z-10 bg-white shadow-xl ring-2 md:scale-105'
           : 'hover:border-brand-mint border border-transparent'
       )}
     >
-      {plan.popular && (
+      {isPopular && (
         <div className='typo-caption-12 bg-brand-violet text-primary-foreground absolute top-0 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-full px-3 py-1.5 whitespace-nowrap shadow-lg'>
           <SparkleIcon size={10} className='mr-1' />
           MOST POPULAR
@@ -114,14 +88,16 @@ const PriceCard = ({ plan }: any) => {
       <CardHeader>
         <CardTitle>{plan.name}</CardTitle>
         <CardDescription className='text-balance'>
-          {plan.description}
+          {plan.title ?? ' '}
         </CardDescription>
       </CardHeader>
 
       <CardContent>
         <div className='mb-8 flex items-baseline'>
-          <span className='text-foreground typo-heading-28'>{plan.price}</span>
-          {!plan.recommand && (
+          <span className='text-foreground typo-heading-28'>
+            {isFree ? '평생 무료' : plan.monthlyPrice.toLocaleString()}
+          </span>
+          {!isFree && (
             <span className='ml-1'>
               <span className='mr-0.5'>원 /월</span>
               <span className='text-muted-foreground'>(VAT 포함)</span>
@@ -130,11 +106,9 @@ const PriceCard = ({ plan }: any) => {
         </div>
 
         <div className='flex flex-grow flex-col space-y-2'>
-          {plan.features.map((feature: string) => (
+          {features.map((feature) => (
             <div key={feature} className='flex items-center'>
-              <div
-                className={`bg-brand-green/20 mr-3 flex flex-shrink-0 rounded-full p-1`}
-              >
+              <div className='bg-brand-green/20 mr-3 flex flex-shrink-0 rounded-full p-1'>
                 <CheckIcon size={10} className='text-muted-foreground' />
               </div>
               <span className='text-foreground typo-body-14'>{feature}</span>
@@ -148,15 +122,33 @@ const PriceCard = ({ plan }: any) => {
           onClick={() => router.push(ROUTES.LOGIN)}
           className={cn(
             'hover:bg-foreground hover:text-primary-foreground mt-6 w-full',
-            plan.popular && 'bg-brand-violet text-primary-foreground',
-            plan.recommand && 'bg-brand-400 text-primary-foreground'
+            isPopular && 'bg-brand-violet text-primary-foreground',
+            isFree && 'bg-brand-400 text-primary-foreground'
           )}
         >
-          {plan.cta}
+          {isFree ? '무료로 시작하기' : '플랜 시작하기'}
         </Button>
       </CardContent>
     </Card>
   );
 };
+
+const PriceCardSkeleton = () => (
+  <Card className='bg-accent/20 relative flex h-full flex-col overflow-visible lg:py-8'>
+    <CardHeader>
+      <Skeleton className='h-6 w-24' />
+      <Skeleton className='mt-2 h-4 w-40' />
+    </CardHeader>
+    <CardContent>
+      <Skeleton className='mb-8 h-8 w-32' />
+      <div className='flex flex-grow flex-col space-y-3'>
+        <Skeleton className='h-4 w-full' />
+        <Skeleton className='h-4 w-full' />
+        <Skeleton className='h-4 w-full' />
+      </div>
+      <Skeleton className='mt-6 h-10 w-full' />
+    </CardContent>
+  </Card>
+);
 
 export default PriceSection;
