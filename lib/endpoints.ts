@@ -47,9 +47,7 @@ export const USER_ENDPOINTS = {
   GET_NOTIFICATION_SETTINGS: `${API_BASE_V1}/users/me/notification-settings`,
   UPDATE_NOTIFICATION_SETTINGS: `${API_BASE_V1}/users/me/notification-settings`,
 
-  // 본인인증 (TEST provider 전용, swagger v260430 deprecated)
-  VERIFY_IDENTITY: `${API_BASE_V1}/users/me/verify-identity`,
-  // KCP 본인확인 거래등록 (1단계: 인증창 호출 정보 발급)
+  // KCP 본인확인 거래등록 (운영용, 인증창 호출 정보 발급)
   VERIFY_IDENTITY_KCP_TRADE_REG: `${API_BASE_V1}/users/me/verify-identity/kcp/trade-reg`,
   // [TEST] KCP 본인확인 시작 (개발/테스트 환경 전용, stg/prod 404)
   VERIFY_IDENTITY_KCP_TEST: `${API_BASE_V1}/users/me/verify-identity/kcp/test`,

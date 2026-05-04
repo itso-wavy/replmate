@@ -8,7 +8,6 @@ import type {
   NotificationSettingsDto,
   ReactivateSubscriptionResponse,
   ReceiptRequestDto,
-  UserDto,
   UserPlanInfo,
 } from '@/types/api/user';
 import { toPlanDomain } from '@/types/domain/plan';
@@ -22,7 +21,6 @@ import {
   toSubscriptionDomain,
   toUserDomain,
 } from '@/types/domain/user';
-import { VerifyIdentityProvider } from '@/types/enums';
 
 // ==========================================================
 // 사용자 정보
@@ -73,6 +71,7 @@ export interface ChangePlanResponse {
   isUpgrade?: boolean;
   orderId: number;
   toPlanName: string;
+  paymentUrl: string;
 }
 
 /**
@@ -85,6 +84,7 @@ export async function changePlan(planId: number): Promise<ChangePlanResponse> {
     USER_ENDPOINTS.CHANGE_PLAN,
     { planId }
   );
+
   return response.data;
 }
 
@@ -181,24 +181,8 @@ export async function updateNotificationSettings(
 }
 
 // ==========================================================
-// 본인인증
+// 본인인증 (KCP)
 // ==========================================================
-
-/**
- * @deprecated swagger v260430부터 deprecated (TEST provider 전용).
- * 운영 환경 KCP 본인확인은 `verifyIdentityKcpTradeReg()` 흐름 사용.
- * - 연속 5회 실패 시 30분간 차단 (429)
- */
-export async function verifyIdentity(
-  provider: VerifyIdentityProvider = VerifyIdentityProvider.TEST,
-  impUid?: string
-): Promise<UserDomain> {
-  const response = await api.post<UserDto>(USER_ENDPOINTS.VERIFY_IDENTITY, {
-    provider,
-    ...(impUid && { impUid }),
-  });
-  return toUserDomain(response.data);
-}
 
 /**
  * KCP 본인확인 거래등록 (1단계)
@@ -210,4 +194,19 @@ export async function verifyIdentityKcpTradeReg(): Promise<KcpTradeRegDto> {
     USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TRADE_REG
   );
   return response.data;
+}
+
+/**
+ * KCP 본인확인 테스트 URL 조회 (dev/test 전용, stg/prod 404)
+ * - trade-reg(Trade Registration)를 내부적으로 실행 + Redis 저장 후 KCP test-page absolute URL을 응답
+ * - redirect=false로 호출하여 JSON {url} 형식으로 받음 → 팝업창에 직접 설정
+ * - page_submit_yn=N: 팝업 모드 (PC)
+ */
+export async function getKcpTestVerifyUrl(): Promise<string> {
+  const url = new URL(USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TEST);
+  url.searchParams.set('redirect', 'false');
+  url.searchParams.set('page_submit_yn', 'N');
+
+  const response = await api.get<{ url: string }>(url.toString());
+  return response.data.url;
 }

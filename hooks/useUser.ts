@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { toast } from 'sonner';
 
+import {
+  openKcpPopup,
+  submitKcpAuthFormToPopup,
+  waitForKcpResult,
+} from '@/lib/kcp';
 import { queryKeys } from '@/lib/queryKeys';
 import {
   agreeTerms,
@@ -8,17 +14,16 @@ import {
   cancelPlan,
   changePlan,
   deleteUser,
+  getKcpTestVerifyUrl,
   getNotificationSettings,
   getUser,
   getUserPlan,
   reactivatePlan,
   requestReceipt,
   updateNotificationSettings,
-  verifyIdentity,
+  verifyIdentityKcpTradeReg,
 } from '@/services/user';
-import { UserStore } from '@/store/userStore';
 import type { DeleteUserRequest } from '@/types/api/user';
-import { VerifyIdentityProvider } from '@/types/enums';
 
 export const useUser = () =>
   useQuery({
@@ -100,16 +105,58 @@ export const useAgreeTerms = () => {
   });
 };
 
+// KCP 본인확인 (PC 팝업 방식).
+// 1) 빈 팝업창 선개방 (popup blocker 회피)
+// 2) 모드별 처리:
+//    - 테스트: GET /verify-identity/kcp/test (redirect=false) → JSON {url} → 팝업 location 설정
+//    - 운영: POST /verify-identity/kcp/trade-reg → form POST to callUrl with target=팝업
+// 3) 팝업 내부에서 인증 → 백엔드 callback → /auth/kcp/callback로 redirect → postMessage + close
+// 4) 부모창은 메시지 수신 후 user 재조회 → fresh isVerified 변화로 성공/실패 판정
+export type VerifyIdentityResult = { success: boolean };
+
 export const useVerifyIdentity = () => {
   const qc = useQueryClient();
-  const { setUser } = UserStore.useActions();
-  return useMutation({
-    mutationFn: (provider?: VerifyIdentityProvider) => verifyIdentity(provider),
-    onSuccess: async () => {
-      const updatedUser = await getUser();
-      setUser(updatedUser);
-      qc.invalidateQueries({ queryKey: queryKeys.user.me() });
+
+  return useMutation<VerifyIdentityResult>({
+    mutationFn: async () => {
+      const popup = openKcpPopup();
+      if (!popup)
+        throw new Error(
+          '팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.'
+        );
+
+      const result = waitForKcpResult(popup);
+
+      try {
+        if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
+          const url = await getKcpTestVerifyUrl();
+          popup.location.href = url;
+        } else {
+          const trade = await verifyIdentityKcpTradeReg();
+          submitKcpAuthFormToPopup(trade);
+        }
+      } catch (e) {
+        popup.close();
+        throw e;
+      }
+
+      await result;
+
+      // 인증 결과는 user.isVerified 서버 상태로 판정 (postMessage 내용 trust 안 함)
+      await qc.invalidateQueries({ queryKey: queryKeys.user.me() });
+      const fresh = await qc.fetchQuery({
+        queryKey: queryKeys.user.me(),
+        queryFn: getUser,
+      });
+
+      return { success: !!fresh.isVerified };
+    },
+    onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.user.plan() });
     },
+    onError: (e) =>
+      toast.error(
+        e instanceof Error ? e.message : '본인인증 요청에 실패했습니다.'
+      ),
   });
 };

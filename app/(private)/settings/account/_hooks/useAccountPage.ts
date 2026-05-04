@@ -91,14 +91,18 @@ export function useAccountPage() {
     );
   };
 
-  // 본인인증
+  // 본인인증 (KCP 팝업)
+  // useVerifyIdentity가 팝업 열기 + 메시지 수신 + user 재조회까지 캡슐화.
+  // 성공/실패 판정은 mutation 결과의 success(=fresh isVerified)로 판정.
   const { mutate: verifyIdentity, isPending: isVerifying } =
     useVerifyIdentity();
 
   const handleUserVerify = () => {
     verifyIdentity(undefined, {
-      onSuccess: () => toast.success('본인인증이 완료되었습니다.'),
-      onError: () => toast.error('본인인증에 실패했습니다.'),
+      onSuccess: ({ success }) => {
+        if (success) toast.success('본인인증이 완료되었습니다.');
+        else toast.error('본인인증에 실패했습니다.');
+      },
     });
   };
 
