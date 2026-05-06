@@ -182,6 +182,8 @@ export const USAGE_ENDPOINTS = {
 export const REMINDER_ENDPOINTS = {
   // 알림 조회
   GET_REMINDERS: `${API_BASE_V1}/reminders`,
+  // 알림 SSE 스트림 (생성/삭제 실시간 푸시)
+  STREAM_REMINDERS: `${API_BASE_V1}/reminders/stream`,
 } as const;
 
 // ==========================================================

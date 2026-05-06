@@ -18,3 +18,16 @@ export async function getReminders(params?: {
   );
   return toReminderDomainList(response.data);
 }
+
+/**
+ * 리마인더 SSE 스트림 구독
+ * GET /api/v1/reminders/stream
+ * 세션 쿠키 인증 (withCredentials: true)
+ * 30초마다 keepalive 라인 자동 무시 (SSE 주석)
+ * 끊기면 EventSource가 자동 재연결, catch-up은 호출 측에서 GET /reminders로 보완
+ */
+export function streamReminders(): EventSource {
+  return new EventSource(REMINDER_ENDPOINTS.STREAM_REMINDERS, {
+    withCredentials: true,
+  });
+}
