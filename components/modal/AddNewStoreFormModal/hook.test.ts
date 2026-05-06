@@ -13,8 +13,14 @@ const mockCheckUrl = vi.fn();
 vi.mock('@/hooks/useStores', () => ({
   useCheckStoreUrl: () => ({ mutateAsync: mockCheckUrl }),
   useCreateStore: () => ({ mutateAsync: vi.fn() }),
-  useGetPresignedUrl: () => ({ mutateAsync: vi.fn() }),
+  useGetPresignedUrls: () => ({ mutateAsync: vi.fn() }),
 }));
+
+// axios.isAxiosError가 true 판정하도록 isAxiosError 플래그를 가진 객체 생성
+const makeAxiosError = (errorCode?: number) => ({
+  isAxiosError: true,
+  response: { data: { errorCode } },
+});
 
 const makeFile = (name: string, type = 'image/jpeg', sizeBytes = 100) =>
   new File([new ArrayBuffer(sizeBytes)], name, { type });
@@ -152,13 +158,13 @@ describe('useAddNewStoreForm', () => {
   // 5. 중복확인 결과
   // ──────────────────────────────────────────────
   describe('URL 중복확인', () => {
+    // shouldValidate를 켜면 비동기 trigger가 직후 setError를 덮어씀 (race)
+    // 실제 사용 흐름(blur 후 클릭)과 의미는 동일하므로 shouldValidate 생략
     const setupWithValidUrl = () => {
       const hook = setup();
       act(() => {
         hook.result.current.handlePlatformChange(PlatformType.SMARTSTORE);
-        hook.result.current.form.setValue('url', 'valid-url', {
-          shouldValidate: true,
-        });
+        hook.result.current.form.setValue('url', 'valid-url');
       });
       return hook;
     };
@@ -173,7 +179,7 @@ describe('useAddNewStoreForm', () => {
       expect(result.current.form.getValues('isUrlAvailable')).toBe(true);
     });
 
-    it('이미 등록됨 → isUrlAvailable = false + 에러', async () => {
+    it('이미 등록됨 → isUrlAvailable = false + url/isUrlAvailable 에러', async () => {
       mockCheckUrl.mockResolvedValueOnce({ exists: true });
       const { result } = setupWithValidUrl();
       await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
@@ -181,13 +187,35 @@ describe('useAddNewStoreForm', () => {
       expect(result.current.form.getFieldState('isUrlAvailable').error?.message).toBe(
         '이미 등록된 URL입니다'
       );
+      // url 필드도 에러 상태 (메시지 없는 마커)
+      expect(result.current.form.getFieldState('url').error).toBeDefined();
     });
 
-    it('API 실패 → 토스트 에러', async () => {
-      mockCheckUrl.mockRejectedValueOnce(new Error('network'));
+    it('errorCode 3103 → "존재하지 않거나 잘못된 스토어 URL입니다" 인라인 에러', async () => {
+      mockCheckUrl.mockRejectedValueOnce(makeAxiosError(3103));
+      const { result } = setupWithValidUrl();
+      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
+      expect(result.current.form.getFieldState('isUrlAvailable').error?.message).toBe(
+        '존재하지 않거나 잘못된 스토어 URL입니다'
+      );
+      expect(result.current.form.getFieldState('url').error).toBeDefined();
+      expect(toast.error).not.toHaveBeenCalled();
+    });
+
+    it('axios error (3103 외) → 토스트 에러', async () => {
+      mockCheckUrl.mockRejectedValueOnce(makeAxiosError(9999));
       const { result } = setupWithValidUrl();
       await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
       expect(toast.error).toHaveBeenCalledWith('중복 확인 중 오류가 발생했습니다.');
+      expect(result.current.form.getFieldState('isUrlAvailable').error).toBeUndefined();
+    });
+
+    it('axios가 아닌 일반 에러 → 인라인/토스트 모두 미노출', async () => {
+      mockCheckUrl.mockRejectedValueOnce(new Error('network'));
+      const { result } = setupWithValidUrl();
+      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
+      expect(toast.error).not.toHaveBeenCalled();
+      expect(result.current.form.getFieldState('isUrlAvailable').error).toBeUndefined();
     });
 
     it('중복확인 후 URL 수정 → 상태 초기화', async () => {

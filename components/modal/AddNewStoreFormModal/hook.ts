@@ -121,9 +121,10 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     form.clearErrors('isUrlAvailable');
 
     try {
+      // URL 중복 여부 확인
       const result = await checkUrlMutation.mutateAsync(url);
       // exists: true → 이미 등록된 URL
-      form.setValue('isUrlAvailable', !result.exists, { shouldValidate: true });
+      form.setValue('isUrlAvailable', !result.exists);
       if (result.exists) {
         form.setError('url', {});
         form.setError('isUrlAvailable', { message: '이미 등록된 URL입니다' });
