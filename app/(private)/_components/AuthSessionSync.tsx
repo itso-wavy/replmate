@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { UserStore } from '@/store/userStore';
 import { toUserDomain } from '@/types';
 
-function SessionSync() {
+function AuthSessionSync() {
   const { data: session, status } = useSession();
   const { setUser, clearUser } = UserStore.useActions();
   const isAuthenticated = UserStore.useIsAuthenticated();
@@ -28,4 +28,4 @@ function SessionSync() {
   return null;
 }
 
-export default SessionSync;
+export default AuthSessionSync;

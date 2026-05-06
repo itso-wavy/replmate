@@ -3,12 +3,17 @@
 import { Logo } from '@/components/global';
 import { DASHBOARD_MENU } from '@/constants/nav-menu';
 
-import { PrivateHeader, SessionSync } from './_components';
+import {
+  AuthSessionSync,
+  PrivateHeader,
+  ReminderStreamSync,
+} from './_components';
 
 const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <SessionSync />
+      <AuthSessionSync />
+      <ReminderStreamSync />
 
       {/* md 사이즈 미만 대체 화면 */}
       <div className='wrapper'>
