@@ -27,7 +27,7 @@ export function useReplysPage({ PAGE_SIZE }: { PAGE_SIZE: number }) {
     replies: data?.items ?? [],
     isLoading,
     currentPage,
-    totalPages: data?.totalPages ?? 1,
+    totalPages: data?.totalPages || 1,
     onPageChange: setCurrentPage,
     handleStoreChange,
   };

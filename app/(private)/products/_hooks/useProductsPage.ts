@@ -229,7 +229,7 @@ export function useProductsPage() {
     setSelectedStore(storeId);
   };
 
-  // 브라우저 탭 이탈/새로고침 가드
+  // 브라우저 탭 이탈/새로고침/뒤로가기 가드
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
       if (isDirty) {
@@ -251,7 +251,7 @@ export function useProductsPage() {
     isDirty,
     isLoading: isProductsLoading,
     currentPage,
-    totalPages: productData?.products.totalPages ?? 1,
+    totalPages: productData?.products.totalPages || 1,
     storeName: selectedStore?.name ?? '',
     handlePageChange: setCurrentPage,
     handleToggle,

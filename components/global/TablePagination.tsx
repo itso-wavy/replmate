@@ -1,10 +1,16 @@
 import {
+  CaretDoubleLeftIcon,
+  CaretDoubleRightIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+} from '@phosphor-icons/react';
+
+import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from '../ui/pagination';
 
 interface TablePaginationProps {
@@ -18,43 +24,81 @@ const TablePagination = ({
   currentPage,
   totalPages,
 }: TablePaginationProps) => {
+  const isFirst = currentPage === 1;
+  const isLast = currentPage === totalPages;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+    (page) =>
+      page === 1 ||
+      page === totalPages ||
+      (page >= currentPage - 1 && page <= currentPage + 1)
+  );
+
   return (
     <div className='py-4'>
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious
-              className='hover:bg-accent cursor-pointer'
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            />
+            <PaginationLink
+              aria-label='Go to first page'
+              onClick={() => !isFirst && onPageChange(1)}
+              disabled={isFirst}
+            >
+              <CaretDoubleLeftIcon />
+            </PaginationLink>
           </PaginationItem>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-            if (
-              page === 1 ||
-              page === totalPages ||
-              (page >= currentPage - 2 && page <= currentPage + 2)
-            ) {
-              return (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    isActive={page === currentPage}
-                    onClick={() => onPageChange(page)}
-                    className='cursor-pointer'
-                  >
-                    {page}
-                  </PaginationLink>
+
+          <PaginationItem className='mr-0.5'>
+            <PaginationLink
+              aria-label='Go to previous page'
+              onClick={() => !isFirst && onPageChange(currentPage - 1)}
+              disabled={isFirst}
+            >
+              <CaretLeftIcon />
+            </PaginationLink>
+          </PaginationItem>
+
+          {pages.flatMap((page, idx, arr) => {
+            const items = [
+              <PaginationItem key={page}>
+                <PaginationLink
+                  isActive={page === currentPage}
+                  onClick={() => onPageChange(page)}
+                  className='cursor-pointer'
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>,
+            ];
+            const next = arr[idx + 1];
+            if (next && next - page > 1) {
+              items.push(
+                <PaginationItem key={`gap-${page}`} className='-mx-3'>
+                  <PaginationEllipsis />
                 </PaginationItem>
               );
             }
-            return null;
+            return items;
           })}
+
+          <PaginationItem className='ml-0.5'>
+            <PaginationLink
+              aria-label='Go to next page'
+              onClick={() => !isLast && onPageChange(currentPage + 1)}
+              disabled={isLast}
+            >
+              <CaretRightIcon />
+            </PaginationLink>
+          </PaginationItem>
+
           <PaginationItem>
-            <PaginationNext
-              className='hover:bg-accent cursor-pointer'
-              onClick={() =>
-                onPageChange(Math.min(totalPages, currentPage + 1))
-              }
-            />
+            <PaginationLink
+              aria-label='Go to final page'
+              onClick={() => !isLast && onPageChange(totalPages)}
+              disabled={isLast}
+            >
+              <CaretDoubleRightIcon />
+            </PaginationLink>
           </PaginationItem>
         </PaginationContent>
       </Pagination>

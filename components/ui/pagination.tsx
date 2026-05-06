@@ -40,6 +40,7 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
+  disabled?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
   React.ComponentProps<'a'>;
 
@@ -47,14 +48,21 @@ function PaginationLink({
   className,
   isActive,
   size = 'icon',
+  disabled = false,
   ...props
 }: PaginationLinkProps) {
   return (
     <Button
       variant={isActive ? 'outline' : 'ghost'}
       size={size}
-      className={cn(className)}
+      className={cn(
+        'hover:bg-accent',
+        disabled &&
+          'hover:bg-input/25 hover:text-foreground/60 cursor-default!',
+        className
+      )}
       nativeButton={false}
+      disabled={disabled}
       render={
         <a
           aria-current={isActive ? 'page' : undefined}
@@ -75,7 +83,7 @@ function PaginationPrevious({
     <PaginationLink
       aria-label='Go to previous page'
       size='default'
-      className={cn('aspect-square pl-2!', className)}
+      className={cn('aspect-square', className)}
       {...props}
     >
       <CaretLeftIcon data-icon='inline-start' />
