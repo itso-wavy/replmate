@@ -8,6 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 
+import { useUnsavedChangesGuard } from '@/hooks';
 import {
   useReplyOptions,
   useTestQuota,
@@ -93,6 +94,16 @@ export function useOptionsPage() {
   // --- 모달 ---
   const [activeModal, setActiveModal] = useState<OptionsModalType>(null);
   const pendingStoreIdRef = useRef<number | null>(null);
+
+  const {
+    isBackPendingRef,
+    leaveBack,
+    prepareSaveLeaveBack,
+    resetBackPending,
+  } = useUnsavedChangesGuard({
+    isDirty,
+    onBack: () => setActiveModal('unsavedChanges'),
+  });
 
   // --- mutations ---
   const { mutateAsync: updateOptions, isPending: isSaving } =
@@ -201,18 +212,6 @@ export function useOptionsPage() {
     }
   }, [pendingUrl, isDirty]);
 
-  // 브라우저 탭 이탈/새로고침 가드
-  useEffect(() => {
-    const handler = (e: BeforeUnloadEvent) => {
-      if (isDirty) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handler);
-    return () => window.removeEventListener('beforeunload', handler);
-  }, [isDirty]);
-
   // --- 스토어 전환 가드 ---
   const handleStoreChange = (storeId: number) => {
     if (isDirty) {
@@ -232,11 +231,19 @@ export function useOptionsPage() {
   // --- UnsavedChangesModal 콜백 ---
   const handleLeaveWithoutSaving = () => {
     setActiveModal(null);
+
     if (pendingStoreIdRef.current !== null) {
       setSelectedStore(pendingStoreIdRef.current);
       pendingStoreIdRef.current = null;
       return;
     }
+
+    if (isBackPendingRef.current) {
+      clearGuard();
+      leaveBack();
+      return;
+    }
+
     if (pendingUrl) {
       const url = pendingUrl;
       clearPending();
@@ -252,9 +259,20 @@ export function useOptionsPage() {
     }
 
     try {
+      if (isBackPendingRef.current) {
+        prepareSaveLeaveBack();
+        await performSave();
+        toast.success('저장이 완료되었습니다.');
+        setActiveModal(null);
+        clearGuard();
+        leaveBack();
+        return;
+      }
+
       await performSave();
       toast.success('저장이 완료되었습니다.');
       setActiveModal(null);
+
       if (pendingStoreIdRef.current !== null) {
         setSelectedStore(pendingStoreIdRef.current);
         pendingStoreIdRef.current = null;
@@ -269,6 +287,13 @@ export function useOptionsPage() {
     } catch {
       toast.error('저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');
     }
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    resetBackPending();
+    pendingStoreIdRef.current = null;
+    if (pendingUrl) clearPending();
   };
 
   return {
@@ -295,7 +320,7 @@ export function useOptionsPage() {
 
     // 모달 & 가드
     activeModal,
-    closeModal: () => setActiveModal(null),
+    closeModal,
     handleLeaveWithoutSaving,
     handleSaveAndLeave,
 
