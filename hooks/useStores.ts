@@ -60,8 +60,7 @@ export const useUpdateStore = () => {
       storeId: number;
       data: UpdateStoreRequest;
     }) => updateStore(storeId, data),
-    onSuccess: () =>
-      qc.invalidateQueries({ queryKey: queryKeys.stores.all() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.stores.all() }),
   });
 };
 
@@ -96,13 +95,15 @@ export const useCreateStore = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: createStore,
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
   });
 };
 
 export const useCheckStoreUrl = () =>
   useMutation({
     mutationFn: (url: string) => checkStoreUrl(url),
+    onError: () => {},
   });
 
 export const useGetPresignedUrl = () =>
@@ -130,6 +131,7 @@ export const useUpdateStoresBulk = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data: UpdateStoresRequest) => updateStoresBulk(data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: queryKeys.stores.list() }),
   });
 };

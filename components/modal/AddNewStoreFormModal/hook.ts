@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 
 import { PLATFORM_TYPE_CONFIG } from '@/constants/platform';
@@ -124,10 +125,24 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
       // exists: true → 이미 등록된 URL
       form.setValue('isUrlAvailable', !result.exists, { shouldValidate: true });
       if (result.exists) {
+        form.setError('url', {});
         form.setError('isUrlAvailable', { message: '이미 등록된 URL입니다' });
       }
-    } catch {
-      toast.error('중복 확인 중 오류가 발생했습니다.');
+    } catch (err) {
+      // 외부 플랫폼에서 URL을 찾지 못한 경우 → 인라인 에러로 노출
+      if (isAxiosError(err)) {
+        const errorCode = err?.response?.data.errorCode;
+
+        if (errorCode === 3103) {
+          form.setError('url', {});
+          form.setError('isUrlAvailable', {
+            message: '존재하지 않거나 잘못된 스토어 URL입니다',
+          });
+          return;
+        } else {
+          toast.error('중복 확인 중 오류가 발생했습니다.');
+        }
+      }
     }
   };
 
@@ -264,6 +279,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
    */
   const onSubmit = async (data: AddNewStoreFormData) => {
     if (data.isUrlAvailable !== true) {
+      form.setError('url', {});
       form.setError('isUrlAvailable', {
         message: 'URL 중복 확인이 필요합니다',
       });

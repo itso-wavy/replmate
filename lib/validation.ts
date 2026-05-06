@@ -27,11 +27,9 @@ export const addNewStoreSchema = z.object({
     .regex(/^[a-zA-Z0-9\-_]+$/, '영문, 숫자, -, _만 입력 가능합니다'),
 
   // URL 중복 확인 여부
-  // undefined: 미확인, false: 중복됨, true: 사용 가능
-  isUrlAvailable: z
-    .boolean()
-    .refine((val) => val === true, { message: '이미 등록된 URL입니다' })
-    .optional(),
+  // undefined: 미확인, false: 중복/미존재, true: 사용 가능
+  // 메시지 분기는 호출부 setError에서 처리하므로 refine 두지 않음
+  isUrlAvailable: z.boolean().optional(),
 
   // 파일 업로드 (optional, 클라이언트에서 검증)
   certification: z
