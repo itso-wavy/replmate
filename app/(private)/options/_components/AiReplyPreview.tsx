@@ -63,7 +63,7 @@ const AiReplyPreview = ({
             <Button
               isPending={isGenerating}
               onClick={onGenerate}
-              disabled={!testReview.trim() || isGenerating || isLimitReached}
+              disabled={isGenerating || isLimitReached}
             >
               AI 리플 생성하기
             </Button>

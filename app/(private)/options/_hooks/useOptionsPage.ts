@@ -172,15 +172,8 @@ export function useOptionsPage() {
         toast.error(
           '일시적인 오류로 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
+        return;
       });
-
-      es.onerror = () => {
-        es.close();
-        setIsGenerating(false);
-        toast.error(
-          '일시적인 오류로 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.'
-        );
-      };
     } catch {
       setIsGenerating(false);
       toast.error(
