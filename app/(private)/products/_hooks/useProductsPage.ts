@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import { useUnsavedChangesGuard } from '@/hooks';
 import {
   useProducts,
   useUpdateProduct,
@@ -88,6 +89,16 @@ export function useProductsPage() {
     () => !setsEqual(selectedIds, initialIds),
     [selectedIds, initialIds]
   );
+
+  const {
+    isBackPendingRef,
+    leaveBack,
+    prepareSaveLeaveBack,
+    resetBackPending,
+  } = useUnsavedChangesGuard({
+    isDirty,
+    onBack: () => setActiveModal('unsavedChanges'),
+  });
 
   // --- 네비게이션 가드 연동 ---
   const pendingUrl = NavigationGuardStore.usePendingUrl();
@@ -176,13 +187,19 @@ export function useProductsPage() {
   // --- UnsavedChangesModal 콜백 ---
   const handleLeaveWithoutSaving = () => {
     setActiveModal(null);
-    // 스토어 전환 케이스
+
     if (pendingStoreIdRef.current !== null) {
       setSelectedStore(pendingStoreIdRef.current);
       pendingStoreIdRef.current = null;
       return;
     }
-    // 페이지 이동 케이스
+
+    if (isBackPendingRef.current) {
+      clearGuard();
+      leaveBack();
+      return;
+    }
+
     if (pendingUrl) {
       const url = pendingUrl;
       clearPending();
@@ -198,16 +215,25 @@ export function useProductsPage() {
     }
 
     try {
+      if (isBackPendingRef.current) {
+        prepareSaveLeaveBack();
+        await performSave();
+        toast.success('저장이 완료되었습니다.');
+        setActiveModal(null);
+        clearGuard();
+        leaveBack();
+        return;
+      }
+
       await performSave();
       toast.success('저장이 완료되었습니다.');
       setActiveModal(null);
-      // 스토어 전환 케이스
+
       if (pendingStoreIdRef.current !== null) {
         setSelectedStore(pendingStoreIdRef.current);
         pendingStoreIdRef.current = null;
         return;
       }
-      // 페이지 이동 케이스
       if (pendingUrl) {
         const url = pendingUrl;
         clearPending();
@@ -219,6 +245,13 @@ export function useProductsPage() {
     }
   };
 
+  const closeUnsavedModal = () => {
+    setActiveModal(null);
+    resetBackPending();
+    pendingStoreIdRef.current = null;
+    if (pendingUrl) clearPending();
+  };
+
   // 스토어 전환 가드
   const handleStoreChange = (storeId: number) => {
     if (isDirty) {
@@ -228,18 +261,6 @@ export function useProductsPage() {
     }
     setSelectedStore(storeId);
   };
-
-  // 브라우저 탭 이탈/새로고침/뒤로가기 가드
-  useEffect(() => {
-    const handler = (e: BeforeUnloadEvent) => {
-      if (isDirty) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handler);
-    return () => window.removeEventListener('beforeunload', handler);
-  }, [isDirty]);
 
   return {
     products,
@@ -261,5 +282,6 @@ export function useProductsPage() {
     handleStoreChange,
     handleLeaveWithoutSaving,
     handleSaveAndLeave,
+    closeUnsavedModal,
   };
 }
