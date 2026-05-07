@@ -22,6 +22,7 @@ export interface PresignedUrlDto {
 
 // POST /api/v1/stores/presigned-urls Presigned URL 일괄 발급 (최대 3개)
 export interface PresignedUrlsRequest {
+  filenames: string[];
   contentTypes: string[];
 }
 export type PresignedUrlsDto = PresignedUrlDto[];
