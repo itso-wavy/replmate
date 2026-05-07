@@ -86,7 +86,13 @@ const PaymentAmountBox = ({
   </div>
 );
 
-const InstantAvailableBox = ({ quota }: { quota: number }) => (
+const InstantAvailableBox = ({
+  quota,
+  showCancelNotice = false,
+}: {
+  quota: number;
+  showCancelNotice?: boolean;
+}) => (
   <div className='bg-brand-500/5 flex items-start gap-2 rounded-xl p-4'>
     <CheckCircle size={16} className='text-brand-500 mt-0.5 shrink-0' />
     <div>
@@ -94,11 +100,20 @@ const InstantAvailableBox = ({ quota }: { quota: number }) => (
       <p className='typo-caption-12 text-muted-foreground'>
         업그레이드 시 {quota.toLocaleString()}건이 바로 제공됩니다
       </p>
+      {showCancelNotice && (
+        <p className='typo-caption-12 text-muted-foreground'>
+          해지 예약이 설정된 경우, 자동으로 취소됩니다
+        </p>
+      )}
     </div>
   </div>
 );
 
-const NextBillingNoticeBox = () => (
+const NextBillingNoticeBox = ({
+  showCancelNotice = false,
+}: {
+  showCancelNotice?: boolean;
+}) => (
   <div className='bg-brand-500/5 flex items-start gap-2 rounded-xl p-4'>
     <CheckCircle size={16} className='text-brand-500 mt-0.5 shrink-0' />
     <div>
@@ -106,6 +121,11 @@ const NextBillingNoticeBox = () => (
       <p className='typo-caption-12 text-muted-foreground'>
         이전까지 현재 플랜을 계속해서 이용하실 수 있습니다
       </p>
+      {showCancelNotice && (
+        <p className='typo-caption-12 text-muted-foreground'>
+          해지 예약이 설정된 경우, 자동으로 취소됩니다
+        </p>
+      )}
     </div>
   </div>
 );
@@ -131,6 +151,7 @@ interface ConfirmProps {
 
 interface ChangeConfirmProps extends ConfirmProps {
   currentPlan: PlanDomain;
+  isCancelScheduled?: boolean;
 }
 
 const SubscribeConfirm = ({ plan, onConfirm, isPending }: ConfirmProps) => (
@@ -159,6 +180,7 @@ const UpgradeConfirm = ({
   plan,
   onConfirm,
   isPending,
+  isCancelScheduled,
 }: ChangeConfirmProps) => {
   // TODO: 차액은 API 응답값으로 교체
   const diff = plan.monthlyPrice - currentPlan.monthlyPrice;
@@ -176,7 +198,10 @@ const UpgradeConfirm = ({
           amount={diff}
           caption='※ 남은 기간에 대한 일할 계산 차액만 결제됩니다'
         />
-        <InstantAvailableBox quota={plan.monthlyReplyQuota} />
+        <InstantAvailableBox
+          quota={plan.monthlyReplyQuota}
+          showCancelNotice={isCancelScheduled}
+        />
         <NextBillingInfoBox plan={plan} />
       </div>
       <DialogFooter>
@@ -193,6 +218,7 @@ const DowngradeConfirm = ({
   plan,
   onConfirm,
   isPending,
+  isCancelScheduled,
 }: ChangeConfirmProps) => (
   <>
     <DialogHeader>
@@ -202,7 +228,7 @@ const DowngradeConfirm = ({
     </DialogHeader>
     <div className='space-y-3'>
       <PlanChangeRow from={currentPlan} to={plan} />
-      <NextBillingNoticeBox />
+      <NextBillingNoticeBox showCancelNotice={isCancelScheduled} />
       <NextBillingInfoBox plan={plan} />
     </div>
     <DialogFooter>
@@ -291,6 +317,7 @@ interface PlanChangeModalsProps {
   state: Exclude<PlanModalState, 'keepSubscription'>;
   selectedPlan: PlanDomain;
   currentPlan: PlanDomain;
+  isCancelScheduled?: boolean;
   onClose: () => void;
   onConfirm: () => void | Promise<void>;
   isConfirmPending?: boolean;
@@ -300,6 +327,7 @@ const PlanChangeModals = ({
   state,
   selectedPlan,
   currentPlan,
+  isCancelScheduled,
   onClose,
   onConfirm,
   isConfirmPending,
@@ -322,6 +350,7 @@ const PlanChangeModals = ({
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
+            isCancelScheduled={isCancelScheduled}
           />
         )}
         {state === 'downgrade' && (
@@ -330,6 +359,7 @@ const PlanChangeModals = ({
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
+            isCancelScheduled={isCancelScheduled}
           />
         )}
         {state === 'upgradeSuccess' && (

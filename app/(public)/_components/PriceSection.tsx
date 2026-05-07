@@ -18,14 +18,6 @@ import { usePlans } from '@/hooks/usePlans';
 import { cn } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
 
-const POPULAR_PLAN_NAME = 'Premium';
-
-const buildPlanFeatures = (plan: PlanDomain): string[] => [
-  `월 ${plan.monthlyReplyQuota.toLocaleString()}건 답글 생성`,
-  `상품 ${plan.maxProductCount.toLocaleString()}개 집중 관리`,
-  `쇼핑몰 ${plan.maxStoreCount.toLocaleString()}개 연동`,
-];
-
 const PriceSection = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data: plans, isLoading } = usePlans(true);
@@ -64,10 +56,12 @@ const PriceSection = ({ id }: { id: string }) => {
 };
 
 const PriceCard = ({ plan }: { plan: PlanDomain }) => {
+  const POPULAR_PLAN_NAME = 'Premium';
+
   const router = useRouter();
   const isFree = plan.monthlyPrice === 0;
+  // TODO: 현재는 POPULAR 플랜을 프론트에서 직접 선택하고 있음
   const isPopular = plan.name.toLowerCase() === POPULAR_PLAN_NAME.toLowerCase();
-  const features = buildPlanFeatures(plan);
 
   return (
     <Card
@@ -106,7 +100,7 @@ const PriceCard = ({ plan }: { plan: PlanDomain }) => {
         </div>
 
         <div className='flex flex-grow flex-col space-y-2'>
-          {features.map((feature) => (
+          {[...plan.summary, ...plan.contents].map((feature) => (
             <div key={feature} className='flex items-center'>
               <div className='bg-brand-green/20 mr-3 flex flex-shrink-0 rounded-full p-1'>
                 <CheckIcon size={10} className='text-muted-foreground' />
