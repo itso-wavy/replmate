@@ -172,15 +172,26 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     }
 
     // 각 파일 검증
+    const normalizedFiles: File[] = [];
     for (const file of files) {
+      // macOS NFD(자모 분리) 한글 파일명을 NFC로 정규화
+      const normalizedName = file.name.normalize('NFC');
+      const normalizedFile =
+        normalizedName === file.name
+          ? file
+          : new File([file], normalizedName, {
+            type: file.type,
+            lastModified: file.lastModified,
+          });
+
       // 파일명 길이 검증 (확장자 포함 100자 이하)
-      if (file.name.length > 100) {
+      if (normalizedFile.name.length > 100) {
         toast.error('파일명이 너무 깁니다.\n(확장자 포함 100자 이하만 가능)');
         return;
       }
 
       // 파일명 문자 검증 (한글, 영문, 숫자, 공백, _, -, (), . 허용)
-      if (/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 _\-.()]/.test(file.name)) {
+      if (/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 _\-.()]/.test(normalizedFile.name)) {
         toast.error(
           '사용할 수 없는 문자가 포함되어 있습니다.\n(한글, 영문, 숫자, 공백, _, -, (), .만 가능)'
         );
@@ -189,28 +200,31 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
 
       // 형식 검증
       const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-      if (!allowedTypes.includes(file.type)) {
+      if (!allowedTypes.includes(normalizedFile.type)) {
         toast.error('지원하지 않는 파일 형식입니다. (JPEG, PNG, PDF만 가능)');
         return;
       }
 
       // 용량 검증 (5MB)
-      if (file.size > 5 * 1024 * 1024) {
+      if (normalizedFile.size > 5 * 1024 * 1024) {
         toast.error('파일 용량이 5MB를 초과했습니다.');
         return;
       }
 
       const isDuplicate = uploadedFiles.some(
-        (uploaded) => uploaded.name === file.name && uploaded.size === file.size
+        (uploaded) =>
+          uploaded.name === normalizedFile.name && uploaded.size === normalizedFile.size
       );
       if (isDuplicate) {
         toast.error('이미 등록된 파일입니다.');
         return;
       }
+
+      normalizedFiles.push(normalizedFile);
     }
 
     // 검증 통과 시 파일 추가
-    const newFiles = [...uploadedFiles, ...files];
+    const newFiles = [...uploadedFiles, ...normalizedFiles];
     setUploadedFiles(newFiles);
     form.setValue('certification', newFiles, { shouldValidate: true });
   };
