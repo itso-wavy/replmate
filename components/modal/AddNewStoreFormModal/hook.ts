@@ -304,6 +304,7 @@ export const useAddNewStoreForm = ({ closeModal }: UseAddNewStoreFormProps) => {
     try {
       // 1. presigned URL 일괄 발급 + S3 병렬 업로드 (최대 3개)
       const presignedUrls = await getPresignedUrlsMutation.mutateAsync({
+        filenames: uploadedFiles.map((file) => file.name),
         contentTypes: uploadedFiles.map((file) => file.type),
       });
 
