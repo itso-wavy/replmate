@@ -20,6 +20,7 @@ const PlansPage = () => {
     plans,
     planStatus,
     isFree,
+    isCancelScheduled,
     isUnverified,
     isDowngradeScheduled,
     // 모달
@@ -94,6 +95,7 @@ const PlansPage = () => {
           state={modalState}
           currentPlan={userPlan!.plan}
           selectedPlan={selectedPlan}
+          isCancelScheduled={isCancelScheduled}
           onClose={closeModal}
           onConfirm={handleConfirm}
           isConfirmPending={isConfirmPending}
