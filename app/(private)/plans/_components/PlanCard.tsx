@@ -7,19 +7,6 @@ import { cn } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
 import { SubscriptionStatus } from '@/types/enums';
 
-// FIXME: 플랜 도메인 필드로 기능 목록 생성=> 백엔드에서 제공하는 목록으로 교체해야 함
-const getDummyPlanFeatures = (plan: PlanDomain): string[] => {
-  const features = [
-    `월 ${plan.monthlyReplyQuota.toLocaleString()}건 답글 생성`,
-    `상품 ${plan.maxProductCount.toLocaleString()}개 집중 관리`,
-    `쇼핑몰 ${plan.maxStoreCount}개 연동`,
-    '문맥 파악 AI 엔진',
-    '브랜드 톤앤매너 설정',
-  ];
-  if (plan.maxStoreCount >= 2) features.splice(4, 0, '다중 몰 관리');
-  return features;
-};
-
 interface PlanCardProps {
   plan: PlanDomain;
   currentPlanId: number;
@@ -119,8 +106,11 @@ const PlanCard = ({
 
       {/* Row 5: 기능 목록 */}
       <ul className='space-y-2.5 self-start'>
-        {getDummyPlanFeatures(plan).map((feature) => (
-          <li key={feature} className='flex items-start gap-2.5'>
+        {[...plan.summary, ...plan.contents].map((feature, idx) => (
+          <li
+            key={`${plan.id}-${idx}`}
+            className='flex items-start gap-2.5'
+          >
             <span className='bg-brand-500/10 mt-0.5 flex shrink-0 rounded-full p-1'>
               <CheckIcon size={10} className='text-brand-500' />
             </span>

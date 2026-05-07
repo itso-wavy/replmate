@@ -12,6 +12,9 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 1,
     maxProductCount: 10,
     maxTestPerDay: 5,
+    highlights: ['50건', '10개', '1개'],
+    summary: ['월 50건 답변 생성', '상품 10개 관리', '쇼핑몰 1개 연동'],
+    contents: ['문맥 파악 AI 엔진'],
   },
   {
     id: 2,
@@ -24,6 +27,9 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 2,
     maxProductCount: 100,
     maxTestPerDay: 20,
+    highlights: ['300건', '100개', '2개'],
+    summary: ['월 300건 답변 생성', '상품 100개 관리', '쇼핑몰 2개 연동'],
+    contents: ['문맥 파악 AI 엔진', '브랜드 톤앤매너 설정'],
   },
   {
     id: 3,
@@ -36,6 +42,13 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 5,
     maxProductCount: 1000,
     maxTestPerDay: 50,
+    highlights: ['1,000건', '1,000개', '5개'],
+    summary: [
+      '월 1,000건 답변 생성',
+      '상품 1,000개 관리',
+      '쇼핑몰 5개 연동',
+    ],
+    contents: ['문맥 파악 AI 엔진', '브랜드 톤앤매너 설정', '다중 몰 관리'],
   },
   {
     id: 4,
@@ -48,5 +61,12 @@ export const dummyPlans: PlanDomain[] = [
     maxStoreCount: 20,
     maxProductCount: 20000,
     maxTestPerDay: 200,
+    highlights: ['5,000건', '20,000개', '20개'],
+    summary: [
+      '월 5,000건 답변 생성',
+      '상품 20,000개 관리',
+      '쇼핑몰 20개 연동',
+    ],
+    contents: ['문맥 파악 AI 엔진', '브랜드 톤앤매너 설정', '다중 몰 관리'],
   },
 ];

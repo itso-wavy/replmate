@@ -17,4 +17,10 @@ export interface PlanDto {
   /** @deprecated 1.5.0 Drop 예정. `maxProductCount` 사용 */
   maxProductPerStore?: number;
   maxTestPerDay: number;
+  /** 카드 상단 강조 키워드 (예: ["800건", "50개", "2개"]) */
+  highlights: string[];
+  /** 핵심 요약 라인 (예: ["월 800건 답변 생성", ...]) */
+  summary: string[];
+  /** 부가 기능 라인 (예: ["문맥 파악 AI 엔진", ...]) */
+  contents: string[];
 }
