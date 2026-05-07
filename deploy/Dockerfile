@@ -1,7 +1,7 @@
 # Node 22 Alpine 기반 multi-stage 빌드
 FROM node:22-alpine AS base
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
 
 # MARK: - 의존성 설치
 FROM base AS deps
