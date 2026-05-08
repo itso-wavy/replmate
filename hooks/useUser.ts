@@ -23,6 +23,7 @@ import {
   updateNotificationSettings,
   verifyIdentityKcpTradeReg,
 } from '@/services/user';
+import { UserStore } from '@/store/userStore';
 import type { DeleteUserRequest } from '@/types/api/user';
 
 export const useUser = () =>
@@ -116,6 +117,7 @@ export type VerifyIdentityResult = { success: boolean };
 
 export const useVerifyIdentity = () => {
   const qc = useQueryClient();
+  const { setUser } = UserStore.useActions();
 
   return useMutation<VerifyIdentityResult>({
     mutationFn: async () => {
@@ -148,6 +150,10 @@ export const useVerifyIdentity = () => {
         queryKey: queryKeys.user.me(),
         queryFn: getUser,
       });
+
+      // 화면은 UserStore(Zustand)를 구독하므로 fresh 결과를 store에도 반영
+      // (AuthSessionSync는 미인증 → 인증 전이만 동기화하여 isVerified 변경은 별도 갱신 필요)
+      if (fresh.isVerified) setUser(fresh);
 
       return { success: !!fresh.isVerified };
     },
