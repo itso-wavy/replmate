@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
+import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import googleIcon from '@/assets/png/google.png';
@@ -14,22 +15,21 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { ROUTES } from '@/constants/nav-menu';
 import { ENDPOINTS } from '@/lib/endpoints';
-import { UserStore } from '@/store/userStore';
 import { AuthProvider } from '@/types';
 
 import { PublicHeader } from '../_components';
 
 export const LoginPage = () => {
   const router = useRouter();
+  const { status } = useSession();
 
-  const isAuthenticated = UserStore.useIsAuthenticated();
-  const [isLoading, setIsLoading] = useState(true);
-
+  // NextAuth 세션이 살아있을 때만 대시보드로 보냄
+  // (zustand persist의 stale user 무시 → 세션 만료 후 무한 스피너 방지)
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push(ROUTES.DASHBOARD);
-    } else setIsLoading(false);
-  }, [isAuthenticated]);
+    if (status === 'authenticated') {
+      router.replace(ROUTES.DASHBOARD);
+    }
+  }, [status, router]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -82,13 +82,13 @@ export const LoginPage = () => {
       <PublicHeader />
 
       <main className='wrapper flex flex-1 items-center justify-center'>
-        {isLoading && (
+        {(status === 'loading' || status === 'authenticated') && (
           <div className='grid place-content-center'>
             <Spinner />
           </div>
         )}
 
-        {!isLoading && (
+        {status === 'unauthenticated' && (
           <div className='relative flex w-[320px] max-w-[350px] flex-col text-center'>
             <div>
               <h1 className='text-foreground typo-display-36'>로그인</h1>
