@@ -17,19 +17,17 @@ export async function startDanalAuth(
 }
 
 /**
- * [TEST] 다날 테스트 결제 URL 조회 (dev/test 전용, stg/prod 404)
- * - GET /payments/danal/test?redirect=false → JSON {url} 응답
- * - 팝업창 location에 직접 설정해 결제 페이지로 진입
+ * 결제수단 변경 시작
+ * - 서버: 기존 활성 빌링키 DELBILLKEY + DB is_active=false → 신규 AUTH(ISBILL=N) 호출
+ * - 응답은 DANAL_AUTH와 동일한 DanalAuthResponse → form POST로 결제창 진입
+ * - 콜백 복귀: {frontend_url}/payments/danal/callback?status=success|error|cancel&orderId=...
+ *   (redirect_uri 옵션은 서버가 저장하지 않음 → 항상 frontend_url + /payments/danal/callback)
+ * - 신규 BILLKEY는 콜백에서 ISSUEBILLKEY로 발급/저장. 실제 결제는 일어나지 않음(amount=100 더미)
  */
-export async function getDanalTestPaymentUrl(
-  params: { planId?: number; amount?: number } = {}
-): Promise<string> {
-  const url = new URL(PAYMENT_ENDPOINTS.DANAL_TEST);
-  url.searchParams.set('redirect', 'false');
-  if (params.planId !== undefined)
-    url.searchParams.set('plan_id', String(params.planId));
-  if (params.amount !== undefined)
-    url.searchParams.set('amount', String(params.amount));
-  const response = await api.get<{ url: string }>(url.toString());
-  return response.data.url;
+export async function changePaymentMethod(): Promise<DanalAuthResponseDto> {
+  const response = await api.post<DanalAuthResponseDto>(
+    PAYMENT_ENDPOINTS.METHOD_CHANGE
+  );
+  return response.data;
 }
+
