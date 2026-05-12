@@ -10,8 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate } from '@/lib/utils';
 import type { PlanDomain } from '@/types';
+import type { ChangePlanPreviewDomain } from '@/types/domain/user';
 
 // ─── 모달 상태 타입 ───────────────────────────────────────
 export type PlanModalState =
@@ -56,16 +58,6 @@ const PlanChangeRow = ({ from, to }: { from: PlanDomain; to: PlanDomain }) => (
   </div>
 );
 
-const SinglePlanCard = ({ plan }: { plan: PlanDomain }) => (
-  <div className='bg-brand-500/5 border-brand-500/10 rounded-xl border p-4 text-center'>
-    <p className='typo-caption-12 text-muted-foreground mb-1'>변경 플랜</p>
-    <p className='typo-heading-16'>{plan.name}</p>
-    <p className='typo-body-14 text-muted-foreground'>
-      월 {plan.monthlyPrice.toLocaleString()}원
-    </p>
-  </div>
-);
-
 const PaymentAmountBox = ({
   amount,
   caption,
@@ -98,11 +90,11 @@ const InstantAvailableBox = ({
     <div>
       <p className='typo-body-14 font-medium'>즉시 사용 가능</p>
       <p className='typo-caption-12 text-muted-foreground'>
-        업그레이드 시 {quota.toLocaleString()}건이 바로 제공됩니다
+        업그레이드 시 {quota.toLocaleString()}건이 바로 제공됩니다.
       </p>
       {showCancelNotice && (
         <p className='typo-caption-12 text-muted-foreground'>
-          해지 예약이 설정된 경우, 자동으로 취소됩니다
+          해지 예약이 설정된 경우, 자동으로 취소됩니다.
         </p>
       )}
     </div>
@@ -119,25 +111,48 @@ const NextBillingNoticeBox = ({
     <div>
       <p className='typo-body-14 font-medium'>다음 결제일 적용</p>
       <p className='typo-caption-12 text-muted-foreground'>
-        이전까지 현재 플랜을 계속해서 이용하실 수 있습니다
+        이전까지 현재 플랜을 계속해서 이용하실 수 있습니다.
       </p>
       {showCancelNotice && (
         <p className='typo-caption-12 text-muted-foreground'>
-          해지 예약이 설정된 경우, 자동으로 취소됩니다
+          해지 예약이 설정된 경우, 자동으로 취소됩니다.
         </p>
       )}
     </div>
   </div>
 );
 
-const NextBillingInfoBox = ({ plan }: { plan: PlanDomain }) => (
+const NextBillingInfoBox = ({
+  billingDate,
+  amount,
+  quotaLimit,
+  isLoading,
+}: {
+  billingDate?: Date | null;
+  amount: number;
+  quotaLimit: number;
+  isLoading?: boolean;
+}) => (
   <div className='bg-muted/40 space-y-2 rounded-xl p-4'>
     <p className='typo-caption-12 font-medium'>다음 결제 안내</p>
-    {/* TODO: 결제일은 API 연동 후 표시 */}
-    <InfoRow label='결제일'>{formatDate(new Date(), 'yyyy년 M월 d일')}</InfoRow>
-    <InfoRow label='결제 금액'>{plan.monthlyPrice.toLocaleString()}원</InfoRow>
+    <InfoRow label='결제일'>
+      {isLoading ? (
+        <Skeleton className='h-4 w-24' />
+      ) : billingDate ? (
+        formatDate(billingDate, 'yyyy년 M월 d일')
+      ) : (
+        '—'
+      )}
+    </InfoRow>
+    <InfoRow label='결제 금액'>
+      {isLoading ? (
+        <Skeleton className='h-4 w-16' />
+      ) : (
+        `${amount.toLocaleString()}원`
+      )}
+    </InfoRow>
     <InfoRow label='리플 제공 한도'>
-      {plan.monthlyReplyQuota.toLocaleString()}건 (전체)
+      {quotaLimit.toLocaleString()}건 (전체)
     </InfoRow>
   </div>
 );
@@ -147,6 +162,10 @@ interface ConfirmProps {
   plan: PlanDomain;
   onConfirm: () => void | Promise<void>;
   isPending?: boolean;
+  preview?: ChangePlanPreviewDomain | null;
+  isPreviewLoading?: boolean;
+  /** 현재 구독 종료일 — 다음 결제일 표시 용 (Subscribe/Upgrade) */
+  currentPeriodEnd?: Date | null;
 }
 
 interface ChangeConfirmProps extends ConfirmProps {
@@ -154,26 +173,47 @@ interface ChangeConfirmProps extends ConfirmProps {
   isCancelScheduled?: boolean;
 }
 
-const SubscribeConfirm = ({ plan, onConfirm, isPending }: ConfirmProps) => (
-  <>
-    <DialogHeader>
-      <DialogTitle className='typo-heading-20!'>
-        {plan.name} 플랜 구독
-      </DialogTitle>
-    </DialogHeader>
-    <div className='space-y-3'>
-      <SinglePlanCard plan={plan} />
-      <PaymentAmountBox amount={plan.monthlyPrice} />
-      <InstantAvailableBox quota={plan.monthlyReplyQuota} />
-      <NextBillingInfoBox plan={plan} />
-    </div>
-    <DialogFooter>
-      <Button onClick={onConfirm} isPending={isPending} className='w-full'>
-        구독하기
-      </Button>
-    </DialogFooter>
-  </>
-);
+const SubscribeConfirm = ({
+  plan,
+  onConfirm,
+  isPending,
+  preview,
+  isPreviewLoading,
+  currentPeriodEnd,
+}: ConfirmProps) => {
+  const nextPayment = preview?.nextPayment;
+  const instantQuota =
+    nextPayment?.immediateAvailableReplyQuota ?? plan.monthlyReplyQuota;
+  const payAmount = nextPayment?.amount ?? plan.monthlyPrice;
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className='typo-heading-20!'>
+          {plan.name} 플랜 구독
+        </DialogTitle>
+      </DialogHeader>
+      <div className='space-y-3'>
+        <PaymentAmountBox amount={payAmount} />
+        <InstantAvailableBox
+          quota={instantQuota}
+          showCancelNotice={preview?.cancelAtPeriodEndScheduled}
+        />
+        <NextBillingInfoBox
+          billingDate={currentPeriodEnd}
+          amount={plan.monthlyPrice}
+          quotaLimit={plan.monthlyReplyQuota}
+          isLoading={isPreviewLoading}
+        />
+      </div>
+      <DialogFooter>
+        <Button onClick={onConfirm} isPending={isPending} className='w-full'>
+          구독하기
+        </Button>
+      </DialogFooter>
+    </>
+  );
+};
 
 const UpgradeConfirm = ({
   currentPlan,
@@ -181,9 +221,17 @@ const UpgradeConfirm = ({
   onConfirm,
   isPending,
   isCancelScheduled,
+  preview,
+  isPreviewLoading,
+  currentPeriodEnd,
 }: ChangeConfirmProps) => {
-  // TODO: 차액은 API 응답값으로 교체
-  const diff = plan.monthlyPrice - currentPlan.monthlyPrice;
+  const nextPayment = preview?.nextPayment;
+  const diff =
+    nextPayment?.amount ?? plan.monthlyPrice - currentPlan.monthlyPrice;
+  const instantQuota =
+    nextPayment?.immediateAvailableReplyQuota ?? plan.monthlyReplyQuota;
+  const showCancelNotice =
+    preview?.cancelAtPeriodEndScheduled ?? isCancelScheduled;
 
   return (
     <>
@@ -196,13 +244,18 @@ const UpgradeConfirm = ({
         <PlanChangeRow from={currentPlan} to={plan} />
         <PaymentAmountBox
           amount={diff}
-          caption='※ 남은 기간에 대한 일할 계산 차액만 결제됩니다'
+          caption={`※ 남은 기간 ${preview?.remainingDays}일에 대한 일할 계산 차액만 결제됩니다.`}
         />
         <InstantAvailableBox
-          quota={plan.monthlyReplyQuota}
-          showCancelNotice={isCancelScheduled}
+          quota={instantQuota}
+          showCancelNotice={showCancelNotice}
         />
-        <NextBillingInfoBox plan={plan} />
+        <NextBillingInfoBox
+          billingDate={currentPeriodEnd}
+          amount={plan.monthlyPrice}
+          quotaLimit={plan.monthlyReplyQuota}
+          isLoading={isPreviewLoading}
+        />
       </div>
       <DialogFooter>
         <Button onClick={onConfirm} isPending={isPending} className='w-full'>
@@ -219,32 +272,49 @@ const DowngradeConfirm = ({
   onConfirm,
   isPending,
   isCancelScheduled,
-}: ChangeConfirmProps) => (
-  <>
-    <DialogHeader>
-      <DialogTitle className='typo-heading-20!'>
-        {plan.name.toUpperCase()} 플랜으로 변경
-      </DialogTitle>
-    </DialogHeader>
-    <div className='space-y-3'>
-      <PlanChangeRow from={currentPlan} to={plan} />
-      <NextBillingNoticeBox showCancelNotice={isCancelScheduled} />
-      <NextBillingInfoBox plan={plan} />
-    </div>
-    <DialogFooter>
-      <Button onClick={onConfirm} isPending={isPending} className='w-full'>
-        변경 예약하기
-      </Button>
-    </DialogFooter>
-  </>
-);
+  preview,
+  isPreviewLoading,
+}: ChangeConfirmProps) => {
+  const nextPayment = preview?.nextPayment;
+  const showCancelNotice =
+    preview?.cancelAtPeriodEndScheduled ?? isCancelScheduled;
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className='typo-heading-20!'>
+          {plan.name.toUpperCase()} 플랜으로 변경
+        </DialogTitle>
+      </DialogHeader>
+      <div className='space-y-3'>
+        <PlanChangeRow from={currentPlan} to={plan} />
+        <NextBillingNoticeBox showCancelNotice={showCancelNotice} />
+        <NextBillingInfoBox
+          billingDate={nextPayment?.billingDate}
+          amount={nextPayment?.amount ?? plan.monthlyPrice}
+          quotaLimit={nextPayment?.replyQuotaLimit ?? plan.monthlyReplyQuota}
+          isLoading={isPreviewLoading}
+        />
+      </div>
+      <DialogFooter>
+        <Button onClick={onConfirm} isPending={isPending} className='w-full'>
+          변경 예약하기
+        </Button>
+      </DialogFooter>
+    </>
+  );
+};
 
 const UpgradeSuccess = ({
   plan,
   onClose,
+  nextBillingDate,
+  instantQuota,
 }: {
   plan: PlanDomain;
   onClose: () => void;
+  nextBillingDate?: Date | null;
+  instantQuota?: number | null;
 }) => (
   <>
     <div className='flex flex-col items-center gap-3 py-4 text-center'>
@@ -256,7 +326,7 @@ const UpgradeSuccess = ({
         <p className='typo-body-14 text-muted-foreground mt-1'>
           지금 바로 {plan.name} 플랜의
           <br />
-          모든 기능을 사용하실 수 있습니다
+          모든 기능을 사용하실 수 있습니다.
         </p>
       </div>
     </div>
@@ -264,12 +334,13 @@ const UpgradeSuccess = ({
       <div className='text-center'>
         <p className='typo-caption-12 text-muted-foreground'>즉시 사용 가능</p>
         <p className='typo-heading-20 font-bold'>
-          {plan.monthlyReplyQuota.toLocaleString()}건
+          {(instantQuota ?? plan.monthlyReplyQuota).toLocaleString()}건
         </p>
       </div>
       <div className='border-muted border-t' />
-      {/* TODO: 결제일 / 결제 금액은 API 연동 후 표시 */}
-      <InfoRow label='다음 결제일'>—</InfoRow>
+      <InfoRow label='다음 결제일'>
+        {nextBillingDate ? formatDate(nextBillingDate, 'yyyy년 M월 d일') : '—'}
+      </InfoRow>
       <InfoRow label='다음 결제 금액'>
         {plan.monthlyPrice.toLocaleString()}원
       </InfoRow>
@@ -283,9 +354,11 @@ const UpgradeSuccess = ({
 const DowngradeSuccess = ({
   plan,
   onClose,
+  scheduledAt,
 }: {
   plan: PlanDomain;
   onClose: () => void;
+  scheduledAt?: Date | null;
 }) => (
   <>
     <div className='flex flex-col items-center gap-3 py-4 text-center'>
@@ -295,13 +368,14 @@ const DowngradeSuccess = ({
       <div>
         <p className='typo-heading-20 font-bold'>변경 예약 완료!</p>
         <p className='typo-body-14 text-muted-foreground mt-1'>
-          다음 결제일까지는 현재 플랜 이용 가능합니다
+          다음 결제일까지는 현재 플랜 이용 가능합니다.
         </p>
       </div>
     </div>
     <div className='bg-muted/40 space-y-1.5 rounded-xl p-4'>
-      {/* TODO: 결제일 / 결제 금액은 API 연동 후 표시 */}
-      <InfoRow label='다음 결제일'>—</InfoRow>
+      <InfoRow label='다음 결제일'>
+        {scheduledAt ? formatDate(scheduledAt, 'yyyy년 M월 d일') : '—'}
+      </InfoRow>
       <InfoRow label='다음 결제 금액'>
         {plan.monthlyPrice.toLocaleString()}원
       </InfoRow>
@@ -318,6 +392,12 @@ interface PlanChangeModalsProps {
   selectedPlan: PlanDomain;
   currentPlan: PlanDomain;
   isCancelScheduled?: boolean;
+  preview?: ChangePlanPreviewDomain | null;
+  isPreviewLoading?: boolean;
+  /** 현재 구독 종료일 — 업그레이드 confirm/success 다음 결제일 표시 용 */
+  currentPeriodEnd?: Date | null;
+  /** 다운그레이드 예약 시 전환 예정일 (ChangePlanDomain.scheduledAt) */
+  downgradeScheduledAt?: Date | null;
   onClose: () => void;
   onConfirm: () => void | Promise<void>;
   isConfirmPending?: boolean;
@@ -328,6 +408,10 @@ const PlanChangeModals = ({
   selectedPlan,
   currentPlan,
   isCancelScheduled,
+  preview,
+  isPreviewLoading,
+  currentPeriodEnd,
+  downgradeScheduledAt,
   onClose,
   onConfirm,
   isConfirmPending,
@@ -342,6 +426,9 @@ const PlanChangeModals = ({
             plan={selectedPlan}
             onConfirm={onConfirm}
             isPending={isConfirmPending}
+            preview={preview}
+            isPreviewLoading={isPreviewLoading}
+            currentPeriodEnd={currentPeriodEnd}
           />
         )}
         {state === 'upgrade' && (
@@ -351,6 +438,9 @@ const PlanChangeModals = ({
             onConfirm={onConfirm}
             isPending={isConfirmPending}
             isCancelScheduled={isCancelScheduled}
+            preview={preview}
+            isPreviewLoading={isPreviewLoading}
+            currentPeriodEnd={currentPeriodEnd}
           />
         )}
         {state === 'downgrade' && (
@@ -360,13 +450,24 @@ const PlanChangeModals = ({
             onConfirm={onConfirm}
             isPending={isConfirmPending}
             isCancelScheduled={isCancelScheduled}
+            preview={preview}
+            isPreviewLoading={isPreviewLoading}
           />
         )}
         {state === 'upgradeSuccess' && (
-          <UpgradeSuccess plan={selectedPlan} onClose={onClose} />
+          <UpgradeSuccess
+            plan={selectedPlan}
+            onClose={onClose}
+            nextBillingDate={currentPeriodEnd}
+            instantQuota={preview?.nextPayment.immediateAvailableReplyQuota}
+          />
         )}
         {state === 'downgradeSuccess' && (
-          <DowngradeSuccess plan={selectedPlan} onClose={onClose} />
+          <DowngradeSuccess
+            plan={selectedPlan}
+            onClose={onClose}
+            scheduledAt={downgradeScheduledAt}
+          />
         )}
       </DialogContent>
     </Dialog>

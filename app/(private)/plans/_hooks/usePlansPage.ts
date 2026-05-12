@@ -12,11 +12,13 @@ import {
   useChangePlan,
   useDanalCheckout,
   usePlans,
+  usePreviewChangePlan,
   useReactivatePlan,
   useUserPlan,
 } from '@/hooks';
 import { UserStore } from '@/store/userStore';
 import type { PlanDomain } from '@/types';
+import type { ChangePlanDomain } from '@/types/domain/user';
 import { SubscriptionStatus } from '@/types/enums';
 
 export const usePlansPage = () => {
@@ -38,6 +40,19 @@ export const usePlansPage = () => {
   // 모달 상태
   const [modalState, setModalState] = useState<PlanModalState | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<PlanDomain | null>(null);
+  const [changeResult, setChangeResult] = useState<ChangePlanDomain | null>(
+    null
+  );
+
+  // 플랜 변경 미리보기 — 결제 확정 모달(subscribe/upgrade/downgrade) 진입 시에만 조회
+  const isPreviewable =
+    modalState === 'subscribe' ||
+    modalState === 'upgrade' ||
+    modalState === 'downgrade';
+  const { data: preview, isLoading: isPreviewLoading } = usePreviewChangePlan(
+    selectedPlan?.id ?? null,
+    isPreviewable
+  );
 
   // 뮤테이션
   const { mutateAsync: changePlan, isPending: isChangePlanPending } =
@@ -52,6 +67,7 @@ export const usePlansPage = () => {
   const closeModal = () => {
     setModalState(null);
     setSelectedPlan(null);
+    setChangeResult(null);
   };
 
   const openPlanSelection = (plan: PlanDomain) => {
@@ -76,7 +92,8 @@ export const usePlansPage = () => {
 
     if (modalState === 'downgrade') {
       try {
-        await changePlan(selectedPlan.id);
+        const result = await changePlan(selectedPlan.id);
+        setChangeResult(result);
         setModalState('downgradeSuccess');
       } catch {
         toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
@@ -89,10 +106,12 @@ export const usePlansPage = () => {
     //   → userPlan 폴링/SSE로 결과 대기 (현 구현은 결과 토스트만, 후속 SSE 연동 시 갱신)
     // - paymentPending=false (빌링키 X): orderId 발급 → 다날 결제창(팝업) 진입
     try {
-      const { orderId, paymentPending } = await changePlan(selectedPlan.id);
+      const result = await changePlan(selectedPlan.id);
+      const { orderId, paymentPending } = result;
 
       if (paymentPending) {
         // TODO: userPlan SSE/폴링 결과 수신 후 success 모달 전환
+        setChangeResult(result);
         setModalState('upgradeSuccess');
         return;
       }
@@ -107,6 +126,7 @@ export const usePlansPage = () => {
       });
 
       if (success) {
+        setChangeResult(result);
         setModalState('upgradeSuccess');
       } else {
         closeModal();
@@ -150,6 +170,9 @@ export const usePlansPage = () => {
     // 모달
     modalState,
     selectedPlan,
+    preview,
+    isPreviewLoading,
+    changeResult,
     isConfirmPending: isChangePlanPending || isCheckoutPending,
     isKeepSubscriptionPending: isReactivatePending,
     // 액션

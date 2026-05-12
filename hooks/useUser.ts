@@ -18,6 +18,7 @@ import {
   getNotificationSettings,
   getUser,
   getUserPlan,
+  previewChangePlan,
   reactivatePlan,
   requestReceipt,
   updateNotificationSettings,
@@ -35,6 +36,17 @@ export const useUserPlan = () =>
   useQuery({
     queryKey: queryKeys.user.plan(),
     queryFn: getUserPlan,
+  });
+
+export const usePreviewChangePlan = (
+  planId: number | null,
+  enabled: boolean = true
+) =>
+  useQuery({
+    queryKey: queryKeys.user.planPreview(planId ?? 0),
+    queryFn: () => previewChangePlan(planId as number),
+    enabled: enabled && planId != null,
+    staleTime: 30 * 1000,
   });
 
 export const useNotificationSettings = () =>

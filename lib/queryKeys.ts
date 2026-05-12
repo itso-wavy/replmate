@@ -5,6 +5,7 @@ export const queryKeys = {
     all: () => ['user'] as const,
     me: () => ['user', 'me'] as const,
     plan: () => ['user', 'plan'] as const,
+    planPreview: (planId: number) => ['user', 'plan', 'preview', planId] as const,
     notifications: () => ['user', 'notifications'] as const,
   },
   stores: {

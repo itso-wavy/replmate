@@ -26,6 +26,9 @@ const PlansPage = () => {
     // 모달
     modalState,
     selectedPlan,
+    preview,
+    isPreviewLoading,
+    changeResult,
     isConfirmPending,
     isKeepSubscriptionPending,
     // 액션
@@ -96,6 +99,10 @@ const PlansPage = () => {
           currentPlan={userPlan!.plan}
           selectedPlan={selectedPlan}
           isCancelScheduled={isCancelScheduled}
+          preview={preview}
+          isPreviewLoading={isPreviewLoading}
+          currentPeriodEnd={userPlan?.subscription.currentPeriodEnd}
+          downgradeScheduledAt={changeResult?.scheduledAt}
           onClose={closeModal}
           onConfirm={handleConfirm}
           isConfirmPending={isConfirmPending}
