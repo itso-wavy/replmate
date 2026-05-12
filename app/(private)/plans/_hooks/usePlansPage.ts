@@ -65,9 +65,12 @@ export const usePlansPage = () => {
     useDanalCheckout();
 
   const closeModal = () => {
+    const wasSuccess =
+      modalState === 'upgradeSuccess' || modalState === 'downgradeSuccess';
     setModalState(null);
     setSelectedPlan(null);
     setChangeResult(null);
+    if (wasSuccess) router.push(ROUTES.SUBSCRIBE);
   };
 
   const openPlanSelection = (plan: PlanDomain) => {

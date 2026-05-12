@@ -75,7 +75,11 @@ export const useChangePlan = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (planId: number) => changePlan(planId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+    onSuccess: () =>
+      qc.invalidateQueries({
+        queryKey: queryKeys.user.plan(),
+        exact: true,
+      }),
   });
 };
 
@@ -83,7 +87,11 @@ export const useCancelPlan = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: cancelPlan,
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+    onSuccess: () =>
+      qc.invalidateQueries({
+        queryKey: queryKeys.user.plan(),
+        exact: true,
+      }),
   });
 };
 
@@ -91,7 +99,11 @@ export const useReactivatePlan = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: reactivatePlan,
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+    onSuccess: () =>
+      qc.invalidateQueries({
+        queryKey: queryKeys.user.plan(),
+        exact: true,
+      }),
   });
 };
 
@@ -99,7 +111,11 @@ export const useCancelDowngrade = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: cancelDowngrade,
-    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.user.plan() }),
+    onSuccess: () =>
+      qc.invalidateQueries({
+        queryKey: queryKeys.user.plan(),
+        exact: true,
+      }),
   });
 };
 
