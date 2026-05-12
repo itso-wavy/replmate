@@ -1,13 +1,21 @@
 import type {
+  CancelDowngradeResponse,
+  CancelSubscriptionResponse,
+  ChangePlanNextPayment,
+  ChangePlanPreviewResponse,
+  ChangePlanResponse,
   DowngradeInfoDto,
   NotificationSettingsDto,
-  ReceiptRequestDto,
+  PaymentMethodDto,
+  ReactivateSubscriptionResponse,
+  ReceiptRequestResultDto,
   SubscriptionDto,
   UserDto,
 } from '@/types/api/user';
 import { AuthProvider, SubscriptionStatus } from '@/types/enums';
 
 import type { PlanDomain } from './plan';
+import { toPlanDomain } from './plan';
 
 // Re-export PlanDomain for convenience
 export type { PlanDomain };
@@ -55,13 +63,22 @@ export interface DowngradeDomain {
 }
 
 /**
- * 사용자 플랜 정보 (플랜 + 구독 정보)
+ * 등록된 결제수단 (다날 BillKey 표시 정보)
+ */
+export interface PaymentMethodDomain {
+  cardCompany: string | null;
+  cardNumber: string | null;
+}
+
+/**
+ * 사용자 플랜 정보 (플랜 + 구독 + 결제수단)
  */
 export interface UserPlanDomain {
   planStatus: SubscriptionStatus;
   plan: PlanDomain;
   subscription: SubscriptionDomain;
   downgrade: DowngradeDomain | null;
+  paymentMethod: PaymentMethodDomain | null;
 }
 
 /**
@@ -91,6 +108,72 @@ export interface NotificationSettingsDomain {
   emailEnabled: boolean;
   smsEnabled: boolean;
   updatedAt: Date;
+}
+
+/**
+ * 플랜 변경 응답 도메인 (업그레이드 / 다운그레이드 통합)
+ */
+export interface ChangePlanDomain {
+  isUpgrade: boolean;
+  fromPlanName: string;
+  toPlanName: string;
+  orderId: number | null;
+  amount: number | null;
+  /** @deprecated 결제창 진입 경로는 별도 분기로 결정 */
+  paymentUrl: string | null;
+  paymentPending: boolean;
+  scheduledAt: Date | null;
+}
+
+/**
+ * 플랜 변경 미리보기 - 다음 결제 안내
+ */
+export interface ChangePlanNextPaymentDomain {
+  billingDate: Date;
+  amount: number;
+  replyQuotaLimit: number;
+  immediateAvailableReplyQuota: number | null;
+}
+
+/**
+ * 플랜 변경 미리보기 응답 도메인
+ */
+export interface ChangePlanPreviewDomain {
+  isUpgrade: boolean;
+  currentPlan: PlanDomain;
+  targetPlan: PlanDomain;
+  cancelAtPeriodEndScheduled: boolean;
+  nextPayment: ChangePlanNextPaymentDomain;
+  remainingDays: number | null;
+}
+
+/**
+ * 구독 취소 응답 도메인
+ */
+export interface CancelSubscriptionDomain {
+  subscriptionId: number;
+  planName: string;
+  currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
+}
+
+/**
+ * 구독 재활성화 응답 도메인
+ */
+export interface ReactivateSubscriptionDomain {
+  subscriptionId: number;
+  planName: string;
+  currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
+}
+
+/**
+ * 다운그레이드 예약 취소 응답 도메인
+ */
+export interface CancelDowngradeDomain {
+  subscriptionId: number;
+  planName: string;
+  currentPeriodEnd: Date;
 }
 
 // ==========================================================
@@ -124,10 +207,32 @@ export function toSubscriptionDomain(dto: SubscriptionDto): SubscriptionDomain {
 }
 
 /**
- * ReceiptRequestDto → ReceiptRequestDomain 변환
+ * DowngradeInfoDto → DowngradeDomain 변환
+ */
+export function toDowngradeDomain(dto: DowngradeInfoDto): DowngradeDomain {
+  return {
+    plan: toPlanDomain(dto.plan),
+    effectiveDate: new Date(dto.effectiveDate),
+  };
+}
+
+/**
+ * PaymentMethodDto → PaymentMethodDomain 변환
+ */
+export function toPaymentMethodDomain(
+  dto: PaymentMethodDto
+): PaymentMethodDomain {
+  return {
+    cardCompany: dto.cardCompany,
+    cardNumber: dto.cardNumber,
+  };
+}
+
+/**
+ * ReceiptRequestResultDto → ReceiptRequestDomain 변환
  */
 export function toReceiptRequestDomain(
-  dto: ReceiptRequestDto
+  dto: ReceiptRequestResultDto
 ): ReceiptRequestDomain {
   return {
     ...dto,
@@ -145,5 +250,81 @@ export function toNotificationSettingsDomain(
   return {
     ...dto,
     updatedAt: new Date(dto.updatedAt),
+  };
+}
+
+/**
+ * ChangePlanResponse → ChangePlanDomain 변환
+ */
+export function toChangePlanDomain(dto: ChangePlanResponse): ChangePlanDomain {
+  return {
+    ...dto,
+    scheduledAt: dto.scheduledAt ? new Date(dto.scheduledAt) : null,
+  };
+}
+
+/**
+ * ChangePlanNextPayment → ChangePlanNextPaymentDomain 변환
+ */
+export function toChangePlanNextPaymentDomain(
+  dto: ChangePlanNextPayment
+): ChangePlanNextPaymentDomain {
+  return {
+    billingDate: new Date(dto.billingDate),
+    amount: dto.amount,
+    replyQuotaLimit: dto.replyQuotaLimit,
+    immediateAvailableReplyQuota: dto.immediateAvailableReplyQuota,
+  };
+}
+
+/**
+ * ChangePlanPreviewResponse → ChangePlanPreviewDomain 변환
+ */
+export function toChangePlanPreviewDomain(
+  dto: ChangePlanPreviewResponse
+): ChangePlanPreviewDomain {
+  return {
+    isUpgrade: dto.isUpgrade,
+    currentPlan: toPlanDomain(dto.currentPlan),
+    targetPlan: toPlanDomain(dto.targetPlan),
+    cancelAtPeriodEndScheduled: dto.cancelAtPeriodEndScheduled,
+    nextPayment: toChangePlanNextPaymentDomain(dto.nextPayment),
+    remainingDays: dto.remainingDays,
+  };
+}
+
+/**
+ * CancelSubscriptionResponse → CancelSubscriptionDomain 변환
+ */
+export function toCancelSubscriptionDomain(
+  dto: CancelSubscriptionResponse
+): CancelSubscriptionDomain {
+  return {
+    ...dto,
+    currentPeriodEnd: new Date(dto.currentPeriodEnd),
+  };
+}
+
+/**
+ * ReactivateSubscriptionResponse → ReactivateSubscriptionDomain 변환
+ */
+export function toReactivateSubscriptionDomain(
+  dto: ReactivateSubscriptionResponse
+): ReactivateSubscriptionDomain {
+  return {
+    ...dto,
+    currentPeriodEnd: new Date(dto.currentPeriodEnd),
+  };
+}
+
+/**
+ * CancelDowngradeResponse → CancelDowngradeDomain 변환
+ */
+export function toCancelDowngradeDomain(
+  dto: CancelDowngradeResponse
+): CancelDowngradeDomain {
+  return {
+    ...dto,
+    currentPeriodEnd: new Date(dto.currentPeriodEnd),
   };
 }
