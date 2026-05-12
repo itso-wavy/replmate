@@ -12,6 +12,7 @@ import type { ReplyDomain, UsageQuotaSubscriptionDomain } from '@/types';
 export function useDashboardPage() {
   const { data: myStoresData, isLoading: isStoresLoading } = useMyStores();
   const stores = myStoresData?.stores;
+  const storeQuota = myStoresData?.storeQuota;
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: usageQuota, isLoading: isQuotaLoading } = useUsageQuota();
 
@@ -40,10 +41,11 @@ export function useDashboardPage() {
       currentPeriodEnd: sub.currentPeriodEnd,
       replyQuotaTotal: plan.monthlyReplyQuota,
       replyQuotaUsed: plan.monthlyReplyQuota - usageQuota.remaining,
-      storeQuotaTotal: plan.maxStoreCount,
-      storeQuotaUsed: activeStores.length,
+      // 백엔드 storeQuota 우선. 없으면 plan/active stores 폴백.
+      storeQuotaTotal: storeQuota?.max ?? plan.maxStoreCount,
+      storeQuotaUsed: storeQuota?.used ?? activeStores.length,
     };
-  }, [userPlan, usageQuota, activeStores]);
+  }, [userPlan, usageQuota, storeQuota, activeStores]);
 
   const recentReplies = useMemo<ReplyDomain[]>(
     () => recentRepliesData?.items ?? [],

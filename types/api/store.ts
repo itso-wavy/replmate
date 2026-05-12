@@ -89,12 +89,20 @@ export interface UpdateVerificationImageRequest {
 // 내 스토어 (Users/me)
 // ==========================================================
 // GET /api/v1/users/me/stores 내 스토어 목록 응답
+// 스토어 등록 quota 정보
+// - max: 플랜 허용 스토어 수
+// - registered: 등록된 스토어 수 (PENDING + ACTIVE + DEACTIVATING)
+// - used: 한도 차감 스토어 수 (현재 registered와 동일, 추후 INACTIVE 포함 시 분리)
+// - remaining: 남은 등록 가능 수 (max - used)
 export interface StoreQuotaDto {
-  maxStoreCount: number;
-  currentStoreCount: number;
+  max: number;
+  registered: number;
+  used: number;
   remaining: number;
 }
 
+// stores: visible 스토어 (REJECTED 포함 / INACTIVE·UNLINKED·DELETED 제외)
+// → stores.length ≠ storeQuota.registered. "등록 수" UI는 storeQuota.registered 사용.
 export interface MyStoresResponseDto {
   storeQuota: StoreQuotaDto;
   stores: StoreDto[];

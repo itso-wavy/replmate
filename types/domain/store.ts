@@ -106,14 +106,24 @@ export function toStoreDomainList(dtos: StoreDto[]): StoreDomain[] {
 }
 
 /**
- * 내 스토어 목록 + 쿼터 정보
+ * 스토어 등록 quota Domain 타입
+ * - max: 플랜 허용 스토어 수
+ * - registered: 등록된 스토어 수 (PENDING + ACTIVE + DEACTIVATING)
+ * - used: 한도 차감 스토어 수 (현재 registered와 동일, 추후 INACTIVE 포함 시 분리)
+ * - remaining: 남은 등록 가능 수 (max - used)
  */
 export interface StoreQuota {
-  maxStoreCount: number;
-  currentStoreCount: number;
+  max: number;
+  registered: number;
+  used: number;
   remaining: number;
 }
 
+/**
+ * 내 스토어 목록 + 쿼터 정보
+ * stores 는 visible 스토어 (REJECTED 포함 / INACTIVE·UNLINKED·DELETED 제외).
+ * "등록 스토어 수" 표시는 storeQuota.registered 사용 — stores.length 와 다름.
+ */
 export interface MyStoresResult {
   stores: StoreDomain[];
   storeQuota: StoreQuota;
@@ -122,7 +132,12 @@ export interface MyStoresResult {
 export function toMyStoresResult(dto: MyStoresResponseDto): MyStoresResult {
   return {
     stores: dto.stores.map(toStoreDomain),
-    storeQuota: dto.storeQuota,
+    storeQuota: {
+      max: dto.storeQuota.max,
+      registered: dto.storeQuota.registered,
+      used: dto.storeQuota.used,
+      remaining: dto.storeQuota.remaining,
+    },
   };
 }
 

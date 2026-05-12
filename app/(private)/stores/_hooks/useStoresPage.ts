@@ -1,30 +1,23 @@
 import { useMemo } from 'react';
 
-import { dummyStores } from '@/dummy';
 import { useMyStores } from '@/hooks/useStores';
-import { useUserPlan } from '@/hooks/useUser';
-import { getRegisteredStoreList, sortStoreList } from '@/lib/utils';
+import { sortStoreList } from '@/lib/utils';
 
 export function useStoresPage() {
   const { data: myStoresData, isLoading: isStoresLoading } = useMyStores();
   const stores = myStoresData?.stores ?? [];
-  const { data: planData, isLoading: isPlanLoading } = useUserPlan();
+  const storeQuota = myStoresData?.storeQuota;
   const sortedStores = useMemo(() => sortStoreList(stores), [stores]);
 
-  const registeredStoreCount = useMemo(
-    () => getRegisteredStoreList(stores).length,
-    [stores]
-  );
+  // 백엔드 quota 가 진실. stores.length 와 다를 수 있음 (visible vs registered)
+  const registeredStoreCount = storeQuota?.registered ?? 0;
+  const storeQuotaTotal = storeQuota?.max ?? 0;
 
-  const storeQuotaTotal = planData?.plan.maxStoreCount ?? 0;
+  // 플랜 다운그레이드로 한도를 초과한 상태 (조정 필요)
+  const needsAdjustment = storeQuota ? storeQuota.used > storeQuota.max : false;
 
-  // 플랜 다운그레이드로 인해 등록 쇼핑몰 수가 한도를 초과한 상태 (조정 필요)
-  const needsAdjustment =
-    storeQuotaTotal > 0 && registeredStoreCount > storeQuotaTotal;
-
-  // 쇼핑몰 추가 버튼: 한도에 도달했거나 초과한 상태
-  const storeLimitExceeded =
-    storeQuotaTotal > 0 && registeredStoreCount >= storeQuotaTotal;
+  // 쇼핑몰 추가 버튼: 한도 도달/초과
+  const storeLimitExceeded = storeQuota ? storeQuota.remaining <= 0 : false;
 
   return {
     sortedStores,
@@ -32,6 +25,6 @@ export function useStoresPage() {
     storeQuotaTotal,
     needsAdjustment,
     storeLimitExceeded,
-    isLoading: isStoresLoading || isPlanLoading,
+    isLoading: isStoresLoading,
   };
 }
