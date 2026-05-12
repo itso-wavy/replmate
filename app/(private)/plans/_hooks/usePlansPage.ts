@@ -84,9 +84,23 @@ export const usePlansPage = () => {
       return;
     }
 
-    // subscribe / upgrade: orderId 발급 → 다날 결제창 (팝업)
+    // subscribe / upgrade
+    // - paymentPending=true (활성 빌링키 O): 서버가 OTBILL 비동기 결제 진행 중. 결제창 진입 금지
+    //   → userPlan 폴링/SSE로 결과 대기 (현 구현은 결과 토스트만, 후속 SSE 연동 시 갱신)
+    // - paymentPending=false (빌링키 X): orderId 발급 → 다날 결제창(팝업) 진입
     try {
-      const { orderId } = await changePlan(selectedPlan.id);
+      const { orderId, paymentPending } = await changePlan(selectedPlan.id);
+
+      if (paymentPending) {
+        // TODO: userPlan SSE/폴링 결과 수신 후 success 모달 전환
+        setModalState('upgradeSuccess');
+        return;
+      }
+
+      if (orderId == null) {
+        throw new Error('주문 ID가 없어 결제창을 열 수 없습니다.');
+      }
+
       const { success } = await danalCheckout({
         orderId,
         planId: selectedPlan.id,

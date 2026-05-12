@@ -43,6 +43,7 @@ export const dummyUserPlanUnverified: UserPlanDomain = {
     canceledAt: null,
   },
   downgrade: null,
+  paymentMethod: null,
 };
 
 // FREE 플랜
@@ -73,6 +74,7 @@ export const dummyUserPlanFree: UserPlanDomain = {
     canceledAt: null,
   },
   downgrade: null,
+  paymentMethod: null,
 };
 
 // Active 플랜
@@ -103,6 +105,7 @@ export const dummyUserPlanActive: UserPlanDomain = {
     canceledAt: null,
   },
   downgrade: null,
+  paymentMethod: null,
 };
 
 // PAID_CANCEL_SCHEDULED (해지 예정)
@@ -133,6 +136,7 @@ export const dummyUserPlanCancelScheduled: UserPlanDomain = {
     canceledAt: new Date('2026-04-10T00:00:00Z'),
   },
   downgrade: null,
+  paymentMethod: null,
 };
 
 // PAID_PLAN_DOWNGRADE_SCHEDULED (다운그레이드 예정)
@@ -180,6 +184,7 @@ export const dummyUserPlanDowngradeScheduled: UserPlanDomain = {
     },
     effectiveDate: new Date('2026-05-04T00:00:00Z'),
   },
+  paymentMethod: null,
 };
 
 export const dummyUsageRemaining = 270;
