@@ -39,8 +39,14 @@ export function submitDanalAuthFormToPopup(auth: DanalAuthResponseDto) {
   document.body.removeChild($form);
 }
 
+// 팝업 종료 신호를 기다린다.
+// resolve 조건:
+//   1) DANAL_PAYMENT_DONE postMessage 수신 (same-origin callback 경로)
+//   2) popup.closed 감지 (cross-origin redirect로 callback page 안 거치고 자동 close된 경우)
+// 결제 성공/실패 판정은 호출 측에서 fresh userPlan diff(planStatus/plan.id 변화)로 수행.
+// 사용자가 임의로 close해도 동일하게 resolve → fresh fetch 결과 변화 없으면 미완료 처리.
 export function waitForDanalResult(popup: Window): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const cleanup = () => {
       window.removeEventListener('message', handler);
       clearInterval(closedCheck);
@@ -54,7 +60,7 @@ export function waitForDanalResult(popup: Window): Promise<void> {
     const closedCheck = setInterval(() => {
       if (popup.closed) {
         cleanup();
-        reject(new Error('결제가 취소되었습니다.'));
+        resolve();
       }
     }, 500);
     window.addEventListener('message', handler);

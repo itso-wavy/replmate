@@ -5,8 +5,9 @@ import {
   submitDanalAuthFormToPopup,
   waitForDanalResult,
 } from '@/lib/danal';
+import { PAYMENT_ENDPOINTS } from '@/lib/endpoints';
 import { queryKeys } from '@/lib/queryKeys';
-import { getDanalTestPaymentUrl, startDanalAuth } from '@/services/payment';
+import { startDanalAuth } from '@/services/payment';
 import { getUserPlan } from '@/services/user';
 import type { UserPlanDomain } from '@/types/domain/user';
 
@@ -20,9 +21,9 @@ export interface DanalCheckoutVars {
 // 다날 결제 (PC 팝업 방식).
 // 1) 빈 팝업창 선개방 (popup blocker 회피)
 // 2) 모드별 처리:
-//    - 테스트: GET /payments/danal/test?redirect=false → JSON {url} → 팝업 location 설정
+//    - 테스트: 팝업이 GET /payments/danal/test?redirect=true 직접 호출 → 백엔드 302 → PG 결제창
 //    - 운영: POST /payments/danal/auth/{orderId} → form POST to startUrl with target=팝업
-// 3) 팝업 내부에서 결제 → 백엔드 callback → /payments/danal/callback로 redirect → postMessage + close
+// 3) 팝업 내부에서 결제 → 백엔드 callback 303 → /payments/danal/callback → postMessage + close
 // 4) 부모창은 메시지 수신 후 userPlan 재조회 → planStatus / plan.id 변화로 성공/실패 판정
 export const useDanalCheckout = () => {
   const qc = useQueryClient();
@@ -41,8 +42,11 @@ export const useDanalCheckout = () => {
 
       try {
         if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
-          const url = await getDanalTestPaymentUrl({ planId });
-          popup.location.href = url;
+          const url = new URL(PAYMENT_ENDPOINTS.DANAL_TEST);
+          url.searchParams.set('redirect', 'true');
+          if (planId !== undefined)
+            url.searchParams.set('plan_id', String(planId));
+          popup.location.href = url.toString();
         } else {
           const auth = await startDanalAuth(orderId);
           submitDanalAuthFormToPopup(auth);
