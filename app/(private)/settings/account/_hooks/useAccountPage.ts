@@ -12,6 +12,7 @@ import {
   useDeleteUser,
   useNotificationSettings,
   useUpdateNotificationSettings,
+  useUser,
   useUserPlan,
   useVerifyIdentity,
 } from '@/hooks/useUser';
@@ -20,7 +21,7 @@ import { UserStore } from '@/store/userStore';
 
 export function useAccountPage() {
   const router = useRouter();
-  const user = UserStore.useUser();
+  const { data: user } = useUser();
   const { clearUser } = UserStore.useActions();
 
   // 구독 상태

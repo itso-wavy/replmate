@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/constants/nav-menu';
 import { dummyRecentReplies } from '@/dummy/replies';
-import { UserStore } from '@/store/userStore';
+import { useUser } from '@/hooks/useUser';
 
 import { DashboardLayout } from '../_components';
 import {
@@ -21,7 +21,7 @@ import { useDashboardPage } from './_hooks/useDashboardPage';
 
 const DashboardPage = () => {
   const router = useRouter();
-  const user = UserStore.useUser();
+  const { data: user } = useUser();
 
   const { stores, subscription, todayReplyCount, recentReplies, isLoading } =
     useDashboardPage();

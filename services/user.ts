@@ -183,30 +183,16 @@ export async function updateNotificationSettings(
 // ==========================================================
 // 본인인증 (KCP)
 // ==========================================================
-
 /**
  * KCP 본인확인 거래등록 (1단계)
- * - 응답의 callUrl에 regCertKey를 form POST하여 KCP 인증창 호출
- * - 인증 완료 시 백엔드가 환경별 frontend URL로 RedirectResponse 처리
+  - 운영 환경(trade-reg): 응답의 callUrl에 registration certificate key를 form-POST하여 KCP 인증창 호출
+ * 인증 완료 시 백엔드가 환경별 frontend URL로 RedirectResponse 처리
+  - 운영 환경(trade-reg): RedirectResponse + app.frontend_url
+  - 테스트 환경(/kcp/test): Redis에 redirect 플래그 저장 → 콜백에서 꺼내 분기
  */
 export async function verifyIdentityKcpTradeReg(): Promise<KcpTradeRegDto> {
   const response = await api.post<KcpTradeRegDto>(
     USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TRADE_REG
   );
   return response.data;
-}
-
-/**
- * KCP 본인확인 테스트 URL 조회 (dev/test 전용, stg/prod 404)
- * - trade-reg(Trade Registration)를 내부적으로 실행 + Redis 저장 후 KCP test-page absolute URL을 응답
- * - redirect=false로 호출하여 JSON {url} 형식으로 받음 → 팝업창에 직접 설정
- * - page_submit_yn=N: 팝업 모드 (PC)
- */
-export async function getKcpTestVerifyUrl(): Promise<string> {
-  const url = new URL(USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TEST);
-  url.searchParams.set('redirect', 'false');
-  url.searchParams.set('page_submit_yn', 'N');
-
-  const response = await api.get<{ url: string }>(url.toString());
-  return response.data.url;
 }

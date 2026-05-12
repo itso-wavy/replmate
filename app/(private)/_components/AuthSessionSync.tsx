@@ -15,7 +15,15 @@ function AuthSessionSync() {
   useEffect(() => {
     if (status === 'loading') return;
     if (session?.user && !isAuthenticated) {
-      setUser(toUserDomain(session.user));
+      // session에는 isVerified/verifiedAt 없음 (single source = /users/me).
+      // Zustand UserDomain 타입 충족용 기본값 보강. 이 값은 신뢰하지 말 것.
+      setUser(
+        toUserDomain({
+          ...session.user,
+          isVerified: false,
+          verifiedAt: null,
+        })
+      );
     } else if (status === 'unauthenticated' && isAuthenticated) {
       console.warn('[auth] NextAuth 세션 없음 → clearUser', {
         status,

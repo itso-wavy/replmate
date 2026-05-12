@@ -39,10 +39,14 @@ export function submitKcpAuthFormToPopup(trade: KcpTradeRegDto) {
   document.body.removeChild($form);
 }
 
-// 팝업이 보낸 KCP_VERIFY_DONE 메시지를 기다린다.
-// 사용자가 인증 끝내지 않고 팝업을 그냥 닫으면 reject.
+// 팝업 종료 신호를 기다린다.
+// resolve 조건:
+//   1) KCP_VERIFY_DONE postMessage 수신 (same-origin callback 경로)
+//   2) popup.closed 감지 (cross-origin redirect로 callback page 안 거치고 자동 close된 경우)
+// 인증 성공/실패 판정은 호출 측에서 fresh `/users/me` isVerified 값으로 수행.
+// 사용자가 임의로 close해도 동일하게 resolve → fresh fetch 결과 isVerified=false면 실패 처리.
 export function waitForKcpResult(popup: Window): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const cleanup = () => {
       window.removeEventListener('message', handler);
       clearInterval(closedCheck);
@@ -58,7 +62,7 @@ export function waitForKcpResult(popup: Window): Promise<void> {
     const closedCheck = setInterval(() => {
       if (popup.closed) {
         cleanup();
-        reject(new Error('인증 창이 닫혔습니다.'));
+        resolve();
       }
     }, 500);
 

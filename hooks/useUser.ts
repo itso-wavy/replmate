@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 
+import { USER_ENDPOINTS } from '@/lib/endpoints';
 import {
   openKcpPopup,
   submitKcpAuthFormToPopup,
@@ -14,7 +15,6 @@ import {
   cancelPlan,
   changePlan,
   deleteUser,
-  getKcpTestVerifyUrl,
   getNotificationSettings,
   getUser,
   getUserPlan,
@@ -108,9 +108,9 @@ export const useAgreeTerms = () => {
 // KCP 본인확인 (PC 팝업 방식).
 // 1) 빈 팝업창 선개방 (popup blocker 회피)
 // 2) 모드별 처리:
-//    - 테스트: GET /verify-identity/kcp/test (redirect=false) → JSON {url} → 팝업 location 설정
+//    - 테스트: 팝업이 GET /verify-identity/kcp/test?redirect=true 직접 호출 → 백엔드 302 → KCP 인증창
 //    - 운영: POST /verify-identity/kcp/trade-reg → form POST to callUrl with target=팝업
-// 3) 팝업 내부에서 인증 → 백엔드 callback → /auth/kcp/callback로 redirect → postMessage + close
+// 3) 팝업 내부에서 인증 → 백엔드 callback 303 → /auth/kcp/callback → postMessage + close
 // 4) 부모창은 메시지 수신 후 user 재조회 → fresh isVerified 변화로 성공/실패 판정
 export type VerifyIdentityResult = { success: boolean };
 
@@ -127,10 +127,12 @@ export const useVerifyIdentity = () => {
 
       const result = waitForKcpResult(popup);
 
+      const isTestMode = process.env.NEXT_PUBLIC_TEST_MODE === 'true';
       try {
-        if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
-          const url = await getKcpTestVerifyUrl();
-          popup.location.href = url;
+        if (isTestMode) {
+          const url = new URL(USER_ENDPOINTS.VERIFY_IDENTITY_KCP_TEST);
+          url.searchParams.set('page_submit_yn', 'Y');
+          popup.location.href = url.toString();
         } else {
           const trade = await verifyIdentityKcpTradeReg();
           submitKcpAuthFormToPopup(trade);

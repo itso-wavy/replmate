@@ -34,13 +34,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user as unknown as UserDto;
+        // isVerified/verifiedAt은 session에 저장하지 않음.
+        // single source of truth = GET /users/me (react-query useUser).
+        const { isVerified: _v, verifiedAt: _va, ...rest } =
+          user as unknown as UserDto;
+        token.user = rest as Omit<UserDto, 'isVerified' | 'verifiedAt'>;
       }
       return token;
     },
 
     async session({ session, token }) {
-      session.user = token.user as UserDto;
+      session.user = token.user as Omit<UserDto, 'isVerified' | 'verifiedAt'>;
       return session;
     },
   },
