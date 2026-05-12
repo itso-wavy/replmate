@@ -4,7 +4,6 @@ import type { PlanDto } from './plan';
 // ==========================================================
 // 사용자 (Users)
 // ==========================================================
-
 // GET /api/v1/users/me 유저 프로필 조회
 export interface UserDto {
   id: number;
@@ -27,7 +26,6 @@ export interface DowngradeInfoDto {
 }
 
 // 등록된 결제수단 (다날 BillKey 표시 정보)
-// 결제수단 변경 직후에는 카드사명/카드번호가 null일 수 있고 다음 정기결제(OTBILL) 성공 시 채워진다
 export interface PaymentMethodDto {
   cardCompany: string | null;
   cardNumber: string | null; // 마스킹 (예: "1111-11**-****-1111")
@@ -42,7 +40,6 @@ export interface UserPlanInfo {
 }
 
 // 스웨거 SubscriptionStatus enum: pending | active | canceled
-// (UserPlanInfo.planStatus의 PlanStatus와는 다른 enum — 혼동 주의)
 export interface SubscriptionDto {
   id: number;
   status: string;
@@ -60,7 +57,7 @@ export interface NotificationSettingsDto {
   updatedAt: string;
 }
 
-// POST /api/v1/users/me/receipt 영수증 요청 응답 (스웨거: ReceiptRequestResultDto)
+// POST /api/v1/users/me/receipt 영수증 요청 응답
 export interface ReceiptRequestResultDto {
   id: number;
   status: 'pending' | 'completed' | 'rejected';
@@ -73,7 +70,6 @@ export interface ReceiptRequestResultDto {
 export type ReceiptRequestDto = ReceiptRequestResultDto;
 
 // DELETE /api/v1/users/me 사용자 탈퇴 요청
-// 유료 구독 중 + 해지 예약 전이면 백엔드가 탈퇴 거부 → 해지 예약 후 재요청
 export interface DeleteUserRequest {
   forfeitSubscriptionAgreed: boolean;
 }
@@ -144,7 +140,6 @@ export interface ChangePlanPreviewResponse {
 }
 
 // POST /api/v1/users/me/verify-identity/kcp/trade-reg KCP 본인확인 거래등록 응답
-// 프론트는 callUrl로 regCertKey를 form POST해 KCP 인증창을 띄운다.
 export interface KcpTradeRegDto {
   ordrIdxx: string;
   callUrl: string;

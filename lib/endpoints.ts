@@ -39,6 +39,8 @@ export const USER_ENDPOINTS = {
   CANCEL_PLAN: `${API_BASE_V1}/users/me/plan`,
   REACTIVATE_PLAN: `${API_BASE_V1}/users/me/plan/reactivate`,
   CANCEL_DOWNGRADE: `${API_BASE_V1}/users/me/plan/cancel-downgrade`,
+  // 플랜 변경 미리보기 (업그레이드/다운그레이드 결제 금액 + 다음 결제일 안내)
+  CHANGE_PLAN_PREVIEW: `${API_BASE_V1}/users/me/plan/change-preview`,
 
   // 영수증 요청
   REQUEST_RECEIPT: `${API_BASE_V1}/users/me/receipt`,
@@ -85,6 +87,10 @@ export const PAYMENT_ENDPOINTS = {
   // 결제 완료 후 다날이 서버 `/danal/callback`으로 콜백 → 서버가 frontend로 redirect
   DANAL_AUTH: (orderId: string | number) =>
     `${API_BASE_V1}/payments/danal/auth/${orderId}`,
+  // 결제수단 변경 — 기존 빌링키 DELBILLKEY + 신규 AUTH(ISBILL=N)
+  // 응답은 DANAL_AUTH와 동일한 DanalAuthResponse → form POST로 결제창 진입
+  // 콜백 복귀: {frontend_url}/payments/danal/callback?status=success|error|cancel&orderId=...
+  METHOD_CHANGE: `${API_BASE_V1}/payments/method/change`,
   // [TEST] 다날 결제 시작 (개발/테스트 환경 전용, stg/prod 404)
   DANAL_TEST: `${API_BASE_V1}/payments/danal/test`,
 } as const;
