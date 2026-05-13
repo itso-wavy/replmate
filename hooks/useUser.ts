@@ -75,10 +75,15 @@ export const useChangePlan = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (planId: number) => changePlan(planId),
+    // refetchType: 'none' — /plans 페이지가 active observer일 때 즉시 refetch되면
+    // 다운그레이드 응답 직후 planStatus가 PAID_PLAN_DOWNGRADE_SCHEDULED로 바뀌어
+    // page guard(isDowngradeScheduled → notFound)가 success 모달 표시 전에 트리거됨.
+    // 사용자가 success 모달 닫고 /settings/subscribe 진입 시 stale 감지 → fresh fetch.
     onSuccess: () =>
       qc.invalidateQueries({
         queryKey: queryKeys.user.plan(),
         exact: true,
+        refetchType: 'none',
       }),
   });
 };
