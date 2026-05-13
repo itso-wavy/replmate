@@ -53,7 +53,7 @@ const SubscriptionInfo = ({
 }: SubscriptionInfoProps) => {
   const router = useRouter();
 
-  const { planStatus, plan, subscription, downgrade } = userPlan;
+  const { planStatus, plan, subscription, downgrade, paymentMethod } = userPlan;
 
   const isUnverified = planStatus === SubscriptionStatus.UNVERIFIED;
   const isFree = planStatus === SubscriptionStatus.FREE;
@@ -223,21 +223,22 @@ const SubscriptionInfo = ({
             ) ?? '-'}
           </InnerPageRow>
 
-          {isPaid && (
-            <InnerPageRow
-              label={
-                <div className='flex items-center'>
-                  <PiggyBank size={13} />
-                  <span className='ml-1'>결제 수단</span>
-                </div>
-              }
-              className='*:first:text-muted-foreground'
-            >
-              {/* FIXME: 결제 수단 실데이터 연동 필요:
-               **** {plan.paymentMethod.last4} ({plan.paymentMethod.brand}) */}
-              {'-'}
-            </InnerPageRow>
-          )}
+          {/* TODO: 결제 수단 변경시 변경한 수단의 정보가 보이지 않을 수 있음. 다날 정책 확인 중 */}
+          {isPaid &&
+            paymentMethod?.cardNumber &&
+            paymentMethod?.cardCompany && (
+              <InnerPageRow
+                label={
+                  <div className='flex items-center'>
+                    <PiggyBank size={13} />
+                    <span className='ml-1'>결제 수단</span>
+                  </div>
+                }
+                className='*:first:text-muted-foreground'
+              >
+                {`${paymentMethod.cardNumber} (${paymentMethod.cardCompany})`}
+              </InnerPageRow>
+            )}
         </div>
 
         {/* 플랜 비교 블록 (DOWNGRADE_SCHEDULED만) */}
