@@ -59,7 +59,12 @@ export const useDanalCheckout = () => {
       await result;
 
       // 결제 결과는 userPlan 서버 상태로 판정 (postMessage 내용 trust 안 함)
-      await qc.invalidateQueries({ queryKey: queryKeys.user.plan() });
+      // exact: true — preview 캐시(['user', 'plan', 'preview', ...])는 invalidate 대상 아님.
+      // 결제 직후 prefix match로 preview까지 refetch되면 success 모달이 confirm 시점과 다른 값 표시함.
+      await qc.invalidateQueries({
+        queryKey: queryKeys.user.plan(),
+        exact: true,
+      });
       const fresh = await qc.fetchQuery({
         queryKey: queryKeys.user.plan(),
         queryFn: getUserPlan,

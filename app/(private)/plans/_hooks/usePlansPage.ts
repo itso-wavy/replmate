@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { PlanModalState } from '@/components/modal/PlanChangeModals';
@@ -16,6 +17,7 @@ import {
   useReactivatePlan,
   useUserPlan,
 } from '@/hooks';
+import { queryKeys } from '@/lib/queryKeys';
 import { UserStore } from '@/store/userStore';
 import type { PlanDomain } from '@/types';
 import type { ChangePlanDomain } from '@/types/domain/user';
@@ -23,6 +25,7 @@ import { SubscriptionStatus } from '@/types/enums';
 
 export const usePlansPage = () => {
   const router = useRouter();
+  const qc = useQueryClient();
 
   const { data: userPlan, isLoading: isPlanLoading } = useUserPlan();
   const { data: allPlans = [], isLoading: isPlansLoading } = usePlans(true);
@@ -43,6 +46,11 @@ export const usePlansPage = () => {
   const [changeResult, setChangeResult] = useState<ChangePlanDomain | null>(
     null
   );
+  // confirm 시점 preview의 immediateAvailableReplyQuota 스냅샷.
+  // 결제 후 preview 캐시 갱신/invalidate되어도 success 모달이 사용자가 본 값 그대로 표시하도록 박제.
+  const [instantQuotaSnapshot, setInstantQuotaSnapshot] = useState<
+    number | null
+  >(null);
 
   // 플랜 변경 미리보기 — 결제 확정 모달(subscribe/upgrade/downgrade) 진입 시에만 조회
   const isPreviewable =
@@ -70,6 +78,7 @@ export const usePlansPage = () => {
     setModalState(null);
     setSelectedPlan(null);
     setChangeResult(null);
+    setInstantQuotaSnapshot(null);
     if (wasSuccess) router.push(ROUTES.SUBSCRIBE);
   };
 
@@ -93,6 +102,10 @@ export const usePlansPage = () => {
   const handleConfirm = async () => {
     if (!selectedPlan || !user) return;
 
+    // preview 캐시는 결제 직후 invalidate/refetch될 수 있으므로 confirm 시점 값을 박제.
+    const snapshotQuota =
+      preview?.nextPayment?.immediateAvailableReplyQuota ?? null;
+
     if (modalState === 'downgrade') {
       try {
         const result = await changePlan(selectedPlan.id);
@@ -115,6 +128,7 @@ export const usePlansPage = () => {
       if (paymentPending) {
         // TODO: userPlan SSE/폴링 결과 수신 후 success 모달 전환
         setChangeResult(result);
+        setInstantQuotaSnapshot(snapshotQuota);
         setModalState('upgradeSuccess');
         return;
       }
@@ -129,7 +143,16 @@ export const usePlansPage = () => {
       });
 
       if (success) {
+        // 다날 결제 완료 후 백엔드 플랜 변경 — cache stale 처리.
+        // refetchType: 'none' = 활성 observer(현재 /plans) 즉시 refetch 안 함.
+        // 사용자가 success 모달 닫고 /settings/subscribe 이동 시 stale 감지 → fresh fetch.
+        qc.invalidateQueries({
+          queryKey: queryKeys.user.plan(),
+          exact: true,
+          refetchType: 'none',
+        });
         setChangeResult(result);
+        setInstantQuotaSnapshot(snapshotQuota);
         setModalState('upgradeSuccess');
       } else {
         closeModal();
@@ -176,6 +199,7 @@ export const usePlansPage = () => {
     preview,
     isPreviewLoading,
     changeResult,
+    instantQuotaSnapshot,
     isConfirmPending: isChangePlanPending || isCheckoutPending,
     isKeepSubscriptionPending: isReactivatePending,
     // 액션

@@ -398,6 +398,8 @@ interface PlanChangeModalsProps {
   currentPeriodEnd?: Date | null;
   /** 다운그레이드 예약 시 전환 예정일 (ChangePlanDomain.scheduledAt) */
   downgradeScheduledAt?: Date | null;
+  /** confirm 시점 preview의 immediateAvailableReplyQuota 스냅샷 — success 모달이 사용자가 본 값 유지 */
+  instantQuotaSnapshot?: number | null;
   onClose: () => void;
   onConfirm: () => void | Promise<void>;
   isConfirmPending?: boolean;
@@ -412,6 +414,7 @@ const PlanChangeModals = ({
   isPreviewLoading,
   currentPeriodEnd,
   downgradeScheduledAt,
+  instantQuotaSnapshot,
   onClose,
   onConfirm,
   isConfirmPending,
@@ -459,7 +462,7 @@ const PlanChangeModals = ({
             plan={selectedPlan}
             onClose={onClose}
             nextBillingDate={currentPeriodEnd}
-            instantQuota={preview?.nextPayment.immediateAvailableReplyQuota}
+            instantQuota={instantQuotaSnapshot}
           />
         )}
         {state === 'downgradeSuccess' && (

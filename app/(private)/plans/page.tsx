@@ -29,6 +29,7 @@ const PlansPage = () => {
     preview,
     isPreviewLoading,
     changeResult,
+    instantQuotaSnapshot,
     isConfirmPending,
     isKeepSubscriptionPending,
     // 액션
@@ -103,6 +104,7 @@ const PlansPage = () => {
           isPreviewLoading={isPreviewLoading}
           currentPeriodEnd={userPlan?.subscription.currentPeriodEnd}
           downgradeScheduledAt={changeResult?.scheduledAt}
+          instantQuotaSnapshot={instantQuotaSnapshot}
           onClose={closeModal}
           onConfirm={handleConfirm}
           isConfirmPending={isConfirmPending}
