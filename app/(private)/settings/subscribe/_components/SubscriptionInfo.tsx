@@ -245,9 +245,7 @@ const SubscriptionInfo = ({
           <div className='mt-4 flex gap-3 border-t pt-4'>
             <div className='bg-brand-700/5 flex-1 rounded-xl p-4'>
               <p className='typo-caption-12 text-muted-foreground'>현재 플랜</p>
-              <p className='typo-heading-18 mt-1 font-medium'>
-                {plan.title ?? plan.name}
-              </p>
+              <p className='typo-heading-18 mt-1 font-medium'>{plan.name}</p>
               <p className='typo-body-14 text-foreground-description mt-0.5'>
                 월 {plan.monthlyPrice.toLocaleString()}원
               </p>
@@ -259,7 +257,7 @@ const SubscriptionInfo = ({
             <div className='bg-muted/50 flex-1 rounded-xl p-4'>
               <p className='typo-caption-12 text-muted-foreground'>다음 플랜</p>
               <p className='typo-heading-18 mt-1 font-medium'>
-                {downgrade.plan.title ?? downgrade.plan.name}
+                {downgrade.plan.name}
               </p>
               <p className='typo-body-14 text-foreground-description mt-0.5'>
                 월 {downgrade.plan.monthlyPrice.toLocaleString()}원

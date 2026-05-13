@@ -51,7 +51,7 @@ export const usePlansPage = () => {
     null
   );
   // confirm 시점 preview의 immediateAvailableReplyQuota 스냅샷.
-  // 결제 후 preview 캐시 갱신/invalidate되어도 success 모달이 사용자가 본 값 그대로 표시하도록 박제.
+  // 결제 후 preview 캐시 갱신/invalidate되어도 success 모달이 confirm 시점 값을 그대로 표시하도록 보존.
   const [instantQuotaSnapshot, setInstantQuotaSnapshot] = useState<
     number | null
   >(null);
@@ -176,7 +176,7 @@ export const usePlansPage = () => {
   const handleConfirm = async () => {
     if (!selectedPlan || !user) return;
 
-    // preview 캐시는 결제 직후 invalidate/refetch될 수 있으므로 confirm 시점 값을 박제.
+    // preview 캐시는 결제 직후 invalidate/refetch될 수 있으므로 confirm 시점 값을 저장.
     const snapshotQuota =
       preview?.nextPayment?.immediateAvailableReplyQuota ?? null;
 
