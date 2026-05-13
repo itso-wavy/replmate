@@ -34,16 +34,15 @@ export function useDashboardPage() {
   });
 
   const subscription = useMemo<UsageQuotaSubscriptionDomain | null>(() => {
-    if (!userPlan || !usageQuota) return null;
+    if (!userPlan || !usageQuota || !storeQuota) return null;
     const { plan, subscription: sub } = userPlan;
     return {
       planName: plan.name,
       currentPeriodEnd: sub.currentPeriodEnd,
       replyQuotaTotal: plan.monthlyReplyQuota,
       replyQuotaUsed: plan.monthlyReplyQuota - usageQuota.remaining,
-      // 백엔드 storeQuota 우선. 없으면 plan/active stores 폴백.
-      storeQuotaTotal: storeQuota?.max ?? plan.maxStoreCount,
-      storeQuotaUsed: storeQuota?.used ?? activeStores.length,
+      storeQuotaTotal: storeQuota.max,
+      storeQuotaUsed: activeStores.length,
     };
   }, [userPlan, usageQuota, storeQuota, activeStores]);
 
