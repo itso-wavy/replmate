@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -15,13 +15,17 @@ import {
   usePlans,
   usePreviewChangePlan,
   useReactivatePlan,
+  useReminders,
   useUserPlan,
 } from '@/hooks';
 import { queryKeys } from '@/lib/queryKeys';
+import { getUserPlan } from '@/services/user';
 import { UserStore } from '@/store/userStore';
 import type { PlanDomain } from '@/types';
 import type { ChangePlanDomain } from '@/types/domain/user';
-import { SubscriptionStatus } from '@/types/enums';
+import { ReminderEvent, SubscriptionStatus } from '@/types/enums';
+
+const POLLING_INTERVAL_MS = 1000;
 
 export const usePlansPage = () => {
   const router = useRouter();
@@ -52,6 +56,15 @@ export const usePlansPage = () => {
     number | null
   >(null);
 
+  // paymentPending=true 결과 대기 상태 — confirm 버튼 pending 유지 + 모달 배경/ESC 닫기 차단
+  const [isPaymentPolling, setIsPaymentPolling] = useState(false);
+  // 폴링 대상 plan / 시작 시각 — 모달이 닫혀도 ref로 유지되어 결과 도착 시 success 모달 복구.
+  const pollingTargetRef = useRef<{
+    plan: PlanDomain;
+    instantQuota: number | null;
+    startedAt: Date;
+  } | null>(null);
+
   // 플랜 변경 미리보기 — 결제 확정 모달(subscribe/upgrade/downgrade) 진입 시에만 조회
   const isPreviewable =
     modalState === 'subscribe' ||
@@ -72,13 +85,74 @@ export const usePlansPage = () => {
   const { mutateAsync: danalCheckout, isPending: isCheckoutPending } =
     useDanalCheckout();
 
+  // 리마인더 — PAYMENT_FAILED 수신 시 폴링 중단 + 토스트
+  const { data: reminders } = useReminders();
+
+  // ── 폴링 effect ─────────────────────────────────────────
+  // paymentPending=true 응답 후 백엔드 OTBILL 처리 완료까지 plan.id 변경 확인.
+  // 일치 시 캐시 setQueryData + success 모달 전환.
+  useEffect(() => {
+    if (!isPaymentPolling) return;
+    let cancelled = false;
+
+    const tick = async () => {
+      if (cancelled) return;
+      try {
+        const result = await getUserPlan();
+        const target = pollingTargetRef.current;
+        if (target && result.plan?.id === target.plan.id) {
+          qc.setQueryData(queryKeys.user.plan(), result);
+          setSelectedPlan(target.plan);
+          setInstantQuotaSnapshot(target.instantQuota);
+          setModalState('upgradeSuccess');
+          setIsPaymentPolling(false);
+          pollingTargetRef.current = null;
+          return;
+        }
+      } catch {
+        // 폴링 응답 에러는 무시 — 다음 tick에서 재시도
+      }
+      if (!cancelled) {
+        timeoutId = setTimeout(tick, POLLING_INTERVAL_MS);
+      }
+    };
+
+    let timeoutId = setTimeout(tick, POLLING_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [isPaymentPolling, qc]);
+
+  // ── PAYMENT_FAILED reminder watch ──────────────────────
+  // 폴링 진행 중일 때만 감시. 시작 시점 이후 생성된 PAYMENT_FAILED 발견 시 중단 + 토스트.
+  useEffect(() => {
+    if (!isPaymentPolling) return;
+    const target = pollingTargetRef.current;
+    if (!target || !reminders) return;
+
+    const failed = reminders.find(
+      (r) =>
+        r.event === ReminderEvent.PAYMENT_FAILED &&
+        r.createdAt > target.startedAt
+    );
+    if (failed) {
+      setIsPaymentPolling(false);
+      pollingTargetRef.current = null;
+      toast.error(failed.message || '결제에 실패했습니다.');
+    }
+  }, [reminders, isPaymentPolling]);
+
   const closeModal = () => {
     const wasSuccess =
       modalState === 'upgradeSuccess' || modalState === 'downgradeSuccess';
     setModalState(null);
-    setSelectedPlan(null);
-    setChangeResult(null);
-    setInstantQuotaSnapshot(null);
+    // 폴링 진행 중이면 결과 도착 시 success 모달 복구를 위해 state 유지
+    if (!isPaymentPolling) {
+      setSelectedPlan(null);
+      setChangeResult(null);
+      setInstantQuotaSnapshot(null);
+    }
     if (wasSuccess) router.push(ROUTES.SUBSCRIBE);
   };
 
@@ -119,17 +193,20 @@ export const usePlansPage = () => {
 
     // subscribe / upgrade
     // - paymentPending=true (활성 빌링키 O): 서버가 OTBILL 비동기 결제 진행 중. 결제창 진입 금지
-    //   → userPlan 폴링/SSE로 결과 대기 (현 구현은 결과 토스트만, 후속 SSE 연동 시 갱신)
+    //   → plan.id 폴링 + PAYMENT_FAILED reminder watch로 결과 대기
     // - paymentPending=false (빌링키 X): orderId 발급 → 다날 결제창(팝업) 진입
     try {
       const result = await changePlan(selectedPlan.id);
       const { orderId, paymentPending } = result;
 
       if (paymentPending) {
-        // TODO: userPlan SSE/폴링 결과 수신 후 success 모달 전환
+        pollingTargetRef.current = {
+          plan: selectedPlan,
+          instantQuota: snapshotQuota,
+          startedAt: new Date(),
+        };
         setChangeResult(result);
-        setInstantQuotaSnapshot(snapshotQuota);
-        setModalState('upgradeSuccess');
+        setIsPaymentPolling(true);
         return;
       }
 
@@ -155,11 +232,9 @@ export const usePlansPage = () => {
         setInstantQuotaSnapshot(snapshotQuota);
         setModalState('upgradeSuccess');
       } else {
-        closeModal();
         toast.error('결제가 완료되지 않았습니다.');
       }
     } catch (e) {
-      closeModal();
       toast.error(
         e instanceof Error && e.message
           ? e.message
@@ -200,7 +275,8 @@ export const usePlansPage = () => {
     isPreviewLoading,
     changeResult,
     instantQuotaSnapshot,
-    isConfirmPending: isChangePlanPending || isCheckoutPending,
+    isConfirmPending:
+      isChangePlanPending || isCheckoutPending || isPaymentPolling,
     isKeepSubscriptionPending: isReactivatePending,
     // 액션
     openPlanSelection,

@@ -419,7 +419,22 @@ const PlanChangeModals = ({
   onConfirm,
   isConfirmPending,
 }: PlanChangeModalsProps) => {
-  const onDialogOpenChange = (open: boolean) => !open && onClose();
+  // 결제 처리 중에는 배경 클릭(outside-press) / ESC(escape-key)로 닫히지 않도록 차단.
+  // X 버튼(close-press)은 일반 닫기로 동작 — 폴링은 페이지 훅에서 별도 유지.
+  const onDialogOpenChange = (
+    open: boolean,
+    details: { reason: string; cancel: () => void }
+  ) => {
+    if (open) return;
+    if (
+      isConfirmPending &&
+      (details.reason === 'outside-press' || details.reason === 'escape-key')
+    ) {
+      details.cancel();
+      return;
+    }
+    onClose();
+  };
 
   return (
     <Dialog open onOpenChange={onDialogOpenChange}>
