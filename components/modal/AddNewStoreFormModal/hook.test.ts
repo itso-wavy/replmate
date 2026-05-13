@@ -45,13 +45,19 @@ describe('useAddNewStoreForm', () => {
   describe('별칭 입력 필터링', () => {
     it('허용 문자만 통과', () => {
       const { result } = setup();
-      act(() => result.current.handleNameInputChange(makeInputEvent('테스트 Store-1_(A)')));
+      act(() =>
+        result.current.handleNameInputChange(
+          makeInputEvent('테스트 Store-1_(A)')
+        )
+      );
       expect(result.current.form.getValues('name')).toBe('테스트 Store-1_(A)');
     });
 
     it('특수문자 필터링', () => {
       const { result } = setup();
-      act(() => result.current.handleNameInputChange(makeInputEvent('test@#!')));
+      act(() =>
+        result.current.handleNameInputChange(makeInputEvent('test@#!'))
+      );
       expect(result.current.form.getValues('name')).toBe('test');
     });
   });
@@ -141,7 +147,7 @@ describe('useAddNewStoreForm', () => {
       );
     });
 
-    it('플랫폼 선택됨 + URL 3자 → "5자 이상 입력해 주세요"', async () => {
+    it('플랫폼 선택됨 + URL 3자 → "2자 이상 입력해 주세요"', async () => {
       const { result } = setup();
       act(() => {
         result.current.handlePlatformChange(PlatformType.SMARTSTORE);
@@ -149,7 +155,7 @@ describe('useAddNewStoreForm', () => {
       });
       await act(async () => result.current.handleUrlBlur());
       expect(result.current.form.getFieldState('url').error?.message).toBe(
-        '5자 이상 입력해 주세요'
+        '2자 이상 입력해 주세요'
       );
     });
   });
@@ -170,23 +176,29 @@ describe('useAddNewStoreForm', () => {
     };
 
     const makeBtnEvent = () =>
-      ({ preventDefault: vi.fn() }) as unknown as React.MouseEvent<HTMLButtonElement>;
+      ({
+        preventDefault: vi.fn(),
+      }) as unknown as React.MouseEvent<HTMLButtonElement>;
 
     it('사용 가능 → isUrlAvailable = true', async () => {
       mockCheckUrl.mockResolvedValueOnce({ exists: false });
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
+      );
       expect(result.current.form.getValues('isUrlAvailable')).toBe(true);
     });
 
     it('이미 등록됨 → isUrlAvailable = false + url/isUrlAvailable 에러', async () => {
       mockCheckUrl.mockResolvedValueOnce({ exists: true });
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
-      expect(result.current.form.getValues('isUrlAvailable')).toBe(false);
-      expect(result.current.form.getFieldState('isUrlAvailable').error?.message).toBe(
-        '이미 등록된 URL입니다'
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
       );
+      expect(result.current.form.getValues('isUrlAvailable')).toBe(false);
+      expect(
+        result.current.form.getFieldState('isUrlAvailable').error?.message
+      ).toBe('이미 등록된 URL입니다');
       // url 필드도 에러 상태 (메시지 없는 마커)
       expect(result.current.form.getFieldState('url').error).toBeDefined();
     });
@@ -194,10 +206,12 @@ describe('useAddNewStoreForm', () => {
     it('errorCode 3103 → "존재하지 않거나 잘못된 스토어 URL입니다" 인라인 에러', async () => {
       mockCheckUrl.mockRejectedValueOnce(makeAxiosError(3103));
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
-      expect(result.current.form.getFieldState('isUrlAvailable').error?.message).toBe(
-        '존재하지 않거나 잘못된 스토어 URL입니다'
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
       );
+      expect(
+        result.current.form.getFieldState('isUrlAvailable').error?.message
+      ).toBe('존재하지 않거나 잘못된 스토어 URL입니다');
       expect(result.current.form.getFieldState('url').error).toBeDefined();
       expect(toast.error).not.toHaveBeenCalled();
     });
@@ -205,23 +219,35 @@ describe('useAddNewStoreForm', () => {
     it('axios error (3103 외) → 토스트 에러', async () => {
       mockCheckUrl.mockRejectedValueOnce(makeAxiosError(9999));
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
-      expect(toast.error).toHaveBeenCalledWith('중복 확인 중 오류가 발생했습니다.');
-      expect(result.current.form.getFieldState('isUrlAvailable').error).toBeUndefined();
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
+      );
+      expect(toast.error).toHaveBeenCalledWith(
+        '중복 확인 중 오류가 발생했습니다.'
+      );
+      expect(
+        result.current.form.getFieldState('isUrlAvailable').error
+      ).toBeUndefined();
     });
 
     it('axios가 아닌 일반 에러 → 인라인/토스트 모두 미노출', async () => {
       mockCheckUrl.mockRejectedValueOnce(new Error('network'));
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
+      );
       expect(toast.error).not.toHaveBeenCalled();
-      expect(result.current.form.getFieldState('isUrlAvailable').error).toBeUndefined();
+      expect(
+        result.current.form.getFieldState('isUrlAvailable').error
+      ).toBeUndefined();
     });
 
     it('중복확인 후 URL 수정 → 상태 초기화', async () => {
       mockCheckUrl.mockResolvedValueOnce({ exists: false });
       const { result } = setupWithValidUrl();
-      await act(async () => result.current.handleDuplicateCheck(makeBtnEvent()));
+      await act(async () =>
+        result.current.handleDuplicateCheck(makeBtnEvent())
+      );
       expect(result.current.form.getValues('isUrlAvailable')).toBe(true);
 
       act(() => result.current.handleUrlChange(makeInputEvent('changed')));
@@ -238,7 +264,9 @@ describe('useAddNewStoreForm', () => {
       result.current.onInvalid({
         name: { type: 'too_big', message: '' },
       } as any);
-      expect(toast.error).toHaveBeenCalledWith('최대 15자까지 입력 가능합니다.');
+      expect(toast.error).toHaveBeenCalledWith(
+        '최대 15자까지 입력 가능합니다.'
+      );
     });
 
     it('invalid_string → 허용되지 않은 문자 토스트', () => {
@@ -272,13 +300,21 @@ describe('useAddNewStoreForm', () => {
     describe('파일명 길이', () => {
       it('100자 이하 - 통과', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('a'.repeat(96) + '.jpg')])));
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([makeFile('a'.repeat(96) + '.jpg')])
+          )
+        );
         expect(toast.error).not.toHaveBeenCalled();
       });
 
       it('101자 - 에러', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('a'.repeat(97) + '.jpg')])));
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([makeFile('a'.repeat(97) + '.jpg')])
+          )
+        );
         expect(toast.error).toHaveBeenCalledWith(
           '파일명이 너무 깁니다.\n(확장자 포함 100자 이하만 가능)'
         );
@@ -290,8 +326,12 @@ describe('useAddNewStoreForm', () => {
         '허용: "%s"',
         (name) => {
           const { result } = setup();
-          act(() => result.current.handleFileChange(fileChangeEvent([makeFile(name)])));
-          expect(toast.error).not.toHaveBeenCalledWith(expect.stringContaining('사용할 수 없는 문자'));
+          act(() =>
+            result.current.handleFileChange(fileChangeEvent([makeFile(name)]))
+          );
+          expect(toast.error).not.toHaveBeenCalledWith(
+            expect.stringContaining('사용할 수 없는 문자')
+          );
         }
       );
 
@@ -299,8 +339,12 @@ describe('useAddNewStoreForm', () => {
         '차단: "%s"',
         (name) => {
           const { result } = setup();
-          act(() => result.current.handleFileChange(fileChangeEvent([makeFile(name)])));
-          expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('사용할 수 없는 문자'));
+          act(() =>
+            result.current.handleFileChange(fileChangeEvent([makeFile(name)]))
+          );
+          expect(toast.error).toHaveBeenCalledWith(
+            expect.stringContaining('사용할 수 없는 문자')
+          );
         }
       );
     });
@@ -308,37 +352,66 @@ describe('useAddNewStoreForm', () => {
     describe('파일 형식', () => {
       it('JPEG 통과', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('t.jpg', 'image/jpeg')])));
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([makeFile('t.jpg', 'image/jpeg')])
+          )
+        );
         expect(toast.error).not.toHaveBeenCalled();
       });
 
       it('GIF 차단', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('t.gif', 'image/gif')])));
-        expect(toast.error).toHaveBeenCalledWith('지원하지 않는 파일 형식입니다. (JPEG, PNG, PDF만 가능)');
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([makeFile('t.gif', 'image/gif')])
+          )
+        );
+        expect(toast.error).toHaveBeenCalledWith(
+          '지원하지 않는 파일 형식입니다. (JPEG, PNG, PDF만 가능)'
+        );
       });
     });
 
     describe('파일 용량', () => {
       it('5MB 이하 통과', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('t.jpg', 'image/jpeg', 5 * 1024 * 1024)])));
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([makeFile('t.jpg', 'image/jpeg', 5 * 1024 * 1024)])
+          )
+        );
         expect(toast.error).not.toHaveBeenCalled();
       });
 
       it('5MB 초과 차단', () => {
         const { result } = setup();
-        act(() => result.current.handleFileChange(fileChangeEvent([makeFile('t.jpg', 'image/jpeg', 5 * 1024 * 1024 + 1)])));
-        expect(toast.error).toHaveBeenCalledWith('파일 용량이 5MB를 초과했습니다.');
+        act(() =>
+          result.current.handleFileChange(
+            fileChangeEvent([
+              makeFile('t.jpg', 'image/jpeg', 5 * 1024 * 1024 + 1),
+            ])
+          )
+        );
+        expect(toast.error).toHaveBeenCalledWith(
+          '파일 용량이 5MB를 초과했습니다.'
+        );
       });
     });
 
     describe('파일 개수', () => {
       it('4개 차단', () => {
         const { result } = setup();
-        const files = [makeFile('a.jpg'), makeFile('b.jpg'), makeFile('c.jpg'), makeFile('d.jpg')];
+        const files = [
+          makeFile('a.jpg'),
+          makeFile('b.jpg'),
+          makeFile('c.jpg'),
+          makeFile('d.jpg'),
+        ];
         act(() => result.current.handleFileChange(fileChangeEvent(files)));
-        expect(toast.error).toHaveBeenCalledWith('최대 3개까지만 등록 가능합니다.');
+        expect(toast.error).toHaveBeenCalledWith(
+          '최대 3개까지만 등록 가능합니다.'
+        );
       });
     });
 

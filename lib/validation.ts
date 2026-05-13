@@ -23,7 +23,7 @@ export const addNewStoreSchema = z.object({
     .string()
     .trim()
     .min(1, 'URL을 입력해 주세요')
-    .min(5, '5자 이상 입력해 주세요')
+    .min(2, '2자 이상 입력해 주세요')
     .regex(/^[a-zA-Z0-9\-_]+$/, '영문, 숫자, -, _만 입력 가능합니다'),
 
   // URL 중복 확인 여부
