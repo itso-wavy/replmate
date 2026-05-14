@@ -191,7 +191,7 @@ const Modal = ({ open, onOpenChange }: CommonModalProps) => {
                       className='h-9!'
                       disabled={
                         !form.watch('platformType') ||
-                        form.watch('url').length < 5 ||
+                        form.watch('url').length < 4 ||
                         form.watch('isUrlAvailable') === true
                       }
                       onClick={handleDuplicateCheck}
