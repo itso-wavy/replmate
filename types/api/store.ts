@@ -112,5 +112,6 @@ export interface MyStoresResponseDto {
 // PATCH /api/v1/users/me/stores 스토어 벌크 업데이트 요청
 export interface UpdateStoresRequest {
   storeIds: number[];
-  isDeactivationScheduled?: boolean;
+  // 일괄 상태 변경 — active/deactivating/unlinked 만 허용
+  status?: 'active' | 'deactivating' | 'unlinked';
 }

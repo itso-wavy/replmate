@@ -70,7 +70,7 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
     try {
       await updateStoresBulk({
         storeIds: unselectedIds,
-        isDeactivationScheduled: true,
+        status: 'deactivating',
       });
       toast.success('선택한 쇼핑몰이 유지됩니다.');
       onOpenChange(false);
@@ -95,7 +95,7 @@ const Modal = ({ open, onOpenChange, stores, maxAllowed }: ModalProps) => {
         >
           <DialogHeader>
             <DialogTitle className='typo-heading-20!'>쇼핑몰 선택</DialogTitle>
-            <DialogDescription className='mx-auto text-center'>{`구독 플랜 변경으로 연동 가능한 쇼핑몰 수를 초과했습니다.\n계속해서 관리할 쇼핑몰을 선택해 주세요.`}</DialogDescription>
+            <DialogDescription className='mx-auto text-center'>{`구독 플랜 변경으로 연동 가능한 쇼핑몰 수를 초과했습니다.\n계속해서 관리할 쇼핑몰을 선택해 주세요.\n(승인 대기 중인 쇼핑몰은 자동으로 유지됩니다.)`}</DialogDescription>
           </DialogHeader>
 
           <div className='max-h-[80vh] overflow-y-auto md:max-h-[400px]'>

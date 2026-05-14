@@ -16,6 +16,7 @@ const StoresPage = () => {
     storeQuotaTotal,
     needsAdjustment,
     storeLimitExceeded,
+    futureMaxStoreCount,
   } = useStoresPage();
 
   useEffect(() => {
@@ -47,10 +48,10 @@ const StoresPage = () => {
         <AddNewCard storeLimitExceeded={storeLimitExceeded} />
       </div>
 
-      {isPlanLimitModalOpen && (
+      {isPlanLimitModalOpen && futureMaxStoreCount !== undefined && (
         <StoreLimitExceededModal
           stores={sortedStores}
-          maxAllowed={storeQuotaTotal}
+          maxAllowed={futureMaxStoreCount}
           open={isPlanLimitModalOpen}
           onOpenChange={setIsPlanLimitModalOpen}
         />
