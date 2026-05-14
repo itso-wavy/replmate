@@ -12,6 +12,7 @@ import {
   dummyUserPlanFree,
   dummyUserPlanUnverified,
 } from '@/dummy';
+import { useChangePaymentMethod } from '@/hooks/useChangePaymentMethod';
 import { useUsageHistory, useUsageQuota } from '@/hooks/useUsage';
 import {
   useCancelDowngrade,
@@ -28,7 +29,6 @@ type SubscribeModal =
   | 'cancelSubscription'
   | 'cancelDowngrade'
   | 'cancelUnsubscribe'
-  | 'paymentChange'
   | 'receipt'
   | null;
 
@@ -55,6 +55,10 @@ export function useSubscribePage() {
     useCancelDowngrade();
   const { mutateAsync: requestReceipt, isPending: isReceiptPending } =
     useRequestReceipt();
+  const {
+    mutateAsync: changePaymentMethod,
+    isPending: isChangePaymentMethodPending,
+  } = useChangePaymentMethod();
 
   // ── 파생 상태 ──────────────────────────────────────────
   const isVerified = userPlan?.planStatus !== SubscriptionStatus.UNVERIFIED;
@@ -101,6 +105,26 @@ export function useSubscribePage() {
       );
     } catch {
       toast.error('요청에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    }
+  };
+
+  const handlePaymentChange = async () => {
+    try {
+      const result = await changePaymentMethod();
+      if (result.status === 'success') {
+        toast.success('결제 정보 변경이 완료되었습니다.');
+      } else if (result.status === 'error') {
+        toast.error(
+          '결제 정보 변경에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+        );
+      }
+      // cancel — 사용자 취소 → 토스트 생략
+    } catch (e) {
+      toast.error(
+        e instanceof Error && e.message
+          ? e.message
+          : '요청에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+      );
     }
   };
 
@@ -152,11 +176,13 @@ export function useSubscribePage() {
     isCancelDowngradePending,
     isCancelUnsubscribePending,
     isReceiptPending,
+    isChangePaymentMethodPending,
 
     // 확인 핸들러
     handleCancelSubscription,
     handleCancelDowngrade,
     handleCancelUnsubscribe,
     handleReceiptConfirm,
+    handlePaymentChange,
   };
 }

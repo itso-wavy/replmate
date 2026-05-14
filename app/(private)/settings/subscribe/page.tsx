@@ -6,7 +6,6 @@ import {
   CancelDowngradeModal,
   CancelSubscriptionModal,
   CancelUnsubscribeModal,
-  PaymentChangeModal,
   ReceiptRequestModal,
 } from '@/components/modal';
 import { Button } from '@/components/ui/button';
@@ -46,6 +45,7 @@ const SubscribePage = () => {
     handleCancelDowngrade,
     handleCancelUnsubscribe,
     handleReceiptConfirm,
+    handlePaymentChange,
   } = useSubscribePage();
 
   return (
@@ -55,7 +55,7 @@ const SubscribePage = () => {
         <InnerPageSection heading='구독 정보'>
           <SubscriptionInfo
             userPlan={userPlan}
-            onPaymentChange={() => setActiveModal('paymentChange')}
+            onPaymentChange={handlePaymentChange}
             onReactivate={() => setActiveModal('cancelUnsubscribe')}
             onCancelPlan={() => setActiveModal('cancelSubscription')}
             onCancelDowngrade={() => setActiveModal('cancelDowngrade')}
@@ -145,11 +145,6 @@ const SubscribePage = () => {
             periodEnd={userPlan.subscription.currentPeriodEnd}
             onConfirm={handleCancelUnsubscribe}
             isPending={isCancelUnsubscribePending}
-          />
-
-          <PaymentChangeModal
-            open={activeModal === 'paymentChange'}
-            onOpenChange={(open) => !open && closeModal()}
           />
 
           <ReceiptRequestModal

@@ -23,7 +23,6 @@ export { default as ReceiptRequestModal } from './ReceiptRequestModal';
 export { default as CancelSubscriptionModal } from './CancelSubscriptionModal';
 export { default as CancelDowngradeModal } from './CancelDowngradeModal';
 export { default as CancelUnsubscribeModal } from './CancelUnsubscribeModal';
-export { default as PaymentChangeModal } from './PaymentChangeModal';
 
 // Plan
 export { default as PlanChangeModals } from './PlanChangeModals';

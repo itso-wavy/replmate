@@ -10,5 +10,6 @@ export * from './useTerms';
 export * from './useUsage';
 export * from './useUser';
 
+export * from './useChangePaymentMethod';
 export * from './useDanalCheckout';
 export * from './useUnsavedChangesGuard';
